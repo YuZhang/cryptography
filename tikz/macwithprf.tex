@@ -1,0 +1,9 @@
+\begin{tikzpicture}
+\node (r) {$m$};
+\node (pg) [draw, below of = r, rounded corners=1ex,node distance = 1.5cm] {$F$};
+\node (k) [left of = pg, node distance = 1.5cm] {$k$};
+\node (t) [below of = pg, node distance = 1.5cm] {$t$};
+\draw[-latex] (r) -- (pg);
+\draw[-latex] (pg) -- (t);
+\draw[-latex] (k) -- (pg);
+\end{tikzpicture}

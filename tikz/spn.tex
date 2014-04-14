@@ -1,0 +1,28 @@
+\begin{tikzpicture}
+\foreach \z in {1, 2,...,3} {
+\node (km\z) at ($\z*(0,-2.2cm)$) [minimum width=6cm,rounded corners=1ex,draw] {sub-key $K_\z$ mixing};
+\foreach \x in {1, 2,...,4} {
+\node (s\x) at ($(km\z)+\x*(1.5cm,0)-(3.75cm,0.7cm)$) [minimum width=1.2cm,rounded corners=1ex,draw] {$S_\x$};
+}
+\foreach \x in {1, 2,...,4} {
+\foreach \y in {1, 2,...,4} {
+\draw[-] ($(s\x.north)+\y*(0.3cm,0)-(0.75cm,0)$) -- +(0,0.1cm);
+\draw[-] ($(s\x.south)+\y*(0.3cm,0)-(0.75cm,0)$) -- +(0,-0.1cm);
+\draw[-] ($(s\x.south)+\y*(0.3cm,0)-(0.75cm,0.1cm)$) -- ($(s\y.south)+\x*(0.3cm,0)-(0.75cm,0.8cm)$)
+-- +(0,-0.1cm);
+}
+}
+}
+\foreach \z in {4} {
+\node (km\z) at ($\z*(0,-2.2cm)$) [minimum width=6cm,rounded corners=1ex,draw] {sub-key $K_\z$ mixing};
+}
+\foreach \x in {1, 2,...,4} {
+\foreach \y in {1, 2,...,4} {
+\draw[-] ($(s\x.north)+\y*(0.3cm,0)-(0.75cm,2.2cm)$) -- +(0,0.1cm);
+\draw[-] ($(s\x.south)+\y*(0.3cm,0)-(0.75cm,-5.8cm)$) -- +(0,-0.1cm);
+}
+}
+\node at ($(s1.north)+1*(0.3cm,0)-(0.75cm,-5.4cm)$) {$P_1$};
+\node at ($(s4.north)+4*(0.3cm,0)-(0.75cm,-5.4cm)$) {$P_{16}$};
+\node at ($(s2.north)+(1.5cm,0)-(0.75cm,-5.4cm)$) {\textbf{Plaintext}};
+\end{tikzpicture}

@@ -1,0 +1,376 @@
+\input{main.tex}
+
+\title{Random Oracle, Trapdoor Permutation and More Public-Key Schemes}
+
+\begin{document}
+\maketitle
+\begin{frame}
+\frametitle{Outline}
+\tableofcontents
+\end{frame}
+\section{Trapdoor Permutations}
+\begin{frame}\frametitle{Overview}
+\textbf{Trapdoor function}: is easy to compute, yet difficult to find its inverse without special info., the ``trapdoor''. (One Way Function with the ``trapdoor'')
+\newline
+
+A public-key encryption scheme can be constructed from any trapdoor permutation. (``\emph{Theory and Applications of Trapdoor Functions}'', [Yao, 1982])
+\begin{figure}
+\begin{center}
+\input{tikz/trapdoor.tex}
+\end{center}
+\end{figure}
+\end{frame}
+\begin{frame}\frametitle{Definition of Families of Trapdoor Permutations}
+A tuple of polynomial-time algorithms $\Pi = (\mathsf{Gen}, \mathsf{Samp}, f, \mathsf{Inv})$ is a \textbf{family of trapdoor permutations (TDP)} if:
+\begin{itemize}
+\item \textbf{parameter generation} algorithm $\mathsf{Gen}$, on input $1^n$, outputs $(I,\mathsf{td})$ with $\abs{I} \ge n$. $(I, \mathsf{td})$ defines a set $\mathcal{D}_I = \mathcal{D}_{\mathsf{td}}$.
+\item $\mathsf{Gen}_I$ outputs only $I$.
+$(\mathsf{Gen}_I, \mathsf{Samp}, f)$ is OWP.
+\item deterministic \textbf{inverting algorithm} $\mathsf{Inv}$. $\forall (I,\mathsf{td})$ and $\forall x \in \mathcal{D}_{I}$, 
+\[ \mathsf{Inv}_{\mathsf{td}}(f_I(x))=x.\]
+\end{itemize}
+Deterministic polynomial-time algorithm $\mathsf{hc}$ is a \textbf{hard-core predicate} of $\Pi$ if $\forall$ \textsc{ppt} $\mathcal{A}$, $\exists$ $\mathsf{negl}$ such that
+\[ \Pr[\mathcal{A}(I,f_I(x)) = \mathsf{hc}_I(x)] \le \frac{1}{2} +\mathsf{negl}(n). \]
+\end{frame}
+\begin{frame}\frametitle{Public-key Encryption Schemes from TDPs}
+\begin{construction}
+\begin{itemize}
+\item $\mathsf{Gen}$: $(I, \mathsf{td}) \gets \widehat{Gen}$ output \textbf{public key} $I$ and \textbf{private key} $\mathsf{td}$.
+\item $\mathsf{Enc}$: on input $I$ and $m \in \{0,1\}$, choose a random $x\gets \mathcal{D}_I$ and output $\langle f_I(x), \mathsf{hc}_I(x)\oplus m \rangle$.
+\item $\mathsf{Dec}$: on input $\mathsf{td}$ and $\langle y, m'\rangle$, compute $x:= f^{-1}_I(y)$ and output $\mathsf{hc}_I(x)\oplus m'$.
+\end{itemize}
+\end{construction}
+\begin{theorem}
+If $\widehat{\Pi}=(\widehat{Gen},f)$ is TDP, and $\mathsf{hc}$ is HCP for $\widehat{\Pi}$, then Construction $\Pi$ is CPA-secure.
+\end{theorem}
+\end{frame}
+\begin{frame}\frametitle{Proof}
+\textbf{Idea}: $\mathsf{hc}_I(x)$ is pseudorandom. Reduce $\mathcal{A}_{\mathsf{hc}}$ for $\mathsf{hc}$ to $\mathcal{A}$ for $\Pi$.
+\begin{figure}
+\begin{center}
+\input{tikz/tdp-pk}
+\end{center}
+\end{figure}
+\[\Pr[\mathcal{A}_{\mathsf{hc}}(I,f_I(x))=\mathsf{hc}_I(x)] = \]
+\[\frac{1}{2}\cdot (\Pr[b'=b|z=\mathsf{hc}_I(x)]+\Pr[b'\neq b|z\neq \mathsf{hc}_I(x)]).\]
+\end{frame}
+\begin{frame}\frametitle{Proof (Cont.)}
+\[\Pr[b'=b|z=\mathsf{hc}_I(x)] = \Pr[\mathsf{PubK}^{\mathsf{eav}}_{\mathcal{A},\Pi}(n)=1]=\varepsilon(n).\]
+If $z \neq \mathsf{hc}_I(x)$, $m' = m_b\oplus \overline{\mathsf{hc}}_I(x) = m_{\overline{b}}\oplus \mathsf{hc}_I(x)$,
+\[\Pr[b'=b|z\neq \mathsf{hc}_I(x)] = \Pr[\mathsf{PubK}^{\mathsf{eav}}_{\mathcal{A},\Pi}(n)=0]=1-\varepsilon(n).\]
+\[\Pr[b'\neq b|z\neq \mathsf{hc}_I(x)] =\varepsilon(n).\]
+\[\Pr[\mathcal{A}_{\mathsf{hc}}(I,f_I(x))=\mathsf{hc}_I(x)] = \frac{1}{2}\cdot (\varepsilon(n)+\varepsilon(n)) = \varepsilon(n).\]
+\end{frame}
+\begin{frame}\frametitle{Encrypting Longer Messages}
+\begin{theorem}
+If $\exists$ TDP $\Pi$, then $\exists$ TDP $\widehat{\Pi}$ with a HCP $\mathsf{hc}$ for $\widehat{\Pi}$.
+\end{theorem}
+\textbf{Example}: If RSA assumption holds then the least-significant bit is hard-core for the RSA family of TDP.
+\newline
+
+an $\ell$-it message $m=m_1\cdots m_{\ell}$, the public key $I$, the ciphertext is
+\[\langle f_I(x_1), \mathsf{hc}_I(x_I)\oplus m_1\rangle,\dotsc,\langle f_I(x_{\ell}), \mathsf{hc}_I(x_{\ell})\oplus m_{\ell}\rangle,\]
+with $x_1,\dotsc,x_{\ell}$ chosen independently and \emph{u.r.a} from $\mathcal{D}_I$.
+\newline
+
+An alternative way: $x_1\gets \mathcal{D}_I$ and compute $x_{i+1} := f_I(x_i)$ for $i=1$ to $\ell$. the ciphertext is 
+\[\langle x_{\ell+1},\mathsf{hc}_I(x_1)\oplus m_1,\dotsc,\mathsf{hc}_I(x_{\ell})\oplus m_{\ell}\rangle.\]
+\end{frame}
+\section{The Random Oracle Methodology}
+\begin{frame}\frametitle{Random Oracle Model (ROM) -- Overview}
+\begin{itemize}
+\item \textbf{Random oracle (RO)}: a truly random function $H$ answers every possible query with a random response.
+\item \textbf{Random oracle model (ROM)}: the existence of a public RO $H$.
+\item \textbf{Standard Model}: the adversary is only limited by time and computational power.
+\item \textbf{Methodology}: for constructing proven security in ROM.
+\begin{enumerate}
+\item a scheme is designed and proven secure in ROM.
+\item Instantiate $H$ with a hash function $\hat{H}$, such as SHA-1.
+\end{enumerate}
+\item \alert{No one seriously claims that a random oracle exists}.
+\item There exists schemes that are proven secure in ROM but are insecure no matter how the random oracle is instantiated.
+\end{itemize}
+\emph{With ROM, it is easy to achieve proven security, while keeping the efficiency by appropriate instantiation.}
+\end{frame}
+\begin{frame}\frametitle{ROM in Detail}
+\begin{itemize}
+\item \textbf{Consistent}: If $H$ ever outputs $y$ for an input $x$ ``on-the-fly'', then it always outputs the same answer given the same input.
+\item No one ``knows'' the entire function $H$.
+\item \textbf{PRF vs. RO}: PRF emulates RO, and has different usage:
+\begin{itemize}
+\item PRF: a way of defining what it means for a concrete keyed function to be pseudorandom.
+\item RO: as part of the construction of the primitive, and so must be instantiated if we want a concrete realization.
+\end{itemize}
+\end{itemize}
+\end{frame}
+\begin{frame}\frametitle{Simple Illustrations of ROM}
+A RO maps $n_1$-bit inputs to $n_2$-bit outputs.
+\begin{itemize}
+\item A RO as a OWF, experiment:
+\begin{enumerate}
+\item A random function $H$ is chosen.
+\item A random $x \in \{0,1\}^{n_1}$ is chosen, and $y := H(x)$ is evaluated.
+\item $\mathcal{A}$ is given $y$, and succeeds if it outputs $x'$: $H(x')=y$.
+\end{enumerate}
+\item A RO as a CRHF, experiment:
+\begin{enumerate}
+\item A random function $H$ is chosen.
+\item $\mathcal{A}$ succeeds if it outputs $x, x'$ with $H(x)=H(x')$ but $x\neq x'$.
+\end{enumerate}
+\item Constructing a PRF from a RO: $n_1=2n$, $n_2=n$.
+$ F_k(x) \overset{\text{def}}{=} H(k\| x),\;\; \abs{k}=\abs{x}=n.$
+\end{itemize}
+\end{frame}
+\begin{frame}\frametitle{Is the Random Oracle Methodology Sound?}
+\begin{itemize}
+\item \textbf{Pro}:
+\begin{itemize}
+\item enables the design of more efficient schemes.
+\item better than no proof at all.
+\item only possible weaknesses are due to the hash function.
+\item few real-world attacks on ``natural'' secure schemes in ROM.
+\end{itemize}
+\item \textbf{Con}:
+\begin{itemize}
+\item No proof that security in ROM implies real-world security.
+\item The reduction can not see ``queries'' in the real world.
+\item Not well understand what is a ``good'' CRHF/PRF like a RO.
+\end{itemize}
+\end{itemize}
+\begin{itemize}
+\item What does security in the ROM guarantee in the real world?
+\item Are ROM fundamentally different from the standard model?
+\end{itemize}
+\end{frame}
+\section{Public-Key Encryption from TDP in ROM}
+\begin{frame}\frametitle{Security Against CPA}
+\begin{construction}
+\begin{itemize}
+\item $\mathsf{Gen}$: $pk =  I $, $sk = \mathsf{td} $.
+\item $\mathsf{Enc}$: $r \gets \{0,1\}^*$, output $\langle f_I(r), H(r)\oplus m\rangle$.
+\item $\mathsf{Dec}$: input $(c_1,c_2)$; compute $r := f_{\mathsf{td}}^{-1}(c_1)$, output $H(r)\oplus c_2$.
+\end{itemize}
+\end{construction}
+\begin{theorem}
+If $f$ is TPD and $H$ is RO, Construction is CPA-secure.
+\end{theorem}
+\alert{$H$ can not be replaced by PRG, since the partial info on $r$ may be leaked by $c_1$.}
+\end{frame}
+\begin{frame}\frametitle{CCA-secure based on Private Key Encryption}
+\textbf{Idea}: PubK CCA = PrivK CCA + (Secret Key = TPD + RO).  
+\begin{construction}
+$\Pi' = (\mathsf{Gen}', \mathsf{Enc}', \mathsf{Dec}')$ is a private-key encryption scheme.
+\begin{itemize}
+\item $\mathsf{Gen}$: $pk = I$, $sk = \mathsf{td}$.
+\item $\mathsf{Enc}$: $r \gets D_I$ and compute $k := H(r)$, output $f_I(r), \mathsf{Enc}'_k(m)\rangle$.
+\item $\mathsf{Dec}$: input $\langle c_1,c_2\rangle$, compute $r := f^{-1}_{\mathsf{td}}(c_1)$, $k:=H(r)$, output $\mathsf{Dec}'_k(c_2)$.
+\end{itemize}
+\end{construction}
+\begin{theorem}
+If $f$ is TDP, $\Pi'$ is CCA-secure, and $H$ is RO, Construction is CCA-secure.
+\end{theorem}
+\end{frame}
+\begin{frame}\frametitle{CCA-secure based on TPD in ROM}
+\textbf{Idea}: PubK CCA = TDP + 2 RO (one for enc, one for mac).  
+\begin{construction}
+\begin{itemize}
+\item $\mathsf{Gen}$: $pk = I$, $sk = \mathsf{td}$.
+\item $\mathsf{Enc}$: $r \gets D_I$, output $\langle c_1=f_I(r), c_2 = H(r)\oplus m, c_3=G(c_2\|m)\rangle$.
+\item $\mathsf{Dec}$: $r := f^{-1}_{\mathsf{td}}(c_1)$, $m := H(r)\oplus c_2$. If $G(c_2\|m) = c_3$ output $m$, otherwise $\perp$.
+\end{itemize}
+\end{construction}
+\begin{theorem}
+If $f$ is TDP, $G,H$ are ROs, Construction is CCA-secure.
+\end{theorem}
+\end{frame}
+\section{More Public-key Schemes}
+\begin{frame}\frametitle{Additional Public-key Schemes}
+\begin{itemize}
+\item \textbf{Goldwasser-Micali} based on deciding quadratic residuosity problem. (first scheme proven to be CPA-secure)
+\item \textbf{Rabin}: based on the computing square root problem. (security equivalent to the hardness of factoring)
+\item \textbf{Paillier}: based on the decisional composite residuosity problem. (efficient and homomorphic)
+\item \textbf{Elliptic curve}: forms a cyclic group with DH problem (efficient).
+\end{itemize}
+\end{frame}
+\begin{frame}\frametitle{Quadratic Residues Modulo a Prime}
+\begin{itemize}
+\item $y \in \mathbb{G}$ is a \textbf{quadratic residue (qr)} if $\exists x \in \mathbb{G}$ with $x^2 = y$. Otherwise, $y$ is a \textbf{quadratic non-residue (qnr)}.
+\item In an abelian group, the set of qr forms a subgroup.
+\item In $\mathbb{Z}_p^*$, $p> 2$ is prime, every qr has two square roots.
+\item The set of qr/qnr is $\mathcal{QR}_p$/$\mathcal{QNR}_p$,
+$\abs{\mathcal{QR}_p}= \abs{\mathcal{QNR}_p} = \frac{p-1}{2}$.
+\item $\mathcal{J}_p(x)$ is \textbf{Jacobi symbol} of $x$ modulo $p$:
+
+\[
+  \mathcal{J}_p(x) \overset{\mathsf{def}}{=} \left\{ 
+  \begin{array}{l l}
+    +1 & \quad \text{if $x$ is a qr}\\
+    -1 & \quad \text{if $x$ is not a qr}\\
+  \end{array} \right .
+\]
+\item $\mathcal{J}_p(x) = x ^{\frac{p-1}{2}} \bmod p$.
+\item $\mathcal{J}_p(xy) = \mathcal{J}_p(x)\cdot \mathcal{J}_p(y)$.
+\end{itemize}
+\end{frame}
+\begin{frame}\frametitle{Quadratic Residues Modulo a Composite}
+\begin{itemize}
+\item $N = pq$, $p,q$ distinct primes, in Chinese Remainder Theorem: 
+$x \in \mathbb{Z}_N^*$ with $ x \leftrightarrow (x_p,x_q) = ([x \bmod p], [x \bmod q])$.
+\item $x$ is a qr mod $N$ $\iff$ $x_p$/$x_q$ are qr mod $p$/$q$.
+\item $x$ is a qr mod $N$ $\iff \mathcal{J}_p(x) = \mathcal{J}_q(x) = +1$.
+\item Qr $x$ has 4 roots: $(\pm x_p, \pm x_q)$, so $\frac{\abs{\mathcal{QR}_N}}{\abs{Z_N^*}} = \frac{\abs{\mathcal{QR}_p}\abs{\mathcal{QR}_q}}{\abs{Z_N^*}}=\frac{1}{4}$.
+\item $\mathcal{J}_N(x) \overset{\mathsf{def}}{=} \mathcal{J}_p(x) \cdot \mathcal{J}_q(x)$. $\mathcal{J}_N(xy) = \mathcal{J}_N(x)\cdot \mathcal{J}_N(y)$.
+\item $\mathcal{QNR}_N^{+1}(x) \overset{\mathsf{def}}{=} \{ x | x \text{ is qnr, but } \mathcal{J}_N(x) = +1\}$.
+%\item $[xy \bmod N] \in \mathcal{QR}_N \text{ if } x,y \in \mathcal{QR}_N \text { or } \mathcal{QNR}_N^{+1}$.
+%\item $[xy \bmod N] \in \mathcal{QNR}_N^{+1} \text{ if } x \in \mathcal{QR}_N \text{ and } y \in \mathcal{QNR}_N^{+1}$.
+\end{itemize}
+\begin{figure}
+\begin{center}
+\input{tikz/qr-qnr.tex}
+\end{center}
+\end{figure}
+\end{frame}
+\begin{frame}\frametitle{Goldwasser-Micali Scheme}
+\begin{itemize}
+\item \textbf{Deciding quadratic residuosity (DQR)} of $x$, where $x$ is randomly chosen from $\mathcal{J}_N^{+1}$ ($\mathcal{QR}_N$ and $\mathcal{QNR}_N^{+1}$).
+\item For DQR, no solution is better than factoring $N$.
+\end{itemize}
+\begin{construction}
+\begin{itemize}
+\item $\mathsf{Gen}$: $(N,p,q)$, $z \gets \mathcal{QNR}_N^{+1}$. $pk = \left<N,z\right>$ and $sk=\left<p,q\right>$.
+\item $\mathsf{Enc}$: $m\in \{0,1\}$, $x\gets \mathbb{Z}_N^*$, output $c := [z^m\cdot x^2 \bmod N]$.
+\item $\mathsf{Dec}$: If $c$ is a qr, output $0$; otherwise $1$.
+\end{itemize}
+\end{construction}
+Goldwasser-Micali scheme is CPA-secure if DQR problem is hard.
+\end{frame}
+\begin{frame}\frametitle{Computing Square Roots mod a Prime}
+\begin{algorithm}[H]
+\SetKwInOut{Input}{input}
+\SetKwInOut{Output}{output}
+\SetKw{KwC}{compute}
+\SetKw{KwS}{sort}
+\SetKw{KwCA}{case}
+\DontPrintSemicolon
+\caption{computing square root of a prime}
+\Input{Prime $p$; quadratic residue $a \in \mathbb{Z}^*_p$}
+\Output{A square root of $a$}
+\BlankLine
+
+\KwCA $p=3 \bmod 4$:
+\Return $[a^{\frac{p+1}{4}} \bmod p]$\;
+\KwCA $p=1 \bmod 4$:
+let $b$ be a qnr modulo $p$\;
+\KwC $l$ and $m$ odd with $2^\ell\cdot m = \frac{p-1}{2}$\;
+$r := 2^\ell$, $r' := 0$\;
+\For{$i = \ell$ \KwTo $1$}{ $r := r/2$, $r' := r'/2$\tcc*[f]{maintain $a^r\cdot b^{r'}=1 \bmod p$}\;
+\lIf{$a^r\cdot b^{r'} = -1 \bmod p$}{$r' := r' + 2^\ell \cdot m$\;}
+}
+\tcc{now $r=m$, $r'$ is even, and $a^r\cdot b^{r'}=1 \bmod p$}
+\Return $\left[ a^{\frac{r+1}{2}}\cdot b^{\frac{r'}{2}} \bmod p\right]$\;
+\end{algorithm}
+\end{frame}
+\begin{frame}\frametitle{Rabin Scheme}
+\begin{itemize}
+\item \textbf{Computing square roots (CSR)} of qr mod $N$ is \textbf{proven to be hard} if factoring $N$ is hard.
+\item $N=pq$ is a \textbf{Blum integer} if $p \ne q$ and $p \equiv q \equiv 3 \bmod 4$.
+\item $\mathcal{QR}$ for Blum integer can form TDP.
+\end{itemize}
+\begin{construction}
+\begin{itemize}
+\item $\mathsf{Gen}$: Blum integer $N=pq$, $pk = N$ and $sk=\left<p,q\right>$.
+\item $\mathsf{Enc}$: $m\in \{0,1\}$, $x\gets \mathcal{QR}_N$, output $c := \left< [x^2 \bmod N],\mathsf{lsb}(x)\oplus m\right>$.
+\item $\mathsf{Dec}$: Input $\left<c,c'\right>$. $x=c^{1/2}$, output $\mathsf{lsb}(x)\oplus c'$.
+\end{itemize}
+\end{construction}
+Rabin scheme is CPA-secure if factoring problem is hard.
+\end{frame}
+\begin{frame}\frametitle{Paillier Scheme}
+\begin{itemize}
+\item $\mathbb{Z}_N\times \mathbb{Z}_N^* \simeq \mathbb{Z}_{N^2}^*$ with $f(a,b)=[(1+N)^a\cdot b^N \bmod N^2]$.
+\item $\mathsf{Res}(N^2)$ is the set of $N$th residue mod $N^2$: $\{(0,b) | b \in \mathbb{Z}_N^*\}$.
+\item \textbf{Decisional composite residuosity (DCR)} problem is to distinguish a random element of $\mathbb{Z}_{N^2}^*$ from one of $\mathsf{Res}(N^2)$. 
+\end{itemize}
+\begin{construction}
+\begin{itemize}
+\item $\mathsf{Gen}$: $(N,p,q)$, $pk = N$ and $sk=\left<N,\phi(N)\right>$.
+\item $\mathsf{Enc}$: $m\in \mathbb{Z}_N$, $r\gets \mathbb{Z}_N^*$, output $c := [(1+N)^m\cdot r^N \bmod N^2]$.
+\item $\mathsf{Dec}$: output $\left[ \frac{[c^{\phi(N)} \bmod N^2]-1}{N}\cdot \phi(N)^{-1} \bmod N\right]$.
+\end{itemize}
+\end{construction}
+$c^{\phi(N)} \bmod N^2 \leftrightarrow (m,r)^{\phi(N)} = (m\cdot {\phi(N)}, r^{\phi(N)}).$ \\
+Paillier scheme is CPA-secure if DCR problem is hard.
+\end{frame}
+\begin{frame}\frametitle{Homomorphic Encryption}
+\begin{itemize}
+\item \textbf{Homomorphic Encryption} with $\circ$: $\mathsf{Dec}_{sk}(c_1\circ c_2)=m_1\circ m_2$.
+\item Elgamal encryption is homomorphic with $\times$: $\left<g^{y_1},h^{y_1}\cdot m_1\right>\cdot \left<g^{y_2},h^{y_2}\cdot m_2\right> = \left<g^{y_1+y_2},h^{y_1+y_2}\cdot m_1m_2\right>$
+\item Paillier scheme is homomorphic with $+$: $\mathsf{Enc}_N(m_1) \cdot \mathsf{Enc}_N(m_2) = \mathsf{Enc}_N([m_1+m_2 \bmod N])$.
+\item \textbf{Application}: voting without learning any individual votes.
+\[c_i := [(1+N)^{v_i}\cdot r^N \bmod N^2], v_i \in \{0,1\}\]
+\[c^* := [\Pi_{i} c_i \bmod N^2], v^* = \Sigma_{i} v_i \]
+\item First \textbf{Fully} homomorphic with $\times$ and $+$ by Craig Gentry in 2009.
+\end{itemize}
+\end{frame}
+\begin{frame}\frametitle{Elliptic Curve Groups}
+\textbf{Elliptic curve group}: points with ``addition'' operation.\\
+Any \textbf{elliptic curve} is a plane algebraic curve:
+\[ y^2 \equiv x^3 + Ax + B \pmod p\]
+where $A,B \in \mathbb{Z}_p$ are constants with $4A^3 + 27B^2\not \equiv 0 \pmod p$.
+$\hat{E}(\mathbb{Z}_p)$ is the set of pairs $(x,y) \in \mathbb{Z}_p \times \mathbb{Z}_p$:
+\[ \hat{E}(\mathbb{Z}_p) \overset{\text{def}}{=} \{(x,y) \mid x,y\in \mathbb{Z}_p \land y^2 \equiv x^3 + Ax + B \pmod p \}\]
+$E(\mathbb{Z}_p) \overset{\text{def}}{=} \hat{E}(\mathbb{Z}_p)\cup \{\mathcal{O}\}$, $\mathcal{O}$ is identity, ``\textbf{point at infinity}''.
+\end{frame}
+\begin{frame}\frametitle{``Addition'' on Points of Elliptic Curves}
+\begin{columns}
+\begin{column}{5cm}
+\begin{figure}
+\begin{center}
+\input{tikz/ellipticcurve}
+\end{center}
+\end{figure}
+\end{column}
+\begin{column}{5cm}
+Every line intersects the curve in 3 points:
+\begin{itemize}
+\item count twice if tangent.
+\item count $\mathcal{O}$ at the vertical infinity of $y$-axis.
+\end{itemize}
+``\textbf{Addition}'' on points:
+\begin{itemize}
+\item $P+\mathcal{O} = \mathcal{O} + P = P$.
+\item If $P_1, P_2, P_3$ are co-linear, then $P_1 + P_2 + P_3 = \mathcal{O}$.
+\end{itemize}
+$-P=(x,-y)$\\
+$P_1 + P_2 = -P_3$\\
+$2P_4=-P_3$\\
+$dP = P + (d-1)P$
+\end{column}
+\end{columns}
+\[sk = (P,d); pk = (P,Q=dP)\]
+\end{frame}
+\begin{frame}\frametitle{Key Size Comparison}
+\begin{center}
+\textbf{Key lengths} (in bits) with comparable security
+\newline
+
+\begin{tabular}{|c|c|c|} \hline
+Symmetric & RSA/DH & ECC \\ \hline	
+56 & 512 & 112 \\
+80 & 1024 & 160 \\
+112 & 2048 & 224 \\
+128 & 3072 & 256 \\
+192 & 7680 & 384 \\
+256 & 15360 & 521 \\ \hline	
+\end{tabular}	
+\end{center}
+\end{frame}
+\begin{frame}\frametitle{Summary}
+\begin{itemize}
+\item public key encryption from tpd
+\item random oracle model vs. standard model
+\item CPA/CCA in ROM, RSA-FDH
+\item Coldwasser-Micali, Rabin, Paillier (homomorphic with $+$), elliptic curve.
+\end{itemize}
+\end{frame}
+\end{document}

@@ -1,0 +1,17 @@
+\begin{tikzpicture}[font=\footnotesize]
+\node (A) at (0,0) {\Lisa};
+\node (B) [right of = A, node distance = 4cm] {\Left\Bart};
+\node (0a) [below of=A, node distance=1cm] {a random $r$};
+\node (0b) [below of=B, node distance=1cm] {};
+\node (1a) [below of=0a, node distance=0.5cm] {$t = g^r$};
+\node (1b) [below of=0b, node distance=0.5cm] {};
+\draw[-latex] (1a) -- (1b) node [midway,above] {};
+\node (2a) [below of=1a, node distance=0.5cm] {};
+\node (2b) [below of=1b, node distance=0.5cm] {a random bit $c \gets\{0,1\}$};
+\draw[-latex] (2b) -- (2a) node [midway,above] {};
+\node (3a) [below of=2a, node distance=0.5cm] {$s = r + cx$};
+\node (3b) [below of=2b, node distance=0.5cm] {};
+\draw[-latex] (3a) -- (3b) node [midway,above] {};
+\node (4a) [below of=3a, node distance=0.5cm] {};
+\node (4b) [below of=3b, node distance=0.5cm] {$g^s \overset{?}{=} ty^c$};
+\end{tikzpicture}

@@ -1,0 +1,9 @@
+\begin{tikzpicture}
+\node (x) [circle, minimum size=1.5cm, draw] {$x$};
+\node (fx) [circle, draw, right of=x, minimum size=1.5cm, node distance=4cm] {$f(x)$};
+\node (hc) at ($(x)+(2cm,-1cm)$) [circle, draw, minimum size=1cm] {$\mathsf{hc}(x)$};
+
+\draw[-latex] (x) to [bend left=30,-latex,above] node {easy} (fx);
+\draw[-latex,dotted] (fx) to [bend left=30,-latex,right] node {hard} (hc);
+\draw[-latex] (x) to [bend right=30,-latex,left] node {easy} (hc);
+\end{tikzpicture}

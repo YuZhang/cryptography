@@ -1,0 +1,21 @@
+\begin{tikzpicture}[scale=1.2]
+%\draw [help lines] (-2,-2) grid [step=0.1] (2,2);
+%\draw [help lines,black] (-2,-2) grid [step=0.5] (2,2);
+\draw[dotted,gray,name path=curve3] (1.43,-2) -- (1.43,2);
+\draw[-latex,gray] (-2,0) -- (2,0);
+\draw[-latex,gray] (0,-2) -- (0,2);
+\draw[blue,name path=curve1] plot[smooth] file {tikz/outfile};
+\draw[red,name path=curve2] (-2,-1) -- (2,2);
+
+\fill [name intersections={of=curve1 and curve2, by={a,b,c}}]
+(a) circle (2pt) node [above left] {$P_3$}
+(b) circle (2pt) node [above] {$P_2$}
+(c) circle (2pt) node [left] {$P_1$};
+\fill [name intersections={of=curve1 and curve3, by={a,d}}]
+(d) circle (2pt) node [left] {$-P_3$};
+%\fill [name intersections={of=curve1 and curve4, by={a,b}}]
+%(b) circle (2pt) node [left] {$P_4$};
+\node (eq) at (-1,-1.7) {\small $y^2=x^3-x+1$};
+\draw[green] (-2,0.94) node [black,above] {$P_4$} -- (a);
+\draw[fill] (-0.7,1.18) circle (1.5pt);
+\end{tikzpicture}

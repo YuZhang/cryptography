@@ -1,0 +1,16 @@
+\begin{tikzpicture}[block/.style={rectangle, draw,align=center, rounded corners,
+minimum height=2em, minimum width=11em}]
+\node (pke) [block] {Private-Key Encryption};
+\node (mac) [right of=pke,block,node distance=5cm] {Message Authentication Codes};
+\node (prf) at ($(pke)+(2.5cm,-1.5cm)$) [block] {Pseudorandom Functions};
+\node (bc) [below of=pke,block,node distance=3cm] {Block Ciphers};
+\node (prg) [below of=mac,block,node distance=3cm] {Pseudorandom Generators};
+\node (owf) [below of=prg,block,node distance=1.5cm] {One-Way Function};
+\node (rsa) [below of=owf,block,node distance=1.5cm] {RSA, Discrete Log, Factoring};
+\draw[-latex] (prf) -- (pke);
+\draw[-latex] (prf) -- (mac);
+\draw[-latex] (bc) -- (prf);
+\draw[-latex] (prg) -- (prf);
+\draw[-latex] (owf) -- (prg);
+\draw[-latex] (rsa) -- (owf);
+\end{tikzpicture}

@@ -1,0 +1,28 @@
+\begin{tikzpicture}[cf/.style={trapezium left angle=65, trapezium right angle=90, minimum height=1cm,minimum width=1cm,trapezium, rounded corners=1ex,shape border rotate=270, draw}]
+\foreach \i in {1,2,...,5} {
+\ifnum \i = 3
+\node (h\i) at ($\i*(1.5cm,0)$) [trapezium left angle=65, trapezium right angle=90, minimum height=1cm,minimum width=1cm,trapezium, rounded corners=1ex,shape border rotate=270] {$\cdots$};
+\else
+\node (h\i) at ($\i*(1.5cm,0)$) [cf] {$h^s$};
+\fi
+}
+\foreach \i/\j in {1/2,2/3,3/4} {
+\ifnum \i = 3
+\node (x\i) at ($\i*(1.5cm,0)+(0,1.5cm)$) [minimum height=0.6cm, minimum width=1.5cm] {$\cdots$};
+\else
+\node (x\i) at ($\i*(1.5cm,0)+(0,1.5cm)$) [minimum height=0.6cm, minimum width=1.5cm,draw] {$m_{\i}$};
+\draw[-latex] (x\i) -- (h\i);
+\fi
+\draw[-latex] (h\i) -- (h\j);
+}
+\node (x4) at ($4*(1.5cm,0)+(0,1.5cm)$) [minimum height=0.6cm, minimum width=1.5cm] {$|m|$};
+\draw[-latex] (x4) -- (h4);
+\node (x5) at ($5*(1.5cm,0)+(0,1.5cm)$) [minimum height=0.6cm, minimum width=1.5cm] {$k_1$};
+\draw[-latex] (x5) -- (h5);
+\draw[-latex] (h4) -- (h5);
+
+\node (iv) at (0,0) {$k_2$};
+\node (hs) at (9cm,0) {$t$};
+\draw[-latex] (iv) -- (h1);
+\draw[-latex] (h5) -- (hs);
+\end{tikzpicture}

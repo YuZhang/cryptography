@@ -1,0 +1,43 @@
+\begin{tikzpicture}
+\node (sm) {};
+\foreach \x in {1, 2, 3} {
+\node (g\x) at ($(sm) + \x*(2.8cm,0) - (4cm,0)$)  [] {};
+\node (pa\x) [right of = g\x, node distance = 1.8cm, minimum width = 2.8cm, draw] {Part \x};
+\node (xor\x) [below of = pa\x, circle, node distance = 1cm, draw] {};
+\draw[-] (xor\x.north) -- (xor\x.south);
+\draw[-] (xor\x.east) -- (xor\x.west);
+\node (pt\x) [left of = xor\x, node distance = 0.9cm] {$m_\x$};
+\node (ct\x) [right of = xor\x, node distance = 0.8cm] {$c_\x$};
+\draw[-latex] (pa\x) -- (xor\x);
+\draw[-latex] (pt\x) -- (xor\x);
+\draw[-latex] (xor\x) -- (ct\x);
+}
+\node (gg) at ($(sm) - (1.7cm,0)$)  [rounded corners=1ex,draw] {$G$};
+\draw[-latex] (gg) -- (pa1);
+\node (iv) [below=0.5cm of gg] {$K$};
+\draw[-latex] (iv) -- (gg.south);
+%\node (k) [left of = gg, node distance = 1cm] {$K$};
+%\draw[-latex] (k) -- (gg);
+
+\node (usm) [below of=sm, node distance=3.5cm] {};
+\foreach \x in {1, 2, 3} {
+\node (ug\x) at ($(usm) + \x*(3.3cm,0) - (5cm,0)$)  [rounded corners=1ex,draw] {$G$};
+\node (uk\x) [above=0.5cm of ug\x] {};
+\draw[-latex] (uk\x) -- (ug\x.north);
+\node (uiv\x) [below=0.5cm of ug\x] {$IV_\x$};
+\draw[-latex] (uiv\x) -- (ug\x.south);
+\node (upa\x) [right of = ug\x, node distance = 1.8cm, minimum width = 2cm, draw] {Part \x};
+\node (uxor\x) [below of = upa\x, circle, node distance = 1cm, draw] {};
+\draw[-] (uxor\x.north) -- (uxor\x.south);
+\draw[-] (uxor\x.east) -- (uxor\x.west);
+\node (upt\x) [left of = uxor\x, node distance = 0.9cm] {$m_\x$};
+\node (uct\x) [right of = uxor\x, node distance = 0.8cm] {$c_\x$};
+\draw[-latex] (upa\x) -- (uxor\x);
+\draw[-latex] (upt\x) -- (uxor\x);
+\draw[-latex] (uxor\x) -- (uct\x);
+\draw[-latex] (ug\x) -- (upa\x);
+}
+\draw[-] (uk1.south) node [left] {$K$} -- (uk3.south);
+\node [above of= upt2, node distance=2.5cm] {\emph{Synchronized Mode}};
+\node [below of= upt2] {\emph{Unsynchronized Mode}};
+\end{tikzpicture}

@@ -1,0 +1,155 @@
+\input{main.tex}
+
+\title{Private-Key Management and the Public-Key Revolution}
+
+\begin{document}
+\maketitle
+\begin{frame}
+\frametitle{Outline}
+\tableofcontents
+\end{frame}
+\section{Limitations of Private-Key Cryptography}
+\begin{frame}\frametitle{Limitations of Private-Key Cryptography}
+\begin{itemize}
+\item The key-distribution need physically meeting.
+\item The number of keys for $U$ users is $\Theta(U^2)$.
+\item Secure communication in open system:
+\end{itemize}
+\vspace{0.5cm}
+Solutions that are based on private-key cryptography are not sufficient to deal with the problem of secure communication in open systems where parties cannot physically meet, or where parties have transient interactions.
+\end{frame}
+\begin{frame}\frametitle{Needham-Schroeder Protocol}
+\begin{itemize}
+\item Key Distribution Center (KDC) as Trusted Third Party (TTP).
+\item $E_{Bob}(k)$ is a \textbf{ticket} to access $Bob$, $k$ is \textbf{session key}.
+\item Used in MIT's Kerberos protocol (in Windows).
+\end{itemize}
+\begin{columns}[t]
+\begin{column}{5cm}
+\begin{figure}[t]
+\begin{center}
+\input{tikz/KDC}
+\end{center}
+\end{figure}
+\end{column}
+\begin{column}{5cm}
+\textbf{Strength}:
+\begin{itemize}
+\item each one stores one key.
+\item no updates.
+\end{itemize}
+\textbf{Weakness}:
+\begin{itemize}
+\item all-or-nothing.
+\item single-point-of-failure.
+\end{itemize}
+\end{column}
+\end{columns}
+\end{frame}
+\begin{frame}\frametitle{Merkle Puzzles (Key Exchange W/O TTP)}
+\begin{itemize}
+\item[Alice] prepares $2^{32}$ puzzles $\mathsf{Puzzle}_i$, and sends to Bob.\\
+\[\mathsf{Puzzle}_i \gets \mathsf{Enc}_{(0^{96}\|p_i)}(\text{``Puzzle \#''} x_i  \| k_i),\]
+where $\mathsf{Enc}$ is 128-bit, $p_i \gets \{0,1\}^{32}$ and $x_i,k_i \gets \{0,1\}^{128}$.
+\item[Bob] chooses $\mathsf{Puzzle}_j$ randomly, guesses $p_j$ in $2^{32}$ time, obtains $x_j,k_j$ and sends $x_j$ to Alice.
+\item[Alice] lookups puzzle with $x_j$, and uses $k_j$ as secret key.
+\item \textbf{Adversary} needs $2^{32+32}$ time.
+\end{itemize}
+\begin{block}{Better Gap?}
+Quadratic gap is best possible if we treat cipher as a black box oracle.
+\end{block}
+\end{frame}
+\section{The Public-Key Revolution}
+\begin{frame}\frametitle{Public-Key Revolution}
+\begin{itemize}
+\item In 1976, Whitfield Diffie and Martin Hellman published ``\emph{New Directions in Cryptography}''.
+\item \textbf{Asymmetric} or \textbf{public-key} encryption schemes:
+\begin{itemize}
+\item \textbf{Public key} as the encryption key.
+\item \textbf{Private key} as the decryption key.
+\end{itemize}
+\item \textbf{Public-key primitives}:
+\begin{itemize}
+\item Public-key encryption.
+\item Digital signatures. (non-repudiation)
+\item Interactive key exchange.
+\end{itemize}
+\item \textbf{Strength}:
+\begin{itemize}
+\item Key distribution over public channels.
+\item Reduce the need to store many keys.
+\item Enable security in open system.
+\end{itemize}
+\item \textbf{Weakness}: slow, active attack on public key distribution.
+\item \textbf{Peoples}: Ralphe Merkle (his advisor at Stanford was Hellman), Michael Rabin, Rivest, Shamir, and Adleman.
+\end{itemize}
+\end{frame}
+\section{Diffie-Hellman Key Exchange}
+\begin{frame}\frametitle{The Setting and Definition of Security}
+The key-exchange experiment $\mathsf{KE}^{\mathsf{eav}}_{\mathcal{A},\Pi}(n)$:
+\begin{enumerate}
+\item Two parties holding $1^n$ execute protocol $\Pi$. $\Pi$ results in a \textbf{transcript} $\mathsf{trans}$ containing all the messages sent by the parties, and a \textbf{key} $k$ that is output by each of the parties.
+\item A random bit $b \gets \{0,1\}$ is chosen. If $b=0$ then choose $\hat{k} \gets \{0,1\}^n$ \emph{u.a.r}, and if $b=1$ then set $\hat{k} :=k$.
+\item $\mathcal{A}$ is given $\mathsf{trans}$ and $\hat{k}$, and outputs a bit $b'$.
+\item $\mathsf{KE}^{\mathsf{eav}}_{\mathcal{A},\Pi}(n)=1$ if $b'=b$, and 0 otherwise. 
+\end{enumerate}
+\begin{definition}
+A key-exchange protocol $\Pi$ is secure in the presence of an eavesdropper if $\forall$ \textsc{ppt} $\mathcal{A}$, $\exists$ $\mathsf{negl}$ such that
+\[ \Pr[\mathsf{KE}^{\mathsf{eav}}_{\mathcal{A},\Pi}(n) = 1] < \frac{1}{2} + \mathsf{negl}(n). \]
+\end{definition}
+\end{frame}
+\begin{frame}\frametitle{Diffie-Hellman Key-Exchange Protocol}
+\begin{columns}[h]
+\begin{column}{5cm}
+\begin{figure}
+\begin{center}
+\input{tikz/DHkey}
+\end{center}
+\end{figure}
+\end{column}
+\begin{column}{6cm}
+$k_A = k_B = k = g^{xy}$.
+\newline
+	
+$\widehat{\mathsf{KE}}^{\mathsf{eav}}_{\mathcal{A},\Pi}$ denote an experiment where if $b=0$ the adversary is given $\hat{k} \gets \mathbb{G}$.
+\begin{theorem}
+If DDH problem is hard relative to $\mathcal{G}$, then DH key-exchange protocol $\Pi$ is secure in the presence of an eavesdropper (with respect to the modified experiment $\widehat{\mathsf{KE}}^{\mathsf{eav}}_{\mathcal{A},\Pi}$). 
+\end{theorem}
+\end{column}
+\end{columns}
+\begin{alertblock}{Security}
+Insecurity against active adversaries (Man-In-The-Middle).
+\end{alertblock}
+\end{frame}
+\begin{frame}\frametitle{Triparties Key Exchange}
+\begin{columns}[C]
+\begin{column}{5cm}
+\begin{center}
+DH-based KE in 2 rounds:
+\begin{figure}
+\input{tikz/3parties-DHKE}
+\end{figure}
+Key$=g^{abc}$.
+\end{center}
+\end{column}
+\begin{column}{6cm}
+\begin{center}
+Joux's KE in 1 round:
+\begin{figure}
+\input{tikz/3parties-JOUX}
+\end{figure}
+Key$=e(P,P)^{abc}$ in bilinear map.
+\end{center}
+\end{column}
+\end{columns}
+\begin{block}{Open Problem}
+How to exchange keys between 4 parties in one round?
+\end{block}
+\end{frame}
+\begin{frame}\frametitle{Summary}
+\begin{itemize}
+\item Merkle, Diffie, Hellman, Rivest, Shamir, Adleman and Rabin.
+\item Needham-Schroeder protocol, Diffie-Hellman key-exchange protocol.
+\end{itemize}
+\end{frame}
+\end{document}

@@ -1,0 +1,361 @@
+\input{main.tex}
+
+\title{Digital Signature Schemes}
+
+\begin{document}
+\maketitle
+\begin{frame}
+\frametitle{Outline}
+\tableofcontents
+\end{frame}
+\section{Definitions of Digital Signatures}
+\begin{frame}{Digital Signatures -- An Overview}
+\begin{itemize}
+\item \textbf{Digital signature scheme} is a mathematical scheme for demonstrating the authenticity/integrity of a digital message.
+\item allow a \textbf{signer} $S$ to ``\textbf{sign}'' a message with its own $sk$, anyone who knows $S$'s $pk$ can \textbf{verify} the authenticity/integrity.
+\item (Comparing to MAC) digital signature is:
+\begin{itemize}
+\item publicly verifiable.
+\item transferable.
+\item non-repudiation.
+\item but slow.
+\end{itemize}
+\item Digital signature is NOT the ``inverse'' of public-key encryption.
+\end{itemize}
+\end{frame}
+\begin{frame}\frametitle{The Syntax of Digital Signature Scheme}
+\begin{figure}
+\begin{center}
+\input{tikz/digitalsignature}
+\end{center}
+\end{figure}
+\begin{itemize}
+\item signature $\sigma$, a bit $b$ means $\mathsf{valid}$ if $b=1$; $\mathsf{invalid}$ if $b=0$.
+\item \textbf{Key-generation} algorithm~$(pk,sk) \gets \mathsf{Gen}(1^n), \abs{pk},\abs{sk} \ge n$.
+\item \textbf{Signing} algorithm~$\sigma \gets \mathsf{Sign}_{sk}(m)$.
+\item \textbf{Verification} algorithm~$b:= \mathsf{Vrfy}_{pk}(m,\sigma)$.
+\item \textbf{Basic correctness requirement}: $\mathsf{Vrfy}_{pk}(m,\mathsf{Sign}_{sk}(m)) = 1$.
+\end{itemize}
+\end{frame}
+\begin{frame}\frametitle{Defining of Signature Security}
+The signature experiment $\mathsf{Sigforge}_{\mathcal{A},\Pi }(n)$:
+\begin{enumerate}
+\item $(pk,sk) \gets \mathsf{Gen}(1^n)$.
+\item $\mathcal{A}$ is given input $1^n$ and oracle access to $\mathsf{Sign}_{sk}(\cdot)$, and outputs $(m,\sigma)$. $\mathcal{Q}$ is the set of queries to its oracle.
+\item $\mathsf{Sigforge}_{\mathcal{A},\Pi }(n)=1 \iff$ $\mathsf{Vrfy}_{pk}(m,\sigma)=1$ $\land$ $m \notin \mathcal{Q}$. 
+\end{enumerate}
+\begin{definition}
+A signature scheme $\Pi$ is \textbf{existentially unforgeable under an adaptive CMA} if $\forall$ \textsc{ppt} $\mathcal{A}$, $\exists$ $\mathsf{negl}$ such that:
+\[ \Pr [\mathsf{Sigforge}_{\mathcal{A},\Pi }(n)=1] \le \mathsf{negl}(n).
+\]
+\end{definition}
+\end{frame}
+\section{RSA Signatures}
+\begin{frame}\frametitle{``Textbook RSA''}
+\begin{construction}
+\begin{itemize}
+\item $\mathsf{Gen}$: on input $1^n$ run $\mathsf{GenRSA}(1^n)$ to obtain $N,e,d$. $pk = \langle N,e \rangle$ and $sk = \langle N,d \rangle$.
+\item $\mathsf{Sign}$: on input $sk$ and $m \in \mathbb{Z}^*_N$, $\sigma:= [m^d \bmod N]$.
+\item $\mathsf{Vrfy}$: on input $pk$ and $m \in \mathbb{Z}^*_N$, $m \overset{?}{=} [\sigma^e \bmod N]$.
+\end{itemize}
+\end{construction}
+\begin{alertblock}{Insecurity}
+The ``textbook RSA'' is insecure. 
+\end{alertblock}
+\end{frame}
+\begin{frame}\frametitle{Insecurity of ``Textbook RSA''}
+\begin{itemize}
+\item \textbf{A no-message attack}:
+choose an arbitrary $\sigma \in \mathbb{Z}^*_N$ and compute $m := [\sigma^e \bmod N]$. Output the forgery $(m,\sigma)$.
+\item \textbf{Forging a signature on an arbitrary message}:\\
+To forge a signature on $m$, choose a random $m_1$, set $m_2 := [m/m_1 \bmod N]$,  obtain signatures $\sigma_1, \sigma_2$ on $m_1, m_2$. \\
+$\sigma := [\sigma_1\cdot \sigma_2 \bmod N]$ is a valid signature on $m$.
+\end{itemize}
+\[\sigma^e \equiv (\sigma_1\cdot \sigma_2)^e \equiv (m^d_1\cdot m^d_2)^e \equiv m_1^{ed}\cdot m_2^{ed} \equiv m_1m_2 \equiv m \pmod N.\]
+\end{frame}
+\begin{frame}\frametitle{Hashed RSA}
+\begin{itemize}
+\item $\mathsf{Gen}$: a hash function $H : \{0,1\}^* \to \mathbb{Z}_N^*$ is part of public key.
+\item $\mathsf{Sign}$: $\sigma := [H(m)^d \bmod N]$.
+\item $\mathsf{Vrfy}$: $\sigma^e \overset{?}{=} H(m) \bmod N$.
+\end{itemize}
+If $H$ is not efficiently invertible, then the no-message attack and forging a signature on an arbitrary message is difficult.
+\begin{alertblock}{Insecurity}
+There is NO known function $H$ for which hashed RSA signatures are secure.
+\end{alertblock}
+\textbf{RSA-FDH Signature Scheme}: Random Oracle as a \textbf{Full Domain Hash (FDH)} whose image size $=$ the RSA modulus $N-1$.
+\end{frame}
+\begin{frame}\frametitle{The ``Hash-and-Sign'' Paradigm}
+\begin{construction}
+$\Pi = (\mathsf{Gen}_S, \mathsf{Sign}, \mathsf{Vrfy})$, $\Pi_H = (\mathsf{Gen}_H, H)$. A signature scheme $\Pi'$:
+\begin{itemize}
+\item $\mathsf{Gen}'$: on input $1^n$ run $\mathsf{Gen}_S(1^n)$ to obtain $(pk,sk)$, and run $\mathsf{Gen}_H(1^n)$ to obtain $s$. The public key is $pk'=\langle pk,s\rangle$ and the private key is $sk' = \langle sk,s\rangle$.
+\item $\mathsf{Sign}'$: on input $sk'$ and $m \in \{0,1\}^*$, $\sigma \gets \mathsf{Sign}_{sk}(H^s(m))$.
+\item $\mathsf{Vrfy}'$: on input $pk'$, $m \in \{0,1\}^*$ and $\sigma$, output 1 $\iff$ $\mathsf{Vrfy}_{pk}(H^s(m),\sigma)=1$.
+\end{itemize}
+\end{construction}
+\begin{theorem}
+If $\Pi$ is existentially unforgeable under an adaptive CMA and $\Pi_H$ is collision resistant, then Construction is existentially unforgeable under an adaptive CMA.
+\end{theorem}
+\end{frame}
+\begin{frame}\frametitle{Proof of Security of ``Hash-and-Sign'' Paradigm}
+\textbf{Idea}: a forgery must involve either finding a collision in $H$ or forging a signature with respect to $\Pi$.
+\begin{proof}
+$\mathcal{A}'$ attacks $\Pi'$ and output $(m,\sigma)$, $m\notin \mathcal{Q}$.\\
+$\mathsf{SF}$: $\mathsf{Sigforge}_{\mathcal{A}',\Pi'}(n)=1$.\\
+$\mathsf{coll}$: $\exists m' \in \mathcal{Q}$, $H^s(m')=H^s(m)$.
+\[\Pr[\mathsf{SF}] = \Pr[\mathsf{SF} \land \mathsf{coll}] + \Pr[\mathsf{SF} \land \overline{\mathsf{coll}}] \le \Pr[\mathsf{coll}]+\Pr[\mathsf{SF} \land \overline{\mathsf{coll}}].\]
+Reduce $\mathcal{C}$ for $\Pi_H$ to $\mathcal{A}'$. $\Pr[\mathsf{coll}] = \Pr[\mathsf{Hashcoll}_{\mathcal{C},\Pi_H}(n)=1]$. \\
+Reduce $\mathcal{A}$ for $\Pi$ to $\mathcal{A}'$.
+$\Pr[\mathsf{SF} \land \overline{\mathsf{coll}}] = \Pr[\mathsf{Sigforge}_{\mathcal{A},\Pi}(n)=1]$.\\
+So both $\Pr[\mathsf{coll}]$ and $\Pr[\mathsf{SF} \land \overline{\mathsf{coll}}]$ are negligible.
+\end{proof}
+\end{frame}
+\begin{frame}\frametitle{Proof (Cont.)}
+Reduce $\mathcal{C}$ for $\Pi_H$ to $\mathcal{A}'$. $\mathcal{A}'$ queries the signature $\sigma_i$ of $i$-th message $m_i$, $i = 1,\dotsc,\abs{\mathcal{Q}}$.
+\begin{figure}
+\begin{center}
+\input{tikz/hs-reduce-1}
+\end{center}
+\end{figure}
+$\Pr[\mathsf{coll}] = \Pr[\mathsf{Hashcoll}_{\mathcal{C},\Pi_H}(n)=1]$.
+\end{frame}
+\begin{frame}\frametitle{Proof (Cont.)}
+Reduce $\mathcal{A}$ for $\Pi$ to $\mathcal{A}'$.
+\begin{figure}
+\begin{center}
+\input{tikz/hs-reduce-2}
+\end{center}
+\end{figure}
+$\Pr[\mathsf{SF} \land \overline{\mathsf{coll}}] = \Pr[\mathsf{Sigforge}_{\mathcal{A},\Pi}(n)=1]$.
+\end{frame}
+\section{One-Time Signature Scheme}
+\begin{frame}\frametitle{One-Time Signature (OTS)}
+\textbf{One-Time Signature (OTS)}: sign only one message with one secret.\\
+The OTS experiment $\mathsf{Sigforge}_{\mathcal{A},\Pi }^{\text{1-time}}(n)$:
+\begin{enumerate}
+\item $(pk,sk) \gets \mathsf{Gen}(1^n)$.
+\item $\mathcal{A}$ is given input $1^n$ and a \alert{single query} $m'$ to $\mathsf{Sign}_{sk}(\cdot)$, and outputs $(m,\sigma)$, $m \neq m'$.
+\item $\mathsf{Sigforge}_{\mathcal{A},\Pi }^{\text{1-time}}(n)=1 \iff \mathsf{Vrfy}_{pk}(m,\sigma)=1$. 
+\end{enumerate}
+\begin{definition}
+A signature scheme $\Pi$ is \textbf{existentially unforgeable under a single-message attack} if $\forall$ \textsc{ppt} $\mathcal{A}$, $\exists$ $\mathsf{negl}$ such that:
+\[ \Pr [\mathsf{Sigforge}_{\mathcal{A},\Pi }^{\text{1-time}}(n)=1] \le \mathsf{negl}(n).
+\]
+\end{definition}
+\end{frame}
+\begin{frame}\frametitle{Lamport's OTS}
+\textbf{Idea}: OTS from OWF; one mapping per bit.
+\begin{construction}
+$f$ is a one-way function.
+\begin{itemize}
+\item $\mathsf{Gen}$: on input $1^n$, for $i \in \{1,\dotsc, \ell\}$:
+\begin{enumerate}
+\item choose random $x_{i,0}, x_{i,1} \gets \{0,1\}^n$.
+\item compute $y_{i,0} := f(x_{i,0})$ and $y_{i,1} := f(x_{i,1})$.
+\end{enumerate}
+\[ pk = \begin{pmatrix} y_{1,0} & y_{2,0} & \cdots & y_{\ell,0} \\
+y_{1,1} & y_{2,1} & \cdots & y_{\ell,1} \end{pmatrix}\;\;\; sk = \begin{pmatrix} x_{1,0} & x_{2,0} & \cdots & x_{\ell,0} \\
+x_{1,1} & x_{2,1} & \cdots & x_{\ell,1} \end{pmatrix}. \]
+\item $\mathsf{Sign}$: $m = m_1\cdots m_{\ell}$, output $\sigma = (x_{1,m_1},\dotsc,x_{\ell,m_{\ell}})$.
+\item $\mathsf{Vrfy}$:  $\sigma = (x_1,\dotsc,x_{\ell})$, output $1 \iff f(x_i) = y_{i,m_i}$, for all $i$. 
+\end{itemize}
+\end{construction}
+\begin{theorem}
+If $f$ is OWF, $\Pi$ is OTS for messages of length polynomial $\ell$.
+\end{theorem}
+\end{frame}
+\begin{frame}\frametitle{Example of Lamport's OTS}
+\begin{exampleblock}{Signing $m=011$}
+\[ sk =
+\begin{pmatrix} {\color{red} x_{1,0}} & x_{2,0} & x_{3,0} \\
+x_{1,1} & {\color{red} x_{2,1}} & {\color{red} x_{3,1}} 
+\end{pmatrix}
+\implies \sigma = (x_{1,0},x_{2,1},x_{3,1})\]
+$\sigma = (x_1,x_2,x_3)$:
+\[ pk =
+\begin{pmatrix} {\color{red} y_{1,0}} & y_{2,0} & y_{3,0} \\
+y_{1,1} & {\color{red} y_{2,1}} & {\color{red} y_{3,1}} 
+\end{pmatrix}
+\implies \begin{array}{l} f(x_1) \overset{?}{=} y_{1,0} \\ f(x_2) \overset{?}{=} y_{2,1} \\ f(x_3) \overset{?}{=} y_{3,1} \end{array} \]
+\end{exampleblock}
+\end{frame}
+\begin{frame}\frametitle{Proof of Lamport's OTS Security}
+\textbf{Idea}: If $m \neq m'$, then $\exists i^*, m_{i*} = b^* \neq m'_{i*}$. So to forge a signature on $m$ can invert a single $y_{i^*,b^*}$ at least.
+\begin{proof}
+Reduce $\mathcal{I}$ inverting $y$ to $\mathcal{A}$ attacking $\Pi$:
+\begin{enumerate}
+\item Construct $pk$: Choose $i^* \gets \{1,\dotsc,\ell\}$ and $b^* \gets \{0,1\}$, set $y_{i^*,b^*} := y$. For $i \neq i^*$, $y_{i,b} := f(x_{i,b})$.
+\item $\mathcal{A}$ queries $m'$: If $m_{i_*}' = b^*$, stop. Otherwise, return $\sigma = (x_{1,m'_1},\dots,x_{\ell,m'_{\ell}})$.
+\item When $\mathcal{A}$ outputs $(m,\sigma)$, $\sigma=(x_1,\dotsc,x_{\ell})$, if $\mathcal{A}$ output a forgery at $(i^*,b^*)$: $\mathsf{Vrfy}_{pk}(m,\sigma)=1$ and $m_{i^*} =b^* \neq m'_{i^*}$, then output $x_{i^*,b^*}$.
+\end{enumerate}
+\[\Pr[\mathcal{I}\;\; \text{succeeds} ] \ge \frac{1}{2\ell}\Pr[\mathcal{A}\;\;  \text{succeeds}] \]
+\end{proof}
+\end{frame}
+\begin{frame}\frametitle{Stateful Signature Scheme}
+\textbf{Idea}: OTS by signing with \textbf{``new'' key} derived from \textbf{``old'' state}. 
+\begin{definition}[Stateful signature scheme]
+\begin{itemize}
+\item \textbf{Key-generation} algorithm~$(pk,sk,s_0) \gets \mathsf{Gen}(1^n)$. $s_0$ is \textbf{initial state}.
+\item \textbf{Signing} algorithm~$(\sigma,s_i) \gets \mathsf{Sign}_{sk,s_{i-1}}(m)$.
+\item \textbf{Verification} algorithm~$b:= \mathsf{Vrfy}_{pk}(m,\sigma)$.
+\end{itemize}
+\end{definition}
+\textbf{A simple stateful signature scheme for OTS}:\\
+Generate $(pk_i,sk_i)$ independently, set $pk := (pk_1,\dotsc,pk_{\ell})$ and $sk := (sk_1,\dotsc,sk_{\ell})$. \\
+Start from the state $1$, sign the $s$-th message with $sk_s$, verify with $pk_s$, and update the state to $s+1$.\\
+\textbf{Weakness}: the upper bound $\ell$ must be fixed in advance.
+\end{frame}
+\begin{frame}\frametitle{``Chain-Based'' Signatures}
+\textbf{Idea}: generate keys ``on-the-fly'' and sign the key chain.
+\begin{figure}
+\begin{center}
+\input{tikz/chain-sig}
+\end{center}
+\end{figure}
+Use a single public key $pk_1$, sign each $m_i$ and $pk_{i+1}$ with $sk_i$: \[\sigma_i \gets \mathsf{Sign}_{sk_i}(m_i\| pk_{i+1}),\] output $\langle pk_{i+1},\sigma_i \rangle$, and verify $\sigma_i$ with $pk_i$.\\
+The signature is $(pk_{i+1},\sigma_i,\{m_j,pk_{j+1},\sigma_j\}^{i-1}_{j=1})$.\\
+\textbf{Weakness}: stateful, not efficient, revealing all previous messages.
+\end{frame}
+\begin{frame}\frametitle{``Tree-Based'' Signatures -- Merkle Tree}
+\textbf{Idea}: generate a chain of keys for each message and sign the key chain.
+\begin{figure}
+\begin{center}
+\input{tikz/tree-sig}
+\end{center}
+\end{figure}
+\begin{itemize}
+\item root is $\varepsilon$ (empty string), leaf is a message $m$, and internal nodes $(pk_w,sk_w)$, where $w$ is the prefix of $m$.
+\item each node $pk_w$ ``certifies'' its children $pk_{w0}\| pk_{w1}$ or $w$.
+\end{itemize}
+\end{frame}
+\begin{comment}
+\begin{frame}\frametitle{Construction of ``Tree-Based'' Signatures}
+\begin{construction}
+$\Pi = (\mathsf{Gen},\mathsf{Sign},\mathsf{Vrfy})$. For a binary string $m$, $m|_i \overset{\text{def}}{=} m_1\cdots m_i$ denote the $i$-bit prefix of $m$. $\Pi^*=(\mathsf{Gen}^*,\mathsf{Sign}^*,\mathsf{Vrfy}^*)$:
+\begin{itemize}
+\item $\mathsf{Gen}^*$: on input $1^n$, compute $(pk_\varepsilon,sk_\varepsilon) \gets \mathsf{Gen}(1^n)$ and output the public key $pk_\varepsilon$. The private key and initial sate are $sk_\varepsilon$.
+\item $\mathsf{Sign}^*$: on input $m \in \{0,1\}^n$,
+\begin{enumerate}
+\item for $i=0$ to $n-1$: compute $(pk_{m|_i0},sk_{m|_i0}) \gets \mathsf{Gen}(1^n)$, $(pk_{m|_i1},sk_{m|_i1})\gets \mathsf{Gen}(1^n)$, $\sigma_{m|_i} \gets \mathsf{Sign}_{sk_{m|_i}}(pk_{m|_i0}\| pk_{m|_i1})$, if these values are not in the state, and add them to the state.
+\item compute $\sigma_m \gets \mathsf{Sign}_{sk_m}(m)$, if it is not in the state, add it.
+\item output $\sigma = (\{\sigma_{m|_i},pk_{m|_i0},pk_{m|_i1}\}^{n-1}_{i=0}, \sigma_m)$.
+\end{enumerate}
+\item $\mathsf{Vrfy}^*$: on input $pk_\varepsilon, m, \sigma$, output 1 $\iff$
+\begin{enumerate}
+\item $\mathsf{Vrfy}_{pk_{m|_i}}(pk_{m|_i0}\| pk_{m|_i1},\sigma_{m|_i}) \overset{?}{=} 1$ for all $i \in \{0,\dotsc,n-1\}$.
+\item $\mathsf{Vrfy}_{pk_{m}}(m,\sigma_m) \overset{?}{=} 1$.
+\end{enumerate}
+\end{itemize}
+\end{construction}
+\end{frame}
+\begin{frame}\frametitle{Security of ``Tree-Based'' Signatures}
+\begin{theorem}
+$\Pi$ is a OTS. Construction $\Pi^*$ is a secure digital signature scheme.
+\end{theorem}
+\begin{proof}
+\textbf{Idea}: Reduce $\mathcal{A}$ for OTS $\Pi$ to $\mathcal{A}^*$ for ``tree-based'' $\Pi^*$.\\
+$\mathcal{A}^*$ queries $\ell^*=\ell^*(n)$ times, $\ell=\ell(n)=2n\ell^*+1$.\\
+$\mathcal{A}$ is given input $pk$, generates a list of $\ell$ key pairs with $i^*$-th node $pk$ inserted randomly. $\mathcal{A}$ runs $\mathcal{A}^*$ as a subroutine, and replies the queries from $\mathcal{A}^*$ with the list of keys. If $\mathcal{A}^*$ outputs a forgery on $m$, then there is one node $i$, for which the signature of its child $C$ is forged, on the path from the root to $m$. If $i=i^*$ (with probability $\frac{1}{\ell}$), then $\mathcal{A}$ outputs a forgery on $C$.
+
+\[ \Pr [\mathsf{Sigforge}_{\mathcal{A},\Pi }^{\text{1-time}}(n)=1] = \Pr [\mathsf{Sigforge}_{\mathcal{A}^*,\Pi^* }(n)=1]/\ell(n)\]
+\end{proof}
+\end{frame}
+\end{comment}
+\begin{frame}\frametitle{A Stateless Solution}
+\textbf{Idea}: use deterministic randomness to emulate the state of tree.
+\newline
+
+Use PRF $F$ and two keys $k,k'$ (secrets) to generate $pk_w,sk_w$:
+\begin{enumerate}
+\item compute $r_w := F_k(w)$.
+\item compute $(pk_w,sk_w) := \mathsf{Gen}(1^n;r_w)$, using $r_w$ as random coins.
+\end{enumerate}
+$k'$ is used to generate $r_w'$ that is used to compute $\sigma_w$.
+\begin{lemma}
+If OWF exist, then $\exists$ OTS (for messages of arbitrary length).
+\end{lemma}
+\begin{theorem}
+If OWF exists, then $\exists$ (stateless) secure signature scheme.
+\end{theorem}
+\end{frame}
+\section{The Digital Signature Standard (DSS)}
+\begin{frame}\frametitle{Construction of DSS}
+DSS uses Digital Signature Algorithm (DSA, a variant of ElGamal signature scheme). [FIPS 186]
+\begin{construction}
+$\mathcal{G}$ outputs $(p,q,g)$: (1) $p$ and $q$ are primes with $\|q\| =n$;\\
+(2) $q|(p-1)$ but $q^2 \nmid (p-1)$;\\
+(3) $g$ is a generator of the subgroup of $\mathbb{Z}^*_p$ of order $q$.
+\begin{itemize}
+\item $\mathsf{Gen}$: $(p,q,g) \gets \mathcal{G}$. hash function $H : \{0,1\}^* \to \mathbb{Z}_q$. \\
+$x \gets \mathbb{Z}_q$ and $y:= [g^x \bmod p]$.\\
+$pk = \langle H,p,q,g,y\rangle$. $sk=\langle H,p,q,g,x\rangle$.
+\item $\mathsf{Sign}$: $k\gets \mathbb{Z}^*_q$ and $r:= [[g^k \bmod p] \bmod q]$, $s:= [(H(m)+xr)\cdot k^{-1} \bmod q]$. Output $(r,s)$.
+\item $\mathsf{Vrfy}$: $u_1 := [H(m)\cdot s^{-1} \bmod q]$, $u_2 := [r\cdot s^{-1} \bmod q]$. Output $1 \iff r \overset{?}{=} [[g^{u_1}y^{u_2} \bmod p]\bmod q].$
+\end{itemize}
+\end{construction}
+\end{frame}
+\begin{frame}\frametitle{Correctness and Security of DSS}
+\[r = [[g^k \bmod p] \bmod q]\; \text{and}\; s= [(\hat{m}+xr)\cdot k^{-1} \bmod q],\; \hat{m}=H(m). \]
+\begin{align*}g^{\hat{m}s^{-1}}y^{rs^{-1}} &= g^{\hat{m}\cdot (\hat{m}+xr)^{-1}k}g^{xr\cdot (\hat{m}+xr)^{-1}k} \pmod p \\
+	&= g^{(\hat{m}+xr)\cdot (\hat{m}+xr)^{-1}k} \pmod p \\  
+	&= g^k \pmod p.
+	\end{align*}
+\[ [[g^k \bmod p] \bmod q] = r.\]
+Security of DSS relies on the hardness of discrete log problem.\\
+The entropy, secrecy and uniqueness of $k$ is critical.
+\begin{alertblock}{Insecurity}
+No proof of security for DSS based on discrete log assumption.
+\end{alertblock}
+\end{frame}
+\section{Certificates and Public-Key Infrastructures}
+\begin{frame}\frametitle{Certificates}
+\begin{figure}
+\begin{center}
+\input{tikz/certificates}
+\end{center}
+\end{figure}
+\[\text{\bf Certificates}\;\; \mathsf{cert}_{C\to B} \overset{\text{def}}{=} \mathsf{Sign}_{sk_C}(\text{`Bob's key is } pk_B\text{'}).\]
+\end{frame}
+\begin{frame}\frametitle{Public-Key Infrastructure (PKI)}
+\begin{itemize}
+\item \textbf{A single CA}: is trusted by everybody.
+\begin{itemize}
+\item Strength: simple
+\item Weakness: single-point-of-failure
+\end{itemize}
+\item \textbf{Multiple CAs}: are trusted by everybody.
+\begin{itemize}
+\item Strength: robust
+\item Weakness: cannikin law
+\end{itemize}
+\item \textbf{Delegation and certificate chains}: The trust is transitive.
+\begin{itemize}
+\item Strength: ease the burden on the root CA. 
+\item Weakness: difficult for management, cannikin law. 
+\end{itemize}
+\item \textbf{``Web of trust''}: No central points of trust, e.g., PGP.
+\begin{itemize}
+\item Strength: robust, work at ``grass-roots'' level. 
+\item Weakness: difficult to manage/give a guarantee on trust.
+\end{itemize}
+\end{itemize}
+\end{frame}
+\begin{frame}\frametitle{Invalidating Certificates}
+\begin{itemize}
+\item \textbf{Expiration}: include an \emph{expiry date} in the certificate.
+\[\mathsf{cert}_{C \to B} \overset{\text{def}}{=} \mathsf{Sign}_{sk_C}(\text{`bob's key is}\; pk_B \text{'},\; \text{date}). \]
+\item \textbf{Revocation}: explicitly revoke the certificate.
+\[\mathsf{cert}_{C \to B} \overset{\text{def}}{=} \mathsf{Sign}_{sk_C}(\text{`bob's key is}\; pk_B \text{'},\; \text{\#\#\#}).  \]
+``\#\#\#'' represents the serial number of this certificate.\\
+\textbf{Cumulated Revocation}: CA generates \emph{certificate revocation list} (CRL) containing the serial numbers of all revoked certificates, signs CRL with the current date. 
+\end{itemize}
+\end{frame}
+\begin{frame}\frametitle{Summary}
+\begin{itemize}
+\item Textbook RSA, Hashed RSA, Hash-and-Sign, Lamport's OTS, DSS.
+\item Stateful/Chain-based/Tree-based/Stateless Signature Scheme.
+\item Certificates, PKI, CA, Web-of-trust, Invalidation.
+\end{itemize}
+\end{frame}
+\end{document}

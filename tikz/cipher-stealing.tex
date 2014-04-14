@@ -1,0 +1,22 @@
+\begin{tikzpicture}[scale=0.7, every node/.style={scale=0.7,minimum size=0.5cm}]
+\node (m2) at (0,0) [minimum width=1.5cm, draw] {$m_{l-1}$};
+\node (f2) [right of=m2, node distance=2cm, minimum width=0.5cm, rounded corners=0.5ex, draw] {$F$};
+\node (c2) [right of=f2, node distance=2cm, minimum width=1.5cm, draw] {$c_{l-1}$};
+\node (m1) at (-0.25cm,-2cm) [minimum width=1cm, draw] {$m_{l}$};
+\node (f1) [below of=f2, node distance=2cm, minimum width=0.5cm, rounded corners=0.5ex, draw] {$F$};
+\node (p1) at (0.5cm,-2cm) [minimum width=0.5cm, draw, pattern=north east lines] {};
+\node (p2) [left of = c2, node distance=0.5cm, minimum width=0.5cm, draw, pattern=north east lines] {};
+\node (c1) [below of=c2, node distance=2cm, minimum width=1.5cm, draw] {$c_{l}$};
+\node (l2) [right of=c2, node distance=3cm, minimum width=1.5cm, draw] {$c_{l}$};
+\node (l1) at ($(m1) + (7cm,0)$) [minimum width=1cm, draw] {$c_{l-1}$};
+\draw[-latex] (m2) -- (f2) -- (c2);
+\draw[-latex] (p1) -- (f1) -- (c1);
+\draw[-, dashed] (p1.north west) -- (p2.south west); 
+\draw[-, dashed] (p1.north east) -- (p2.south east); 
+\draw[-, dashed] (c2.south east) -- (l1.north east);
+\draw[-, dashed] (p2.south east) -- (l1.north west);
+\draw[-, dashed] (c1.north west) -- (l2.south west); 
+\draw[-, dashed] (c1.north east) -- (l2.south east);
+\end{tikzpicture}
+
+

@@ -1,0 +1,16 @@
+\begin{tikzpicture}
+\clip (-2.5,-4.5) rectangle (7.5,1);
+\draw[dashed] (2.5,-5) -- (2.5,1);
+\node (nph) {$\mathcal{NP}\text{-Hard}$};
+\node (nphr) [right of=nph, node distance=5cm] {$\mathcal{NP}\text{-Hard}$};
+\node (npc) [below of=nph, node distance=1.5cm] {$\mathcal{NP}\text{-Complete}$};
+\node (np) [below of=npc, node distance=0.8cm] {$\mathcal{NP}$};
+\node (ci) [below of=npc, draw, circle, node distance=0.75cm, minimum size=3cm] {};
+\node (cir) [right of=ci, draw, circle, node distance=5cm, minimum size=3cm] {$\mathcal{NP}\text{-Complete}$};
+\node [below of=cir, node distance=0.4cm] {$= \mathcal{NP} = \mathcal{P}$};
+\node (el) [draw, ellipse, above of=npc, node distance=2cm, minimum width=4.5cm, minimum height=5cm] {};
+\node [draw, ellipse, right of=el, node distance=5cm, minimum width=4.5cm, minimum height=5cm] {};
+\node (p) [draw, ellipse, below of=npc, node distance=1.75cm, minimum width=1.5cm, minimum height=1cm] {$\mathcal{P}$};
+\node (pnp) [below of=p] {$\mathcal{P} \ne \mathcal{NP}$};
+\node [right of=pnp, node distance=5cm] {$\mathcal{P} = \mathcal{NP}$};
+\end{tikzpicture}

@@ -1,0 +1,13 @@
+\begin{tikzpicture}
+\node (x) [circle, minimum size=1.5cm, draw] {$x$};
+\node (fx) [circle, draw, right of=x, minimum size=1.5cm, node distance=4cm] {$f(x)$};
+\node (hc) at ($(x)+(2cm,-1cm)$) [circle, draw] {$\mathsf{hc}(x)$};
+\node (tp) [draw, right of=x, node distance=2cm] {$\mathsf{tp}$};
+\node (ez) [above of=tp, node distance=0.5cm, blue] {easy};
+
+\draw[-latex,blue] (x) to [bend left=30,-latex,above] node {easy} (fx);
+\draw[-latex,red] (fx) to [bend left=30,-latex,right] node {hard} (hc);
+\draw[-latex,blue] (x) to [bend right=30,-latex,left] node {easy} (hc);
+\draw[-latex,blue] (fx) -- (tp)  -- (x);
+\draw[-latex,red] (fx) to [bend right=-120,-latex,below] node {hard} (x);
+\end{tikzpicture}

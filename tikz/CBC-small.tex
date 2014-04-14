@@ -1,0 +1,23 @@
+\begin{tikzpicture}[scale=0.7, every node/.style={scale=0.7}]
+\foreach \x in {1, 2, 3} {
+\node (f\x) at ($\x*(2.5cm,0)$) [minimum size=1.25cm,rounded corners=1ex,draw] {\Large $F_k$};
+\node (m\x) [above of=f\x, node distance=2.5cm] {$m_\x$};
+\node (c\x) [below of=f\x, node distance=1.5cm] {$c_\x$};
+\node (p\x) [above of=f\x, node distance=1.5cm, circle, draw] {};
+\draw[-] (p\x.north) -- (p\x.south);
+\draw[-] (p\x.east) -- (p\x.west);
+\draw[-latex] (m\x) -- (p\x);
+\draw[-latex] (p\x) -- (f\x);
+\draw[-latex] (f\x) -- (c\x);
+}
+
+\node (iv) [left of=p1, node distance=1.5cm] {$IV$};
+\node (iv2) [left of=c1, node distance=1.5cm] {$IV$};
+\draw[-latex] (iv) -- (iv2);
+\draw[-latex] (iv) -- (p1);
+
+\foreach \x in {1, 2} {
+\draw[-latex] ($(c\x) + (0,0.6cm)$) -| +(1.25cm,2.4cm) -- ($(p\x.west) + (2.5cm,0)$);
+}
+
+\end{tikzpicture}

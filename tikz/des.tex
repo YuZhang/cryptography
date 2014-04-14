@@ -1,0 +1,23 @@
+\begin{tikzpicture}
+\node (xor) [circle, draw] {};
+\draw[-] (xor.north) -- (xor.south);
+\draw[-] (xor.east) -- (xor.west);
+\node (p48) at ($(xor)+(-1.5cm,0.5cm)$) [minimum width=2.7cm,draw] {48-bits};
+\node (E) [above of=p48, rounded corners=1ex, draw] {Expansion};
+\node (p32) [above of=E, draw] {32-bit input};
+\node (skey) [right of=p32, node distance=3cm,draw] {48-bit sub-key};
+\draw [-latex] (p32) -- (E);
+\draw [-latex] (E) -- (p48);
+\draw [-latex] (p48.south) |- (xor);
+\draw [-latex] (skey.south) |- (xor);
+\node (i48) [minimum width=6.6cm,below of=xor, draw] {48-bits (8$\times$6-bits)};
+\node (i32) [minimum width=5.6cm,below of=i48, node distance=2cm, draw] {32-bits (8$\times$4-bits)};
+\node (pm) [below of=i32, rounded corners=1ex,draw] {Permutation};
+\draw [-latex] (xor) -- (i48);
+\draw [-latex] (i32) -- (pm);
+\foreach \x in {1,2,...,8} {
+\node (s\x) at ($(i48)+(\x*0.7cm,-1cm)+(-3.15cm,0)$) [rounded corners=1ex,draw] {$s_\x$};
+\draw [-latex] (s\x |- i48.south) -- (s\x.north);
+\draw [-latex] (s\x.south) -- (s\x |- i32.north);
+}
+\end{tikzpicture}

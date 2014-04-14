@@ -1,0 +1,25 @@
+\begin{tikzpicture}
+\foreach \z in {1, 2,...,4} {
+\node (f\z) at ($\z*(0,-1.5cm)$) [minimum width=1cm,rounded corners=1ex,draw] {$F_{k_\z}$};
+\node (xor\z) [left of = f\z, circle, node distance = 2cm, draw] {};
+\draw[-] (xor\z.north) -- (xor\z.south);
+\draw[-] (xor\z.east) -- (xor\z.west);
+\draw[-latex] (f\z.west) -- (xor\z.east);
+}
+\foreach \z in {1, 2,...,3} {
+\draw[-latex] (f\z.east) -| +(1.5cm,-0.5cm) -- ($(xor\z) - (0,1cm)$) -- ($(xor\z.north) - (0,1.5cm)$);
+\draw[-] (xor\z.south) -- ($(xor\z)+(0,-0.5cm)$) -- ($(f\z.east) + (1.5cm,-1cm)$) -- +(0,-0.5cm);
+}
+\node (p0) [above of = f1, minimum width=5cm,minimum height=0.5cm,node distance=1cm,draw] {}; 
+\node (l0) [above of = xor1,node distance=1cm] {$L_0$};
+\node (r0) [right of = l0, node distance = 4cm] {$R_0$};
+\draw[-] (p0.north) -- (p0.south);
+\draw[-latex] (l0 |- p0.south) -- (xor1.north);
+\draw[-] ($(f1.east)+(1.5cm,0)$) -- +(0,0.75cm);
+\node (p4) [below of = f4, minimum width=5cm,minimum height=0.5cm,node distance=1.75cm,draw] {}; 
+\node (l4) [below of = xor4,node distance=1.75cm] {$L_4$};
+\node (r4) [right of = l4, node distance = 4cm] {$R_4$};
+\draw[-] (p4.north) -- (p4.south);
+\draw[-latex] (f4.east) -| +(1.5cm,-0.5cm) -- ($(xor4) - (0,1cm)$) -- (xor4 |- p4.north);
+\draw[-] (xor4.south) -- ($(xor4)+(0,-0.5cm)$) -- ($(f4.east) + (1.5cm,-1cm)$) -- +(0,-0.5cm);
+\end{tikzpicture}

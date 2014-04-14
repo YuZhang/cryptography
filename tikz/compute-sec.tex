@@ -1,0 +1,9 @@
+\begin{tikzpicture}[scale=1.2]
+\draw[->] (0,0) -- (4,0) node [midway, below] {Time: $t$};
+\draw[->] (0,0) -- (0,4) node [midway, above, sloped] {Pr. of break: $\varepsilon$};
+\draw[blue,name path=curve2] (0,0) -- (4,4) node [near end, below, sloped] {Brute force};
+\draw[red] (0,0) arc (-30:0:8);
+\draw (1.25,3) node [rotate=80,red] {Break!};
+\filldraw [dotted, opacity=0.2, green] (0,0) rectangle (3,1.5);
+\draw (2,0.75) node [green] {Security Zone};
+\end{tikzpicture}

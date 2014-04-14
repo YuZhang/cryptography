@@ -1,0 +1,17 @@
+\begin{tikzpicture}
+\node (x)  {$x$};
+\node (f1) [right of=x, rounded corners=1ex, minimum width=1cm, draw, node distance = 1.5cm] {$F$};
+\node (f2) [right of=f1, rounded corners=1ex, draw, minimum width=1cm, node distance = 1.5cm] {$F^{-1}$};
+\node (f3) [right of=f2, rounded corners=1ex, draw, minimum width=1cm, node distance = 1.5cm] {$F$};
+\node (y)  [right of=f3, , node distance = 1.5cm] {$y$};
+\node (k1) [above of=f1] {$k_1$};
+\node (k2) [above of=f2] {$k_2$};
+\node (k3) [above of=f3] {$k_3$};
+\draw [-latex] (x) -- (f1);
+\draw [-latex] (f1) -- (f2);
+\draw [-latex] (f2) -- (f3);
+\draw [-latex] (f3) -- (y);
+\draw [-latex] (k1) -- (f1);
+\draw [-latex] (k2) -- (f2);
+\draw [-latex] (k3) -- (f3);
+\end{tikzpicture}

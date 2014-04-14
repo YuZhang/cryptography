@@ -1,0 +1,553 @@
+\input{main.tex}
+
+\title{Message Authentication Codes and Collision-Resistant Hash Functions}
+
+\begin{document}
+\maketitle
+\begin{frame}
+\frametitle{Outline}
+\tableofcontents
+\end{frame}
+\section{Message Authentication Codes (MAC) -- Definitions}
+\begin{frame}\frametitle{Integrity and Authentication}
+\begin{figure}
+\begin{center}
+\input{tikz/integrity}
+\input{tikz/authentication}
+\end{center}
+\end{figure}
+\end{frame}
+\begin{frame}\frametitle{The Syntax of MAC}
+\begin{figure}
+\begin{center}
+\input{tikz/mac}
+\end{center}
+\end{figure}
+\begin{itemize}
+\item key $k$, tag $t$, a bit $b$ means $\mathsf{valid}$ if $b=1$; $\mathsf{invalid}$ if $b=0$.
+\item \textbf{Key-generation} algorithm~$k \gets \mathsf{Gen}(1^n), \abs{k} \ge n$.
+\item \textbf{Tag-generation} algorithm~$t \gets \mathsf{Mac}_k(m)$.
+\item \textbf{Verification} algorithm~$b:= \mathsf{Vrfy}_k(m,t)$.
+\item \textbf{Message authentication code}: $\Pi = (\mathsf{Gen}, \mathsf{Mac}, \mathsf{Vrfy})$.
+\item \textbf{Basic correctness requirement}: $\mathsf{Vrfy}_k(m,\mathsf{Mac}_k(m)) = 1$.
+\end{itemize}
+\end{frame}
+\begin{frame}\frametitle{Security of MAC}
+\begin{itemize}
+\item \textbf{Intuition}: No adversary should be able to generate a \textbf{valid} tag on any ``\textbf{new}'' message\footnote{A stronger requirement is concerning \emph{new message/tag pair}.} that was not previously sent.
+\item \textbf{Replay attack}: Copy a message and tag previously sent. (\textbf{excluded by only considering ``new'' message})
+\begin{itemize}
+\item Sequence numbers: receiver must store the previous ones.
+\item Time-Stamps: sender/receiver maintain synchronized clocks.
+\end{itemize}
+\item \textbf{Existential unforgeability}: \textbf{Not} be able to forge a valid tag on \textbf{any} message.
+\begin{itemize}
+\item \textbf{Existential forgery}: \emph{at least one} message.
+\item \textbf{Selective forgery}: message chosen \emph{prior} to the attack.
+\item \textbf{Universal forgery}: \emph{any} given message.
+\end{itemize}
+\item \textbf{Adaptive chosen-message attack (CMA)}: be able to obtain tags on \emph{any} message chosen adaptively \emph{during} its attack.
+\end{itemize}
+\end{frame}
+\begin{frame}\frametitle{Definition of MAC Security}
+The message authentication experiment $\mathsf{Macforge}_{\mathcal{A},\Pi }(n)$:
+\begin{enumerate}
+\item $k \gets \mathsf{Gen}(1^n)$.
+\item $\mathcal{A}$ is given input $1^n$ and oracle access to $\mathsf{Mac}_k(\cdot)$, and outputs $(m,t)$. $\mathcal{Q}$ is the set of queries to its oracle.
+\item $\mathsf{Macforge}_{\mathcal{A},\Pi }(n)=1 \iff$ $\mathsf{Vrfy}_k(m,t)=1$ $\land$ $m \notin \mathcal{Q}$. 
+\end{enumerate}
+\begin{figure}
+\begin{center}
+\input{tikz/macforge-exp.tex}
+\end{center}
+\end{figure}
+\begin{definition}
+A MAC $\Pi$ is \textbf{existentially unforgeable under an adaptive CMA} if $\forall$ \textsc{ppt} $\mathcal{A}$, $\exists$ $\mathsf{negl}$ such that:
+\[ \Pr [\mathsf{Macforge}_{\mathcal{A},\Pi }(n)=1] \le \mathsf{negl}(n).
+\]
+\end{definition}
+\end{frame}
+\section{Constructing Secure Message Authentication Codes}
+\begin{frame}\frametitle{Constructing Secure MACs}
+\begin{columns}[C]
+\column{.4\textwidth}
+\begin{figure}
+\begin{center}
+\input{tikz/macwithprf}
+\end{center}
+\end{figure}
+\column{.6\textwidth}
+\begin{construction}
+\begin{itemize}
+\item $F$ is PRF. $\abs{m} = n$.
+\item $\mathsf{Gen}(1^n)$: $k \gets \{0,1\}^n$ \emph{u.a.r}.
+\item $\mathsf{Mac}_k(m)$: $t := F_k(m)$.
+\item $\mathsf{Vrfy}_k(m,t)$: $1 \iff t \overset{?}{=} F_k(m)$.
+\end{itemize}
+\end{construction}
+\begin{theorem}\label{thm:mac}
+If $F$ is a PRF, Construction is a secure fixed-length MAC.
+\end{theorem}
+\end{columns}
+\begin{lemma}
+\textbf{Truncating MACs based on PRFs}:
+If $F$ is a PRF, so is $F^t_k(m) = F_k(m)[1,\dots,t]$.
+\end{lemma}
+\end{frame}
+\begin{frame}\frametitle{Proof of Secure MAC from PRF}
+\textbf{Idea}: Show $\Pi$ is secure unless $F_k$ is not PRF by reduction.  
+\begin{proof}
+$D$ distinguishes $F_k$; $\mathcal{A}$ attacks $\Pi$. 
+\begin{figure}
+\begin{center}
+\input{tikz/pgfMAC}
+\end{center}
+\end{figure}
+\end{proof}
+\end{frame}
+\begin{frame}\frametitle{Proof of Secure MAC from PRF (Cont.)}
+\begin{proof}
+(1) If true random $f$ is used, $t=f(m)$ is uniformly distributed.
+\[ \Pr[D^{f(\cdot)}(1^n)=1] = \Pr[\mathsf{Macforge}_{\mathcal{A},\tilde{\Pi}}(n) = 1] \le 2^{-n}.\]
+(2) If $F_k$ is used, conduct the experiment $\mathsf{Macforge}_{\mathcal{A},\Pi}(n)$. 
+\[ \Pr[D^{F_k(\cdot)}(1^n)=1] = \Pr[\mathsf{Macforge}_{\mathcal{A},\Pi}(n) = 1] = \varepsilon(n).\]
+According to the definition of PGF,
+\[ \left| \Pr[D^{F_k(\cdot)}(1^n)=1] - \Pr[D^{f(\cdot)}(1^n)=1] \right| \ge \varepsilon(n) - 2^{-n}. \]
+\end{proof}
+\end{frame}
+\begin{frame}\frametitle{Extension to Variable-Length Messages}
+\begin{itemize}
+\item \textbf{Suggestion 1}: XOR all the blocks together and authenticate the result. $t := \mathsf{Mac}_k'(\oplus_i m_i)$.
+\item \textbf{Suggestion 2}: Authenticate each block separately. $t_i := \mathsf{Mac}_k'(m_i)$.
+\item \textbf{Suggestion 3}: Authenticate each block along with a sequence number. $t_i := \mathsf{Mac}_k'(i\| m_i)$.
+\item \textbf{Weakness}: forgeable, changing the order, dropping blocks.
+\item \textbf{Countermeasure}: add information. 
+\begin{itemize}
+\item random ``\textbf{message identifier}'' provides randomness; prevents combination.
+\item \textbf{sequence number} prevents reordering.
+\item the \textbf{length} of message prevents dropping/appending.
+\end{itemize}
+\end{itemize}
+\end{frame}
+\begin{frame}\frametitle{Constructing Secure Variable-Length MACs}
+\begin{construction}
+\begin{itemize}
+\item $\Pi' = (\mathsf{Gen}', \mathsf{Mac}', \mathsf{Vrfy}')$ be a fixed-length MAC.
+\item $\mathsf{Gen}$: is identical to $\mathsf{Gen}'$.
+\item $\mathsf{Mac}$: $m$ of length $\ell < 2^{n/4}$ and of $d$ blocks $m_1,\dotsc,m_d $ of length $n/4$ (padded with 0s); $r \gets \{0,1\}^{n/4}$.\\
+For $i=1,\dotsc,d$, $t_i \gets \mathsf{Mac}_k'(r\| \ell\| i\| m_i)$, $i$ and $\ell$ are uniquely encoded as strings of length $n/4$.\\
+Output $t:=\left<r,t_1,\dotsc,t_d\right>$.
+\item $\mathsf{Vrfy}$: Input $m$ of $d'$ blocks and check $d'=d$.\\
+Output $1 \iff \mathsf{Vrfy}_k'(r\| \ell\| i\| m_i, t_i)=1$ for $1\le i \le d$.
+\end{itemize}
+\end{construction}
+\begin{theorem}
+If $\Pi'$ is a secure fixed-length MAC, Construction is a secure MAC.
+\end{theorem}
+\end{frame}
+\begin{frame}\frametitle{Proof of Secure Variable-Length MACs}
+\textbf{Intuition}: The extra information prevents all possible attacks.
+\begin{proof}
+\begin{description}
+\item[$\mathsf{Repeat}$]: the same identifier $r$ is used twice by oracle $\mathcal{O}$. 
+\item[$\mathsf{Forge}$]: at least one new block $r\| \ell\| i\| m_i$ is forged. 
+\item[$\mathsf{Break}$]: $\mathsf{Macforge}_{\mathcal{A},\Pi }(n)=1, \Pr[\mathsf{Break}]=\varepsilon(n)$. 
+\end{description}
+\[
+\begin{split}
+	\Pr[\mathsf{Break}] =& \Pr[\mathsf{Break} \land \mathsf{Repeat}] + \Pr[\mathsf{Break} \land \overline{\mathsf{Repeat}} \land \overline{\mathsf{Forge}}] \\
+	&+ \Pr[\mathsf{Break} \land \overline{\mathsf{Repeat}} \land \mathsf{Forge}].
+\end{split}
+\]
+To prove the below statements:
+\begin{enumerate}
+\item $\Pr[\mathsf{Break} \land \mathsf{Repeat}] \le \Pr[\mathsf{Repeat}] \le \mathsf{negl}(n)$.
+\item $\Pr[\mathsf{Break} \land \overline{\mathsf{Repeat}} \land \overline{\mathsf{Forge}}] = 0$.
+\item For $\Pi'$, $\Pr[\mathsf{Break}'] = \Pr[\mathsf{Break} \land \mathsf{Forge}] \ge \Pr[\mathsf{Break} \land \overline{\mathsf{Repeat}} \land \mathsf{Forge}] \ge \varepsilon(n) - \mathsf{negl}(n)$.
+\end{enumerate}
+\end{proof}
+\end{frame}
+\begin{frame}\frametitle{Proof of Secure Variable-Length MACs (Cont.)}
+\begin{proof}
+\begin{enumerate}
+\item $r \gets \{0,1\}^{\frac{n}{4}}$. By ``brithday bound'', $\Pr[\mathsf{Repeat}] \le q(n)^2/2^{\frac{n}{4}}$.
+\item If $\mathsf{Repeat}$ does not occur, $\mathsf{Break}$ implies $\mathsf{Forge}$. \\
+$\mathcal{A}$ finally outputs $(m,t), t:=\left<r,t_1,\dotsc,t_d\right>$.
+\begin{itemize}
+\item $r$ is new, then $r\| \ell\| i\| m_i$ is new.
+\item $r$ is used exactly once, then the queried message $m' \neq m$. 
+\begin{itemize}
+\item $\ell' \neq \ell$, then $r\| \ell\| i\| m_i$ is new.
+\item $\ell' = \ell$, then $\exists\; m_i' \neq m_i$, so $r\| \ell\| i\| m_i'$ is new.
+\end{itemize}
+\end{itemize}
+So the block is new, $\mathsf{Forge}$ occurs.
+\item Reduce $\mathcal{A}'$ to $\mathcal{A}$: $\mathcal{A}'$ attacks $\Pi'$ with $\mathcal{A}$ as a sub-routine and answer the queries of $\mathcal{A}$ with $\mathcal{A}'$'s own oracle. $\mathcal{A}$ output $(m,t)$; $\mathcal{A}'$ parses it and output a new block $(r\| \ell\| i\| m_i, t_i)$ if possible.
+\end{enumerate}
+\end{proof}
+\end{frame}
+\section{CBC-MAC}
+\begin{frame}\frametitle{Constructing Fixed-Length CBC-MAC}
+\begin{columns}[C]
+\column{.5\textwidth}
+\begin{figure}
+\begin{center}
+\input{tikz/CBC-small}
+\end{center}
+\end{figure}
+\column{.5\textwidth}
+\begin{figure}
+\begin{center}
+\input{tikz/CBC-MAC}
+\end{center}
+\end{figure}
+\end{columns}
+Modify CBC encryption into CBC-MAC:
+\begin{itemize}
+\item Change random $IV$ to encrypted fixed $0^{n}$,\emph{otherwise}:\\
+query $m_1$ and get $(IV, t_1)$; output $m_1' = IV' \oplus  IV \oplus m_{1}$ and $(IV',t_1)$.
+\item Tag only includes the output of the final block,\emph{otherwise}:\\
+query $m_i$ and get $t_i$; output $m_i' = t_{i-1}' \oplus t_{i-1} \oplus m_{i}$ and $t_i$.
+\end{itemize}
+\end{frame}
+\begin{frame}\frametitle{Constructing Fixed-Length CBC-MAC (Cont.)}
+\begin{construction}
+\begin{itemize}
+\item a PRF $F$ and a length function $\ell$. $\abs{m} = \ell(n)\cdot n$.
+$\ell=\ell(n)$. $m = m_1,\dotsc,m_{\ell}$.
+\item $\mathsf{Gen}(1^n)$: $k \gets \{0,1\}^n$ \emph{u.a.r}.
+\item $\mathsf{Mac}_k(m)$: $t_i := F_k(t_{i-1}\oplus m_i), t_0=0^n$. Output $t = t_\ell$.
+\item $\mathsf{Vrfy}_k(m,t)$: $1 \iff t \overset{?}{=} \mathsf{Mac}_k(m)$.
+\end{itemize}
+\end{construction}
+\begin{theorem}
+If $F$ is a PRF, Construction is a secure \textbf{fixed-length} MAC.
+\end{theorem}
+\textbf{Not} for \textbf{variable-length} message:\\
+For one-block message $m$ with tag $t$, adversary can append a block $t\oplus m$ and output tag $t$.
+\end{frame}
+\begin{frame}\frametitle{Secure Variable-Length MAC}
+\begin{itemize}
+\item \textbf{Option 1}: $k_{\ell} := F_k(\ell)$, use $k_{\ell}$ for CBC-MAC.
+\item \textbf{Option 2}: Prepend $m$ with $|m|$, then use CBC-MAC.
+\begin{figure}
+\begin{center}
+\input{tikz/VCBC-MAC}
+\end{center}
+\end{figure}
+\item \textbf{Option 3 (ECBC-MAC)}: Use two keys $k_1, k_2$. Get $t$ with $k_1$ by CBC-MAC, then output $\hat{t} := F_{k_2}(t)$.
+\end{itemize}
+\begin{alertblock}{Lessons learned}
+Wrap CBC-MAC with PRF(length/tag), and only output is tag!
+\end{alertblock}
+\end{frame}
+\begin{frame}{Brute-force Attack against CBC-MAC}
+Query $2^{\abs{t}/2}$ message to find $m \neq m'$ and $t = t'$.
+\newline
+
+\textbf{Extension property} of ECBC-MAC:
+\[ \forall x,y,z: F_k(x)=F_k(y) \Rightarrow F_k(x\|z)=F_k(y\|z).   \]
+
+So the tag of $m\|w$ is the same with that of $m'\|w$.
+\newline
+
+Lesson: the tag space should be enough large.\\
+Improvement: Add a random string $r$, and output $(r, \mathsf{Mac}_{k'}(t\|r))$ instead of $t$.
+\end{frame}
+\begin{frame}\frametitle{MAC Padding}
+Padding must be invertible!\[ m_0\neq m_1 \Rightarrow \mathsf{pad}(m_0) \neq \mathsf{pad}(m_1). \]
+\textbf{ISO}: pad with ``100\dots00''. Add dummy block if needed.\\
+\textbf{CMAC (Cipher-based MAC from NIST)}: key$=(k,k_1,k_2)$.
+\begin{figure}
+\begin{center}
+\input{tikz/CMAC}
+\end{center}
+\end{figure}
+\begin{itemize}
+\item No final encryption step (extension attack thwarted by last keyed XOR).
+\item No dummy block (ambiguity resolved by use of $k_1$ or $k_2$).
+\end{itemize}
+\end{frame}
+\section{Collision-Resistant Hash Functions}
+\begin{frame}\frametitle{Defining Hash Function}
+\begin{figure}
+\begin{center}
+\input{tikz/hash}
+\end{center}
+\end{figure}
+\begin{definition}
+A \textbf{hash function (compression function)} is a pair of \textsc{ppt} algorithms $(\mathsf{Gen}, H)$ satisfying:
+\begin{itemize}
+\item a key $s \gets \mathsf{Gen}(1^n)$, $s$ is \textbf{not kept secret}.
+\item $H^s(x) \in \{0,1\}^{\ell(n)}$, where $x \in \{0,1\}^*$ and $\ell$ is polynomial.
+\end{itemize}
+If $H^s$ is defined only for $x \in \{0,1\}^{\ell'(n)}$ and $\ell'(n) > \ell(n)$, then $(\mathsf{Gen}, H)$ is a \textbf{fixed-length} hash function.
+\end{definition}
+\end{frame}
+\begin{frame}\frametitle{Defining Collision Resistance}
+\begin{itemize}
+\item \textbf{Collision} in $H$: $x \neq x'$ and $H(x) = H(x')$.
+\item \textbf{Collision Resistance}: infeasible for any \textsc{ppt} alg. to find.
+\end{itemize}
+The collision-finding experiment $\mathsf{Hashcoll}_{\mathcal{A},\Pi}(n)$:
+\begin{enumerate}
+\item $s \gets \mathsf{Gen}(1^n)$.
+\item $\mathcal{A}$ is given $s$ and outputs $x, x'$.
+\item $\mathsf{Hashcoll}_{\mathcal{A},\Pi}(n) =1 \iff x\ne x' \land H^s(x) = H^s(x')$.
+\end{enumerate}
+\begin{definition}
+$\Pi$ ($H$, $H^s$) is \textbf{collision resistant} if $\forall$ \textsc{ppt} $\mathcal{A}$, $\exists\;\mathsf{negl}$ such that
+\[ \Pr[\mathsf{Hashcoll}_{\mathcal{A},\Pi}(n)=1] \le \mathsf{negl}(n).
+\]
+\end{definition}
+\end{frame}
+\begin{frame}\frametitle{Weaker Notions of Security for Hash Functions}
+\begin{figure}
+\begin{center}
+\input{tikz/collision}
+\end{center}
+\end{figure}
+\begin{itemize}
+\item \textbf{Collision resistance}: It is hard to find $(x, x'), x' \ne x$ such that $H(x) = H(x')$.
+\item \textbf{Second pre-image resistance}: Given $s$ and $x$, it is hard to find $x' \ne x$ such that $H^s(x') = H^s(x)$.
+\item \textbf{Pre-image resistance}: Given $s$ and $y = H^s(x)$, it is hard to find $x'$ such that $H^s(x')=y$.
+\end{itemize}
+\end{frame}
+%\begin{frame}\frametitle{Applications of Hash Functions}
+%\begin{itemize}
+%\item \textbf{digital signatures}:CRHF
+%\item \textbf{information authentication/integrity check}
+%\item \textbf{protection of passwords}: pre-image resistant.
+%\item \textbf{confirmation of knowledge/commitment}: CRHF
+%\item \textbf{pseudo-random string generation/key derivation}
+%\item \textbf{micropayments (e.g. micromint)}
+%\item \textbf{construction of MACs, stream/block ciphers}
+%\end{itemize}
+%\end{frame}
+\begin{frame}\frametitle{The ``Birthday'' Problem}
+\begin{exampleblock}{The ``Birthday'' Problem}
+\textbf{Q}: ``\emph{What size group of people do we need to take such that with probability $1/2$ some pair of people in the group share a birthday?}''
+
+\textbf{A}: 23.
+\end{exampleblock}
+\begin{lemma}
+Choose $q$ elements $y_1,\dotsc , y_q$ \emph{u.a.r} from a set of size $N$, the probability that $\exists \; i \ne j$ with $y_i = y_j$ is $\mathsf{coll}(q,N)$, then 
+\[ \mathsf{coll}(q,N) \le \frac{q^2}{2N}.
+\]
+\[ \mathsf{coll}(q,N) \ge  \frac{q(q-1)}{4N}\quad \text{if}\; q \le \sqrt{2N}.
+\]
+\[ \mathsf{coll}(q,N) = \Theta(q^2/N)\quad \text{if}\; q < \sqrt{N}.
+\]
+\end{lemma}
+\end{frame}
+\begin{frame}\frametitle{A Generic ``Birthday'' Attack}
+\begin{itemize}
+\item \textbf{Birthday Attack}: $H : \{0,1\}^* \to \{0,1\}^\ell$. Choose $q$ distinct inputs $x_1,\dotsc,x_q \in \{0,1\}^{2\ell}$, check whether any of two $y_i := H(x_i)$ are equal.
+\item \textbf{Birthday problem}: Choose $y_1,\dotsc,y_q \gets \{0,1\}^{\ell}$ \emph{u.a.r}, $\mathsf{coll}(q,2^{\ell}) = ?$
+\item Collision occurs with a high probability when $\mathcal{O}(q) = \mathcal{O}(2^{\ell/2})$.
+\item To let time $T > 2^{\ell/2}$, then $\ell = 2\log T$ at least.
+\item Work only for collision resistance, no generic attacks for 2nd pre-image or pre-image resistance better than $2^\ell$.
+\item Require too much space $\mathcal{O}(2^{\ell/2})$.
+\end{itemize}
+\end{frame}
+\begin{frame}\frametitle{Improved Birthday Attack}
+\begin{algorithm}[H]
+\SetKwInOut{Input}{input}
+\SetKwInOut{Output}{output}
+\SetKw{KwB}{break}
+\SetKw{KwH}{halt}
+\DontPrintSemicolon
+\caption{Improved birthday attack}
+\Input{A hash function $H : \{0, 1\}^*\to \{0, 1\}^\ell$}
+\Output{Distinct $x, x'$ with $H(x) = H(x')$}
+\BlankLine
+$x_0 \gets \{0,1\}^{\ell+1}$, $x' := x := x_0$\;
+\For{$i = 1$ \KwTo $2^{\ell/2} +1$}{
+  $x := H(x)$, $x' := H(H(x'))$
+  \tcp{$x = H^i(x_0)$, $x' = H^{2i}(x_0)$}
+  \lIf{$x=x'$}{\KwB}\;
+}
+\lIf{$x\ne x'$}{\Return fail}\;
+$x' := x$, $x := x_0$\;
+\For{$j=1$ \KwTo $i$}{
+  \lIf{$H(x)=H(x')$}{\Return $x, x'$ and \KwH}\;
+  \lElse{$x := H(x), x' := H(x')$}
+  \tcp{$x = H^j(x_0)$, $x' = H^{j+i}(x_0)$}
+}
+\end{algorithm}
+\end{frame}
+\begin{frame}\frametitle{Proof of Improved Birthday Attack}
+\begin{lemma}
+Let $x_1,\dotsc,x_q$ be a sequence of values with $x_m = H(x_{m-1})$. If $x_I =x_J$ with $I < J$, then $\exists\; i<J$ such that $x_i =x_{2i}$.
+\end{lemma}
+\begin{figure}
+\begin{center}
+\input{tikz/birthdayattack}
+\end{center}
+\end{figure}
+\begin{proof}
+If $x_I =x_J$, then $x_I, x_{I+1}, \dotsc$ repeats with period $J-I$.\\
+Let $i$ to be the smallest multiple of $J-I$ with $i \ge I$, \[i \overset{\text{def}}{=} (J-I)\cdot \lceil I/(J-I)\rceil.\] \\
+$i < J$ since $I,\dotsc,J-1$ contains a multiple of $J-I$.\\
+Since $2i-i=i$ is a multiple of the period and $i \ge I$, $x_i = x_{2i}$. 
+\end{proof}
+\end{frame}
+\begin{frame}\frametitle{Constructing ``Meaningful'' Collisions}
+\begin{exampleblock}{An example with 288 different meaningful sentences}
+It is \textbf{hard/difficult/challenging/impossible} to \textbf{imagine/believe} that we will \textbf{find/locate/hire} another \textbf{employee/person} having similar \textbf{abilities/skills/character} as Alice. She has done a \textbf{great/super} job.
+\end{exampleblock}
+\end{frame}
+\begin{frame}\frametitle{The Merkle-Damg\r{a}rd Transform}
+\begin{figure}
+\begin{center}
+\input{tikz/MDtransform}
+\end{center}
+\end{figure}
+\begin{construction}
+Construct \textbf{variable-length} CRHF $(\mathsf{Gen}, H)$ from fixed-length $(\mathsf{Gen}, h)$ ($2\ell$ bits $\to \ell$ bits, $\ell = \ell(n)$):
+\begin{itemize}
+\item $\mathsf{Gen}$: remains unchanged.
+\item $H$: key $s$ and string $x \in \{0,1\}^*$, $L=|x|< 2^{\ell}$:
+\begin{itemize}
+\item $B := \lceil \frac{L}{\ell} \rceil$ (\# blocks). \textbf{Pad $x$ with 0s}.  $\ell$-bit blocks $x_1,\dotsc,x_B$. $x_{B+1} := L$, $L$ is encoded using $\ell$ bits.
+\item $z_0 := IV = 0^\ell$. For $i=1,\dotsc,B+1$, compute $z_i := h^s(z_{i-1}\| x_i)$.
+\end{itemize}
+\end{itemize}
+\end{construction}
+\end{frame}
+\begin{frame}\frametitle{Security of the Merkle-Damg\r{a}rd Transform}
+\begin{theorem}
+If $(\mathsf{Gen},h)$ is a fixed-length CRHF, then $(\mathsf{Gen},H)$ is a CRHF.
+\end{theorem}
+\begin{proof}
+\textbf{Idea}: a collision in $H^s$ yields a collision in $h^s$. \\
+Two messages $x \ne x'$ of respective lengths $L$ and $L'$ such that $H^s(x) = H^s(x')$. \# blocks are $B$ and $B'$. \\
+$x_{B+1} := L$ is necessary since \textbf{Padding with 0s} will lead to the same input with different messages.
+\begin{enumerate}
+\item $L \ne L'$: $z_B\| L \ne z_{B'}\| L'$.
+\item $L = L'$: $z_{i^*-1}\| x_{i^*} \ne z_{i^*-1}'\| x_{i^*}'$.
+\end{enumerate}
+So there must be $x \neq x'$ such that $h^s(x) = h^s(x')$.
+\end{proof}
+\end{frame}
+\begin{frame}\frametitle{CRHF from Block Cipher}
+\begin{columns}
+\column{.5\textwidth}
+Davies-Meyer:
+\begin{figure}
+\begin{center}
+\input{tikz/Davies-Meyer.tex}
+\end{center}
+\end{figure}
+Used by SHA-1/2, MD5.
+\column{.5\textwidth}
+Miyaguchi-Preneel:
+\begin{figure}
+\begin{center}
+\input{tikz/Miyaguchi-Preneel.tex}
+\end{center}
+\end{figure}
+Used by Whirlpool (in ISO/IEC 10118-3).
+\end{columns}
+\end{frame}
+\begin{frame}\frametitle{Cryptographic Hash Functions: SHA-1 and MD5}
+\begin{columns}[C]
+\column{.5\textwidth}
+SHA-1:
+\begin{figure}
+\begin{center}
+\includegraphics[width=50mm]{pic/SHA1}
+\end{center}
+\end{figure}
+\column{.5\textwidth}
+MD5:
+\begin{figure}
+\begin{center}
+\includegraphics[width=50mm]{pic/MD5}
+\end{center}
+\end{figure}
+\end{columns}
+$A, B, C, D$ and $E$ are 32-bit words of the state;
+$F$ is a nonlinear function that varies;
+$\lll n$ denotes a left bit rotation by $n$ places;
+$W_t$/$M_t$ is the expanded message word of round $t$;
+$K_t$ is the round constant of round $t$;
+$\boxplus$ denotes addition modulo $2^{32}$.
+\end{frame}
+\begin{frame}\frametitle{Collision-Resistant Hash Functions in Practice}
+\begin{itemize}
+\item The hash functions used in practice are generally un-keyed.
+\item The constructions are more heuristic in nature. 
+\item Finding a collision in MD5 (Message Digest 5) with 128-bit output requires time $2^{20.96}$. 
+\item Finding a collision in SHA-1 (Secure Hash Algorithm) with a 160-bit output requires time $2^{51}$.
+\end{itemize}
+\end{frame}
+\section{NMAC and HMAC}
+\begin{frame}\frametitle{Nested MAC (NMAC)}
+\begin{figure}
+\begin{center}
+\input{tikz/NMAC}
+\end{center}
+\end{figure}
+\begin{construction}
+$(\widetilde{\mathsf{Gen}}, h)$ is a fixed-length CRHF. $(\widetilde{\mathsf{Gen}}, H)$ is Merkle-Damg\r{a}rd transform. NMAC:
+\begin{itemize}
+\item $\mathsf{Gen}(1^n)$: Output $(s, k_1, k_2)$. $s \gets \widetilde{\mathsf{Gen}}, k_1,k_2 \gets \{0,1\}^n$ \emph{u.a.r}.
+\item $\mathsf{Mac}_{s,k_1,k_2}(m)$: $t_i := h_{k_1}^s(H_{k_2}^s(m))$. $h_{k}^s \overset{\mathsf{def}}{=} h^s(k\|x)$.\\
+$H^s_{k_2}$ is \emph{inner} function; $h^s_{k_1}$ is \emph{outer} function.
+\item $\mathsf{Vrfy}_{s,k_1,k_2}(m,t)$: $1 \iff t \overset{?}{=} \mathsf{Mac}_{s,k_1,k_2}(m)$.
+\end{itemize}
+\end{construction}
+\end{frame}
+\begin{frame}\frametitle{Security of NMAC}
+\begin{theorem}
+If $(\widetilde{\mathsf{Gen}}, h)$ is CRHF and yields a secure MAC, then NMAC is secure. (existentially unforgeable under an adaptive CMA for arbitrary-length messages)
+\end{theorem}
+\begin{itemize}
+\item $k_2$ is not needed once $(\widetilde{\mathsf{Gen}}, h)$ is CRHF.
+\begin{itemize}
+\item \textbf{Weak collision resistance}: It is hard to find $(x, x'), x' \ne x$ such that $H^s_{k_2}(x) = H^s_{k_2}(x')$.
+\item $H_s^{k_2}(x)$ is hidden by $h_s^{k_1}(H_s^{k_2}(x))$.
+\item \textbf{Disadvantage}: $IV$ of $H$ must be modified.
+\end{itemize}
+\end{itemize}
+\end{frame}
+\begin{frame}\frametitle{Hash-based MAC (HMAC)}
+\begin{figure}
+\begin{center}
+\input{tikz/HMAC}
+\end{center}
+\end{figure}
+\begin{construction}
+$(\widetilde{\mathsf{Gen}}, h)$ is a fixed-length CRHF. $(\widetilde{\mathsf{Gen}}, H)$ is the Merkle-Damg\r{a}rd transform.
+$IV$, $\mathsf{opad}$ (0x36), $\mathsf{ipad}$ (0x5C) are fixed constants of length $n$.
+HMAC:
+\begin{itemize}
+\item $\mathsf{Gen}(1^n)$: Output $(s, k)$. $s \gets \widetilde{\mathsf{Gen}}, k \gets \{0,1\}^n$ \emph{u.a.r}.
+\item $\mathsf{Mac}_{s,k}(m)$: $t := H_{IV}^s\Big((k \oplus \mathsf{opad}) \| H_{IV}^s\big((k \oplus \mathsf{ipad}) \| m\big)\Big)$.
+\item $\mathsf{Vrfy}_{s,k}(m,t)$: $1 \iff t \overset{?}{=} \mathsf{Mac}_{s,k}(m)$.
+\end{itemize}
+\end{construction}
+\end{frame}
+\begin{frame}\frametitle{Security of HMAC}
+\begin{theorem}
+\[ G(k) \overset{\text{def}}{=} h^s(IV\| (k\oplus \mathsf{opad})) \| 
+h^s(IV\| (k\oplus \mathsf{ipad})) = k_1\| k_2.
+\]
+$(\widetilde{\mathsf{Gen}}, h)$ is CRHF. If $G$ is a PRG, then HMAC is secure.
+\end{theorem}
+\begin{itemize}
+\item HMAC is an industry standard (RFC2104) and is widely used in practice.
+\item HMAC is faster than CBC-MAC.
+\item Before HMAC, a common mistake was to use $H^s(k\|x)$.
+\item \emph{Don't implement it yourself.} \alert{Verification timing attacks.}
+\end{itemize}
+\end{frame}
+\begin{frame}\frametitle{Summary}
+\begin{itemize}
+\item adaptive CMA, replay attack, birthday attack.
+\item existential unforgeability, collision resistance.
+\item CBC-MAC, CRHF, Merkle-Damg\r{a}rd transform, NMAC, HMAC. 
+\end{itemize}
+\end{frame}
+\end{document}

@@ -1,0 +1,42 @@
+\begin{tikzpicture}[uk/.style={inner sep=1pt, minimum width=10pt, circle, fill=red!50},kk/.style={inner sep=1pt, minimum width=10pt, fill=blue!50, circle}]
+\node (K) at (2.2cm,0) [ellipse,minimum width=1cm,minimum height=2cm,draw] {}; 
+\node (k) [above of=K,node distance=1.2cm] {$K$}; 
+\foreach \i in {1, 2, 3} {
+\node (X\i) at (\i*3.3cm,0) [ellipse,minimum width=1cm,minimum height=2cm,draw] {}; 
+\node (x) [above of=X\i,node distance=1.2cm] {$X$}; 
+\node (Y\i) [right of=X\i,ellipse,minimum width=1cm,minimum height=2cm,node distance=1.5cm,draw] {};
+\node (y) [above of=Y\i,node distance=1.2cm] {$Y$}; 
+}
+\node (cr) at ($(X1)+(0cm,-1.5cm)$) [] {\footnotesize $F: K \times X \to Y$};
+\node (cr) at ($(X1)+(0cm,-2cm)$) [] {\footnotesize 2D function};
+\node (k1) at ($(K)+(0,0.3cm)$) [kk] {\tiny };
+\node (k2) at ($(K)+(0,-0.3cm)$) [uk] {\tiny };
+\node (x1) at ($(X1)+(0,0.3cm)$) [kk] {\tiny };
+\node (x2) at ($(X1)+(0,-0.3cm)$) [kk] {\tiny };
+\node (y1) at ($(Y1)+(0,0.3cm)$) [kk] {\tiny };
+\node (y2) at ($(Y1)+(0,-0.3cm)$) [kk] {\tiny };
+\draw[-latex,red!50] (x1) -- (y1);
+\draw[-latex,red!50] (x2) -- (y2);
+\draw[-latex] (x1) -- (y2);
+\draw[-latex] (x2) -- (y1);
+\draw[-] (k1) -- (x1);
+\draw[-] (k1) -- (x2);
+\draw[-,red!50] (k2) -- (x1);
+\draw[-,red!50] (k2) -- (x2);
+\node (2pr) at ($(X2)+(0.75cm,-1.5cm)$) [] {\footnotesize $F_k(x) \overset{\text{def}}{=} F(k,x)$};
+\node (2pr) at ($(X2)+(0.75cm,-2cm)$) [] {\footnotesize Keyed function};
+\node (x1) at ($(X2)+(0,0.3cm)$) [kk] {\tiny };
+\node (x2) at ($(X2)+(0,-0.3cm)$) [kk] {\tiny };
+\node (y1) at ($(Y2)+(0,0.3cm)$) [kk] {\tiny };
+\node (y2) at ($(Y2)+(0,-0.3cm)$) [kk] {\tiny };
+\draw[-latex] (x1) -- (y2);
+\draw[-latex] (x2) -- (y1);
+\node (pr) at ($(X3)+(0.75cm,-1.5cm)$) [] {\footnotesize $f : X \to Y$};
+\node (pr) at ($(X3)+(0.75cm,-2cm)$) [] {\footnotesize Look-up table};
+\node (x1) at ($(X3)+(0,0.3cm)$) [kk] {\tiny };
+\node (x2) at ($(X3)+(0,-0.3cm)$) [kk] {\tiny };
+\node (y1) at ($(Y3)+(0,0.3cm)$) [kk] {\tiny };
+\node (y2) at ($(Y3)+(0,-0.3cm)$) [kk] {\tiny };
+\draw[-latex] (x1) -- (y1);
+\draw[-latex] (x2) -- (y1);
+\end{tikzpicture}

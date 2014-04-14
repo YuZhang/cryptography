@@ -1,0 +1,22 @@
+\begin{tikzpicture}
+\node (A) at (0,0) {\Homer};
+\node (B) [right of = A, node distance = 4cm] {\Left\Burns};
+\node (1a) [below of=A, node distance=1.5cm] {choose a truly random};
+\node (1b) [below of=B, node distance=1.5cm] {Distinguisher $D$};
+%\draw[-latex] (1b) -- (1a) node [midway,above] {};
+\node (2a) [below of=1a, node distance=0.5cm] {string or generate a};
+\node (2b) [below of=1b, node distance=0.5cm] {};
+%\draw[-latex] (2b) -- (2a) node [midway,above] {};
+\node (3a) [below of=2a, node distance=0.5cm] {pseudorandom one};
+\node (3b) [below of=2b, node distance=0.5cm] {};
+\node[draw, fit=(1a) (2a) (3a), rounded corners=1ex] {};
+\node (4a) [below of=3a, node distance=1cm] {the string};
+\node (4b) [below of=3b, node distance=1cm] {};
+\draw[-latex] (4a) -- (4b) node [midway,above] {};
+\node (5a) [below of=4a, node distance=0.5cm] {};
+\node (5b) [below of=4b, node distance=0.5cm] {1 or 0};
+\draw[-latex] (5b) -- (5a) node [midway,above] {};
+%\node (6a) [below of=5a, node distance=0.5cm] {};
+%\node (6b) [below of=5b, node distance=0.5cm] {};
+%\node (result) [right of = 6a, node distance = 2cm] {};
+\end{tikzpicture}

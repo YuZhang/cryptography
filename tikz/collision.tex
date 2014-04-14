@@ -1,0 +1,29 @@
+\begin{tikzpicture}[uk/.style={inner sep=1pt, minimum width=10pt, circle, fill=red!50},kk/.style={inner sep=1pt, minimum width=10pt, fill=blue!50, circle}]
+\foreach \i in {1, 2, 3} {
+\node (X\i) at (\i*4cm,0) [ellipse,minimum width=1cm,minimum height=2cm,draw] {}; 
+\node (x) [above of=X\i,node distance=1.2cm] {$X$}; 
+\node (Y\i) [right of=X\i,ellipse,minimum width=1cm,minimum height=2cm,node distance=1.5cm,draw] {};
+\node (y) [above of=Y\i,node distance=1.2cm] {$Y$}; 
+}
+\node (cr) at ($(X1)+(0.75cm,-1.5cm)$) [] {\footnotesize Collision};
+\node (cr) at ($(X1)+(0.75cm,-1.8cm)$) [] {\footnotesize Resistance};
+\node (x1) at ($(X1)+(0,0.3cm)$) [uk] {\tiny ?};
+\node (x2) at ($(X1)+(0,-0.3cm)$) [uk] {\tiny ?};
+\node (y1) at ($(Y1)$) [uk] {\tiny ?};
+\draw[-latex] (x1) -- (y1);
+\draw[-latex] (x2) -- (y1);
+\node (2pr) at ($(X2)+(0.75cm,-1.5cm)$) [] {\footnotesize 2nd Pre-image};
+\node (2pr) at ($(X2)+(0.75cm,-1.8cm)$) [] {\footnotesize Resistance};
+\node (x1) at ($(X2)+(0,0.3cm)$) [kk] {\tiny x};
+\node (x2) at ($(X2)+(0,-0.3cm)$) [uk] {\tiny ?};
+\node (y1) at ($(Y2)$) [kk] {\tiny y};
+\draw[-latex] (x1) -- (y1);
+\draw[-latex] (x2) -- (y1);
+\node (pr) at ($(X3)+(0.75cm,-1.5cm)$) [] {\footnotesize Pre-image};
+\node (pr) at ($(X3)+(0.75cm,-1.8cm)$) [] {\footnotesize Resistance};
+%\node (x1) at ($(X3)+(0,0.3cm)$) [kk] {\tiny x};
+\node (x2) at ($(X3)+(0,-0.3cm)$) [uk] {\tiny ?};
+\node (y1) at ($(Y3)$) [kk] {\tiny y};
+%\draw[-latex] (x1) -- (y1);
+\draw[-latex] (x2) -- (y1);
+\end{tikzpicture}

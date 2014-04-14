@@ -1,0 +1,13 @@
+\begin{tikzpicture}[font=\footnotesize]
+\node (A) at (0,0) {\Lisa};
+\node (B) [right of = A, node distance = 3cm] {\Left\Bart};
+\node (g) [below of =A, node distance = 1cm] {$(\mathbb{G},q,g)\gets \mathcal{G}$};
+\node (x) [below of=g, node distance=1cm] {$x \gets \mathbb{Z}_q$};
+\node (h1) [below of=x, node distance=0.5cm] {$h_1 := g^x$};
+\node (kA) [below of= g, node distance = 3cm] {$k_A := h_2^x$};
+\node (y) [below of=B, node distance=3cm] {$y \gets \mathbb{Z}_q$};
+\node (h2) [below of=y, node distance=0.5cm] {$h_2 := g^y$};
+\node (kB) [below of= B, node distance = 4cm] {$k_B := h_1^y$};
+\draw[-latex] ($(h1)+(0.8,0)$) -- +(1.5cm,0) node [midway,above] {$\mathbb{G},q,g,h_1$};
+\draw[-latex] ($(h2)-(0.8,0)$) -- +(-1.5cm,0) node [midway,above] {$h_2$};
+\end{tikzpicture}

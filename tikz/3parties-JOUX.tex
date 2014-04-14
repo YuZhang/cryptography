@@ -1,0 +1,11 @@
+\begin{tikzpicture}[scale=0.7, every node/.style={scale=0.7}]
+\node (A) at (0,0) [label=below:A] {\Lisa};
+\node (B) [right of = A, node distance = 4cm, label=below:B] {\Left\Bart};
+\node (C) at (2,3.5) [label=right:C] {\Homer};
+\draw[-latex] (A) -- (B) node [midway,above] {$aP$};
+\draw[-latex] (B.190) -- (A.350) node [midway,below] {$bP$};
+\draw[-latex] (C.240) -- (A.90)  node [sloped,midway,above] {$cP$};
+\draw[-latex] (A.80) -- (C.250)  node [sloped,midway,below] {$aP$};
+\draw[-latex] (B.90) -- (C.300)  node [sloped,midway,above] {$bP$};
+\draw[-latex] (C.290) -- (B.100) node [sloped,midway,below] {$cP$};
+\end{tikzpicture}

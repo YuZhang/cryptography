@@ -1,0 +1,9 @@
+\begin{tikzpicture}[out=45,in=135]
+\foreach \x / \y [evaluate=\x as \dg using \x*60] in {0/OWF,1/HCP,2/PRG,3/PRF,4/PRP,5/PrivK} {
+\node (s\x) at (\dg:2.2cm) [circle, minimum size=1.5cm,draw] {\y};
+}
+%\foreach \x [evaluate=\x as \y using \x+1,evaluate=\x as \z using \x*60+120,evaluate=\x as \i using 300-\x*60] in {0,1,...,5} {
+\foreach \x / \y in {0/1,1/2,2/3,3/4,4/5,5/0} {
+\draw[-latex] (s\x) to [bend right] (s\y);
+}
+\end{tikzpicture}

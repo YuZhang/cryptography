@@ -1,0 +1,575 @@
+\input{main.tex}
+
+\title{Number Theory and RSA Problem}
+
+\begin{document}
+\maketitle
+\begin{frame}
+\frametitle{Outline}
+\tableofcontents
+\end{frame}
+%\begin{frame}\frametitle{The World of Private-Key Cryptography}
+%\begin{figure}
+%\begin{center}
+%\input{tikz/worldofpk}
+%\end{center}
+%\end{figure}
+%\end{frame}
+\section{Arithmetic and Basic Group Theory}
+\begin{frame}\frametitle{Primes and Divisibility}
+\begin{itemize}
+\item The set of \textbf{integers} $\mathbb{Z}$, $a,b,c \in \mathbb{Z}$.
+\item $a$ \textbf{divides} $b$: $a \mid b$ if $\exists c, ac=b$ (otherwise $a \nmid b$). \\$b$ is a \textbf{multiple} of $a$. If $a \notin \{1,b\}$, then $a$ is a \textbf{factor} of $b$. 
+\item $p > 1$ is \textbf{prime} if it has no factors.
+\item An integer $>1$ which is not prime is \textbf{composite}.
+\item $\forall a,b$, $\exists$ \textbf{quotient} $q$, \textbf{remainder} $r$: $a=qb+r$, and $0\le r < b$.
+\item \textbf{Greatest common divisor} $\gcd(a,b)$ is the largest integer $c$ such that $c\mid a$ and $c\mid b$. $\gcd(0,b)=b$, $\gcd(0,0)$ undefined.
+\item $a$ and $b$ are \textbf{relatively prime (coprime)} if $\gcd(a,b)=1$.
+\item \textbf{Euclid's theorem}: there are infinitely many prime numbers.
+\end{itemize}
+\end{frame}
+\begin{frame}\frametitle{Fundamental Theorem of Arithmetic}
+\begin{itemize}
+\item \textbf{B\'{e}zout's lemma}: $\forall a,b,\;\exists\;X,Y:\;Xa+Yb=\gcd(a,b)$. $\gcd(a,b)$ is the smallest positive integer that can be expressed in this way.
+\item \textbf{Euclid's lemma}: If $c \mid ab$ and $\gcd(a,c)=1$, then $c \mid b$. \\
+If $p$ is prime and $p\mid ab$, then either $p \mid a$ or $p \mid b$.
+\item \textbf{Fundamental theorem of arithmetic}: $\forall N >1$, $N = \prod _i p_i^{e_i}$, $\{p_i\}$ are distinct primes and $e_i \ge 1$. This expression is unique.
+\end{itemize}
+\end{frame}
+\begin{frame}\frametitle{Modular Arithmetic}
+\begin{itemize}
+\item Remainder $r= [a\bmod N] = a - b\lfloor a/b\rfloor $  and $r<N$. $N$ is called \textbf{modulus}.
+\item \textbf{Reduction modulo} $N$: mapping $a$ to $[a \bmod N]$.
+\item $\mathbb{Z}_N = \{0,1,\dots,N-1\} = \{a \bmod N | a \in \mathbb{Z}\}$.
+\item $a$ and $b$ are \textbf{congruent modulo} $N$: $a \equiv b \pmod N$ if $[a \bmod N] = [b \bmod N]$.
+\item $a$ is \textbf{invertible modulo} $N$ $\iff \gcd(a,N) = 1$. If $ab \equiv 1 \pmod N$, then $b=a^{-1}$ is \textbf{multiple inverse} of $a$ \textbf{modulo} $N$.
+\item \textbf{Cancellation law}: If $\gcd(a,N)=1$ and $ab \equiv ac \pmod N$, then $b \equiv c \pmod N$.
+\item \textbf{Euclidean algorithm}: $\gcd(a,b) = \gcd(b, [a \bmod b]).$
+\item \textbf{Extended Euclidean algorithm}: Given $a,N$, find $X,Y$ with $Xa+YN = \gcd(a,N)$.
+\end{itemize}
+\end{frame}
+\begin{frame}\frametitle{Examples of Modular Arithmetic}
+``Reduce and then add/multiply'' instead of ``add/multiply and then reduce''.
+\begin{exampleblock}{Compute $193028 \cdot 190301 \bmod 100$}
+$193028 \cdot 190301 = [193028 \bmod 100] \cdot [190301 \bmod 100] \bmod 100$
+$= 28\cdot 1 \equiv 28 \bmod 100.$
+\end{exampleblock}
+$ab \equiv cb \pmod N$ does \emph{not necessarily} imply $a \equiv c \pmod N$.
+\begin{exampleblock}{$a=3, c=15, b=2, N=24$}
+$3\cdot 2 = 6 \equiv 15 \cdot 2 \pmod{24}$, but $3 \not \equiv 15 \pmod{24}$.
+\end{exampleblock}
+Use extended Euclidean algorithm to ...
+\begin{exampleblock}{Find the inverse of $11 \pmod {17}$}
+$(-3)\cdot 11 + 2\cdot 17 = 1$, so 14 is the inverse of 11.
+\end{exampleblock}
+\end{frame}
+\begin{frame}\frametitle{Groups}
+A \textbf{group} is a set $\mathbb{G}$ with a binary operation $\circ$:
+\begin{itemize}
+\item (\textbf{Closure}:) $\forall g,h \in \mathbb{G}$, $g \circ h \in \mathbb{G}$.
+\item (\textbf{Existence of an Identity}:) $\exists$ \textbf{identity} $e\in \mathbb{G}$ such that $\forall g\in \mathbb{G}, e \circ g = g = g \circ e$.
+\item (\textbf{Existence of Inverses}:) $\forall g \in G$, $\exists\; h \in \mathbb{G}$ such that $g \circ h =e = h \circ g$. $h$ is an \textbf{inverse} of $g$.
+\item (\textbf{Associativity}:) $\forall g_1,g_2,g_3 \in \mathbb{G}$, $(g_1\circ g_2)\circ g_3 = g_1 \circ (g_2 \circ g_3)$.
+\end{itemize}
+$\mathbb{G}$ with $\circ$ is \textbf{abelian} if
+\begin{itemize}
+\item (\textbf{Commutativity}:) $\forall g,h \in \mathbb{G}, g\circ h = h\circ g$.
+\end{itemize}
+
+Existence of inverses implies \textbf{cancellation law}.\\
+When $\mathbb{G}$ is a \textbf{finite group} and $\abs{\mathbb{G}}$ is the \textbf{order} of group.\\
+\end{frame}
+\begin{frame}\frametitle{Group Exponentiation}
+%\[mg = m\cdot g \overset{\text{def}}{=} \underbrace{g+\cdots +g}_{m\; \text{times}}.\]
+\[ g^m \overset{\text{def}}{=} \underbrace{g\circ g\circ \cdots \circ g}_{m\; \text{times}}. \]
+\begin{theorem}
+$\mathbb{G}$ is a finite group. Then $\forall g \in \mathbb{G}, g^{\abs{\mathbb{G}}}=1$.
+\end{theorem}
+\begin{corollary}
+$\forall g \in \mathbb{G}$ and $i$, $g^i = g^{[i \bmod {\abs{\mathbb{G}}}]}$.
+\end{corollary}
+\begin{corollary}
+Define function $f_e\;:$ $\mathbb{G} \to \mathbb{G}$ by $f_e(g) =g^e$. \\
+If $\gcd(e,\abs{\mathbb{G}})=1$, then $f_e$ is a permutation. \\
+Let $d = [e^{-1} \bmod {\abs{\mathbb{G}}}]$, then $f_d$ is the inverse of $f_e$. ($f_d(f_e(g))=g$)\\
+\textbf{$e$'th root of $c$}: $g^e = c$, $g = c^{1/e} = c^{d}$. 
+\end{corollary}
+\end{frame}
+\begin{frame}\frametitle{The Group $\mathbb{Z}_N^*$}
+\[ \mathbb{Z}_N^* \overset{\text{def}}{=} \{a \in \{1,\dotsc,N-1 \} | \gcd(a,N) = 1\} \]
+\textbf{Euler's phi function}: $\phi(N) \overset{\text{def}}{=} \abs{\mathbb{Z}_N^*}$.
+\begin{theorem}
+$N = \prod_ip_i^{e_i}$, $\{p_i\}$ are distinct primes, $\phi(N) = \prod_ip_i^{e_i-1}(p_i-1)$.
+\end{theorem}
+\begin{corollary}[Euler's theorem \& Fermat's little theorem]
+$a \in \mathbb{Z}_N^*$. $a^{\phi (N)} \equiv 1 \pmod N$.\\
+If $p$ is prime and $a \in \{1,\dotsc,p-1\}$, then $a^{p-1} \equiv 1 \pmod p$.
+\end{corollary}
+\begin{corollary}
+Define function $f_e\;:$ $\mathbb{Z}^*_N \to \mathbb{Z}^*_N$ by $f_e(x) =[x^e \bmod N]$. \\ If $\gcd(e,\phi(N))=1$, then $f_e$ is a permutation. \\
+Let $d = [e^{-1} \bmod \phi(N)]$, then $f_d$ is the inverse of $f_e$.\\
+\textbf{$e$'th root of $c$}: $g^e = c$, $g = c^{1/e} = c^{d}$. 
+\end{corollary}
+\end{frame}
+\begin{frame}\frametitle{Subgroups}
+If $\mathbb{G}$ is a group, a set $\mathbb{H} \subseteq \mathbb{G}$ is a \textbf{subgroup} of $\mathbb{G}$ if $\mathbb{H}$ itself forms a group under the same operation associated with $\mathbb{G}$. $\mathbb{H}$ is a \textbf{strict subgroup} if $\mathbb{H} \neq \mathbb{G}$.
+\begin{itemize}
+\item If $\mathbb{H} \subseteq \mathbb{G}$, $\mathbb{H}$ contains the identity element of $\mathbb{G}$, and $\mathbb{H}$ is closed, then $\mathbb{H}$ is a subgroup of $\mathbb{G}$.
+\item \textbf{Lagrange's theorem}: For a finite group $\mathbb{G}$ and its subgroup $\mathbb{H}$,  $\abs{\mathbb{H}} \mid \abs{\mathbb{G}}$.
+\item $\mathbb{H}$ is a strict subgroup of a finite group $\mathbb{G}$, then $\abs{\mathbb{H}} \le \abs{\mathbb{G}}/2$.
+\end{itemize}
+\end{frame}
+\begin{frame}\frametitle{Examples on Groups}
+\begin{exampleblock}{}
+\begin{itemize}
+\item $\mathbb{Z}$ is an abelian group under `$+$', not a group under `$\cdot$'.
+\item The set of real numbers $\mathbb{R}$ is not a group under `$\cdot$'.
+\item $\mathbb{R}\setminus \{0\}$ is an abelian group under `$\cdot$'.
+\item $\mathbb{Z}_N$ is an abelian group under `$+$' modulo $N$.
+\item If $p$ is prime, then $\mathbb{Z}_p^*$ is an abelian group under `$\cdot$' modulo $p$. 
+\item $\mathbb{Z}_{15}^*= \{1,2,4,7,8,11,13,14\}$, $\abs{\mathbb{Z}_{15}^*}=8$.
+\item $\mathbb{Z}_{3}^*$ is a subgroup of $\mathbb{Z}_{15}^*$, but $\mathbb{Z}_{5}^*$ is not.
+\item $2^{1/3} \bmod 5 = 2^{3} \bmod 5 = 3$. ($3^{-1} = 3 \pmod 4$)
+\item $g^3$ is a permutation on $\mathbb{Z}_{15}^*$, but $g^2$ is not (e.g., $8^2 \equiv 2^2\equiv 4$). 
+\end{itemize}
+\end{exampleblock}
+\begin{exampleblock}{$N=pq$ where $p,q$ are distinct primes. $\phi(N)=?$}
+$\phi(N)=(N-1)-(q-1)-(p-1)=(p-1)(q-1)$.
+\end{exampleblock}
+\end{frame}
+\begin{frame}\frametitle{Isomorphism and Cross Product}
+A bijection function $f : \mathbb{G} \to \mathbb{H}$ is an \textbf{isomorphism from} $\mathbb{G}$ \textbf{to} $\mathbb{H}$:
+\[ \forall g_1,g_2 \in \mathbb{G}, f(g_1 \circ_{\mathbb{G}} g_2) = f(g_1) \circ_{\mathbb{H}} f(g_2).\]
+If $\exists$ such $f$, $\mathbb{G} \simeq \mathbb{H}$.\newline
+
+The \textbf{cross product} of $\mathbb{G}$ and $\mathbb{H}$: $\mathbb{G} \times \mathbb{H}$. The elements are $(g,h)$ with $g \in \mathbb{G}$ and $h \in \mathbb{H}$, the operation $\circ$,
+\[ (g,h)\circ (g',h') \overset{\text{def}}{=} (g \circ_{\mathbb{G}} g', h \circ_{\mathbb{H}} h')\]
+\end{frame}
+\begin{frame}\frametitle{Chinese Remainder Theorem}
+\begin{theorem}[Chinese remainder theorem]
+$N = pq$ where $\gcd(p,q)=1$.
+\[\mathbb{Z}_N \simeq \mathbb{Z}_p \times \mathbb{Z}_q\;\;\text{and}\;\;\mathbb{Z}_N^* \simeq \mathbb{Z}_p^* \times \mathbb{Z}_q^* .\]
+$f$ maps $x \in \{0,\dotsc,N-1\}$ to pairs $(x_p,x_q):$
+\[ f(x) \overset{\text{def}}{=} ([x \bmod p],[x \bmod q]). \]
+$f$ is an isomorphism from $\mathbb{Z}_N$ to $\mathbb{Z}_p \times \mathbb{Z}_q$ and 
+$\mathbb{Z}_N^*$ to $\mathbb{Z}_p^* \times \mathbb{Z}_q^*$.
+\end{theorem}
+If $f(x)=(x_p,x_q)$, $x \leftrightarrow (x_p,x_q) = ([x \bmod p], [x \bmod q])$.
+\end{frame}
+\begin{frame}\frametitle{Using the Chinese Remainder Theorem}
+Compute $g=g_1\circ_{\mathbb{G}} g_2$ [$g \equiv g_1 \times g_2 \pmod N$]:
+\begin{enumerate}
+\item Compute $h_1=f(g_1)$ and $h_2=f(g_2)$;
+\item Compute $h=h_1 \circ_{\mathbb{H}} h_2$;
+\item Compute $g = f^{-1}(h)$.
+\end{enumerate}
+\begin{exampleblock}{Compute $14\cdot 13 \bmod 15$}
+$[14\cdot 13 \bmod 15] \leftrightarrow (4,2)\cdot (3,1) = ([4\cdot 3 \bmod 5],[2\cdot 1 \bmod 3])$ $=(2,2) \leftrightarrow 2$.
+\end{exampleblock}
+\end{frame}
+\begin{frame}\frametitle{Using the Chinese Remainder Theorem (Cont.)}
+Convert $(x_p,x_q)$ to its representation modulo $N$:
+\begin{enumerate}
+\item Compute $X,Y$ such that $Xp+Yq=1$.
+\item $1_p = [Yq \bmod N]$ and $1_q = [Xp \bmod N]$.
+\item Compute $x = [(x_p\cdot 1_p+x_q\cdot 1_q) \bmod N]$.
+\end{enumerate}
+\begin{exampleblock}{Find the representation of $([4 \bmod 5],[3 \bmod 7])$ modulo $35$.}
+Use extended Euclidean algorithm, $3\cdot 5-2\cdot 7 =1$.\\
+$1_p = [(-2\cdot 7) \bmod 35]=21$ and $1_q = [3\cdot 5 \bmod 35] = 15$.\\
+$(4,3) \leftrightarrow [4\cdot 1_p + 3\cdot 1_q \bmod 35] = 24$.
+\end{exampleblock}
+\begin{exampleblock}{Compute $[29^{100} \bmod 35]$}
+$29 \leftrightarrow ([1 \bmod 5],[-1 \bmod 7])$, $[29^{100} \bmod 35] \leftrightarrow (1,-1)^{100} = (1,1) \leftrightarrow 1$.
+\end{exampleblock}
+\end{frame}
+
+\begin{frame}\frametitle{Arithmetic algorithms}
+\begin{itemize}
+\item \textbf{Addition/subtraction}: linear time $O(n)$.
+\item \textbf{Mulplication}: naively $O(n^2)$. Karatsuba (1960): $O(n^{\log_2 3})$\\
+Basic idea: $(2^bx_1+x_0) \times (2^by_1+ y_0)$ with 3 mults.\\
+Best (asymptotic) algorithm: about $O(n\log n)$.
+\item \textbf{Division with remainder}: $O(n^2)$.
+\item \textbf{Exponentiation}: $O(n^3)$.
+\end{itemize}
+\begin{algorithm}[H]
+\SetKwInOut{Input}{input}
+\SetKwInOut{Output}{output}
+\SetKw{KwB}{break}
+\SetKw{KwH}{halt}
+\DontPrintSemicolon
+\caption{Exponentiating by Squaring}
+\Input{$g \in G$; exponent $x=[x_nx_{n-1}\dots x_2x_1x_0]_2$}
+\Output{$g^x$}
+\BlankLine
+$y \gets g; z \gets 1$\;
+\For{$i = 0$ \KwTo $n$}{
+  \lIf{$x_i == 1$}{$z \gets z \times y$}\;
+  $y \gets y^2$\;
+}
+\Return $z$
+\end{algorithm}
+\end{frame}
+
+\section{Primes and Factoring}
+\begin{frame}\frametitle{Integer Factorization/Factoring}
+%The weak factoring experiment $\mathsf{wFactor}_{\mathcal{A}}(n)$:
+%\begin{enumerate}
+%\item Choose two $n$-bit integers $x_1, x_2$ at random.
+%\item $N := x_1\cdot x_2$.
+%\item $\mathcal{A}$ is given $N$, and outputs $x_1',x_2'$.
+%\item $\mathsf{wFactor}_{\mathcal{A}}(n) = 1 $ if $x_1'\cdot x_2' = N$ and 0 otherwise.
+%\end{enumerate}
+
+\begin{quote}
+``The problem of distinguishing prime numbers from composite numbers and of resolving the later into their prime factors is known to be one of the most important and useful in arithmetic.'' -- Gauss (1805)
+\end{quote}
+
+The ``hardest'' numbers to factor seem to be those having only large prime factors.
+\begin{itemize}
+\item The best-known algorithm is the \textbf{general number field sieve} [Pollard] with time $\mathcal{O}(\exp(n^{1/3}\cdot(\log n)^{2/3}))$.
+\item RSA Factoring Challenge: RSA-768 (232 digits)
+\begin{itemize}
+\item Two years on hundreds of machines (2.2GHz/2GB, 1500 years)
+\item Factoring a 1024-bit integer: about 1000 times harder.
+\end{itemize}
+\end{itemize}
+\end{frame}
+\begin{frame}\frametitle{Generating Random Primes}
+\begin{algorithm}[H]
+\SetKwInOut{Input}{input}
+\SetKwInOut{Output}{output}
+\SetKw{KwB}{break}
+\SetKw{KwH}{halt}
+\DontPrintSemicolon
+\caption{Generating a random prime}
+\Input{Length $n$; parameter $t$}
+\Output{A random $n$-bit prime}
+\BlankLine
+\For{$i = 1$ \KwTo $t$}{
+  $p' \gets \{0,1\}^{n-1}$\;
+  $p := 1\| p'$\;
+  \lIf{$p$ is prime}{\Return $p$}\;
+}
+\Return fail
+\end{algorithm}
+To show its efficiency, we need understand two issues:
+\begin{itemize}
+\item the probability that a randomly-selected $n$-bit integer is prime.
+\item how to efficiently test whether a given integer $p$ is prime.
+\end{itemize}
+\end{frame}
+\begin{frame}\frametitle{The Distribution of Prime}
+\begin{theorem}[Prime number theorem]
+$\exists$ a constant $c$ such that, $\forall n>1$, a randomly selected $n$-bit number is prime with probability at least $c/n$.
+\end{theorem}
+The probability that a prime is \emph{not} chosen in $t = n^2/c$ iterations is
+\[ \left( 1-\frac{c}{n} \right)^t = \left( \left( 1-\frac{c}{n} \right)^{n/c} \right)^n \le \left( e^{-1} \right)^n = e^{-n}.
+\]
+The algorithm will fail with a negligible probability.
+\end{frame}
+\begin{frame}\frametitle{Testing Primality}
+\begin{itemize}
+\item \textbf{Trial division}: Divide $N$ by $a=2,3,\dotsc,\sqrt{N}.$
+\item \textbf{Probabilistic algorithm for approximately computing}:
+\begin{itemize}
+\item Atlantic City algorithm with two-sided error. 
+\item Monte Carlo algorithm with one-sided error.
+\item Las Vegas algorithm with zero-sided error.
+\end{itemize}
+\item \textbf{Fermat primality test}: $a^{N-1} \equiv 1 \pmod N$.
+\item $a$ is a \textbf{witness} that $N$ is composite if $a^{N-1} \not \equiv 1 \pmod N$.
+\item $a$ is a \textbf{liar} if $N$ is composite and $a^{N-1} \equiv 1 \pmod N$.
+\item \textbf{Carmichael numbers}: composite numbers without witnesses.
+\end{itemize}
+\begin{theorem}
+If $\exists$ a witness, then at least half the elements of $\mathbb{Z}_N^*$ are witnesses.
+\end{theorem}
+\end{frame}
+\begin{frame}\frametitle{The Miller-Rabin Primality Test}
+$N-1=2^ru$, $u$ is odd. $a \in \mathbb{Z}^*_N$ is a \textbf{strong witness} if
+\begin{enumerate}
+\item $a^u \neq \pm 1$, and
+\item $a^{2^iu} \neq -1$ for $i\in\{1,\dotsc,r-1\}$.
+\end{enumerate}
+\begin{lemma}
+$x \in \mathbb{Z}^*$ is a \textbf{square root of 1 modulo} $N$ if $x^2 \equiv 1 \pmod N$. If $N$ is an odd prime then the only $x$ are $[\pm 1 \bmod N]$.
+\end{lemma}
+\begin{theorem}
+$N$ is an odd, composite number that is not a prime power. Then at least half the elements of $\mathbb{Z}^*_N$ are strong witnesses.
+\end{theorem}
+\begin{theorem}
+If $N$ is prime, then the Miller-Rabin test always outputs ``prime''. If $N$ is composite, then the algorithm outputs ``prime'' with probability at most $2^{-t}\;$\footnote{Actually, it is at most $4^{-t}$.}.
+\end{theorem}
+\end{frame}
+\begin{frame}\frametitle{Describing The Algorithm}
+\begin{algorithm}[H]
+\SetKwInOut{Input}{input}
+\SetKwInOut{Output}{output}
+\SetKw{KwC}{compute}
+\SetKw{KwL}{LOOP}
+\DontPrintSemicolon
+\caption{The Miller-Rabin primality test}
+\Input{Integer $N>2$ and parameter $t$}
+\Output{A decision as to wether $N$ is prime or composite}
+\BlankLine
+
+\lIf{$N$ is a perfect power}{\Return ``composite''}\;
+\KwC $r\ge 1$ and $u$ odd such that $N-1 = 2^ru$\;
+\KwL: \For{$s = 1$ \KwTo $t$}{
+  $a \gets \{2,\dotsc,N-2\}$\;
+  $x = a^u \bmod N$\;
+  \lIf{$x = \pm 1$}{do next \KwL}\;
+  \For{$i = 1$ \KwTo $r$} {
+    $x = x^2 \bmod N$\;
+    \lIf{$x = -1 $}{do next \KwL}\;
+%    \lIf{$x = 1 $}{\Return ``composite''}\;
+  }
+  \Return ``composite''\;
+}
+\Return ``prime''
+\end{algorithm}
+\end{frame}
+\begin{frame}\frametitle{Examples of Primality Tests}
+\begin{exampleblock}{Liars in Fermat primality test}
+$2^{340} \equiv 1 \pmod {341}$,  but $341 = 11\cdot 31$.\\  
+$5^{560} \equiv 1 \pmod {561}$,  but $561 = 3\cdot 11\cdot 17$.\\
+Carmichael numbers $< 10000$: \\  
+561,  1105,  1729,  2465,  2821,  6601,  8911.
+\end{exampleblock}
+\begin{exampleblock}{Examples of Miller-Rabin test}
+Carmichael number $1729=7\cdot 13\cdot 19$. \\$1729-1 = 1728 = 2^6\cdot 27$. So $r = 6, u = 27$. $a=671$.
+\begin{align*}
+671^{27} &\equiv 1084 \pmod {1729} \\
+671^{27\cdot 2} &\equiv 1065 \pmod {1729}\\
+671^{27\cdot 2^2} &\equiv 1 \pmod {1729}\\
+\end{align*}
+
+\end{exampleblock}
+\end{frame}
+\begin{frame}\frametitle{The Factoring Assumption}
+Let $\mathsf{GenModulus}(1^n)$ be a polynomial-time algorithm that, on input $1^n$, outputs $(N,p,q)$ where $N=pq$, and $p,q$ are $n$-bit primes except with probability negligible in $n$.
+\newline
+
+The factoring experiment $\mathsf{Factor}_{\mathcal{A},\mathsf{GenModulus}}(n)$:
+\begin{enumerate}
+\item Run $\mathsf{GenModulus}(1^n)$ to obtain $(N,p,q)$.
+\item $\mathcal{A}$ is given $N$, and outputs $p', q'>1$.
+\item $\mathsf{Factor}_{\mathcal{A},\mathsf{GenModulus}}(n) = 1$ if $p'\cdot q'=N$, and 0 otherwise.
+\end{enumerate}
+\begin{definition}
+\textbf{Factoring is hard relative to} $\mathsf{GenModulus}$ if $\forall$ \textsc{ppt} algorithms $\mathcal{A}$, $\exists$ $\mathsf{negl}$ such that
+\[ \Pr[\mathsf{Factor}_{\mathcal{A},\mathsf{GenModulus}}(n) = 1] \le \mathsf{negl}(n).\] 
+\end{definition}
+\end{frame}
+\begin{frame}\frametitle{Algorithms for Factoring}
+\begin{itemize}
+\item \textbf{Factoring} $N=pq$. $p,q$ are of the same length $n$.
+\item \textbf{Trial division}: $\mathcal{O}(\sqrt{N}\cdot \mathsf{polylog}(N))$.
+\item \textbf{Pollard's $p-1$} method: effective when $p-1$ has ``small'' prime factors.
+\item \textbf{Pollard's rho} method: $\mathcal{O}(N^{1/4}\cdot \mathsf{polylog}(N))$.
+\item \textbf{Quadratic sieve} algorithm [Carl Pomerance]: sub-exponential time $\mathcal{O}(\exp(\sqrt{n\cdot \log n}))$.
+\item The best-known algorithm is the \textbf{general number field sieve} [Pollard] with time $\mathcal{O}(\exp(n^{1/3}\cdot(\log n)^{2/3}))$.
+\end{itemize}
+\end{frame}
+\begin{frame}\frametitle{Pollard's $p-1$ Method}
+\textbf{Idea}: Fermat's little theorem: $y = x^{(p-1)\cdot k} \equiv 1 \pmod p$. Then $(y-1) \equiv 0 \pmod p$ and $p \mid (y-1)$. So $p = \gcd(y-1,N)$. To make the exponent a large multiple of $(p-1)$:
+\[ M = lcm(\{ i | i \le B \}) = \prod_{\text{prime}\;i \le B}i^{\lfloor \log_iB \rfloor}.\]
+If $p-1$ has only ``small'' factors, then the bound $B$ will be small.
+\begin{algorithm}[H]
+\SetKwInOut{Input}{input}
+\SetKwInOut{Output}{output}
+\SetKw{KwC}{compute}
+\SetKw{KwL}{LOOP}
+\DontPrintSemicolon
+\caption{Pollard's $p-1$ algorithm for factoring}
+\Input{Integer $N$}
+\Output{A non-trivial factor of $N$}
+\BlankLine
+
+$x \gets \mathbb{Z}^*_N$\;
+$y := [x^M \bmod N]$\;
+$p := \gcd(y-1,N)$\;
+\lIf{$p \notin \{1,N\}$}{\Return $p$}\;
+\end{algorithm}
+\end{frame}
+\begin{frame}\frametitle{Pollard's Rho ($\rho$) Method}
+\textbf{Idea}: Using the improved birthday attack\footnote{Floyd's cycle-finding algorithm (the ``tortoise and the hare'' algorithm).} to find $x,x'$ such that $x \neq x' \land x \equiv x' \pmod p$. Then $p \mid (x-x')$, $p = \gcd(x-x',N)$.
+$F(x) = x^2+b$, where $b \not \equiv 0,-2 \pmod N$.
+\begin{algorithm}[H]
+\SetKwInOut{Input}{input}
+\SetKwInOut{Output}{output}
+\SetKw{KwC}{compute}
+\SetKw{KwL}{LOOP}
+\DontPrintSemicolon
+\caption{Pollard's rho algorithm for factoring}
+\Input{Integer $N$}
+\Output{A non-trivial factor of $N$}
+\BlankLine
+
+$x_0 \gets \mathbb{Z}^*_N$\;
+\For{$i=1$ \KwTo $2^{n/2}$}{
+$x_i := [F(x_{i-1}) \bmod N]$\;
+$x_{2i} := [F(F(x_{2i-2})) \bmod N]$\;
+$p := \gcd(x_{2i}-x_i,N)$\;
+\lIf{$p \notin \{1,N\}$}{\Return $p$}\;
+}
+\end{algorithm}
+\end{frame}
+\begin{frame}\frametitle{Proof of Pollard's $\rho$ Method}
+\begin{lemma}
+Let $x_1,\dotsc$ be a sequence with $x_m \equiv F(x_{m-1}) \pmod N$. $F$ satisfies that $x \equiv x' \pmod N \implies F(x) \equiv F(x') \pmod N$. If $x_I \equiv x_J\pmod p$ with $I < J$, then $\exists$ $i < J$ such that $x_{i} \equiv x_{2i} \pmod p$.
+\end{lemma}
+\begin{figure}
+\begin{center}
+\input{tikz/birthdayattack}
+\end{center}
+\end{figure}
+\begin{proof}
+See the proof of improved birthday attack.
+\end{proof}
+According to the lemma of birthday problem, given a sequence of length $O(N^{1/4})$, find such pair with probability $1/4$.
+\end{frame}
+\begin{frame}\frametitle{Example of Pollard's $p-1$ and $\rho$ methods}
+\begin{exampleblock}{Factorizing $N=5917$ with Pollard's $p-1$ method}
+Choose $B=5$, $M=lcm(1,2,3,4,5)=60$.\\
+For $x=2$, $y \equiv x^M \equiv 2^{60} \equiv 3417 \pmod{5917}$.\\
+$p = gcd(y-1,N) = \gcd(3416,5917) = 61$.
+\end{exampleblock}
+\begin{exampleblock}{Factorizing $N=8051$ with Pollard's $\rho$ method}
+$f(x) = x^2+1$, $x_0=2$.\\
+\begin{center}
+\begin{tabular}{|c|c|c|c|} \hline
+$i$  & $x_i$ & $x_{2i}$ & $\gcd(x_{2i}-x_i,N)$ \\ \hline
+1 & 5 & 26 & 1 \\
+2 & 26 & 7474 & 1 \\
+3 & 677 & 871 & 97 \\ \hline
+\end{tabular}	
+\end{center}
+\end{exampleblock}
+\end{frame}
+\begin{frame}\frametitle{The Quadratic Sieve Algorithm}
+\textbf{Idea}: Find $x,y$ with $x^2 \equiv y^2 \pmod N$ and $x \not \equiv \pm y \pmod N$. $x^2-y^2 \equiv 0 \pmod N\implies (x+y)(x-y) \equiv 0 \pmod N$.\\
+$\gcd(x+y,N)$ and $\gcd(x-y,N)$ will give $p$.\\
+\textbf{Finding congruence of squares}: \\
+%Find $x_i^2 \equiv y_i \pmod N$ for $i=1,2,\dotsc,r$ and $y_1y_2\cdots y_r = c^2$. \\
+%$(x_1x_2\cdots x_r)^2 \equiv y_1y_2\cdots y_r = c^2 \pmod N$.\\
+\begin{enumerate}
+\item Choose a factor base $B = \{p_1,\dotsc,p_k\}$ of prime numbers. 
+\item Use `\textbf{sieve theory}' to find $\ell = k+1$ distinct $x_1,\dotsc,x_\ell$ for which $[x_i^2 \bmod N]$ decompose into the elements of $B$: $x_i^2 \equiv \prod^k_{j=1} p_j^{e_j} \pmod N$.
+\item Write $x_i^2$ as an exponent vector $\langle e_{i,1},\dotsc,e_{i,k}\rangle \pmod 2$.
+\item Find the addition of vectors = the zero vector $\pmod 2$.\\
+$X=\{x_{\ell_1},\dotsc,x_{\ell_n}\}$. $\forall i$, $E_i = \sum_{j=1}^ne_{\ell_j,i} \equiv 0 \pmod 2$.
+\item Find a pair: $x = \prod_{i=1}^nx_{\ell_i} \not \equiv y=\prod_{i=1}^kp_i^{E_i/2} \pmod N$.  
+\end{enumerate}
+\end{frame}
+\begin{frame}\frametitle{Example of Quadratic Sieve Algorithm}
+\begin{exampleblock}{Factorizing $N=377753$ with quadratic sieve algorithm}
+$B = \{2,13,17,23,29\}$.
+\begin{align*}
+620^2 &\equiv 17^2\cdot 23 \pmod N\\
+621^2 &\equiv 2^4\cdot 17\cdot 29 \pmod N\\
+645^2 &\equiv 2^7\cdot 13\cdot 23 \pmod N\\
+655^2 &\equiv 2^3\cdot 13\cdot 17\cdot 29 \pmod N
+\end{align*}
+\[ [620\cdot 621\cdot 645\cdot 655 \bmod N]^2 \equiv [2^7\cdot 13\cdot 17^2\cdot 23\cdot 29\bmod N]^2 \]
+\[ \implies 127194^2 \equiv 45335^2 \pmod N,\]
+Computing $\gcd(127194-45335,377753)=751$.
+\end{exampleblock}
+\end{frame}
+\section{RSA Assumption}
+\begin{frame}\frametitle{The RSA Problem}
+\begin{block}{Recall group exponentiation on $\mathbb{Z}^*_N$}
+Define function $f_e\;:$ $\mathbb{Z}^*_N \to \mathbb{Z}^*_N$ by $f_e(x) =[x^e \bmod N]$. \\ If $\gcd(e,\phi(N))=1$, then $f_e$ is a permutation. \\
+If $d = [e^{-1} \bmod \phi(N)]$, then $f_d$ is the inverse of $f_e$.\\
+\textbf{$e$'th root of $c$}: $g^e = c$, $g = c^{1/e} = c^{d}$. 
+\end{block}
+\textbf{Idea}: factoring is hard\\ $\implies$ for $N=pq$, finding $p,q$ is hard\\ $\implies$ computing $\phi(N)=(p-1)(q-1)$ is hard\\ $\implies$ computations modulo $\phi(N)$ is not available\\ 
+\alert{\textbf{There is a gap.}}\\
+$\implies$ \textbf{RSA problem} [Rivest, Shamir, and Adleman] is hard:\\
+Given $y \in \mathbb{Z}^*_N$, compute $y^{-e}$, $e^{\text{th}}$-root of $y$ modulo $N$.
+\begin{alertblock}{Open problem}
+RSA problem is easier than factoring?
+\end{alertblock}
+\end{frame}
+\begin{frame}\frametitle{Generating RSA Problem}
+\begin{algorithm}[H]
+\SetKwInOut{Input}{input}
+\SetKwInOut{Output}{output}
+\SetKw{KwF}{find}
+\SetKw{KwC}{compute}
+\DontPrintSemicolon
+\caption{$\mathsf{GenRSA}$}
+\Input{Security parameter $1^n$}
+\Output{$N,e,d$}
+\BlankLine
+$(N,p,q) \gets \mathsf{GenModulus}(1^n)$\;
+$\phi(N) := (p-1)(q-1)$\;
+\KwF $e$ such that $\gcd(e,\phi(N))=1$\;
+\KwC $d := [e^{-1} \bmod \phi(N)]$\;
+\Return $N,e,d$\;
+\end{algorithm}
+\end{frame}
+\begin{frame}\frametitle{The RSA Assumption}
+The RSA experiment $\mathsf{RSAinv}_{\mathcal{A},\mathsf{GenRSA}}(n)$:
+\begin{enumerate}
+\item Run $\mathsf{GenRSA}(1^n)$ to obtain $(N,e,d)$.
+\item Choose $y \gets \mathbb{Z}^*_N$.
+\item $\mathcal{A}$ is given $N,e,y$, and outputs $x \in \mathbb{Z}^*_N$.
+\item $\mathsf{RSAinv}_{\mathcal{A},\mathsf{GenRSA}}(n)=1$ if $x^e \equiv y \pmod N$, and 0 otherwise.
+\end{enumerate}
+\begin{definition}
+\textbf{RSA problem is hard relative to} $\mathsf{GenRSA}$ if $\forall$ \textsc{ppt} algorithms $\mathcal{A}$, $\exists$ $\mathsf{negl}$ such that
+\[ \Pr[\mathsf{RSAinv}_{\mathcal{A},\mathsf{GenRSA}}(n) = 1] \le \mathsf{negl}(n).\]
+\end{definition}
+\end{frame}
+
+\begin{comment}
+\begin{frame}\frametitle{Constructing One-Way Functions}
+\begin{algorithm}[H]
+\SetKwInOut{Input}{input}
+\SetKwInOut{Output}{output}
+\SetKw{KwC}{compute}
+\SetKw{KwL}{LOOP}
+\DontPrintSemicolon
+\caption{Algorithm computing $f_{\mathsf{GenModulus}}$}
+\Input{String $x$}
+\Output{String $N$}
+\BlankLine
+
+\KwC $n$ such that $p(n) \le \abs{x} < p(n+1)$\;
+\KwC $(N,p,q) := \mathsf{GenModulus}(1^n;x)$\;
+\tcc{run $\mathsf{GenModulus}(1^n)$ using $x$ as the random tape}
+\Return $N$\;
+\end{algorithm}
+Reduce the factoring problem to the inverting problem.
+\begin{theorem}
+If the factoring problem is hard relative to $\mathsf{GenModulus}$, then $f_{\mathsf{GenModulus}}$ is a one-way function.
+\end{theorem}
+\end{frame}
+\begin{frame}\frametitle{Constructing One-Way Permutations}
+\begin{construction}
+Define a family of permutations with $\mathsf{GenRSA}$:
+\begin{itemize}
+\item $\mathsf{Gen}$: on input $1^n$, run $\mathsf{GenRSA}(1^n)$ to obtain $(N,e,d)$ and output $I=\langle N,e \rangle$, Set $\mathcal{D}_I = \mathbb{Z}^*_N$.
+\item $\mathsf{Samp}$: on input $I=\langle N,e \rangle$, choose a random elements of $\mathbb{Z}^*_N$.
+\item $f$: on input $I=\langle N,e\rangle$ and $x \in \mathbb{Z}^*_N$, output $[ x^e \bmod N]$.
+\end{itemize}
+\end{construction}
+Reduce the RSA problem to the inverting problem.
+\end{frame}
+\end{comment}
+\begin{frame}\frametitle{Summary}
+\begin{itemize}
+\item Primes, modular arithmetic.
+\item Miller-Rabin primality testing.
+\item Factoring, Pollard's $p-1$ and $\rho$ methods.
+\item $e^{\mathsf{th}}$-root modulo $N$, RSA.
+\end{itemize}
+\begin{block}{Textbook}
+``\emph{A Computational Introduction to Number Theory and Algebra}''
+(Version 2) by Victor Shoup
+\end{block}
+\end{frame}
+\end{document}

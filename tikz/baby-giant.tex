@@ -1,0 +1,21 @@
+\begin{tikzpicture}[thin,giant/.style={decorate,fill=blue!60,decoration={footprints,foot length=20pt, stride length=5cm, foot sep=-10pt}}, baby/.style = {decorate,fill=red!60, decoration = {footprints, foot length=10pt, stride length=1cm, foot sep=-5pt}}]
+\clip (-0.1,-0.5) rectangle (10.5,1);
+\fill[giant] (0,0.5cm) -- (13cm,0.5cm);
+\fill[baby] (4cm,-0.0cm) -- (7cm,-0.0cm);
+\foreach \x in {0,0.5,...,10}{
+\draw[thin] (\x,0.2) circle (1pt);
+\draw[thin] ($(\x,0.2)+(0.1,0)$) -- +(0.3,0);
+}
+\draw[-] (0,-0.5cm) -- (0,0.1cm);
+\draw[-] (2.5,-0.5cm) -- (2.5,0.1cm);
+%\draw[-] (4,-0.3cm) -- (4,0.1cm);
+%\draw[-] (6.5,-0.3cm) -- (6.5,0.1cm);
+\node (t) at (1.25,-0.3) {\small $t = \lfloor \sqrt{q}\rfloor$};
+\draw[->] (t) -- (0,-0.3);
+\draw[->] (t) -- (2.5,-0.3);
+\draw[-] (4,0.1) -- (4,-0.2) node [below=-0.1] {$y$};
+\draw[-] (6.5,0.1) -- (6.5,-0.3) node {\small $y\cdot g^t$};
+\draw[-] (5,0.7) node [above=-0.2] {\small $g^{k\cdot t}$} -- (5,0.3);
+\draw[-] (5,0.1) -- (5,-0.3) node {\small $y\cdot g^{i}$}; 
+\draw[fill] (4,0.2) circle (2pt);
+\end{tikzpicture}

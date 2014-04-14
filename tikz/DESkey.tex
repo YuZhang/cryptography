@@ -1,0 +1,22 @@
+\begin{tikzpicture}[rc/.style={rounded corners=1ex}]
+\node (k1) [minimum width=4cm, draw] {56-bit key};
+\node (lh) at ($(k1)+(-1.1cm, -1cm)$) [minimum width=1.8cm, draw] {28-bit};
+\node (rh) at ($(k1)+(+1.1cm, -1cm)$) [minimum width=1.8cm, draw] {28-bit};
+\node (ls) at ($(k1)+(-1.1cm, -2cm)$) [minimum width=1.2cm, rc, draw] {L-Shift};
+\node (rs) at ($(k1)+(+1.1cm, -2cm)$) [minimum width=1.2cm, rc, draw] {L-Shift};
+%\node (pc) at ($(k1)+(0, -3cm)$) [minimum width=3cm, rc, draw] {Permutation Choice};
+\node (lpc) at ($(k1)+(-1.1cm, -3cm)$) [minimum width=1.2cm, rc, draw] {L PC};
+\node (rpc) at ($(k1)+(+1.1cm, -3cm)$) [minimum width=1.2cm, rc, draw] {R PC};
+\node (sk) at ($(k1)+(0, -4cm)$) [minimum width=3cm, draw] {48-bit sub-key};
+\node (k2) at ($(k1)+(0, -6cm)$) [minimum width=4cm, draw] {56-bit key};
+\draw[-latex] (lh |- k1.south) -- (lh);
+\draw[-latex] (rh |- k1.south) -- (rh);
+\draw[-latex] (lh) -- (ls);
+\draw[-latex] (rh) -- (rs);
+\draw[-latex] (ls) -- (ls |- lpc.north);
+\draw[-latex] (rs) -- (rs |- rpc.north);
+\draw[-latex] ($(ls.south)+(0,-0.15cm)$) -| ($(k2.north)+(-2cm,0.5cm)$) -| ($(k2.north)+(-1.1cm, 0)$);
+\draw[-latex] ($(rs.south)+(0,-0.15cm)$) -| ($(k2.north)+(2cm,0.5cm)$) -| ($(k2.north)+(1.1cm, 0)$);
+\draw[-latex] (lpc) -- (lpc |- sk.north);
+\draw[-latex] (rpc) -- (rpc |- sk.north);
+\end{tikzpicture}

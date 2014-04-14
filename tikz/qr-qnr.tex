@@ -1,0 +1,16 @@
+\begin{tikzpicture}[scale=0.7, every node/.style={scale=0.7}]
+\node (zp) [draw, minimum size=3cm, circle, label=above:$\mathbb{Z}_p^*$] {};
+\node (zn) [draw, right of=zp, node distance=5cm, minimum size=3cm, circle, label=above:$\mathbb{Z}_N^*$] {};
+\node (qrp) [node distance=0.75cm, left of=zp] {$\mathcal{QR}_p$};
+\node (qnrp) [node distance=0.75cm, right of=zp] {$\mathcal{QNR}_p$};
+\node (qrn) [node distance=0.75cm,  above left of=zn] {$\mathcal{QR}_N$};
+\node (qnrn) [node distance=0.75cm, below right of=zn] {$\mathcal{QNR}_N$};
+\draw[-] (zp.north) -- (zp.south);
+\draw[-] (zn.north) -- (zn.center) -- (zn.west);
+\filldraw [opacity=0.2, green] (zp.south) arc (270:90:1.5cm);
+\filldraw [opacity=0.2, green] (zn.south) arc (270:90:1.5cm);
+\node [node distance=2cm,  left of=zn] {$\mathcal{J}_N^{+1}$};
+\node [node distance=2cm,  right of=zn] {$\mathcal{J}_N^{-1}$};
+\node (qnr1) at ($(zn)+(-2cm,-1.2cm)$) {$\mathcal{QNR}_N^{+1}$};
+\draw[-latex] (qnr1.north) -- +(1.5cm,0.4cm) ;
+\end{tikzpicture}

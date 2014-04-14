@@ -1,0 +1,11 @@
+\begin{tikzpicture}[cf/.style={trapezium left angle=65, trapezium right angle=90, minimum height=1cm,minimum width=1cm,trapezium, rounded corners=1ex,shape border rotate=270, draw}]
+\node (m) [minimum width=2cm,minimum height=0.5cm,draw] {$m$};
+\node (H) [right of=m, node distance=2.5cm, cf] {$H$};
+\node (s) [above of=H, node distance=1.5cm] {$s$};
+\node (g) [left of=s, rounded corners=1ex, node distance=1.1cm, draw] {$\mathsf{Gen}$};
+\node (h) [right of=H, minimum width=1cm,minimum height=0.5cm, node distance=2cm, draw] {$h$};
+\draw[-latex] (m) -- (H);
+\draw[-latex] (H) -- (h);
+\draw[-latex] (s) -- (H);
+\draw[-latex] (g) -- (s);
+\end{tikzpicture}

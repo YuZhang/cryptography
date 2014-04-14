@@ -1,0 +1,237 @@
+% AMS dept HW template example
+% v0.04 by Eric J. Malm, 10 Mar 2005
+\documentclass[12pt,letterpaper,boxed]{amspset}
+
+% set 1-inch margins in the document
+\usepackage[margin=1in]{geometry}
+
+% include this if you want to import graphics files with /includegraphics
+\usepackage{graphicx}
+
+% info for header block in upper right hand corner
+\name{{\large Name: }\underline{ \hspace{3cm} }}
+\class{{\large ID: }\underline{ \hspace{3cm} }}
+\assignment{{\large Grade:}\underline{ \hspace{3cm} }}
+\duedate{03/22/2011}
+
+\begin{document}
+
+\problemlist{Classic cipher, Perfectly-Secret Encryption\\Private-Key Encryption, Pseudorandomness}
+
+\begin{problem}[1.1]
+Encrypt your name in Pinyin (without blank space and ignoring case) with Caesar's cipher and shift cipher respectively. The key, if needed, is your student ID ($\bmod 26$).  
+\end{problem}
+
+\begin{solution}
+Name:\hspace{5cm} Key: \\
+Ciphertext (Caesar's): \\
+Ciphertext (Shift):
+\end{solution}
+
+\begin{problem}[1.2]
+Encrypt the message ``attackatnineoclock'' with mono-alphabetic sub. cipher and Vigen\`{e}re cipher respectively. The key is your first name in Pinyin (ignoring case).  
+\end{problem}
+
+\begin{solution}
+Key:\\
+Ciphertext (Mono-Alphabetic sub.):\\
+Ciphertext (Vigen\`{e}re):
+\end{solution}
+
+\begin{problem}[1.3]
+Decrypt the ciphertext ``OVDTHUFWVZZPISLRLFZHYLAOLYL''.  
+\end{problem}
+
+\begin{solution}
+Plaintext:
+\end{solution}
+
+\begin{problem}[1.4]
+Show that the shift, Mono-Alphabetic sub., and Vigen\`{e}re ciphers are all trivial to break using a known-plaintext attack. How much known plaintext is needed to completely recover the key for each of the ciphers?  
+\end{problem}
+
+\begin{solution}
+Shift:\\
+\\
+\\
+\\
+Mono-Alphabetic sub.:\\
+\\
+\\
+\\
+Vigen\`{e}re: \\
+\\
+\\
+\end{solution}
+
+\begin{problem}[1.5]
+Show that the shift, Mono-Alphabetic sub., and Vigen\`{e}re ciphers are all trivial to break using a chosen-plaintext attack. How much plaintext must be encrypted to completely recover the key?  
+\end{problem}
+
+\begin{solution}
+Shift:\\
+\\
+\\
+\\
+Mono-Alphabetic sub.:\\
+\\
+\\
+\\
+Vigen\`{e}re: \\
+\\
+\\
+\end{solution}
+
+\begin{problem}[1.6]
+What is the index of coincidence of your name in Pinyin (without blank space and ignoring case)?
+\end{problem}
+
+\begin{solution}
+Name:\\
+Letters and their corresponding probabilities in your name:\\
+\\
+\\
+IC = 
+\end{solution}
+
+\begin{problem}[2.1]
+Prove or refute: For every encryption scheme that is perfectly secret it holds that for every distribution over the message space $\mathcal{M}$, every $m, m' \in \mathcal{M}$, and every $c \in \mathcal{C}$:
+\[ \Pr[M=m | C=c] = \Pr[M=m'|C=c].
+\]
+\end{problem}
+
+\begin{solution}
+\vspace{5cm}
+
+\end{solution}
+
+\begin{problem}[2.2]
+Study conditions under which the shift, mono-alphabetic sub., and Vigen\`{e}re cipher ciphers are perfectly secret:
+\begin{itemize}
+\item (a) Prove that if only a single character is encrypted, then the shift cipher is perfectly secret.
+\item (b) What is the largest plaintext space $M$ you can find for which the mono-alphabetic sub. cipher provides perfect secrecy?
+\item (c) Show how to use the Vigen\`{e}re cipher to encrypt any word of length $t$ so that perfect secrecy is obtained (note: you can choose the length of the key). Prove your answer.
+\end{itemize}
+\end{problem}
+
+\begin{solution}
+(a) Shift:\\
+\\
+\\
+\\
+\\
+\\
+(b) Mono-alphabetic sub.:\\
+\\
+\\
+\\
+\\
+\\
+(c) Vigen\`{e}re cipher.:\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\end{solution}
+
+\begin{problem}[3.1]
+The best algorithm known today for finding the prime factors of an $n$-bit number runs in time $2^c\cdot n ^ {\frac{1}{3}(\log n)^{\frac{1}{3}}}$. Assuming 4Ghz computers and $c=1$, estimate the size of numbers that cannot be factored for the next 100 years.
+\end{problem}
+
+\begin{solution}
+(Do not only give the value of $n$, show the process of solving it.)\\
+\\
+\\
+\\
+\\
+\\
+\end{solution}
+
+\begin{problem}[3.2]
+Prove that Definition 1 (see handout `3privatekey.pdf') cannot be satisfied if $\Pi$ can encrypt arbitrary-length messages and the adversary is not restricted to output equal-length messages in experiment $\mathsf{PrivK}^{\mathsf{eav}}_{\mathcal{A},\Pi}(n)$.
+\end{problem}
+
+\begin{solution}
+(Show what the adversary would output, and the probability the experiment will success.)
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\end{solution}
+
+\begin{problem}[3.3]
+Assuming the existence of a pseudorandom function, prove that there exists an encryption scheme that has indistinguishable multiple encryptions in the presence of an eavesdropper (i.e. Definition 8), but is not CPA-secure (i.e. Definition 10). (see handout `3privatekey.pdf')
+\end{problem}
+
+\begin{solution}
+{\small Hint: You will need to use the fact that in a CPA the adversary can choose its queries to the encryption oracle adaptively.}\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\end{solution}
+
+\begin{problem}[3.4]
+Present a construction of a variable output-length pseudorandom generator from any pseudorandom function. Prove that your construction satisfies Definition 7 (see handout `3privatekey.pdf').
+\end{problem}
+
+\begin{solution}
+\vspace{5cm}
+\end{solution}
+
+\begin{problem}[3.5]
+Present formulas for decryption of all the different modes of operation for encryption. For which modes can decryption be parallelized?
+\end{problem}
+
+\begin{solution}
+ECB:\\
+\\
+\\
+\\
+CBC:\\
+\\
+\\
+\\
+OFB:\\
+\\
+\\
+\\
+CRT:\\
+\\
+\\
+\\
+\end{solution}
+
+\begin{problem}[3.6]
+Show that the CBC, OFB and CRT modes do not yield CCA-secure encryption schemes (regardless of F).
+\end{problem}
+
+\begin{solution}
+CBC:\\
+\\
+\\
+\\
+\\
+OFB:\\
+\\
+\\
+\\
+\\
+CRT:\\
+\\
+\\
+\\
+\end{solution}
+
+
+\end{document}

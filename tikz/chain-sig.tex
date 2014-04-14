@@ -1,0 +1,32 @@
+\begin{tikzpicture}[ps/.style={fill=blue!30},ss/.style={fill=red!30},ms/.style={fill=green!30},gs/.style={fill=yellow!30}]
+\node (p1) [ps] {$pk_1$};
+\node (s1) [ss,below of=p1] {$sk_1$};
+\node (m1) [ms,right of=p1] {$m_1$};
+\node (p2) [ps,right of=m1] {$pk_2$};
+\node (g1) [gs,right of=s1] {$\sigma_1$};
+\node (s2) [ss,right of=g1] {$sk_2$};
+\node (m2) [ms,right of=p2] {$m_2$};
+\node (g2) [gs,right of=s2] {$\sigma_2$};
+\node (p3) [ps,right of=m2] {$pk_3$};
+\node (s3) [ss,right of=g2] {$sk_3$};
+\node (d1) [right of=p3] {$\cdots$};
+\node (d2) [right of=s3] {$\cdots$};
+\node (pi) [ps,right of=d1] {$pk_i$};
+\node (si) [ss,right of=d2] {$sk_i$};
+\node (mi) [ms,right of=pi] {$m_i$};
+\node (gi) [gs,right of=si] {$\sigma_i$};
+\node (pi1) [ps,right of=mi] {$pk_{i+1}$};
+\node (si1) [ss,right of=gi] {$sk_{i+1}$};
+\node (i1) [right of=m1, node distance=0.5cm, minimum width=1.8cm, minimum height=0.6cm,draw] {};
+\node (i2) [right of=m2, node distance=0.5cm, minimum width=1.8cm, minimum height=0.6cm,draw] {};
+\node (ii) [right of=mi, node distance=0.5cm, minimum width=1.8cm, minimum height=0.6cm,draw] {};
+\draw[-latex] (i1) -- (g1);
+\draw[-latex] (s1) -- (g1);
+\draw[-latex] (i2) -- (g2);
+\draw[-latex] (s2) -- (g2);
+\draw[-latex] (ii) -- (gi);
+\draw[-latex] (si) -- (gi);
+\draw[-latex,dotted] (g1) -- (p1);
+\draw[-latex,dotted] (g2) -- (p2);
+\draw[-latex,dotted] (gi) -- (pi);
+\end{tikzpicture}

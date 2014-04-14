@@ -1,0 +1,25 @@
+\begin{tikzpicture}[uk/.style={inner sep=1pt, minimum width=15pt, circle},kk/.style={inner sep=1pt, minimum width=15pt, circle}]
+\node (X) [ellipse,minimum width=3cm,minimum height=4cm,inner color=blue!40,outer color=blue!10] {}; 
+\node (D) [ellipse,minimum width=1.5cm,minimum height=2cm,draw] {}; 
+\node (x) [above of=X,node distance=2.2cm] {$\mathcal{D}$}; 
+\node (d) [above of=X,node distance=1.2cm] {$\mathcal{D}_I$}; 
+\node (Y) [right of=X,ellipse,minimum width=3cm,minimum height=4cm,node distance=6cm,inner color=blue!40,outer color=blue!10] {};
+\node (R) [right of=X,ellipse,minimum width=1.5cm,minimum height=2cm,node distance=6cm,draw] {}; 
+\node (y) [above of=Y,node distance=2.2cm] {$\mathcal{R}$};
+\node (r) [above of=Y,node distance=1.2cm] {$\mathcal{R}_I$}; 
+\node (gen) [right of=x,node distance=3cm,rounded corners=1ex,draw] {$\mathsf{Gen}$};
+\node (I) [below of=gen,node distance=1cm] {$I$};
+\draw[-latex] (gen) -- (I);
+\node (f) [single arrow,right of=X,node distance=2.8cm, minimum height=2.5cm, minimum width=2.5cm,single arrow head extend=.05cm,fill=blue!40,path fading=west] {};
+\node (samp) [left of=I, node distance=1.5cm,draw,rounded corners=1ex,draw] {$\mathsf{Samp}$};
+\draw[-latex] (I) -- (samp);
+\node (x1) at ($(X)$) [kk] {$x$};
+\draw[-latex] (samp) -- (x1);
+\node (y1) at ($(Y)$) [uk] {$y$};
+\node (fi) at (I |- f) [draw,rounded corners=1ex,draw] {$f_I$};
+\draw[-latex] (x1) -- (fi);
+\draw[-latex] (fi) -- (y1);
+\draw[-latex] (I) -- (fi);
+\node (n) [left of=gen,node distance=1.5cm] {$1^n$};
+\draw[-latex] (n) -- (gen);
+\end{tikzpicture}

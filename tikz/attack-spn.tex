@@ -1,0 +1,72 @@
+\begin{tikzpicture}[font=\tiny,thin,
+	fw/.style={inner sep=0pt, black,fill=white},
+	rv/.style={blue, very thick},
+	uk/.style={inner sep=1pt, minimum width=5pt, circle, fill=red},
+	kk/.style={inner sep=1pt, minimum width=5pt, circle, fill=green},
+	kc/.style={inner sep=1pt, minimum width=5pt, circle, fill=blue}]
+]
+\foreach \z in {1, 2} {
+\node (km\z) at ($\z*(0,-2.2cm)$) [minimum width=6cm,rounded corners=1ex,draw] {$K_\z$};
+\foreach \x in {1, 2,...,4} {
+\node (s\z\x) at ($(km\z)+\x*(1.5cm,0)-(3.75cm,0.7cm)$) [minimum width=1.2cm,rounded corners=1ex,draw] {$S_{\z,\x}$};
+}
+\foreach \x in {1, 2,...,4} {
+\foreach \y in {1, 2,...,4} {
+\draw[-] ($(s\z\x.north)+\y*(0.3cm,0)-(0.75cm,0)$) -- +(0,0.22cm);
+\draw[-] ($(s\z\x.south)+\y*(0.3cm,0)-(0.75cm,0)$) -- +(0,-0.22cm) -- ($(s\z\y.south)+\x*(0.3cm,0)-(0.75cm,0.8cm)$) -- +(0,-0.22cm);
+}
+}
+}
+
+\foreach \z in {1} {
+\foreach \x in {1, 2,...,4} {
+\foreach \y in {1, 2,...,4} {
+%\draw[-] ($(s\z\x.north)+\y*(0.3cm,0)-(0.75cm,0)$);
+\node (a\y) at ($(s\z\x.north |- km1)+\y*(0.3cm,0)-(0.75cm,0cm)$) [uk] {};
+\node (a\y) at ($(s\z\x.north |- km1.north)+\y*(0.3cm,0)-(0.75cm,0cm)$) [kk] {};
+}
+\node (w1) at ($(s\z\x.south)+1*(0.3cm,0)-(0.75cm,0cm)$) [kc] {};
+\draw[-,rv] ($(s\z\x.south)+1*(0.3cm,0)-(0.75cm,0)$) -- +(0,-0.22cm) -- ($(s\z1.south)+\x*(0.3cm,0)-(0.75cm,0.8cm)$) -- +(0,-0.22cm);
+}
+}
+
+\foreach \y in {1, 2,...,4} {
+\node (w\y) at ($(s21.north)+\y*(0.3cm,0)-(0.75cm,0cm)$) [kk] {};
+\node (a\y) at ($(s21.north |- km2)+\y*(0.3cm,0)-(0.75cm,0cm)$) [uk] {};
+\node (a\y) at ($(s21.north |- km2.north)+\y*(0.3cm,0)-(0.75cm,0cm)$) [kc] {};
+%\node (a\y) at ($(s21.north |- km2.north)+\y*(0.3cm,0)-(0.75cm,-0.2cm)$) [cc] {};
+}
+
+\node at (3.3cm,-3.5cm) [kk,label=right:20 bits known] {};
+\node at (3.3cm,-4cm) [uk,label=right:20 bits unknown] {};
+\node at (3.3cm,-4.5cm) [kc,label=right:4 bits compared] {};
+
+%\foreach \z in {4} {
+%\node (km\z) at ($\z*(0,-2.2cm)$) [minimum width=6cm,rounded corners=1ex,draw] %{$K_\z$};
+%}
+%\foreach \x in {1, 2,...,4} {
+%\foreach \y in {1, 2,...,4} {
+%\draw[-] ($(s3\x.north)+\y*(0.3cm,0)-(0.75cm,2.2cm)$) -- +(0,0.22cm);
+%\draw[-] ($(s3\x.south)+\y*(0.3cm,0)-(0.75cm,-5.8cm)$) -- +(0,-0.22cm);
+%}
+%}
+%\node at ($(s11.north)+1*(0.3cm,0)-(0.75cm,-5.4cm)$) {$P_1$};
+%\node at ($(s14.north)+4*(0.3cm,0)-(0.75cm,-5.4cm)$) {$P_{16}$};
+%\node at ($(s12.north)+(1.5cm,0)-(0.75cm,-5.4cm)$) {\textbf{Plaintext}};
+
+%\node (p5) at ($(s12.north)+1*(0.3cm,0)-(0.75cm,-0.8cm)$) [anchor=south, fw] {};
+%\node (p7) at ($(s12.north)+3*(0.3cm,0)-(0.75cm,-0.8cm)$) [anchor=south, fw] {};
+%\node (p8) at ($(s12.north)+4*(0.3cm,0)-(0.75cm,-0.8cm)$) [anchor=south, fw] {};
+
+%\draw[rv,-] (p5) -- +(0,-1cm) -- ($(s12.south)+2*(0.3cm,0)-(0.75cm,0)$);
+%\draw[rv,-] (p7) -- +(0,-1cm) -- ($(s12.south)+2*(0.3cm,0)-(0.75cm,0)$);
+%\draw[rv,-] (p8) -- +(0,-1cm) -- ($(s12.south)+2*(0.3cm,0)-(0.75cm,0)$);
+%\draw[rv,-latex] ($(s12.south)+2*(0.3cm,0)-(0.75cm,0)$) -- ($(s32.north)+2*(0.3cm,0)-(0.75cm,0)$)  node [pos=1,left, fw] {\small $u_{3,6}$};
+%\draw[rv,-latex] ($(s22.north)+2*(0.3cm,0)-(0.75cm,0)$) -- ($(s22.south)+4*(0.3cm,0)-(0.75cm,0)$) -- +(0,-0.22cm) -- ($(s24.south)+2*(0.3cm,0)-(0.75cm,0.8cm)$) -- ($(s34.north)+2*(0.3cm,0)-(0.75cm,0)$) node [pos=1,right, fw] {\small $u_{3,14}$};
+%\node (k41) at (1.5cm,-8.8cm) [fw] {\small $k_{4,2\cdot i}$};
+%\node (e1) at ($(km1)+5.8*(1.5cm,0)-(3.75cm,0.7cm)$) [fw] {\small $S_{1,2}$: $\Delta X = B \to \Delta Y = 4$};
+%\node (e2) at ($(km2)+5.8*(1.5cm,0)-(3.75cm,0.7cm)$) [fw] {\small $S_{2,2}$: $\Delta X = 4 \to \Delta Y = 5$};
+%\node (e3) at ($(km3)+5.9*(1.5cm,0)-(3.75cm,0.7cm)$) [fw] {\small $\Delta U=$ [0000 0100 0000 0100]};
+%\node (e4) at ($(km3)+5.5*(1.5cm,0)-(3.75cm,1.2cm)$) [fw] {};
+%\node (e5) [below of=e4,fw] {\small Guess $k_{4,2\cdot i}$};
+\end{tikzpicture}

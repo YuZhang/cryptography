@@ -1,0 +1,15 @@
+\begin{tikzpicture}
+\node (k) {$k$};
+\node (pg) [draw, below of = k, rounded corners=1ex,node distance = 1.5cm] {$G$};
+\node (pad) [minimum width=2cm, draw, shape = rectangle, below of = pg, node distance = 1.5cm] {Pad};
+\node (xor) [below of = pad, circle, node distance = 1.2cm, draw] {};
+\draw[-] (xor.north) -- (xor.south);
+\draw[-] (xor.east) -- (xor.west);
+\node (pt) [left of = xor, node distance = 1.5cm] {$m$};
+\node (ct) [right of = xor, node distance = 1.5cm] {$c$};
+\draw[-latex] (k) -- (pg);
+\draw[-latex] (pg) -- (pad);
+\draw[-latex] (pad) -- (xor);
+\draw[-latex] (pt) -- (xor);
+\draw[-latex] (xor) -- (ct);
+\end{tikzpicture}

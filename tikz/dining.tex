@@ -1,0 +1,17 @@
+\begin{tikzpicture}[out=45,in=135]
+\foreach \x / \y / \z [evaluate=\x as \dg using \x*60,evaluate=\x as \dgg using \x*60+30] in {0/1/1,1/0/1,2/0/1,3/0/0,4/1/1,5/0/1} {
+\ifnum \x = 2
+\node (s\x) at (\dg:1.6cm) {\color{red} \LARGE \Gentsroom};
+\else
+\node (s\x) at (\dg:1.6cm) {\color{blue} \LARGE \Gentsroom};
+\fi
+\node at (\dg:2.1cm) [inner sep=1pt,circle,draw] {\z};
+\node (c\x) at (\dgg:1.6cm) {\y};
+\node (d\x) at (\dg:1.1cm) { \Coffeecup};
+}
+%\foreach \x [evaluate=\x as \y using \x+1,evaluate=\x as \z using \x*60+120,evaluate=\x as \i using 300-\x*60] in {0,1,...,5} {
+%\foreach \x / \y in {0/1,1/2,2/3,3/4,4/5,5/0} {
+%\draw[-latex] (s\x) to [bend right] (s\y);
+%}
+\node [minimum width = 2.8cm,circle,draw] {};
+\end{tikzpicture}

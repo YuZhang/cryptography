@@ -1,0 +1,68 @@
+% presentation
+\documentclass{beamer}
+\usetheme[height=7mm]{Rochester}
+\usecolortheme{rose}
+
+% handout
+
+%\documentclass[handout]{beamer}
+%\usepackage{pgfpages} \pgfpagesuselayout{8 on 1}[a4paper]
+
+%\documentclass[mathserif]{article}
+%\usepackage{beamerarticle}
+
+\usepackage{amsmath}
+\usepackage{comment}
+\usepackage{amssymb,amsfonts}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{tikz}
+\usepackage{simpsons}
+\usepackage{marvosym}
+\usepackage{color}
+\usepackage{multirow}
+\usepackage{pgffor}
+\usepackage[slide,algoruled,titlenumbered,vlined,noend,linesnumbered,]{algorithm2e}
+
+\usefonttheme{structurebold}
+
+\setbeamertemplate{footline}[frame number]
+\setbeamertemplate{navigation symbols}{}
+\setbeamerfont{smallverb}{size*={73}}
+\usefonttheme[onlymath]{serif}
+\setbeamertemplate{theorems}[numbered]
+\newtheorem{construction}[theorem]{Construction}
+\newtheorem{proposition}[theorem]{Proposition}
+
+\AtBeginSection[] { 
+  \begin{frame} 
+    \frametitle{Content} 
+    \tableofcontents[currentsection]
+  \end{frame} 
+  \addtocounter{framenumber}{-1} 
+}
+
+\usetikzlibrary[shapes.arrows]
+\usetikzlibrary{shapes.geometric}
+\usetikzlibrary{backgrounds}
+\usetikzlibrary{positioning}
+\usetikzlibrary{calc}
+\usetikzlibrary{intersections}
+\usetikzlibrary{fadings}
+\usetikzlibrary{decorations.footprints}
+\usetikzlibrary{patterns}
+\usetikzlibrary{shapes.callouts}
+\usetikzlibrary{fit}
+%handout
+
+\providecommand{\abs}[1]{\lvert#1\rvert}
+
+\tikzset{every picture/.style={line width=1pt,show background rectangle},background rectangle/.style={fill=blue!10,rounded corners=2ex}}
+
+\author{Yu Zhang}
+\institute{HIT/CST/NIS}
+\date[Crypt'14S]{Cryptography, Spring, 2014}
+
+%\input{1introduction.tex}
+%\input{2perfectlysecret.tex}
+%\input{3privatekey.tex}

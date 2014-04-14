@@ -1,0 +1,35 @@
+\begin{tikzpicture}[pattern color=white,fill=blue!50]
+%\draw [help lines] (-2,-2) grid [step=0.1] (10,2);
+%\draw [help lines,black] (-2,-2) grid [step=1] (10,2);
+\foreach \x in {0,1,2} {
+\node (r\x) at ($\x*(3.7cm,0)$) [minimum size=1cm,fill] {};
+\node (r\x) at ($\x*(3.7cm,0)$) [minimum size=1cm,pattern=bricks] {};
+\fill[fill,even odd rule]
+($\x*(3.7cm,0)+(-1.5cm,-1.5cm)$) rectangle +(3,3) ($\x*(3.7cm,0)+(-1cm,-1cm)$) rectangle +(2,2) ($\x*(3.7cm,0)+(-1.5cm,-0.25cm)$) rectangle +(0.5,0.5);
+\fill[pattern=bricks,even odd rule]
+($\x*(3.7cm,0)+(-1.5cm,-1.5cm)$) rectangle +(3,3) ($\x*(3.7cm,0)+(-1cm,-1cm)$) rectangle +(2,2) ($\x*(3.7cm,0)+(-1.5cm,-0.25cm)$) rectangle +(0.5,0.5);
+
+\ifnum \x = 2
+\node at ($\x*(3.7cm,0)+(1.25,0)$) [minimum width=0.5cm,fill=red!50] {};
+\node at ($\x*(3.7cm,0)+(1.25,0)$) [minimum width=0.5cm,pattern=bricks] {};
+\else
+\node at ($\x*(3.7cm,0)+(0.75,0)$) [minimum width=0.5cm,fill=red!50] {};
+\node at ($\x*(3.7cm,0)+(0.75,0)$) [minimum width=0.5cm,pattern=bricks] {};
+\fi
+
+\node at ($\x*(3.7cm,0)+(0,0.75)$) {A};
+\node at ($\x*(3.7cm,0)+(0,-0.75)$) {B};
+}
+\node at (-1.7,0.7) {\color{blue} \LARGE \Gentsroom};
+\node at (-0.7,0) {\color{red} \LARGE \Ladiesroom};
+\draw[->] (-0.7,0.4) to [bend left=30] +(0.5,0.3);
+\draw[->] (-0.7,-0.4) to [bend right=30] +(0.5,-0.3);
+
+\node at (2.5,0) {\color{blue} \LARGE \Gentsroom};
+\node at (4.4,-0.6) {\color{red} \LARGE \Ladiesroom};
+\node at (3,0.4) [inner sep=1pt,shape=ellipse callout, callout relative pointer={(-0.2,-0.2)},draw] {\tiny A};
+
+\node at (6.2,0) {\color{blue} \LARGE \Gentsroom};
+\node at (6.7,0.4) {\color{red} \LARGE \Ladiesroom};
+%\node at (3,0.4) [inner sep=1pt,shape=ellipse callout, callout relative pointer={(-0.2,-0.2)},draw] {\tiny A};
+\end{tikzpicture}
