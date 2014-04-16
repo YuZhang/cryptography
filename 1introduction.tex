@@ -63,13 +63,13 @@ The cipher method must not be required to be secret, and it must be able to fall
 \end{frame}
 \begin{frame}\frametitle{Attack Scenarios}	
 \begin{itemize}
-\item \textbf{Ciphertext-only}: the adversary just observes ciphertext.
-\item \textbf{Known-plaintext}: the adversary learns pairs of plaintexts/ciphertexts under the same key.
-\item \textbf{Chosen-plaintext}: the adversary has the ability to obtain the encryption of plaintexts of its choice.
-\item \textbf{Chosen-ciphertext}: the adversary has the ability to obtain the decryption of \textbf{other} ciphertexts of its choice.
+\item \textbf{Ciphertext-only}: the adversary just observes ciphertext
+\item \textbf{Known-plaintext}: the adversary learns pairs of plaintexts/ciphertexts under the same key
+\item \textbf{Chosen-plaintext}: the adversary has the ability to obtain the encryption of plaintexts of its choice
+\item \textbf{Chosen-ciphertext}: the adversary has the ability to obtain the decryption of \textbf{other} ciphertexts of its choice
 \item \textbf{Passive attack}: COA KPA
 \begin{itemize}
-\item because not all ciphertext are confidential.
+\item because not all ciphertext are confidential
 \end{itemize}
 \item \textbf{Active attack}: CPA CCA
 \begin{itemize}
@@ -78,22 +78,25 @@ The cipher method must not be required to be secret, and it must be able to fall
 \end{itemize}	
 \end{frame}
 \section{Historical Ciphers and Their Cryptanalysis}
-\begin{frame}\frametitle{Why We Learn Broken Ciphers?}
-\begin{itemize}
-\item To understand the weaknesses of an ``ad-hoc'' approach.
-\item To learn that ``simple'' approaches are unlikely to succeed.
-\item To feel that ``we are smart enough to do some crypt-analyzing'' (the last time).
-\end{itemize}
-\end{frame}
+\begin{comment}
+	\begin{frame}\frametitle{Why We Learn Broken Ciphers?}
+	\begin{itemize}
+	\item To understand the weaknesses of an ``ad-hoc'' approach
+	\item To learn that ``simple'' approaches are unlikely to succeed
+	\item To feel that ``we are smart enough to do some crypt-analyzing''
+	\end{itemize}
+	\end{frame}
+\end{comment}
+
 \begin{frame}[fragile]\frametitle{Caesar's Cipher}
 \begin{quote}
-If he had anything confidential to say, he wrote it in cipher, that is, by so changing the order of the letters of the alphabet, that not a word could be made out. If anyone wishes to \alert{decipher} these, and get at their meaning, he must \alert{substitute the fourth letter of the alphabet, namely D, for A}, and so with the others.
+If he had anything confidential to say, he wrote it in cipher, that is, by so changing the order of the letters of the alphabet, that not a word could be made out. If anyone wishes to \alert{decipher} these, and get at their meaning, he must \alert{substitute the fourth letter of the alphabet, namely D, for A}, and so with the others
 
 \rightline{--Suetonius,``Life of Julius Caesar''}
 \end{quote}
 \begin{itemize}
-	\item $\mathsf{Enc}(m)=m+3\mod 26$ \footnote{In fact the quote indicates that decryption involved rotating letters of the alphabet forward 3 positions, $\mathsf{Dec}(c)=c+3\mod 26$.}
-	\item \textbf{Weakness}: $\mathsf{Gen}$~is trivial, and no key.
+	\item $\mathsf{Enc}(m)=m+3\mod 26$ \footnote{In fact the quote indicates that decryption involved rotating letters of the alphabet forward 3 positions, $\mathsf{Dec}(c)=c+3\mod 26$}
+	\item \textbf{Weakness}: $\mathsf{Gen}$~is trivial, and no key
 \end{itemize}
 \begin{exampleblock}{Example}
 \verb|begintheattacknow|\\
@@ -104,7 +107,7 @@ If he had anything confidential to say, he wrote it in cipher, that is, by so ch
 \begin{itemize}
 \item $\mathsf{Enc}_k(m)=m+k\mod 26$
 \item $\mathsf{Dec}_k(c)=c-k\mod 26$
-\item \textbf{Weakness}: Fragile under \textbf{Brute-force attack} (exhaustive search). 
+\item \textbf{Weakness}: Fragile under \textbf{Brute-force attack} (exhaustive search)
 \end{itemize}
 \begin{exampleblock}{Example: Decipher the string}	
 \verb|OVDTHUFWVZZPISLRLFZHYLAOLYL|
@@ -206,9 +209,9 @@ respecting it.
 
 \begin{frame}[fragile]\frametitle{Vigen\`{e}re (poly-alphabetic shift) Cipher}
 \begin{itemize}
-\item \textbf{Idea}: To ``smooth out'' the distribution in the ciphertext by mapping different instances of the same letter in the plaintext to different ones in the ciphertext. 
-\item \textbf{Encryption}: $c_i=m_i+k_{[i\bmod t]}$, $t$ is the length (period) of $k$.
-\item \textbf{Cryptanalysis}: Need find $t$; if $t$ is known, need know whether the decryption ``makes sense'', but brute force ($26^t$) is infeasible for $t > 15$.
+\item \textbf{Idea}: To ``smooth out'' the distribution in the ciphertext by mapping different instances of the same letter in the plaintext to different ones in the ciphertext
+\item \textbf{Encryption}: $c_i=m_i+k_{[i\bmod t]}$, $t$ is the length (period) of $k$
+\item \textbf{Cryptanalysis}: Need find $t$; if $t$ is known, need know whether the decryption ``makes sense'', but brute force ($26^t$) is infeasible for $t > 15$
 \end{itemize}
 \begin{exampleblock}{Example (Key is `cafe')}
 \begin{description}[Ciphertext]
@@ -278,26 +281,24 @@ Then reuse IC method to find $k_i$.
 \end{frame}
 \begin{frame}\frametitle{Why Principle 1 -- General Form}
 \begin{exampleblock}{General Form}
-A cryptographic scheme for a given \textbf{task} is secure if no adversary of a specified \textbf{power} can achieve a specified \textbf{break}.
+A cryptographic scheme for a given \textbf{task} is secure if no adversary of a specified \textbf{power} can achieve a specified \textbf{break}
 \end{exampleblock}
 \begin{alertblock}{Arbitrary Adversary Principle}
-Security must be guaranteed for any adversary within the class of adversaries having the specified power.
+Security must be guaranteed for any adversary within the class of adversaries having the specified power
 \end{alertblock}
-\end{frame}	
-\begin{frame}\frametitle{How To Define Security -- Lesson From Alan Turing}
+How To Define Security -- Lesson From Alan Turing
 \begin{itemize}
-\item What's computation?\footnote{Q: Any ``mathematical proof that there exist well-defined problems that computers cannot solve''? A: Halting Problem in computability theory.}
+\item What's computation?\footnote{Q: Any ``mathematical proof that there exist well-defined problems that computers cannot solve''? A: Halting Problem in computability theory}
 \begin{enumerate}
-\item A direct appeal to \textbf{intuition}.
-\item A \textbf{proof of the equivalence} of two definitions.\\ (The new one has a greater intuitive appeal.)
-\item Giving \textbf{examples} of large classes of problems that can be solved using a definition.
+\item A direct appeal to \textbf{intuition}
+\item A \textbf{proof of the equivalence} of two definitions\\ (The new one has a greater intuitive appeal)
+\item Giving \textbf{examples} solved using a definition
 \end{enumerate}
-\item Additional method for security: \textbf{Test of time}.
-\item Mathematics security to real security: a mathematical formulation of a real-world problem.
+\item Additional method for security: \textbf{Test of time}
 \end{itemize}
-\end{frame}
+\end{frame}	
 \begin{frame}\frametitle{Principle 2 -- Reliance on Precise Assumptions}
-Most cryptographic constructions \textbf{cannot be proven secure unconditionally}.
+Most cryptographic constructions \textbf{cannot be proven secure unconditionally}
 \begin{itemize}
 	\item \textbf{Why?} 
 	\begin{enumerate}
@@ -326,13 +327,13 @@ Most cryptographic constructions \textbf{cannot be proven secure unconditionally
 \end{frame}
 \begin{frame}\frametitle{Summary}
 \begin{itemize}
-\item Modern cryptography secures information, transactions and computations.
-\item Kerckhoffs's principle \& Open cryptographic design.
-\item Caesar's, shift, Mono-Alphabetic sub., Vigen\`{e}re.
-\item Brute force, letter frequency, Kasiski's, IC.
-\item Sufficient key space principle.
-		\item Arbitrary adversary principle.
-		\item Rigorously proven security.
+\item Modern cryptography secures information, transactions and computations
+\item Kerckhoffs's principle \& Open cryptographic design
+\item Caesar's, shift, Mono-Alphabetic sub., Vigen\`{e}re
+\item Brute force, letter frequency, Kasiski's, IC
+\item Sufficient key space principle
+		\item Arbitrary adversary principle
+		\item Rigorously proven security
 	\end{itemize}
 \end{frame}
 \end{document}

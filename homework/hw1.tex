@@ -18,36 +18,9 @@
 
 \problemlist{Classic cipher, Perfectly-Secret Encryption\\Private-Key Encryption, Pseudorandomness}
 
-\begin{problem}[1.1]
-Encrypt your name in Pinyin (without blank space and ignoring case) with Caesar's cipher and shift cipher respectively. The key, if needed, is your student ID ($\bmod 26$).  
-\end{problem}
-
-\begin{solution}
-Name:\hspace{5cm} Key: \\
-Ciphertext (Caesar's): \\
-Ciphertext (Shift):
-\end{solution}
-
-\begin{problem}[1.2]
-Encrypt the message ``attackatnineoclock'' with mono-alphabetic sub. cipher and Vigen\`{e}re cipher respectively. The key is your first name in Pinyin (ignoring case).  
-\end{problem}
-
-\begin{solution}
-Key:\\
-Ciphertext (Mono-Alphabetic sub.):\\
-Ciphertext (Vigen\`{e}re):
-\end{solution}
-
-\begin{problem}[1.3]
-Decrypt the ciphertext ``OVDTHUFWVZZPISLRLFZHYLAOLYL''.  
-\end{problem}
-
-\begin{solution}
-Plaintext:
-\end{solution}
 
 \begin{problem}[1.4]
-Show that the shift, Mono-Alphabetic sub., and Vigen\`{e}re ciphers are all trivial to break using a known-plaintext attack. How much known plaintext is needed to completely recover the key for each of the ciphers?  
+Show that the shift, Mono-Alphabetic sub., and Vigen\`{e}re ciphers are all trivial to break using a known-plaintext attack. How much known plaintext (how many characters) is needed to completely recover the key for each of the ciphers?  (show how to break the cipher)
 \end{problem}
 
 \begin{solution}
@@ -65,7 +38,7 @@ Vigen\`{e}re: \\
 \end{solution}
 
 \begin{problem}[1.5]
-Show that the shift, Mono-Alphabetic sub., and Vigen\`{e}re ciphers are all trivial to break using a chosen-plaintext attack. How much plaintext must be encrypted to completely recover the key?  
+Show that the shift, Mono-Alphabetic sub., and Vigen\`{e}re ciphers are all trivial to break using a chosen-plaintext attack. How much plaintext (how many characters) must be encrypted to completely recover the key? (show your chosen plaintext) 
 \end{problem}
 
 \begin{solution}
@@ -170,7 +143,7 @@ Assuming the existence of a pseudorandom function, prove that there exists an en
 \end{problem}
 
 \begin{solution}
-{\small Hint: You will need to use the fact that in a CPA the adversary can choose its queries to the encryption oracle adaptively.}\\
+{\small Hint: You will need to use the fact that in a CPA the adversary can choose its queries to the encryption oracle adaptively (i.e., new query may be constructed from previous queries).}\\
 \\
 \\
 \\
