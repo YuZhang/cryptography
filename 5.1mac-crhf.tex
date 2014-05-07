@@ -115,6 +115,7 @@ According to the definition of PGF,
 \[ \left| \Pr[D^{F_k(\cdot)}(1^n)=1] - \Pr[D^{f(\cdot)}(1^n)=1] \right| \ge \varepsilon(n) - 2^{-n}. \]
 \end{proof}
 \end{frame}
+\begin{comment}
 \begin{frame}\frametitle{Extension to Variable-Length Messages}
 \begin{itemize}
 \item \textbf{Suggestion 1}: XOR all the blocks together and authenticate the result. $t := \mathsf{Mac}_k'(\oplus_i m_i)$.
@@ -186,6 +187,7 @@ So the block is new, $\mathsf{Forge}$ occurs.
 \end{enumerate}
 \end{proof}
 \end{frame}
+\end{comment}
 \section{CBC-MAC}
 \begin{frame}\frametitle{Constructing Fixed-Length CBC-MAC}
 \begin{columns}[C]
@@ -241,6 +243,7 @@ For one-block message $m$ with tag $t$, adversary can append a block $t\oplus m$
 Wrap CBC-MAC with PRF(length/tag), and only output is tag!
 \end{alertblock}
 \end{frame}
+\begin{comment}
 \begin{frame}{Brute-force Attack against CBC-MAC}
 Query $2^{\abs{t}/2}$ message to find $m \neq m'$ and $t = t'$.
 \newline
@@ -268,6 +271,7 @@ Padding must be invertible!\[ m_0\neq m_1 \Rightarrow \mathsf{pad}(m_0) \neq \ma
 \item No dummy block (ambiguity resolved by use of $k_1$ or $k_2$).
 \end{itemize}
 \end{frame}
+\end{comment}
 \section{Collision-Resistant Hash Functions}
 \begin{frame}\frametitle{Defining Hash Function}
 \begin{figure}

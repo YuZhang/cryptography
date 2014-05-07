@@ -39,6 +39,7 @@ $\Pi_E = (\mathsf{Gen}_E, \mathsf{Enc}, \mathsf{Dec})$, $\Pi_M = (\mathsf{Gen}_M
 \end{itemize}
 \end{construction}
 \end{frame}
+\begin{comment}
 \begin{frame}\frametitle{Proof of CCA-Secure Encryption Schemes}
 \begin{theorem}
 If $\Pi_E$ is a CPA-secure private-key encryption scheme and $\Pi_M$ is a secure MAC with unique tags, then Construction $\Pi'$ is CCA-secure.
@@ -81,6 +82,7 @@ We need to prove the following claims.
 \]
 \end{proof}
 \end{frame}
+\end{comment}
 \section{Obtaining Privacy and Message Authentication}
 \begin{frame}\frametitle{Message Transmission Scheme}
 \begin{figure}
@@ -139,6 +141,7 @@ $10/01 \to 01/10 \to 1$, $00 \to 11 \to \bot$.
 Decryption: If $\mathsf{Vrfy}(\cdot) = 1$, then $\mathsf{Dec}(\cdot)$; otherwise output $\bot$.
 \end{itemize}
 \end{frame}
+\begin{comment}
 \begin{frame}\frametitle{Authenticated Encryption Theory and Practice}
 \begin{theorem}
 $\Pi_E$ is CPA-secure and $\Pi_E$ is a secure MAC with unique tages, $\Pi'$ deriving from encrypt-then-authenticate approach is secure.
@@ -152,6 +155,7 @@ Encrypt-then-authenticate approach is secure if $\Pi_E$ is rand-CTR mode or rand
 \textbf{OCB (Offset Codebook Mode)}: integrating MAC into ENC. (two times fast as CCM, EAX)\\
 \textbf{All support AEAD (A.E. with associated data):} part of message is in clear, and all is authenticated.
 \end{frame}
+\end{comment}
 \begin{frame}\frametitle{Remarks on Secure Message Transmission}
 \begin{itemize}
 \item Authentication may leak the message.
