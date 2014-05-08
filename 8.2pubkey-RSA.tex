@@ -344,6 +344,7 @@ $\hat{c} \equiv c_1 \pmod{N_1}$, $\hat{c} \equiv c_2 \pmod{N_2}$, $\hat{c} \equi
 \item With CRT, $\hat{c} \equiv m^3 \pmod{N^*}$. Since $m^3 < N^*$, $m = \hat{c}^{1/3}$.
 \end{itemize}
 \end{frame}
+\begin{comment}
 \begin{frame}\frametitle{A Quadratic Improvement in Recovering $m$}
 If $1 \le m < \mathcal{L} = 2^{\ell}$, there is an attack that recovers $m$  in time $\sqrt{\mathcal{L}}$.
 \begin{algorithm}[H]
@@ -370,6 +371,7 @@ If $1 \le m < \mathcal{L} = 2^{\ell}$, there is an attack that recovers $m$  in 
 It can be shown that with good probability that $m=r\cdot s$:
 \[ c \equiv m^e = (r\cdot s)^e = r^e\cdot s^e \pmod N \]
 \end{frame}
+\end{comment}
 \begin{frame}\frametitle{Common Modulus Attacks}
 \textbf{Common Modulus Attacks}: the same modulus $N$.
 \newline
@@ -408,6 +410,7 @@ $\ell$ should neither be too large ($r$ is too short in theory) nor be too small
 If the RSA problem is hard relative to $\mathsf{GenRSA}$, then Construction with $\ell(n)=\mathcal{O}(\log n)$ is CPA-secure.
 \end{theorem}
 \end{frame}
+\begin{comment}
 \begin{frame}\frametitle{PKCS \#1 v1.5 (RSAES-PKCS1-v1\_5)}
 \textbf{Public-Key Cryptography Standard (PKCS) \#1 version 1.5}:
 \begin{itemize}
@@ -432,6 +435,7 @@ if the first 16 bits of message is not ``02'' which is standing for ``PKCK \#1''
 
 \textbf{HTTPS Defense} [RFC 5246]: if not ``02'', set the message as a random string.
 \end{frame}
+\end{comment}
 \begin{frame}\frametitle{PKCK \#1 v2.1 (RSAES-OAEP)}
 \textbf{Optimal Asymmetric Encryption Padding} (OAEP): encode $m$ of length $n/2$ as $\hat{m}$ of length $2n$. $G, H$ are \textbf{Random Oracles}.
 \[ \hat{m}_1 := G(r)\oplus (m\| \{0\}^{n/2}), \hat{m} := \hat{m}_1 \| (r \oplus H(\hat{m}_1)).\]

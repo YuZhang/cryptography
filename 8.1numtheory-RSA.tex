@@ -111,6 +111,7 @@ Let $d = [e^{-1} \bmod \phi(N)]$, then $f_d$ is the inverse of $f_e$.\\
 \textbf{$e$'th root of $c$}: $g^e = c$, $g = c^{1/e} = c^{d}$. 
 \end{corollary}
 \end{frame}
+\begin{comment}
 \begin{frame}\frametitle{Subgroups}
 If $\mathbb{G}$ is a group, a set $\mathbb{H} \subseteq \mathbb{G}$ is a \textbf{subgroup} of $\mathbb{G}$ if $\mathbb{H}$ itself forms a group under the same operation associated with $\mathbb{G}$. $\mathbb{H}$ is a \textbf{strict subgroup} if $\mathbb{H} \neq \mathbb{G}$.
 \begin{itemize}
@@ -119,6 +120,7 @@ If $\mathbb{G}$ is a group, a set $\mathbb{H} \subseteq \mathbb{G}$ is a \textbf
 \item $\mathbb{H}$ is a strict subgroup of a finite group $\mathbb{G}$, then $\abs{\mathbb{H}} \le \abs{\mathbb{G}}/2$.
 \end{itemize}
 \end{frame}
+\end{comment}
 \begin{frame}\frametitle{Examples on Groups}
 \begin{exampleblock}{}
 \begin{itemize}
@@ -137,6 +139,7 @@ If $\mathbb{G}$ is a group, a set $\mathbb{H} \subseteq \mathbb{G}$ is a \textbf
 $\phi(N)=(N-1)-(q-1)-(p-1)=(p-1)(q-1)$.
 \end{exampleblock}
 \end{frame}
+\begin{comment}
 \begin{frame}\frametitle{Isomorphism and Cross Product}
 A bijection function $f : \mathbb{G} \to \mathbb{H}$ is an \textbf{isomorphism from} $\mathbb{G}$ \textbf{to} $\mathbb{H}$:
 \[ \forall g_1,g_2 \in \mathbb{G}, f(g_1 \circ_{\mathbb{G}} g_2) = f(g_1) \circ_{\mathbb{H}} f(g_2).\]
@@ -183,7 +186,7 @@ $(4,3) \leftrightarrow [4\cdot 1_p + 3\cdot 1_q \bmod 35] = 24$.
 $29 \leftrightarrow ([1 \bmod 5],[-1 \bmod 7])$, $[29^{100} \bmod 35] \leftrightarrow (1,-1)^{100} = (1,1) \leftrightarrow 1$.
 \end{exampleblock}
 \end{frame}
-
+\end{comment}
 \begin{frame}\frametitle{Arithmetic algorithms}
 \begin{itemize}
 \item \textbf{Addition/subtraction}: linear time $O(n)$.
@@ -287,6 +290,7 @@ The algorithm will fail with a negligible probability.
 If $\exists$ a witness, then at least half the elements of $\mathbb{Z}_N^*$ are witnesses.
 \end{theorem}
 \end{frame}
+\begin{comment}
 \begin{frame}\frametitle{The Miller-Rabin Primality Test}
 $N-1=2^ru$, $u$ is odd. $a \in \mathbb{Z}^*_N$ is a \textbf{strong witness} if
 \begin{enumerate}
@@ -331,6 +335,7 @@ If $N$ is prime, then the Miller-Rabin test always outputs ``prime''. If $N$ is 
 \Return ``prime''
 \end{algorithm}
 \end{frame}
+\end{comment}
 \begin{frame}\frametitle{Examples of Primality Tests}
 \begin{exampleblock}{Liars in Fermat primality test}
 $2^{340} \equiv 1 \pmod {341}$,  but $341 = 11\cdot 31$.\\  
@@ -338,15 +343,15 @@ $5^{560} \equiv 1 \pmod {561}$,  but $561 = 3\cdot 11\cdot 17$.\\
 Carmichael numbers $< 10000$: \\  
 561,  1105,  1729,  2465,  2821,  6601,  8911.
 \end{exampleblock}
-\begin{exampleblock}{Examples of Miller-Rabin test}
-Carmichael number $1729=7\cdot 13\cdot 19$. \\$1729-1 = 1728 = 2^6\cdot 27$. So $r = 6, u = 27$. $a=671$.
-\begin{align*}
-671^{27} &\equiv 1084 \pmod {1729} \\
-671^{27\cdot 2} &\equiv 1065 \pmod {1729}\\
-671^{27\cdot 2^2} &\equiv 1 \pmod {1729}\\
-\end{align*}
+%\begin{exampleblock}{Examples of Miller-Rabin test}
+%Carmichael number $1729=7\cdot 13\cdot 19$. \\$1729-1 = 1728 = 2^6\cdot 27$. So $r = 6, u = 27$. $a=671$.
+%\begin{align*}
+%671^{27} &\equiv 1084 \pmod {1729} \\
+%671^{27\cdot 2} &\equiv 1065 \pmod {1729}\\
+%671^{27\cdot 2^2} &\equiv 1 \pmod {1729}\\
+%\end{align*}
 
-\end{exampleblock}
+%\end{exampleblock}
 \end{frame}
 \begin{frame}\frametitle{The Factoring Assumption}
 Let $\mathsf{GenModulus}(1^n)$ be a polynomial-time algorithm that, on input $1^n$, outputs $(N,p,q)$ where $N=pq$, and $p,q$ are $n$-bit primes except with probability negligible in $n$.
@@ -373,6 +378,7 @@ The factoring experiment $\mathsf{Factor}_{\mathcal{A},\mathsf{GenModulus}}(n)$:
 \item The best-known algorithm is the \textbf{general number field sieve} [Pollard] with time $\mathcal{O}(\exp(n^{1/3}\cdot(\log n)^{2/3}))$.
 \end{itemize}
 \end{frame}
+\begin{comment}
 \begin{frame}\frametitle{Pollard's $p-1$ Method}
 \textbf{Idea}: Fermat's little theorem: $y = x^{(p-1)\cdot k} \equiv 1 \pmod p$. Then $(y-1) \equiv 0 \pmod p$ and $p \mid (y-1)$. So $p = \gcd(y-1,N)$. To make the exponent a large multiple of $(p-1)$:
 \[ M = lcm(\{ i | i \le B \}) = \prod_{\text{prime}\;i \le B}i^{\lfloor \log_iB \rfloor}.\]
@@ -478,6 +484,7 @@ $B = \{2,13,17,23,29\}$.
 Computing $\gcd(127194-45335,377753)=751$.
 \end{exampleblock}
 \end{frame}
+\end{comment}
 \section{RSA Assumption}
 \begin{frame}\frametitle{The RSA Problem}
 \begin{block}{Recall group exponentiation on $\mathbb{Z}^*_N$}
@@ -563,8 +570,8 @@ Reduce the RSA problem to the inverting problem.
 \begin{frame}\frametitle{Summary}
 \begin{itemize}
 \item Primes, modular arithmetic.
-\item Miller-Rabin primality testing.
-\item Factoring, Pollard's $p-1$ and $\rho$ methods.
+%\item Miller-Rabin primality testing.
+%\item Factoring, Pollard's $p-1$ and $\rho$ methods.
 \item $e^{\mathsf{th}}$-root modulo $N$, RSA.
 \end{itemize}
 \begin{block}{Textbook}

@@ -71,6 +71,7 @@ The discrete logarithm experiment $\mathsf{DLog}_{\mathcal{A},\mathcal{G}}(n)$:
 \item Elliptic curve groups vs. $\mathbb{Z}_p^*$: more efficient for the honest parties, but that are equally hard for an adversary to break.\\ (Both 1024-bit $\mathbb{Z}_p^*$ and 132-bit elliptic curve need $2^{66}$ steps.)
 \end{itemize}
 \end{frame}
+\begin{comment}
 \begin{frame}\frametitle{The Baby-Step/Giant-Step Algorithm}
 \begin{figure}
 \begin{center}
@@ -157,6 +158,7 @@ We also have $x^*=5$, $3^5\cdot 87 \equiv 32 \equiv 2^5 \pmod{101}$, or
 Adding the 2nd and 3rd equations and subtracting the 1st, we derive $4\cdot \log_3 2 \equiv 16 \pmod{100}$. So $\log_3 2$ is 4, 29, 54, or 79. Trying all shows that $\log_3 2 = 29$. The last equation gives $\log_3 87 = 40$.
 \end{exampleblock}
 \end{frame}
+\end{comment}
 \section{Diffie-Hellman Assumptions and Applications}
 \begin{frame}\frametitle{Diffie-Hellman Assumptions}
 \begin{itemize}
@@ -174,6 +176,7 @@ DDH problem is hard relative to $\mathcal{G}$ if $\forall$ \textsc{ppt} $\mathca
 DDH is easier than CDH and DL.
 \end{alertblock}
 \end{frame}
+\begin{comment}
 \begin{frame}\frametitle{Why Prime-Order Groups}
 \begin{itemize}
 \item The discrete logarithm problem is hardest in such groups.
@@ -209,6 +212,7 @@ $g := x^2 \bmod p$\;
 \Return $p,q,g$
 \end{algorithm}
 \end{frame}
+\end{comment}
 \begin{frame}\frametitle{Recall Secure Key-Exchange Experiment}
 The key-exchange experiment $\mathsf{KE}^{\mathsf{eav}}_{\mathcal{A},\Pi}(n)$:
 \begin{enumerate}
@@ -260,6 +264,7 @@ If $b=1$, then give true key; otherwise give random $g^z$.
 \end{align*}
 \end{proof}
 \end{frame}
+\begin{comment}
 \begin{frame}\frametitle{Constructing Collision-Resistant Hash Functions}
 \begin{construction}
 Define a fixed-length hash function $(\mathsf{Gen}, H)$:
@@ -290,6 +295,7 @@ Return $[(x_1-x'_1)\cdot (x'_2-x_2)^{-1} \bmod q]$.
 \[ \implies \log_gh = [(x_1-x'_1)\cdot (x'_2-x_2)^{-1} \bmod q]. \]
 \end{proof}
 \end{frame}
+\end{comment}
 \section{The Elgamal Encryption Scheme}
 \begin{frame}\frametitle{Lemma on Perfectly-secret Private-key Encryption}
 \begin{lemma}\label{lem:ps}
@@ -327,6 +333,7 @@ Decryption: $m= [44\cdot (132^{37})^{-1}] \equiv [44\cdot 66] \equiv 65 \pmod{16
 65 has the two square roots 30 and 137, and $30 < q$, so $\hat{m}=29$.
 \end{exampleblock}
 \end{frame}
+\begin{comment}
 \begin{frame}{Proof of Security of Elgamal Encryption Scheme}
 \begin{proof}
 \textbf{Idea}: Prove that $\Pi$ is secure in the presence of an eavesdropper by reducing an algorithm $D$ for DDH problem to the eavesdropper $\mathcal{A}$.
@@ -359,6 +366,7 @@ Since the DDH problem is hard,
 \[  \mathsf{negl}(n) \ge \abs{\Pr[D(g^x,g^y,g^z)=1] - \Pr[D(g^x,g^y,g^{xy})=1]}\]
 \[ =\abs{\frac{1}{2}-\varepsilon(n)}. \]
 \end{frame}
+\end{comment}
 \begin{frame}\frametitle{CCA in Elgamal Encryption}
 \begin{exampleblock}{Constructing the ciphertext of the message $m\cdot m'$.}
 Given $pk=\langle g, h\rangle$, $c = \langle c_1, c_2\rangle$, $c_1=g^y$, $c_2=h^y\cdot m$, \\ \textbf{Method I}: compute
