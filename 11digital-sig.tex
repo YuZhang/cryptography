@@ -98,6 +98,7 @@ $\Pi = (\mathsf{Gen}_S, \mathsf{Sign}, \mathsf{Vrfy})$, $\Pi_H = (\mathsf{Gen}_H
 If $\Pi$ is existentially unforgeable under an adaptive CMA and $\Pi_H$ is collision resistant, then Construction is existentially unforgeable under an adaptive CMA.
 \end{theorem}
 \end{frame}
+\begin{comment}
 \begin{frame}\frametitle{Proof of Security of ``Hash-and-Sign'' Paradigm}
 \textbf{Idea}: a forgery must involve either finding a collision in $H$ or forging a signature with respect to $\Pi$.
 \begin{proof}
@@ -129,6 +130,7 @@ Reduce $\mathcal{A}$ for $\Pi$ to $\mathcal{A}'$.
 \end{figure}
 $\Pr[\mathsf{SF} \land \overline{\mathsf{coll}}] = \Pr[\mathsf{Sigforge}_{\mathcal{A},\Pi}(n)=1]$.
 \end{frame}
+\end{comment}
 \section{One-Time Signature Scheme}
 \begin{frame}\frametitle{One-Time Signature (OTS)}
 \textbf{One-Time Signature (OTS)}: sign only one message with one secret.\\
@@ -180,6 +182,7 @@ y_{1,1} & {\color{red} y_{2,1}} & {\color{red} y_{3,1}}
 \implies \begin{array}{l} f(x_1) \overset{?}{=} y_{1,0} \\ f(x_2) \overset{?}{=} y_{2,1} \\ f(x_3) \overset{?}{=} y_{3,1} \end{array} \]
 \end{exampleblock}
 \end{frame}
+\begin{comment}
 \begin{frame}\frametitle{Proof of Lamport's OTS Security}
 \textbf{Idea}: If $m \neq m'$, then $\exists i^*, m_{i*} = b^* \neq m'_{i*}$. So to forge a signature on $m$ can invert a single $y_{i^*,b^*}$ at least.
 \begin{proof}
