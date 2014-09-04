@@ -96,11 +96,11 @@ If he had anything confidential to say, he wrote it in cipher, that is, by so ch
 \end{quote}
 \begin{itemize}
 	\item $\mathsf{Enc}(m)=m+3\mod 26$ \footnote{In fact the quote indicates that decryption involved rotating letters of the alphabet forward 3 positions, $\mathsf{Dec}(c)=c+3\mod 26$}
-	\item \textbf{Weakness}: $\mathsf{Gen}$~is trivial, and no key
+	\item \textbf{Weakness}: \alert{What is the key?}
 \end{itemize}
 \begin{exampleblock}{Example}
-\verb|begintheattacknow|\\
-\verb|EHJLQWKHDWWDFNQRZ|
+\verb|begintheattacknow|
+%\verb|EHJLQWKHDWWDFNQRZ|
 \end{exampleblock}
 \end{frame}
 \begin{frame}[fragile]\frametitle{Shift Cipher}
@@ -110,33 +110,39 @@ If he had anything confidential to say, he wrote it in cipher, that is, by so ch
 \item \textbf{Weakness}: Fragile under \textbf{Brute-force attack} (exhaustive search)
 \end{itemize}
 \begin{exampleblock}{Example: Decipher the string}	
-\verb|OVDTHUFWVZZPISLRLFZHYLAOLYL|
+\verb|EHJLQWKHDWWDFNQRZ|
 \end{exampleblock}
 \begin{alertblock}{Sufficient Key Space Principle}
 Any secure encryption scheme must have a key space that is not vulnerable to exhaustive search.\footnote{If the plaintext space is larger than the key space.}
 \end{alertblock}
 \end{frame}
 \begin{frame}\frametitle{Index of Coincidence (IC) Method (to find $k$)}
-\textbf{Index of Coincidence (IC)}: the probability that two randomly selected letters will be identical.
+\textbf{Index of Coincidence (IC)}: the probability that two randomly selected letters (pick-then-return) will be identical.
 
 Let $p_i$ denote the probability of $i$th letter in English text.
-\[I \overset{\text{def}}{=}\sum_{i=0}^{25} p_i^2 \approx 0.065\]
-For $j = 0, 2, \dotsc , 25$, $q_j$ is the probability of $j$th letter in the ciphertext.
+\[I \overset{\text{def}}{=}\sum_{i=0}^{25} p_i^2 \]
+\begin{exampleblock}{Example}
+What's the IC of `apple'?
+\end{exampleblock}
+
+For a long English text, the IC is $\approx 0.065$.
+For $j = 0, 1, \dotsc , 25$, $q_j$ is the probability of $j$th letter in the ciphertext.
 \[I_j \overset{\text{def}}{=}\sum_{i=0}^{25} p_i \cdot q_{i+j}\]
-For shift cipher, \alert{if $j = k$, then $I_j \approx 0.065$}.
+\alert{Q: For shift cipher, if $j = k$, then $I_j \approx$ ?}
+
 \end{frame}
 \begin{frame}[fragile]\frametitle{Mono-Alphabetic Substitution}
 \begin{itemize}
 \item \textbf{Idea}: To map each character to a different one in an arbitrary manner.
-\item \textbf{Strength}: Key space is large $26! \approx 2^{88}$\\
+\item \textbf{Strength}: Key space is large $\approx 2^{88}$. \alert{Q: how to count?}
 \item \textbf{Weakness}: The mapping of each letter is fixed.
 \end{itemize}
 \begin{exampleblock}{Example}
 \verb|abcdefghijklmnopqrstuvwxyz|\\
-\verb|XEUADNBKVMROCQFSYHWGLZIJPT|\\
+\verb|XEUADNBKVMROCQFSYHWGLZIJPT|
 
-\verb|tellhimaboutme|\\
-\verb|GDOOKVCXEFLGCD|
+Plaintext: \verb|tellhimaboutme|\\
+Ciphertext: \verb|??????????????|
 \end{exampleblock}
 \end{frame}
 \begin{frame}[fragile]\frametitle{Attack with Statistical Patterns}
@@ -217,7 +223,7 @@ respecting it.
 \begin{description}[Ciphertext]
 \item[Plaintext]  \verb|tellhimaboutme| \\
 \item[Key]        \verb|cafecafecafeca| \\
-\item[Ciphertext] \verb|WFRQKJSFEPAYPF|
+\item[Ciphertext] \verb|??????????????| %\verb|WFRQKJSFEPAYPF|
 \end{description}
 \end{exampleblock}
 \end{frame}
@@ -238,11 +244,14 @@ VMFQTPFOH\alert{MJJ}XSFCSSIMTNFZXFYISEIYUIKHWPQ\alert{MJJ}QSLVTGJKGF
 \begin{frame}\frametitle{Index of Coincidence (IC) Method (to find $t$)}
 For $\tau = 1, 2, \dotsc$, $q_i$ is the probability of $i$th letter in $c_1, c_{1+\tau}, c_{1+2\tau}, \dotsc$, IC is
 \[I_\tau \overset{\text{def}}{=}\sum_{i=0}^{25} q_i^2\]
-\alert{If $\tau = t$, then $I_\tau \approx 0.065$} ; otherwise $q_i \approx \frac{1}{26}$ and
+\alert{If $\tau = t$, then $I_\tau \approx ?$} ; otherwise $q_i \approx \frac{1}{26}$ and
 \[I_\tau \approx \sum_{i=0}^{25} \left(\frac{1}{26}\right)^2 \approx 0.038\]
 Then reuse IC method to find $k_i$.
+\begin{alertblock}{Arbitrary Adversary Principle}
+Security must be guaranteed for any adversary within the class of adversaries having the specified power
+\end{alertblock}
 \end{frame}
-\begin{frame}\frametitle{Cryptanalytic Attacks}
+\begin{frame}\frametitle{Cryptanalytic Attacks (homework assignment)}
 \begin{itemize}
 \item Under COA, the requirement for ciphertext related to the size of the key space.  Vig\`{e}nere > mono-alphabetic sub. > shift
 \item Under KPA, trivially broken.
@@ -252,40 +261,38 @@ Then reuse IC method to find $k_i$.
 \item Sufficient key space principle.
 \item Designing secure cipher is a hard task.
 \item Complexity does not imply security. (then what does?)
+\item Arbitrary adversary principle
 \end{itemize}
 \end{alertblock}
 \end{frame}
 \section{The Basic Principles of Modern Cryptography}
 \begin{frame}\frametitle{Three Main Principles of Modern Cryptography}
 \begin{enumerate}
-\item The formulation of a rigorous \textbf{definition} of security.
+\item The formulation of a rigorous \textbf{definition} of security / threat model.
 \item When the security of a cipher relies on an unproven \textbf{assumption}, this assumption must be precisely stated and be as minimal as possible.
 \item Cipher should be accompanied by a rigorous \textbf{proof} of security with the above definition and the above assumption.
 \end{enumerate}
 \end{frame}
 \begin{frame}\frametitle{Why Principle 1 -- Formulation of Exact Definitions}
-\begin{itemize}	
-\item Importance for design, usage and study.
-\item \alert{Mistake}: ``we have an intuitive idea of what security means''.
-\end{itemize}
-\begin{exampleblock}{Q: how would you formalize the desired notion of security for private-key encryption?}
+\begin{exampleblock}{Q: how would you formalize the security for private-key encryption?}
 \begin{enumerate}
-\item No adversary can find the secret key when given a ciphertext.
-\item No adversary can find the plaintext that corresponds to the ciphertext.
-\item No adversary can determine any character of the plaintext that corresponds to the ciphertext.
-\item No adversary can derive any meaningful information about the plaintext from the ciphertext.
-\item No adversary can compute any function of the plaintext from the ciphertext.
+\item \emph{No adversary can find the secret key when given a ciphertext.}\\
+$\mathsf{Enc}_k(m)=m$
+\item \emph{No adversary can find the plaintext that corresponds to the ciphertext.}\\
+$\mathsf{Enc}_k(m)=m_{0}\parallel \mathsf{AES}_k(m)$
+\item \emph{No adversary can determine any character of the plaintext that corresponds to the ciphertext.}\\
+$m=1000$, someone can learn $ 800 < m < 1200$
+\item \emph{No adversary can derive any meaningful information about the plaintext from the ciphertext.}\\
+Could you define so-called `meaningful'?
 \end{enumerate}
 \emph{\alert{Definitions of security should suffice for all potential applications.}}
 \end{exampleblock}
 \end{frame}
-\begin{frame}\frametitle{Why Principle 1 -- General Form}
-\begin{exampleblock}{General Form}
-A cryptographic scheme for a given \textbf{task} is secure if no adversary of a specified \textbf{power} can achieve a specified \textbf{break}
-\end{exampleblock}
-\begin{alertblock}{Arbitrary Adversary Principle}
-Security must be guaranteed for any adversary within the class of adversaries having the specified power
-\end{alertblock}
+\begin{frame}\frametitle{Why Principle 1 -- How to define}
+%\begin{exampleblock}{General Form}
+%A cryptographic scheme for a given \textbf{task} is secure if no adversary of a specified \textbf{power} can achieve a specified \textbf{break}
+%\end{exampleblock}
+
 How To Define Security -- Lesson From Alan Turing
 \begin{itemize}
 \item What's computation?\footnote{Q: Any ``mathematical proof that there exist well-defined problems that computers cannot solve''? A: Halting Problem in computability theory}
@@ -327,14 +334,14 @@ Most cryptographic constructions \textbf{cannot be proven secure unconditionally
 \end{frame}
 \begin{frame}\frametitle{Summary}
 \begin{itemize}
-\item Modern cryptography secures information, transactions and computations
+\item Cryptography secures information, transactions and computations
 \item Kerckhoffs's principle \& Open cryptographic design
 \item Caesar's, shift, Mono-Alphabetic sub., Vigen\`{e}re
 \item Brute force, letter frequency, Kasiski's, IC
 \item Sufficient key space principle
-		\item Arbitrary adversary principle
-		\item Rigorously proven security
-	\end{itemize}
+\item Arbitrary adversary principle
+\item Rigorously proven security
+\end{itemize}
 \end{frame}
 \end{document}
 
