@@ -1,72 +1,38 @@
-% AMS dept HW template example
-% v0.04 by Eric J. Malm, 10 Mar 2005
-\documentclass[12pt,letterpaper,boxed]{amspset}
+\documentclass[11pt]{article}
 
 % set 1-inch margins in the document
 \usepackage[margin=1in]{geometry}
+\usepackage{amsthm}
+\theoremstyle{definition}
 
 % include this if you want to import graphics files with /includegraphics
 \usepackage{graphicx}
 
 % info for header block in upper right hand corner
-\name{{\large Name: }\underline{ \hspace{3cm} }}
-\class{{\large ID: }\underline{ \hspace{3cm} }}
-\assignment{{\large Grade:}\underline{ \hspace{3cm} }}
-\duedate{03/22/2011}
+
+\newtheorem{problem}{Problem}
+
+\title{HIT --- Cryptography --- Homework 1}
 
 \begin{document}
 
-\problemlist{Classic cipher, Perfectly-Secret Encryption\\Private-Key Encryption, Pseudorandomness}
+\maketitle
 
-
-\begin{problem}[1.1]
+\begin{problem}
 Show that the shift, Mono-Alphabetic sub., and Vigen\`{e}re ciphers are all trivial to break using a known-plaintext attack. How much known plaintext (how many characters) is needed to completely recover the key for each of the ciphers?  (show how to break the cipher)
 \end{problem}
 
-\begin{solution}
-Shift:\\
-\\
-\\
-\\
-Mono-Alphabetic sub.:\\
-\\
-\\
-\\
-Vigen\`{e}re: \\
-\\
-\\
-\end{solution}
-
-\begin{problem}[1.2]
+\begin{problem}
 Show that the shift, Mono-Alphabetic sub., and Vigen\`{e}re ciphers are all trivial to break using a chosen-plaintext attack. How much plaintext (how many characters) must be encrypted to completely recover the key? (show your chosen plaintext) 
 \end{problem}
 
-\begin{solution}
-Shift:\\
-\\
-\\
-\\
-Mono-Alphabetic sub.:\\
-\\
-\\
-\\
-Vigen\`{e}re: \\
-\\
-\\
-\end{solution}
-
-\begin{problem}[2.1]
+\begin{problem}
 Prove or refute: For every encryption scheme that is perfectly secret it holds that for every distribution over the message space $\mathcal{M}$, every $m, m' \in \mathcal{M}$, and every $c \in \mathcal{C}$:
 \[ \Pr[M=m | C=c] = \Pr[M=m'|C=c].
 \]
 \end{problem}
 
-\begin{solution}
-\vspace{5cm}
-
-\end{solution}
-
-\begin{problem}[2.2]
+\begin{problem}
 Study conditions under which the shift, mono-alphabetic sub., and Vigen\`{e}re cipher ciphers are perfectly secret:
 \begin{itemize}
 \item (a) Prove that if only a single character is encrypted, then the shift cipher is perfectly secret.
@@ -74,112 +40,5 @@ Study conditions under which the shift, mono-alphabetic sub., and Vigen\`{e}re c
 \item (c) Show how to use the Vigen\`{e}re cipher to encrypt any word of length $t$ so that perfect secrecy is obtained (note: you can choose the length of the key). Prove your answer.
 \end{itemize}
 \end{problem}
-
-\begin{solution}
-(a) Shift:\\
-\\
-\\
-\\
-\\
-\\
-(b) Mono-alphabetic sub.:\\
-\\
-\\
-\\
-\\
-\\
-(c) Vigen\`{e}re cipher.:\\
-\\
-\\
-\\
-\\
-\\
-\\
-\\
-\end{solution}
-
-\begin{problem}[3.1]
-Prove that the indistinguishable encryptions in the presence of an eavesdropper cannot be satisfied if $\Pi$ can encrypt arbitrary-length messages and the adversary is not restricted to output equal-length messages in experiment $\mathsf{PrivK}^{\mathsf{eav}}_{\mathcal{A},\Pi}(n)$.
-\end{problem}
-
-\begin{solution}
-(Show what the adversary would output, and the probability the experiment will success.)
-\\
-\\
-\\
-\\
-\\
-\\
-\\
-\end{solution}
-
-\begin{problem}[3.2]
-Assuming the existence of a pseudorandom function, prove that there exists an encryption scheme that has indistinguishable multiple encryptions in the presence of an eavesdropper, but is not CPA-secure.
-\end{problem}
-
-\begin{solution}
-{\small Hint: You will need to use the fact that in a CPA the adversary can choose its queries to the encryption oracle adaptively (i.e., new query may be constructed from previous queries).}\\
-\\
-\\
-\\
-\\
-\\
-\\
-\\
-\\
-\end{solution}
-
-\begin{problem}[3.4]
-Present a construction of a variable output-length pseudorandom generator from any pseudorandom function. Prove that your construction is PRG.
-\end{problem}
-
-\begin{solution}
-\vspace{5cm}
-\end{solution}
-
-\begin{problem}[3.5]
-Present formulas for decryption of all the different modes of operation for encryption. For which modes can decryption be parallelized?
-\end{problem}
-
-\begin{solution}
-ECB:\\
-\\
-\\
-\\
-CBC:\\
-\\
-\\
-\\
-OFB:\\
-\\
-\\
-\\
-CRT:\\
-\\
-\\
-\\
-\end{solution}
-
-\begin{problem}[3.6]
-Show that the CBC, OFB and CRT modes do not yield CCA-secure encryption schemes (regardless of F).
-\end{problem}
-
-\begin{solution}
-CBC:\\
-\\
-\\
-\\
-\\
-OFB:\\
-\\
-\\
-\\
-\\
-CRT:\\
-\\
-\\
-\\
-\end{solution}
-
 
 \end{document}

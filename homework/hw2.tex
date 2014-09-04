@@ -1,155 +1,42 @@
-% AMS dept HW template example
-% v0.04 by Eric J. Malm, 10 Mar 2005
-\documentclass[12pt,letterpaper,boxed]{amspset}
+\documentclass[11pt]{article}
 
 % set 1-inch margins in the document
 \usepackage[margin=1in]{geometry}
+\usepackage{amsthm}
+\theoremstyle{definition}
 
 % include this if you want to import graphics files with /includegraphics
 \usepackage{graphicx}
 
 % info for header block in upper right hand corner
-\name{{\large Name: }\underline{ \hspace{3cm} }}
-\class{{\large ID: }\underline{ \hspace{3cm} }}
-\assignment{{\large Grade:}\underline{ \hspace{3cm} }}
-\duedate{04/06/2011}
+
+\newtheorem{problem}{Problem}
+
+\title{HIT --- Cryptography --- Homework 2}
 
 \begin{document}
 
-\problemlist{Message Authentication Codes, Collision-Resistant Hash Functions,\\Block Ciphers, One-Way Function}
+\maketitle
 
-\begin{problem}[4.1]
-Let $F$ be a pseudorandom function. Show that the following MAC for messages of length $2n$ is insecure: The shared key is a random $k\in \{0,1\}^n$. To authenticate a message $m_1\| m_2$ with $\abs{m_1}=\abs{m_2}=n$, compute the tag $\langle F_k(m_1), F_k(F_k(m_2))\rangle$. 
+\begin{problem}
+Prove that the indistinguishable encryptions in the presence of an eavesdropper cannot be satisfied if $\Pi$ can encrypt arbitrary-length messages and the adversary is not restricted to output equal-length messages in experiment $\mathsf{PrivK}^{\mathsf{eav}}_{\mathcal{A},\Pi}(n)$.
 \end{problem}
 
-\begin{solution}
-\vspace{3cm}
-\end{solution}
-
-\begin{problem}[4.2]
-Show that the basic CBC-MAC construction is not secure when used to authenticate messages of different lengths.
+\begin{problem}
+Assuming the existence of a pseudorandom function, prove that there exists an encryption scheme that has indistinguishable multiple encryptions in the presence of an eavesdropper, but is not CPA-secure.
+{\small Hint: You will need to use the fact that in a CPA the adversary can choose its queries to the encryption oracle adaptively (i.e., new query may be constructed from previous queries).}
 \end{problem}
 
-\begin{solution}
-\vspace{3cm}
-\end{solution}
-
-%\begin{problem}[4.3]
-%Provide formal definitions for second pre-image resistance and pre-image resistance. Formally prove that any hash function that is collision resistant is second pre-image resistant, and that any hash function that is second pre-image resistant is pre-image resistant.
-%\end{problem}
-
-%\begin{solution}
-%Definition of the second pre-image resistance:
-
-%\vspace{5cm}
-%\noindent Proof of its security based on collision resistant:\\
-
-%\vspace{3cm}
-%\noindent Definition of the pre-image resistance:\\
-
-%\vspace{3cm}
-%\noindent Proof of its security based on second pre-image resistant:\\
-
-%\vspace{3cm}
-%\end{solution}
-
-\begin{problem}[4.4]
-Let $(\mathsf{Gen},H)$ be a collision-resistant hash function. Is $(\mathsf{Gen},\hat{H})$ defined by $(\hat{H}^s(x) \overset{\text{def}}{=} H^s(H^s(x))$ necessarily collision resistant? Prove your answer. 
+\begin{problem}
+Present a construction of a variable output-length pseudorandom generator from any pseudorandom function. Prove that your construction is PRG.
 \end{problem}
 
-\begin{solution}
-Proof:\\
-
-\vspace{3cm}
-\end{solution}
-
-\begin{problem}[4.5]
-For each of following modifications to the Merkle-Damg\r{a}rd transform, determine whether the result is collision resistant or not. If yes, provide a proof; if not, demonstrate an attack.
+\begin{problem}
+Present formulas for decryption of all the different modes of operation for encryption: ECB, CBC, OFB, CRT. For which modes can decryption be parallelized?
 \end{problem}
 
-\begin{solution}
-(a) Modify the construction so that the input length is not included at all (i.e, output $z_B$ and not $z_{B+1} = h^s(z_B\| L)$).\\
-
-\vspace{4cm}
-\noindent (b) Modify the construction so that instead of outputting $z = h^s(z_B\| L)$, the algorithm outputs $z_B\|L$\\
-
-\vspace{4cm}
-\noindent (c) Instead of using an $IV$, just start the computation from $x_1$. That is, define $z_1 := x_1$ and then compute $z_i := h^s(z_{i-1}\|x_i)$ for $i=2,\dotsc,B+1$ and output $z_{B+1}$ as before.\\
-
-\vspace{4cm}
-\noindent (d) Instead of using a fixed $IV$, set $z_0 := L$ and then compute $z_i := h^s(z_{i-1}\|x_i)$ for $i=1,\dotsc,B$ and output $z_B$.\\
-
-\vspace{4cm}
-\end{solution}
-
-\begin{problem}[5.1]
-In our attack on a two-round substitution-permutation network, we considered a block length of 64 bits and a network with 16 $S$-boxes that each take a 4-bit input. 
+\begin{problem}
+Show that the CBC, OFB and CRT modes do not yield CCA-secure encryption schemes (regardless of F).
 \end{problem}
-
-\begin{solution}
-(a) Repeat the analysis for the case of 8 $S$-boxes, each taking an 8-bit input. What is the complexity of the attack now?\\
-
-\vspace{4cm}
-\noindent (b) Repeat the analysis again with a 128-bit block length and 16 $S$-boxes that each take an 8-bit input.\\
-
-\vspace{4cm}
-\noindent (c) Does the block length make any difference?\\
-
-\vspace{1cm}
-\end{solution}
-
-\begin{problem}[5.2]
-What is the output of an $r$-round Feistel network when the input is $(L_0, R_0)$ in each of the following two cases: (Show your analysis.)
-\end{problem}
-
-\begin{solution}
-(a) Each round function $F$ outputs all $0$s, regardless of the input.
-
-\vspace{7cm}
-\noindent (b) Each round function $F$ is the identity function:
-
-\vspace{5cm}
-\end{solution}
-
-\begin{problem}[5.3]
-Show that DES has the property that $DES_k(x) = \overline{DES_{\overline{k}}(\overline{x})}$ for every key $k$ and input $x$ (where $\overline{z}$ denotes the bitwise complement of $z$). This is called the complementarity property of $DES$.
-\end{problem}
-
-\begin{solution}
-\vspace{4cm}
-\end{solution}
-
-%\begin{problem}[5.4]
-%Show an improvement to the attack on three-round DES that recovers the key using two input/output pairs but runs in time $2\cdot 2^{28}+2\cdot 2^{12}$.
-%\end{problem}
-
-%\begin{solution}
-%\vspace{6cm}
-%\end{solution}
-
-\begin{problem}[6.1]
-Prove that if $f$ is a one-way function, then $g(x_1,x_2) = (f(x_1),x_2)$ where $\abs{x_1} = \abs{x_2}$ is also a one-way function. Observe that $g$ fully reveals half of its input bits, but is nevertheless still one-way.
-\end{problem}
-
-\begin{solution}
-
-
-\vspace{5cm}
-\end{solution}
-
-%\begin{problem}[6.2]
-%Let $f$ be a one-way function. Is $g(x) = f(f(x))$ necessarily a one-way function? What about $g(x) = (f(x),f(f(x)))$? Prove your answers.
-%\end{problem}
-
-%\begin{solution}
-%\vspace{5cm}
-%\end{solution}
-%\begin{problem}[6.3]
-%Let $G$ be a pseudorandom generator with expansion factor $\ell(n)=n+1$. Prove that $G$ is a one-way function.
-%\end{problem}
-
-%\begin{solution}
-%\vspace{5cm}
-%\end{solution}
 
 \end{document}

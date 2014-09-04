@@ -1,0 +1,55 @@
+\documentclass[11pt]{article}
+
+% set 1-inch margins in the document
+\usepackage[margin=1in]{geometry}
+\usepackage{amsthm}
+\usepackage{amsmath}
+\usepackage{amssymb,amsfonts}
+\theoremstyle{definition}
+
+% include this if you want to import graphics files with /includegraphics
+\usepackage{graphicx}
+\providecommand{\abs}[1]{\lvert#1\rvert}
+
+% info for header block in upper right hand corner
+
+\newtheorem{problem}{Problem}
+
+\title{HIT --- Cryptography --- Homework 4}
+
+\begin{document}
+
+\maketitle
+
+\begin{problem}
+In our attack on a two-round substitution-permutation network, we considered a block length of 64 bits and a network with 16 $S$-boxes that each take a 4-bit input. 
+\begin{enumerate}
+\item Repeat the analysis for the case of 8 $S$-boxes, each taking an 8-bit input. What is the complexity of the attack now?
+\item Repeat the analysis again with a 128-bit block length and 16 $S$-boxes that each take an 8-bit input.
+\item Does the block length make any difference?
+\end{enumerate}
+\end{problem}
+
+\begin{problem}
+What is the output of an $r$-round Feistel network when the input is $(L_0, R_0)$ in each of the following two cases: (Show your analysis.)
+(a) Each round function $F$ outputs all $0$s, regardless of the input.
+(b) Each round function $F$ is the identity function.
+\end{problem}
+
+\begin{problem}
+Show that DES has the property that $DES_k(x) = \overline{DES_{\overline{k}}(\overline{x})}$ for every key $k$ and input $x$ (where $\overline{z}$ denotes the bitwise complement of $z$). This is called the complementarity property of $DES$.
+\end{problem}
+
+\begin{problem}
+Prove that if $f$ is a one-way function, then $g(x_1,x_2) = (f(x_1),x_2)$ where $\abs{x_1} = \abs{x_2}$ is also a one-way function. Observe that $g$ fully reveals half of its input bits, but is nevertheless still one-way.
+\end{problem}
+
+\begin{problem}
+Let $f$ be a one-way function. Is $g(x) = f(f(x))$ necessarily a one-way function? What about $g(x) = (f(x),f(f(x)))$? Prove your answers.
+\end{problem}
+
+\begin{problem}
+Let $G$ be a pseudorandom generator with expansion factor $\ell(n)=n+1$. Prove that $G$ is a one-way function.
+\end{problem}
+
+\end{document}

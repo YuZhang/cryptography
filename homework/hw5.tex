@@ -1,0 +1,47 @@
+\documentclass[11pt]{article}
+
+% set 1-inch margins in the document
+\usepackage[margin=1in]{geometry}
+\usepackage{amsthm}
+\usepackage{amsmath}
+\usepackage{amssymb,amsfonts}
+\theoremstyle{definition}
+
+% include this if you want to import graphics files with /includegraphics
+\usepackage{graphicx}
+\providecommand{\abs}[1]{\lvert#1\rvert}
+
+% info for header block in upper right hand corner
+
+\newtheorem{problem}{Problem}
+
+\title{HIT --- Cryptography --- Homework 5}
+
+\begin{document}
+
+\maketitle
+
+\begin{problem}
+This question concerns the Euler phi function.
+\begin{enumerate}
+\item Let  $p$ be a prime and $e \ge 1$ an integer. Show that $\phi(p^e) = p^{e-1}(p-1)$.
+\item Let $p,q$ be relatively prime. Show that $\phi(pq) = \phi(p)\cdot \phi(q)$. (You may use the Chinese remainder theorem.)
+\item Prove Theorem: $N = \prod_ip_i^{e_i}$, $\{p_i\}$ are distinct primes, $\phi(N) = \prod_ip_i^{e_i-1}(p_i-1)$.
+\end{enumerate}
+\end{problem}
+
+\begin{problem}
+Solve the following system of congruences (find $x$ by hand):
+\[ 13x \equiv 4 \pmod{99},\;\;\;\;\; 15x \equiv 56 \pmod{101}\]
+\end{problem}
+
+\begin{problem}
+Compute $[101^{4,800,000,023} \bmod 35]$ (by hand).
+\end{problem}
+
+\begin{problem}
+Let $N=pq$ be a product of two distinct primes. Show that if $\phi(N)$ and $N$ are known, then it is possible to compute $p$ and $q$ in polynomial time.
+\end{problem}
+
+
+\end{document}
