@@ -23,6 +23,10 @@ Prove that the indistinguishable encryptions in the presence of an eavesdropper 
 \end{problem}
 
 \begin{problem}
+Present a construction of a variable output-length pseudorandom generator from any pseudorandom function. Prove that your construction satisfies Definition: `a variable output-length pseudorandom generator'.
+\end{problem}
+
+\begin{problem}
 Assuming the existence of a pseudorandom function, prove that there exists an encryption scheme that has indistinguishable multiple encryptions in the presence of an eavesdropper, but is not CPA-secure.
 {\small Hint: You will need to use the fact that in a CPA the adversary can choose its queries to the encryption oracle adaptively (i.e., new query may be constructed from previous queries).}
 \end{problem}
@@ -32,11 +36,15 @@ Present a construction of a variable output-length pseudorandom generator from a
 \end{problem}
 
 \begin{problem}
-Present formulas for decryption of all the different modes of operation for encryption: ECB, CBC, OFB, CRT. For which modes can decryption be parallelized?
+Present formulas for decryption of all the different modes of operation for encryption: ECB, CBC, OFB, CTR. For which modes can decryption be parallelized?
 \end{problem}
 
 \begin{problem}
-Show that the CBC, OFB and CRT modes do not yield CCA-secure encryption schemes (regardless of F).
+Show that the CBC mode do not yield CPA-secure encryption in the case that the $IV$ is predicable.
+\end{problem}
+
+\begin{problem}
+Show that the CBC, OFB and CTR modes do not yield CCA-secure encryption schemes (regardless of F). (hint: If one bit of Ciphertext is flipped, so does one bit of Plaintext.)
 \end{problem}
 
 \end{document}

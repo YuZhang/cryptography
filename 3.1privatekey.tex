@@ -15,7 +15,8 @@ Computational security vs. Information-theoretical security
 A [cipher] must be practically, if not mathematically, indecipherable.
 \end{alertblock}
 \begin{itemize}
-	\item Information-theoretical security: Perfect secrecy.
+	\item Information-theoretical security: Perfect secrecy. \\
+	\alert{Q: what's the limitation of perfect secrecy?}
 	\item Computational security: 
 \begin{itemize}
 	\item Only preserved against adversaries that run in a \textbf{feasible amount of time}.
@@ -31,20 +32,20 @@ Limit the power of adversary (against brute force with pr. 1 in time linear in $
 \end{center}
 \end{figure}
 \end{frame}
-\begin{frame}\frametitle{Concrete Approach}
-A scheme is $(t,\varepsilon)$-\textbf{secure} if every adversary running for time at most $t$ succeeds in breaking the scheme with probability at most $\varepsilon$.
-\begin{exampleblock}{Example}
-\textbf{Optimal security}: when the key has length $n$, an adversary running in time $t$ can succeed with probability at most $t/2^n$.
-\begin{tabular}{ll}
-$t=2^{80}$ & $2^{20}$ 1GHz CPUs run 35 years. \\
-$n=128$   & $2^{170}$ atoms in the planet. \\
-$\varepsilon=2^{-48}$  & once every 100 years with probability $2^{-30}/\text{sec}$. \\
-\end{tabular}
-\end{exampleblock}
-\begin{itemize}
-\item But one may ask: What type of computing power? What if under Moore's Law? Which kind of  implementation? What is the success probability of running for 10 years? Does the key length matter? 
-\end{itemize}
-\end{frame}
+%\begin{frame}\frametitle{Concrete Approach}
+%A scheme is $(t,\varepsilon)$-\textbf{secure} if every adversary running for time at most $t$ succeeds in breaking the scheme with probability at most $\varepsilon$.
+%\begin{exampleblock}{Example}
+%\textbf{Optimal security}: when the key has length $n$, an adversary running in time $t$ can succeed with probability at most $t/2^n$.
+%\begin{tabular}{ll}
+%$t=2^{80}$ & $2^{20}$ 1GHz CPUs run 35 years. \\
+%$n=128$   & $2^{170}$ atoms in the planet. \\
+%$\varepsilon=2^{-48}$  & once every 100 years with probability $2^{-30}/\text{sec}$. \\
+%\end{tabular}
+%\end{exampleblock}
+%\begin{itemize}
+%\item But one may ask: What type of computing power? What if under Moore's Law? Which kind of  implementation? What is the success probability of running for 10 years? Does the key length matter? 
+%\end{itemize}
+%\end{frame}
 \begin{frame}\frametitle{$\mathcal{P} = \mathcal{NP}$ ?}
 \begin{figure}
 \begin{center}
@@ -54,11 +55,32 @@ $\varepsilon=2^{-48}$  & once every 100 years with probability $2^{-30}/\text{se
 \centerline{The majority of computer scientists believe $\mathcal{P} \ne \mathcal{NP}$.}
 \centerline{\alert{\emph{This is very dangerous!}}} 
 \end{frame}
-\begin{frame}\frametitle{Asymptotic Approach}
-Time $t$ and probability $\varepsilon$ are described as functions of \textbf{security parameter} $n$ (usually, the length of key).
+\begin{frame}[fragile]\frametitle{Efficient Computation}
 \begin{itemize}
-\item Time is \textsc{ppt} (\textbf{probabilistic polynomial-time}): $n^a$ for constant $a$.
-\item Probability is \textbf{negligible}: smaller than any inverse polynomial $n^{-b}$ for constant $b$.
+\item An algorithm $A$ runs in \textbf{polynomial time} if there exists a polynomial $p(\cdot)$ such that,
+ for every input $x \in {0,1}^*$, $A(x)$ terminates within at most $p(|x|)$ steps. \\
+ \alert{Q: is $n!$ polynomial? is $\log n$ polynomial?}
+\item $A$ can run another \textsc{ppt} $A'$ as a sub-routine in polynomial-time.\\
+ \alert{Q: $f(x) = x^{2} $, is $g(x) =  \frac{x^{3}}{f(x)}$ polynomial?}
+\item A \textbf{probabilistic} algorithm has the capability of ``tossing coins''.\\
+Random number generators should be designed for cryptographic use, not \verb|random()| in C.
+\item Open question: Does probabilistic adversaries are more powerful than deterministic ones?  
+\end{itemize}
+\end{frame}
+\begin{frame}\frametitle{Negligible Success Probability}
+\begin{itemize}
+\item A function $f$ is \textbf{negligible} if for every polynomial $p(\cdot)$
+there exists an $N$ such that for all integers $n > N$ it holds that $f(n) < \frac{1}{p(n)}$.\\
+\alert{Q: is $\left( \frac{3}{n} \right)^{9}$ negligible? is $\frac{n^{2}}{2^{n}}$ negligible?}
+\item \alert{Q: is $ \mathsf{negl}_1(n)+\mathsf{negl}_2(n)$ negligible?}
+\item \alert{Q: is $ poly(n)\cdot\mathsf{negl}(n)$ negligible?}
+%\item Problem $\mathsf{X}$ is \emph{hard} if $\mathsf{X}$ cannot be solved by any polynomial-time algorithm except with negligible probability.
+\end{itemize}
+\end{frame}
+\begin{frame}\frametitle{Asymptotic Approach}
+Problem $\mathsf{X}$ (breaking the scheme) is \emph{hard} if $\mathsf{X}$ cannot be solved by any polynomial-time algorithm for time $t$ except with negligible probability $\varepsilon$.
+\begin{itemize}
+\item $t, \varepsilon$ are described as functions of \textbf{security parameter} $n$ (usually, the length of key).%\item Probability is \textbf{negligible}: smaller than any inverse polynomial $n^{-b}$ for constant $b$.
 \item \alert{Caution}: `Security' for large enough values of $n$.
 \end{itemize}
 \begin{exampleblock}{Example}
@@ -67,43 +89,29 @@ Time $t$ and probability $\varepsilon$ are described as functions of \textbf{sec
 $n \le 40$ & 6 weeks with probability 1. \\
 $n=50$   & 3 months with probability $1/1000$. \\
 $n=500$  & more than 200 years with probability $2^{-500}$. \\
-\end{tabular}
+\end{tabular}\\
+
+\alert{Q: What if under Moore's Law?}
 \end{exampleblock}
 \end{frame}
-\begin{frame}[fragile]\frametitle{Efficient Computation}
-\begin{itemize}
-\item An algorithm $A$ runs in \textbf{polynomial time} if there exists a polynomial $p(\cdot)$ such that,
- for every input $x \in {0,1}^*$, $A(x)$ terminates within at most $p(|x|)$ steps. 
-\item A \textbf{probabilistic} algorithm has the capability of ``tossing coins''.
-\item $A$ can run another \textsc{ppt} $A'$ as a sub-routine in polynomial-time.
-\item Random number generators should be designed for cryptographic use, not \verb|random()| in C.
-\item Open question: Does probabilistic adversaries are more powerful than deterministic ones?  
-\end{itemize}
-\end{frame}
-\begin{frame}\frametitle{Negligible Success Probability}
-\begin{itemize}
-\item A function $f$ is \textbf{negligible} if for every polynomial $p(\cdot)$
-there exists an $N$ such that for all integers $n > N$ it holds that $f(n) < \frac{1}{p(n)}$.
-\item $\mathsf{negl}_3(n) = \mathsf{negl}_1(n)+\mathsf{negl}_2(n)$ is negligible.
-\item positive polynomial $p$, $\mathsf{negl}_4(n) = p(n)\cdot\mathsf{negl}_1(n)$ is negligible.
-\item Problem $\mathsf{X}$ is \emph{hard} if $\mathsf{X}$ cannot be solved by any polynomial-time algorithm except with negligible probability.
-\end{itemize}
-\end{frame}
-\begin{frame}\frametitle{Remarks on The Asymptotic Approach}
-\begin{itemize}
-\item The longer the key, the higher the security.
-\item Increasing $n$ to defend against increases in computing power.
-\item Convention: algorithm input is $1^n$. (a string of $n$ 1's)
-\end{itemize}
-\begin{exampleblock}{Example}
-\begin{tabular}{r|r|rr}
- & Honest party & \multicolumn{2}{|c}{Adversary} \\	\hline
-& $10^6 \cdot n^2$ & $10^8 \cdot n^4$ & $2^{20-n}$ \\
-1GHz $n=50$ & 2.5 sec.   & 1 week & $2^{-30}$ \\
-16GHz $n=500$ & 0.625 sec. & 16 week & $2^{-80}$ \\
-\end{tabular}
-\end{exampleblock}
-\end{frame}
+
+%\begin{frame}\frametitle{Remarks on The Asymptotic Approach}
+%\begin{itemize}
+%\item The longer the key, the higher the security.
+%\item Increasing $n$ to defend against increases in computing power.
+%\item Convention: algorithm input is $1^n$. (a string of $n$ 1's)
+%\end{itemize}
+%\begin{exampleblock}{Example}
+%\begin{tabular}{r|r|rr}
+% & Honest party & \multicolumn{2}{|c}{Adversary} \\	\hline
+%& $10^6 \cdot n^2$ & $10^8 \cdot n^4$ & $2^{20-n}$ \\
+%1GHz $n=50$ & 2.5 sec.   & 1 week & $2^{-30}$ \\
+%16GHz $n=500$ & 0.625 sec. & 16 week & $2^{-80}$ \\
+%\end{tabular}
+%
+%\alert{Q: For a bigger $n$, is it harder or easier to break the cipher?}
+%\end{exampleblock}
+%\end{frame}
 \section{Defining Computationally-Secure Encryption}
 \begin{frame}\frametitle{Defining Private-key Encryption Scheme}
 \begin{figure}
@@ -141,19 +149,26 @@ $\Pi$ has \textbf{indistinguishable encryptions in the presence of an eavesdropp
 \]
 where the probability it taken over the random coins used by $\mathcal{A}$.
 \end{definition}
+\alert{Q: It the OTP scheme indistinguishable in the presence of an eavesdropper?}
 \end{frame}
-\begin{frame}\frametitle{Properties of Definition of Indistinguishable}
-\begin{enumerate}
-\item \textbf{No single bit} can be guessed in a randomly-chosen plaintext with probability significantly better than $1/2$.
-\[ \Pr[\mathcal{A}(1^n,\mathsf{Enc}_k(m))=m^i] \le \frac{1}{2} + \mathsf{negl}(n).
-\]
-where $m^i$ is the $i$th bit of $m$, $\mathcal{A}(\cdot)$ outputs the guess.
-\item \textbf{No function of plaintext} can be learned regardless of the \emph{a priori} distribution over the plaintext. \\
-$\forall\;\mathcal{A}$, $\exists\;\mathcal{A'}$, $\forall\;f$ and $\forall\;S \in \{0,1\}^*$,
-\[ \left| \Pr[\mathcal{A}(1^n,\mathsf{Enc}_k(m)) = f(m)] - \Pr[\mathcal{A}'(1^n) = f(m)] \right| \le \mathsf{negl}(n),
-\]
-where $m \in S_n \overset{\text{def}}{=} S \cap \{0,1\}^n$.
-\end{enumerate}
+\begin{frame}\frametitle{Understanding Definition of Indistinguishablity}
+\begin{exampleblock}{If the lowest bit of $m$ can be guessed from the ciphertext with probability $\frac{3}{4}$, is it secure?}
+Q: what are two messages provided by the adversary?\\
+Q: what is the probability of success in this indistinguishability experiment?
+\end{exampleblock}
+\begin{exampleblock}{If the lowest 3 bits can be guessed with probability $\frac{3}{8}$, is it secure?}
+\end{exampleblock}
+%\begin{enumerate}
+%\item \textbf{No single bit} can be guessed in a randomly-chosen plaintext with probability significantly better than $1/2$.
+%\[ \Pr[\mathcal{A}(1^n,\mathsf{Enc}_k(m))=m^i] \le \frac{1}{2} + \mathsf{negl}(n).
+%\]
+%where $m^i$ is the $i$th bit of $m$, $\mathcal{A}(\cdot)$ outputs the guess.
+%\item \textbf{No function of plaintext} can be learned regardless of the \emph{a priori} distribution over the plaintext. \\
+%$\forall\;\mathcal{A}$, $\exists\;\mathcal{A'}$, $\forall\;f$ and $\forall\;S \in \{0,1\}^*$,
+%\[ \left| \Pr[\mathcal{A}(1^n,\mathsf{Enc}_k(m)) = f(m)] - \Pr[\mathcal{A}'(1^n) = f(m)] \right| \le \mathsf{negl}(n),
+%\]
+%where $m \in S_n \overset{\text{def}}{=} S \cap \{0,1\}^n$.
+%\end{enumerate}
 \end{frame}
 \begin{frame}\frametitle{Semantic Security}
 \textbf{Intuition}: No partial information leaks.
@@ -175,7 +190,7 @@ A private-key encryption scheme has \textbf{indistinguishable} encryptions in th
 \item True randomness can not be generated by a describable mechanism.
 \item Pseudorandom looks truly random for the observers who don't know the mechanism. 
 \item No fixed string can be ``pseudorandom'' which refers to a distribution.
-\item It is impossible to definitively prove randomness.
+\item \alert{Q: is it possible to definitively prove randomness?}
 \end{itemize}
 \begin{figure}
 \begin{center}
@@ -212,14 +227,37 @@ A deterministic polynomial-time algorithm $G : \{0,1\}^n \to \{0,1\}^{\ell(n)}$ 
 where $r$ is chosen \emph{u.a.r} from $\{0,1\}^{\ell(n)}$, the \textbf{seed} $s$ is chosen \emph{u.a.r} from $\{0,1\}^n$. $\ell(\cdot)$ is the \textbf{expansion factor} of $G$.
 \end{enumerate}
 \end{definition}
+\begin{itemize}
+\item Pseudorandomness means being \textbf{Unpredictable}
+\item \textbf{Existence}: Under the weak assumption that \emph{one-way functions} exists, or $\mathcal{P} \ne \mathcal{NP}$
+\end{itemize}
 \end{frame}
-\begin{frame}\frametitle{Remarks on Pseudorandom Generators}
+
+\begin{frame}\frametitle{Problems on PRG}
+\begin{exampleblock}{Is $G$ PRG?}
+\begin{itemize}
+\item $G: s \to \{0,1\}^n$ is such that for all $s$: $XOR(G(s)) = 1$
+\item glibc random(): $r[i] = (r[i-3] + r[i-31])\%2^{32}$
+\end{itemize}
+\end{exampleblock}
+\begin{exampleblock}{$F$ is PRG. Is $G$ PRG?}
+\begin{itemize}
+\item $G(s)=F(s)\oplus 1^{n}$
+\item $G(s)=F(0)$
+\item $G(s)=F(s)\| 0$
+\item $G(s)=F(s\oplus 1^{\abs{s}})$
+\item $G(s)=F(s)\| F(s)$
+\item $G(s\| s')=F(s)\| F(s')$
+\item $G: s \gets \{0,1\}^{20}, G(s) = F(s)$ (see next slide)
+\end{itemize}
+\end{exampleblock}
+\end{frame}
+\begin{frame}\frametitle{Sufficient seed space}
 \begin{itemize}
 \item \textbf{Sparse outputs}: In the case of $\ell(n)=2n$, only $2^{-n}$ of strings of length $2n$ occurs.
 \item \textbf{Brute force attack}: Given an unlimited amount of time, one can distinguish $G(s)$ from $r$ with a high probability by generating all strings with all seeds.
 \[  \left|\Pr[D(r)=1] - \Pr[D(G(s))=1]\right| \ge 1-2^{-n} \]
 \item \textbf{Sufficient seed space}: $s$ must be long enough against brute force attack.
-\item \textbf{Existence}: Under the weak assumption that \emph{one-way functions} exists, or $\mathcal{P} \ne \mathcal{NP}$.
 \end{itemize}
 \end{frame}
 \section{Constructing Secure Encryption Schemes}
@@ -296,7 +334,7 @@ Use Definition \ref{def:pg}:
 \] 
 \end{proof}
 \end{frame}
-\begin{frame}\frametitle{Handling Variable-Length Messages}
+\begin{frame}\frametitle{Handling Variable-Length Messages (homework)}
 \begin{definition}\label{def:vlpg}
 A \textbf{deterministic} polynomial-time algorithm $G$ is a \textbf{variable output-length pseudorandom generator} if
 \begin{enumerate}
@@ -318,7 +356,7 @@ Both Construction \ref{con:fl} and Theorem \ref{the:flt} hold here.
 \textbf{Assumption}   & pseudorandom & random   \\ \hline
 \textbf{Key}	      & short random str. & long random str.\\ \hline
 \textbf{Construction} & XOR pad & XOR pad \\ \hline 
-\textbf{Prove}        & reduction & -     \\ \hline
+\textbf{Prove}        & reduction & prob. theory  \\ \hline
 \end{tabular}	
 \end{center}
 \end{frame}

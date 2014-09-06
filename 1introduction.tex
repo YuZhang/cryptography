@@ -279,7 +279,7 @@ Security must be guaranteed for any adversary within the class of adversaries ha
 \item \emph{No adversary can find the secret key when given a ciphertext.}\\
 $\mathsf{Enc}_k(m)=m$
 \item \emph{No adversary can find the plaintext that corresponds to the ciphertext.}\\
-$\mathsf{Enc}_k(m)=m_{0}\parallel \mathsf{AES}_k(m)$
+$\mathsf{Enc}_k(m)=m_{0}\| \mathsf{AES}_k(m)$
 \item \emph{No adversary can determine any character of the plaintext that corresponds to the ciphertext.}\\
 $m=1000$, someone can learn $ 800 < m < 1200$
 \item \emph{No adversary can derive any meaningful information about the plaintext from the ciphertext.}\\

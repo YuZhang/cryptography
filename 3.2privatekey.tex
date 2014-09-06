@@ -42,10 +42,10 @@ $\Pi$ has \textbf{indistinguishable multiple encryptions in the presence of an e
 \[ \Pr\left[\mathsf{PrivK}^{\mathsf{mult}}_{\mathcal{A},\Pi}(n)=1\right] \le \frac{1}{2} + \mathsf{negl}(n).
 \]
 \end{definition}
-\begin{theorem}
-$\Pi = (\mathsf{Gen}, \mathsf{Enc}, \mathsf{Dec})$ for which $\mathsf{Enc}$ is a deterministic function of the key and the message. Then $\Pi$ does not have indistinguishable multiple encryptions in the presence of an eavesdropper.
-\end{theorem}
-For the deterministic encryption, the adversary generates $m_0^1 = m_0^2$ and $m_1^1 \neq m_1^2$ and then outputs $b'=0$ if $c^1 = c^2$, otherwise $b'=1$.
+\begin{alertblock}{Question:}
+$\Pi = (\mathsf{Gen}, \mathsf{Enc}, \mathsf{Dec})$ for which $\mathsf{Enc}$ is a \textbf{deterministic} function of the key and the message.  Does $\Pi$ have indistinguishable multiple encryptions in the presence of an eavesdropper?
+\end{alertblock}
+%For the deterministic encryption, the adversary generates $m_0^1 = m_0^2$ and $m_1^1 \neq m_1^2$ and then outputs $b'=0$ if $c^1 = c^2$, otherwise $b'=1$.
 \end{frame}
 \begin{frame}\frametitle{Secure Multiple Encryptions Using a Stream Cipher}
 \begin{figure}
@@ -53,12 +53,12 @@ For the deterministic encryption, the adversary generates $m_0^1 = m_0^2$ and $m
 \input{tikz/synchronizedmode}
 \end{center}
 \end{figure}
-Unsynchronized mode: $\mathsf{Enc}(m) := \left< IV, G(k, IV) \oplus m\right>$.\\
-Initial vector $IV$ is chosen \emph{u.a.r}.
+%Initial vector $IV$ is chosen \emph{u.a.r}.\\
+\alert{Q: which mode is better in your opinion?}
 \end{frame}
 \begin{frame}\frametitle{Related Keys: Real World Cases}
 Keys for multiple enc. must be independent.
-\begin{exampleblock}{802.11b WEP}
+\begin{exampleblock}{Attacks on 802.11b WEP}
 Unsynchronized mode: $\mathsf{Enc}(m_i) := \left< IV_i, G(IV_i\|k) \oplus m_i\right>$.\\
 \begin{itemize}
 \item Length of $IV$ is 24 bits, repeat $IV$ after $2^{24} \approx$ 16M frames.
@@ -107,7 +107,8 @@ Any private-key encryption scheme that is CPA-secure also is \textbf{multiple-en
 \end{proposition}
 \begin{itemize}
 \item CPA-secure means $\mathsf{Enc}$ is probabilistic.
-\item \textbf{Fixed-length} CPA-secure encryption scheme can be used to construct a \textbf{arbitrary-length} CPA-secure one quite easily.
+\item \alert{Q: does \textbf{multiple-encryption-security} mean CPA-security?} (homework)
+%\item \textbf{Fixed-length} CPA-secure encryption scheme can be used to construct a \textbf{arbitrary-length} CPA-secure one quite easily.
 \end{itemize}
 \end{frame}
 \section{Constructing CPA-Secure Encryption Schemes}
@@ -120,12 +121,12 @@ Any private-key encryption scheme that is CPA-secure also is \textbf{multiple-en
 \begin{itemize}
 \item \textbf{Keyed function} $F : \{0,1\}^* \times \{0,1\}^* \to \{0,1\}^*$. \\
 $F_k : \{0,1\}^* \to \{0,1\}^*$, $F_k(x) \overset{\text{def}}{=} F(k,x)$.
-\item \textbf{Look-up table $f$}: $\{0,1\}^n \to \{0,1\}^n$ with size $n\cdot2^n$.
+\item \textbf{Look-up table $f$}: $\{0,1\}^n \to \{0,1\}^n$ with size \alert{ = ? bits}. %$n\cdot2^n$.
 \item \textbf{Function family $\mathsf{Func}_n$}: all functions $\{0,1\}^n \to \{0,1\}^n$. $|\mathsf{Func}_n| = 2^{n\cdot2^n}$.
 \end{itemize}
 \end{frame}
 \begin{frame}\frametitle{Definition of Pseudorandom Function}
-\textbf{Intuition}: A PRF $F$ generates a function $F_k$ that is indistinguishable for a \textsc{ppt} distinguisher $D$ from truly random selected function $f$ (look-up table) in $\mathsf{Func}_n$.\\ However, the function has \textbf{exponential length}. Give $D$ the deterministic \textbf{oracle access $D^{\mathcal{O}}$} to the functions $\mathcal{O}$.
+\textbf{Intuition}: A PRF $F$ generates a function $F_k$ that is indistinguishable from truly random selected function $f$ (look-up table) in $\mathsf{Func}_n$.\\ However, the function has \textbf{exponential length}. Give $D$ the deterministic \textbf{oracle access $D^{\mathcal{O}}$} to the functions $\mathcal{O}$.
 \begin{definition}
 An efficient length-preserving, keyed function $F$ is a \textbf{pseudorandom function (PRF)} if
 $\forall\;$ \textsc{ppt} distinguishers $D$,
@@ -133,12 +134,33 @@ $\forall\;$ \textsc{ppt} distinguishers $D$,
 \]
 where $f$ is chosen \emph{u.a.r} from $\mathsf{Func}_n$.
 \end{definition}
-\textbf{PRG vs. PRF}:
+
+%\textbf{PRG vs. PRF}:
+%\begin{itemize}
+%\item Pseudorandomness over a set of strings vs. a set of functions.
+%\item A PRG --- an instance of keyed PRF.
+%\end{itemize}
+%\textbf{Existence}: if PRG exists. In practice, block ciphers may be PRF.
+\end{frame}
+\begin{frame}\frametitle{Question}
+\begin{exampleblock}{Let $F: \{0,1\}^{n} \times \{0,1\}^{n} \to \{0,1\}^{n}$ be a secure PRF. Is $G$ a secure PRF?}
 \begin{itemize}
-\item Pseudorandomness over a set of strings vs. a set of functions.
-\item A PRG --- an instance of keyed PRF.
+\item $G((k_{1},k_{2}), x) = F(k_{1},x) \| F(k_{2},x)$
+\item $G(k,x) = F(k, x\oplus 1^{n})$
+\item $G(k,x) = reverse(F(k,x))$
+\item $ G(k,x) = \left\{ 
+  \begin{array}{l l}
+    F(k,x) & \quad \text{when}\ x \neq 0^{n}\\
+    0^{n} & \quad \text{otherwise}\\
+  \end{array} \right. $
+\item $ G(k,x) = \left\{ 
+  \begin{array}{l l}
+    F(k,x) & \quad \text{when}\ x \neq 0^{n}\\
+    k & \quad \text{otherwise}\\
+  \end{array} \right. $
+\item $G(k,x) = F(k,x)\bigoplus F(k, x\oplus 1^{n})$
 \end{itemize}
-\textbf{Existence}: if PRG exists. In practice, block ciphers may be PRF.
+\end{exampleblock}
 \end{frame}
 \begin{frame}\frametitle{CPA-Security from Pseudorandom Function}
 \begin{columns}[t]
@@ -150,7 +172,7 @@ where $f$ is chosen \emph{u.a.r} from $\mathsf{Func}_n$.
 \end{figure}
 \end{column}
 \begin{column}{6cm}
-\begin{construction}
+\begin{construction}\label{thm:cpa}
 \begin{itemize}
 \item Fresh random string $r$.
 \item $F_k(r)$: $\abs{k} = \abs{m} = \abs{r} = n$.
@@ -229,16 +251,28 @@ $\forall\;$ \textsc{ppt} distinguishers $D$,
 where $f$ is chosen \emph{u.a.r} from the set of permutations on $n$-bit strings.
 \end{definition}
 \end{frame}
-\begin{frame}\frametitle{Block Cipher and Modes of Operation}
-\begin{itemize}
-\item \textbf{Block cipher}: A practical (strong) PRP.
-\begin{itemize}
-\item Not encryption scheme, but a building block of encryption scheme.
-\item Block cipher itself is not CPA-secure.
-\end{itemize}
-\item \textbf{Modes of Operation}: A way of encrypting arbitrary-length messages using a block cipher/PRP.
-\end{itemize}
+\begin{frame}\frametitle{Question}
+\begin{exampleblock}{Let $X = \{ 0,1\}$ (1 bit), answer the following questions.}
+\begin{enumerate}
+\item What are the functions in the permutation over $X$?
+\item $K = \{0, 1\}$, what is the simplest permutation $F(k, x)$ over $X$? 
+\item Is your $F$ a secure PRP?
+\item Is your $F$ a secure PRF?
+\item What if $X = \{ 0,1\}^{128}$ and $K = \{0, 1\}^{128}$?
+\item Could you give a (or another) PRP over $X = \{ 0,1\}^{128}$?
+\end{enumerate}
+\end{exampleblock}
 \end{frame}
+%\begin{frame}\frametitle{Block Cipher and Modes of Operation}
+%\begin{itemize}
+%\item \textbf{Block cipher}: A practical (strong) PRP.
+%\begin{itemize}
+%\item Not encryption scheme, but a building block of encryption scheme.
+%\item Block cipher itself is not CPA-secure.
+%\end{itemize}
+%\item \textbf{Modes of Operation}: A way of encrypting arbitrary-length messages using a block cipher/PRP.
+%\end{itemize}
+%\end{frame}
 \begin{frame}\frametitle{Electronic Code Book (ECB) Mode}
 \begin{figure}
 \begin{center}
@@ -246,7 +280,8 @@ where $f$ is chosen \emph{u.a.r} from the set of permutations on $n$-bit strings
 \end{center}
 \end{figure}
 \begin{itemize}
-\item \textbf{Weakness}: not indistinguishable in the presence of an eavesdropper.
+\item \alert{Q: is it indistinguishable in the presence of an eavesdropper?}
+\item \alert{Q: can $F$ be any PRF?}
 \end{itemize}
 \end{frame}
 \begin{frame}\frametitle{Cipher Block Chaining (CBC) Mode}
@@ -256,8 +291,10 @@ where $f$ is chosen \emph{u.a.r} from the set of permutations on $n$-bit strings
 \end{center}
 \end{figure}
 \begin{itemize}
-\item \textbf{Strength}: CPA-secure.
-\item \textbf{Weakness}: not parallelizable.
+\item $IV$: initial vector, a fresh random string.
+\item \alert{Q: is it CPA-secure? what if $IV$ is always $0$?}
+\item \alert{Q: is the encryption parallelizable, i.e., outputting $c_{2}$ before getting $c_{1}$?}
+\item \alert{Q: can $F$ be any PRF?}
 \end{itemize}
 \end{frame}
 \begin{frame}\frametitle{Output Feedback (OFB) Mode}
@@ -267,8 +304,9 @@ where $f$ is chosen \emph{u.a.r} from the set of permutations on $n$-bit strings
 \end{center}
 \end{figure}
 \begin{itemize}
-\item \textbf{Strength}: CPA-secure, pre-processing the stream, PRF-compatible.
-\item \textbf{Weakness}: not parallelizable.
+\item \alert{Q: is it CPA-secure?}
+\item \alert{Q: is the encryption parallelizable?}
+\item \alert{Q: can $F$ be any PRF?}
 \end{itemize}
 \end{frame}
 \begin{frame}\frametitle{Counter (CTR) Mode}
@@ -278,8 +316,10 @@ where $f$ is chosen \emph{u.a.r} from the set of permutations on $n$-bit strings
 \end{center}
 \end{figure}
 \begin{itemize}
-\item \textbf{Strength}: CPA-secure, pre-processing the stream, PRF-compatible, parallelizable, random access.
-\end{itemize}
+\item $ctr$ is an $IV$
+\item \alert{Q: is it CPA-secure?}
+\item \alert{Q: is the encryption parallelizable?}
+\item \alert{Q: can $F$ be any PRF?}\end{itemize}
 \end{frame}
 \begin{frame}\frametitle{CTR Mode Is CPA-secure}
 \begin{theorem}
@@ -314,7 +354,8 @@ See proof of theorem \ref{thm:prf}.
 \end{proof}
 \end{frame}
 \begin{frame}[fragile]\frametitle{$IV$ Should Not Be Predictable}
-If $IV$ is predictable, then CBC/OFB/CTR mode is not CPA-secure.
+If $IV$ is predictable, then CBC/OFB/CTR mode is not CPA-secure.\\
+\alert{Q: Why? (homework)}
 \begin{exampleblock}{Bug in SSL/TLS 1.0}
 $IV$ for record $\#i$ is last CT block of record $\#(i-1)$.
 \end{exampleblock}
@@ -326,7 +367,6 @@ $IV$ for record $\#i$ is last CT block of record $\#(i-1)$.
 \verb#    const AES_KEY       *key,# \\
 \verb#    unsigned char       *ivec,   #  \alert{\textbf{User supplies $IV$}} \\
 \verb#    AES_ENCRYPT or AES_DECRYPT);# \\
-Input \verb#ivec# should be random, otherwise it is not secure.
 \end{exampleblock}
 \end{frame}
 \begin{frame}\frametitle{Remarks on Block Ciphers}
@@ -354,6 +394,16 @@ If no pad needed, add a dummy block.
 \end{center}
 \end{exampleblock}
 \end{frame}
+%\begin{frame}\frametitle{PRP/PRF Switching Lemma (FYI)}
+%\begin{lemma}
+%$\forall\;$ \textsc{ppt} distinguishers $D$,
+%\[ \left|\Pr[D^{f}=1] - \Pr[D^{p}=1]\right| \le \frac{q^{2}}{2^{n+1}},
+%\]
+%where $f$/$p$ is chosen \emph{u.a.r} from the set of functions/permutations on $n$-bit strings.
+%\end{lemma}
+%\begin{exampleblock}
+%\end{exampleblock}
+%\end{frame}
 \section{Security Against Chosen-Ciphertext Attacks (CCA)}
 \begin{frame}\frametitle{Security Against CCA}
 The CCA indistinguishability experiment $\mathsf{PrivK}^{\mathsf{cca}}_{\mathcal{A},\Pi}(n)$:
@@ -361,7 +411,7 @@ The CCA indistinguishability experiment $\mathsf{PrivK}^{\mathsf{cca}}_{\mathcal
 	\item $k \gets \mathsf{Gen}(1^n)$.
 	\item $\mathcal{A}$ is given input $1^n$ and oracle access $\mathcal{A}^{\mathsf{Enc}_k(\cdot)}$ and $\mathcal{A}^{\mathsf{Dec}_k(\cdot)}$, outputs $m_0, m_1$ of the same length.
 	\item $b \gets \{0,1\}$. $c \gets \mathsf{Enc}_k(m_b)$ is given to $\mathcal{A}$.
-	\item $\mathcal{A}$ continues to have oracle access \textbf{except for $c$}, outputs $b'$.
+	\item $\mathcal{A}$ continues to have oracle access \alert{\textbf{except for $c$}}, outputs $b'$.
 	\item If $b' = b$, $\mathcal{A}$ succeeded $\mathsf{PrivK}^{\mathsf{cca}}_{\mathcal{A},\Pi}=1$, otherwise 0.
 \end{enumerate}
 \begin{definition}
@@ -376,17 +426,23 @@ $\Pi$ has \textbf{indistinguishable encryptions under a CCA (CCA-secure)} if $\f
 \begin{itemize}
 \item If the communication is not authenticated, then an adversary may send certain ciphertexts on behalf of the honest party.
 \end{itemize}
-\item None of the above scheme is CCA-secure: If one bit of CT is flipped, so does one bit of PT. 
-\item CCA-security implies ``\textbf{non-malleability}'':\\
-If the adversary tries to modify a given ciphertext, either an illegal ciphertext or one that encrypts a plaintext having no relation to the original one.	
+\item CCA-security implies ``\textbf{non-malleability}''.
+\item None of the above scheme is CCA-secure. 
 \end{itemize}
+\begin{exampleblock}{CCA against Construction \ref{thm:cpa}}
+$\mathcal{A}$ gives $m_{0}, m_{1}$ and gets $c = \left<r, F_k(r)\oplus m_{b}\right>$, 
+and then queries $c'$ which is the same with $c$ except that a single bit is flipped. 
+The $m' = c' \oplus F_k(r)$ should be the same with $m_{b}$ \alert{except ?}
+\end{exampleblock}
+\alert{Q: Show that the above modes (CBC, OFB and CTR) are also not CCA-secure (homework)}
 \end{frame}
 \begin{frame}\frametitle{Summary}
 \begin{itemize}
-\item Asymptotic approach, proof of reduction, indistinguishable.
-\item PRG, PRF, PRP, stream cipher, block cipher.
-\item Security/construction against eavesdropping/CPA.
-\item EBC, CBC, OFB, CTR.
+\item Asymptotic approach, proof of reduction, indistinguishable
+\item PRG, PRF, PRP, stream cipher, block cipher
+\item Security/construction against eavesdropping/CPA
+\item EBC, CBC, OFB, CTR
+\item CCA
 \end{itemize}
 \end{frame}
 \end{document}
