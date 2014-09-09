@@ -175,8 +175,8 @@ Encrypt-then-authenticate approach is secure if $\Pi_E$ is rand-CTR mode or rand
 \end{itemize}
 \end{itemize}
 \end{frame}
-\begin{comment}
-\section{Key Derivation Function}
+%\begin{comment}
+\section{Key Derivation Function (FYI)}
 \begin{frame}\frametitle{Key Derivation Function (KDF)}
 \textbf{Key Derivation Function (KDF)} generates many keys from a secret source key $sk$.
 \newline
@@ -210,7 +210,7 @@ Encrypt-then-authenticate approach is secure if $\Pi_E$ is rand-CTR mode or rand
 \item[salt] consists of random bits, creating the input to a function. 
 \end{itemize}
 \end{frame}
-\section{Deterministic Encryption}
+\section{Deterministic Encryption (FYI)}
 \begin{frame}\frametitle{Deterministic CPA Security}
 \begin{itemize}
 \item \textbf{Deterministic encryption}: the same message is encrypted to the same ciphertext under the same key.
@@ -276,5 +276,5 @@ $SIV \gets F_{k_1}(m)$; $s \gets \mathsf{Enc}_{k_2}(SIV,m)$; \\ output $c = \lef
 \item SIV-CTR, PBKDF, salt, enc. w/o expansion, CTS.
 \end{itemize}
 \end{frame}
-\end{comment}
+%\end{comment}
 \end{document}

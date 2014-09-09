@@ -15,7 +15,7 @@
 $F_k : \{0,1\}^\ell \to \{0,1\}^\ell$, $F_k(x) \overset{\text{def}}{=} F(k,x)$. \\
 $n$ is key length, $\ell$ is block length.
 \item Constructions are \textbf{heuristic}, not proofed.
-\item Considered as \textbf{PRP in practice}.
+\item Considered as \textbf{PRP} in practice, not encryption scheme.
 \begin{itemize}
 \item In the call for proposals for AES: 
 \emph{The extent to which the algorithm output is indistinguishable from a random permutation on the input block.}
@@ -29,7 +29,10 @@ $n$ is key length, $\ell$ is block length.
 \end{frame}
 \begin{frame}\frametitle{The Confusion-Diffusion Paradigm}
 	\begin{itemize}
-	\item \textbf{Goal}: Construct \emph{concise} \footnote{A block length of $n$ bits would require $\log(2^n!) \approx n\cdot 2^n $ bits for its representation.} random-looking permutations.
+	\item \textbf{Goal}: Construct \emph{concise} random-looking permutations.
+	\begin{itemize}
+	\item \alert{Q: a block length of $n$ bits require \underline{\qquad} bits for its representation.} %$\log(2^n!) \approx n\cdot 2^n $
+	\end{itemize}
 	\item \textbf{Confusion}: making the relationship between the key and the ciphertext as complex and involved as possible. \\
 	Construct a large random-looking permutation $F$ from smaller random permutations ${f_i}$. $F_k(x) = f_1(x_1)f_2(x_2) \cdots f_{i}(x_{i})$
 	\item \textbf{Diffusion}: the redundancy in the statistics of the plaintext is dissipated in the statistics of the ciphertext.
@@ -56,10 +59,11 @@ Let $F$ be a keyed function defined by a SPN in which the $S$-boxes are all one-
 \item \textbf{Bit independence criterion}: output bits $j$ and $k$ should change independently when any single input bit $i$ is inverted, for all $i$, $j$ and $k$.
 \item $S$-box: changing a single bit of the input changes at least two bits in the output.
 \item $P$-box: the output bits of any given $S$-box are spread into different $S$-boxes in the next round.
+\item \alert{Q: For 4-bit $S$-boxes, changing 1 bit of the input affects \underline{\qquad} bits of the output after $R$ rounds of SPN.}
 \end{itemize}
-\begin{exampleblock}{}
-For 4-bit $S$-boxes, changing 1 bit of the input affects $2^R$ bits of the output after $R$ rounds of SPN.
-\end{exampleblock}
+%\begin{exampleblock}{}
+%For 4-bit $S$-boxes, changing 1 bit of the input affects $2^R$ bits of the output after $R$ rounds of SPN.
+%\end{exampleblock}
 \end{frame}
 \begin{frame}\frametitle{A Framework for KPA against Block Ciphers}
 \textbf{KPA}: know some plaintext/ciphertext pairs under the same key.
@@ -94,23 +98,33 @@ Attack on a 2-round SPN: 64-bit block, 128-bit key (2 $\times$ 64-bit sub-keys),
 \end{frame}
 \section{Feistel Networks}
 \begin{frame}\frametitle{Feistel Networks}
+\begin{columns}[t]
+\begin{column}{4cm}
 \begin{figure}
 \begin{center}
 \input{tikz/feistel}
 \end{center}
 \end{figure}
-\end{frame}
-\begin{frame}\frametitle{Properties of Feistel Networks}
+\end{column}
+\begin{column}{6cm}
 \begin{itemize}
 \item \textbf{Idea}: Construct an invertible function from non-invertible components.
-\item \textbf{Round function} $f_i(R) \overset{def}{=} \hat{f}_i(k_i,R)$ ($\hat{f}_i$ mangler function).
-\item \textbf{Output}: $L_i := R_{i-1}$ and $R_i := L_{i-1} \oplus f_i(R_{i-1})$.
-\item \textbf{Inverting}: $L_{i-1} := R_i \oplus f_i(R_{i-1}) = R_i \oplus f_i(L_i)$.
+%\item \textbf{Round function} $f_i(R) \overset{def}{=} \hat{f}_i(k_i,R)$ ($\hat{f}_i$ mangler function).
+\item $L_i := R_{i-1}$ and $R_i := L_{i-1} \oplus f_i(R_{i-1})$
+\item \alert{\textbf{Inverting}: $L_{i-1} :=\ ?$} %R_i \oplus f_i(R_{i-1}) = R_i \oplus f_i(L_i)$.
 \item \textbf{Decryption}: Operate with sub-keys in reverse order.
 \end{itemize}
 \begin{proposition}
-\textbf{Luby-Rackoff Theorem}: Let $F$ be a keyed function defined by a Feistel network. Then regardless of the mangler functions $\{\hat{f}_i\}$ and the number of rounds, $F_k$ is a permutation for any choice of $k$.
+\textbf{Luby-Rackoff Theorem}: Regardless of the mangler functions $\{\hat{f}_i\}$ and the number of rounds, $F_k$ is a permutation for any choice of $k$.
 \end{proposition}
+\end{column}
+\end{columns}
+\end{frame}
+\begin{frame}\frametitle{Examples}
+\begin{exampleblock}{What is the output of an $r$-round Feistel network when the input is $(L_0, R_0)$ in each of the following two cases:}
+(a) Each round function $F$ outputs all $0$s, regardless of the input.\\
+(b) Each round function $F$ is the identity function.
+\end{exampleblock}
 \end{frame}
 \section{DES -- The Data Encryption Standard}
 \begin{frame}\frametitle{The Design of DES}
@@ -328,8 +342,8 @@ Without I/O pairs of any $f$, we know the inputs of $f_1$ and $f_3$ and the XOR 
 \end{enumerate}
 \emph{See an animation of Rijndael!}.
 \end{frame}
-\begin{comment}
-\section{Differential and Linear Cryptanalysis -- A Brief Look}
+%\begin{comment}
+\section{Differential and Linear Cryptanalysis -- A Brief Look (FYI)}
 \begin{frame}\frametitle{Linear Cryptanalysis}
 \begin{itemize}
 \item Linear relationships between the input and output: \\
@@ -400,7 +414,7 @@ the bit positions $i_1, ... ,i_\ell$ and $i_1', ... , i_\ell'$ have \textbf{bias
 \end{center}
 \end{figure}
 \end{frame}
-\end{comment}
+%\end{comment}
 \begin{frame}\frametitle{Summary}
 \begin{itemize}
 \item Block cipher is PRP.

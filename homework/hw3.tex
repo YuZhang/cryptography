@@ -22,11 +22,20 @@
 \maketitle
 
 \begin{problem}
-Let $F$ be a pseudorandom function. Show that the following MAC for messages of length $2n$ is insecure: The shared key is a random $k\in \{0,1\}^n$. To authenticate a message $m_1\| m_2$ with $\abs{m_1} =\abs{m_2} = n$, compute the tag $\langle F_k(m_1), F_k(F_k(m_2))\rangle$. 
+In our attack on a two-round substitution-permutation network, we considered a block length of 64 bits and a network with 16 $S$-boxes that each take a 4-bit input. 
+\begin{enumerate}
+\item Repeat the analysis for the case of 8 $S$-boxes, each taking an 8-bit input. What is the complexity of the attack now?
+\item Repeat the analysis again with a 128-bit block length and 16 $S$-boxes that each take an 8-bit input.
+\item Does the block length make any difference?
+\end{enumerate}
 \end{problem}
 
 \begin{problem}
-Show that the basic CBC-MAC construction is not secure when used to authenticate messages of different lengths.
+Show that DES has the property that $DES_k(x) = \overline{DES_{\overline{k}}(\overline{x})}$ for every key $k$ and input $x$ (where $\overline{z}$ denotes the bitwise complement of $z$). This is called the complementarity property of $DES$.
+\end{problem}
+
+\begin{problem}
+Let $F$ be a pseudorandom function. Show that the following MAC for messages of length $2n$ is insecure: The shared key is a random $k\in \{0,1\}^n$. To authenticate a message $m_1\| m_2$ with $\abs{m_1} =\abs{m_2} = n$, compute the tag $\langle F_k(m_1), F_k(F_k(m_2))\rangle$. 
 \end{problem}
 
 \begin{problem}
@@ -35,13 +44,20 @@ Let $(\mathsf{Gen},H)$ be a collision-resistant hash function. Is $(\mathsf{Gen}
 
 \begin{problem}
 For each of following modifications to the Merkle-Damg\r{a}rd transform, determine whether the result is collision resistant or not. If yes, provide a proof; if not, demonstrate an attack.
-
 \begin{enumerate}
 \item Modify the construction so that the input length is not included at all (i.e, output $z_B$ and not $z_{B+1} = h^s(z_B\| L)$).
 \item Modify the construction so that instead of outputting $z = h^s(z_B\| L)$, the algorithm outputs $z_B\|L$
 \item Instead of using an $IV$, just start the computation from $x_1$. That is, define $z_1 := x_1$ and then compute $z_i := h^s(z_{i-1}\|x_i)$ for $i=2,\dotsc,B+1$ and output $z_{B+1}$ as before.
 \item Instead of using a fixed $IV$, set $z_0 := L$ and then compute $z_i := h^s(z_{i-1}\|x_i)$ for $i=1,\dotsc,B$ and output $z_B$.
 \end{enumerate}
+\end{problem}
+
+%\begin{problem}
+%Prove that if $f$ is a one-way function, then $g(x_1,x_2) = (f(x_1),x_2)$ where $\abs{x_1} = \abs{x_2}$ is also a one-way function. Observe that $g$ fully reveals half of its input bits, but is nevertheless still one-way.
+%\end{problem}
+
+\begin{problem}
+Let $f$ be a one-way function. Is $g(x) = f(f(x))$ necessarily a one-way function? What about $g(x) = (f(x),f(f(x)))$? Prove your answers.
 \end{problem}
 
 \end{document}
