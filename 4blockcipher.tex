@@ -139,6 +139,28 @@ Attack on a 2-round SPN: 64-bit block, 128-bit key (2 $\times$ 64-bit sub-keys),
 \item $S$-box is a 4-to-1 function, mapping 6-bit to 4-bit.
 \end{itemize}
 \end{frame}
+\begin{frame}\frametitle{Overview of DES}
+\begin{algorithm}[H]
+\SetKwInOut{Input}{input}
+\SetKwInOut{Output}{output}
+\SetKw{KwK}{KeySchedule}
+\SetKw{KwC}{compute}
+\DontPrintSemicolon
+\caption{$\mathsf{DES}$}
+\Input{key $k$, message $m$}
+\Output{ciphertext $c$}
+\BlankLine
+$(k_{1},\dots,k_{16}) \gets KeySchedule(k)$\;
+$m \gets IP(m)$\;
+Parse $m$ as $L_{0}\| R_{0}$\;
+\For{$r=1$ \KwTo 16}{
+$L_{r} \gets R_{r-1}$\;
+$R_{r} \gets f(k_{r},R_{r-1})\oplus L_{r-1}$\;
+}
+$c \gets IP^{-1}(L_{16}\| R_{16})$\;
+\Return $c$\;
+\end{algorithm}
+\end{frame}
 \begin{frame}\frametitle{The DES Mangler Function}
 \begin{figure}
 \begin{center}
@@ -285,7 +307,7 @@ Without I/O pairs of any $f$, we know the inputs of $f_1$ and $f_3$ and the XOR 
 \item $\mathcal{O}(2^n)$ time and $\mathcal{O}(2^n)$ space.
 \end{itemize}
 \end{frame}
-\begin{comment}
+%\begin{comment}
 \begin{frame}\frametitle{DESX}
 \begin{figure}
 \begin{center}
@@ -301,7 +323,7 @@ Without I/O pairs of any $f$, we know the inputs of $f_1$ and $f_3$ and the XOR 
 
 \textbf{Security}: $\abs{k}=184$, but break in time $2^{64+56}$.
 \end{frame}
-\end{comment}
+%\end{comment}
 \begin{frame}\frametitle{Triple Encryption}
 \begin{figure}
 \begin{center}
@@ -315,7 +337,7 @@ Without I/O pairs of any $f$, we know the inputs of $f_1$ and $f_3$ and the XOR 
 \item \textbf{Triple-DES} (3DES): strong, but small block length and slow.
 \end{itemize}
 \end{frame}
-\section{AES -- The Advanced Encryption Standard}
+\section{AES -- The Advanced Encryption Standard (FYI)}
 \begin{frame}\frametitle{AES -- The Advanced Encryption Standard}
 \begin{itemize}
 \item In 1997, NIST calls for AES.
@@ -332,14 +354,36 @@ Without I/O pairs of any $f$, we know the inputs of $f_1$ and $f_3$ and the XOR 
 \end{itemize}
 \end{itemize}
 \end{frame}
-\begin{frame}\frametitle{The AES Construction}
-\textbf{State}: 4-by-4 array of bytes. The initial state is the plaintext.
-\begin{enumerate}
-\item \textbf{AddRoundKey}: state XORed with the 128-bit sub-key.
-\item \textbf{SubBytes}: each byte replaced according to a single $S$-box.
-\item \textbf{ShiftRows}: each row cyclically shifted. 
-\item \textbf{MixColumns}: each column multiplied by a matrix.
-\end{enumerate}
+%\begin{frame}\frametitle{The AES Construction}
+%\textbf{State}: 4-by-4 array of bytes. The initial state is the plaintext.
+%\begin{enumerate}
+%\item \textbf{AddRoundKey}: state XORed with the 128-bit sub-key.
+%\item \textbf{SubBytes}: each byte replaced according to a single $S$-box.
+%\item \textbf{ShiftRows}: each row cyclically shifted. 
+%\item \textbf{MixColumns}: each column multiplied by a matrix.
+%\end{enumerate}
+%\end{frame}
+\begin{frame}\frametitle{Overview of AES}
+\begin{algorithm}[H]
+\SetKwInOut{Input}{input}
+\SetKwInOut{Output}{output}
+\SetKw{KwK}{KeySchedule}
+\SetKw{KwC}{compute}
+\DontPrintSemicolon
+\caption{$\mathsf{AES}$}
+\Input{key $k$, message $m$}
+\Output{ciphertext $c$}
+\BlankLine
+$(k_{1},\dots,k_{10}) \gets Expand(k)$\;
+$s \gets m\oplus k_{0}$\;
+\For{$r=1$ \KwTo 10}{
+$s \gets SubBytes(s)$\;
+$s \gets ShiftRows(s)$\;
+\lIf{$r \le 9 $}{$s \gets MixColumns(s)$}\;
+$s \gets s\oplus k_{R}$\;
+}
+\Return $c \gets s$\;
+\end{algorithm}
 \emph{See an animation of Rijndael!}.
 \end{frame}
 %\begin{comment}
@@ -372,6 +416,8 @@ the bit positions $i_1, ... ,i_\ell$ and $i_1', ... , i_\ell'$ have \textbf{bias
 \includegraphics[width=100mm]{pic/linear-table} 
 \end{center}
 \end{figure}
+$x_{2}\oplus x_{3} = y_{1}\oplus y_{3} \oplus y_{4}$ for 12 times, the bias is $12 - 8 =4$ times
+$x_{2}\oplus x_{3}: 0110 = 6,\quad y_{1}\oplus y_{3} \oplus y_{4}: 1011=B$, so $(6, B) =4$
 \end{frame}
 \begin{frame}\frametitle{An Example of Linear Cryptanalysis}
 \begin{figure}
@@ -406,6 +452,7 @@ the bit positions $i_1, ... ,i_\ell$ and $i_1', ... , i_\ell'$ have \textbf{bias
 \includegraphics[width=100mm]{pic/difference-table} 
 \end{center}
 \end{figure}
+$\Delta X = 1011 = B, \Delta Y = 0010 = 2$ for 8 times, so $(B, 2) = 8$
 \end{frame}
 \begin{frame}\frametitle{An Example of Differential Cryptanalysis}
 \begin{figure}

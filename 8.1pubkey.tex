@@ -1,6 +1,6 @@
 \input{main.tex}
 
-\title{Public-Key Encryption and RSA Encryption}
+\title{Public-Key Encryption Theory}
 
 \begin{document}
 \maketitle
@@ -193,6 +193,74 @@ If $\Pi$ is a CPA-secure public-key encryption scheme and $\Pi'$ is a private-ke
 \end{center}
 \end{figure}
 \end{frame}
+\section{Trapdoor Permutations}
+\begin{frame}\frametitle{Overview}
+\textbf{Trapdoor function}: is easy to compute, yet difficult to find its inverse without special info., the ``trapdoor''. (One Way Function with the ``trapdoor'')
+\newline
+
+A public-key encryption scheme can be constructed from any trapdoor permutation. (``\emph{Theory and Applications of Trapdoor Functions}'', [Yao, 1982])
+\begin{figure}
+\begin{center}
+\input{tikz/trapdoor.tex}
+\end{center}
+\end{figure}
+\end{frame}
+\begin{frame}\frametitle{Definition of Families of Trapdoor Permutations}
+A tuple of polynomial-time algorithms $\Pi = (\mathsf{Gen}, \mathsf{Samp}, f, \mathsf{Inv})$ is a \textbf{family of trapdoor permutations (TDP)} if:
+\begin{itemize}
+\item \textbf{parameter generation} algorithm $\mathsf{Gen}$, on input $1^n$, outputs $(I,\mathsf{td})$ with $\abs{I} \ge n$. $(I, \mathsf{td})$ defines a set $\mathcal{D}_I = \mathcal{D}_{\mathsf{td}}$.
+\item $\mathsf{Gen}_I$ outputs only $I$.
+$(\mathsf{Gen}_I, \mathsf{Samp}, f)$ is OWP.
+\item deterministic \textbf{inverting algorithm} $\mathsf{Inv}$. $\forall (I,\mathsf{td})$ and $\forall x \in \mathcal{D}_{I}$, 
+\[ \mathsf{Inv}_{\mathsf{td}}(f_I(x))=x.\]
+\end{itemize}
+Deterministic polynomial-time algorithm $\mathsf{hc}$ is a \textbf{hard-core predicate} of $\Pi$ if $\forall$ \textsc{ppt} $\mathcal{A}$, $\exists$ $\mathsf{negl}$ such that
+\[ \Pr[\mathcal{A}(I,f_I(x)) = \mathsf{hc}_I(x)] \le \frac{1}{2} +\mathsf{negl}(n). \]
+\end{frame}
+\begin{frame}\frametitle{Public-key Encryption Schemes from TDPs}
+\begin{construction}
+\begin{itemize}
+\item $\mathsf{Gen}$: $(I, \mathsf{td}) \gets \widehat{Gen}$ output \textbf{public key} $I$ and \textbf{private key} $\mathsf{td}$.
+\item $\mathsf{Enc}$: on input $I$ and $m \in \{0,1\}$, choose a random $x\gets \mathcal{D}_I$ and output $\langle f_I(x), \mathsf{hc}_I(x)\oplus m \rangle$.
+\item $\mathsf{Dec}$: on input $\mathsf{td}$ and $\langle y, m'\rangle$, compute $x:= f^{-1}_I(y)$ and output $\mathsf{hc}_I(x)\oplus m'$.
+\end{itemize}
+\end{construction}
+\begin{theorem}
+If $\widehat{\Pi}=(\widehat{Gen},f)$ is TDP, and $\mathsf{hc}$ is HCP for $\widehat{\Pi}$, then Construction $\Pi$ is CPA-secure.
+\end{theorem}
+\end{frame}
+\begin{frame}\frametitle{Proof}
+\textbf{Idea}: $\mathsf{hc}_I(x)$ is pseudorandom. Reduce $\mathcal{A}_{\mathsf{hc}}$ for $\mathsf{hc}$ to $\mathcal{A}$ for $\Pi$.
+\begin{figure}
+\begin{center}
+\input{tikz/tdp-pk}
+\end{center}
+\end{figure}
+\[\Pr[\mathcal{A}_{\mathsf{hc}}(I,f_I(x))=\mathsf{hc}_I(x)] = \]
+\[\frac{1}{2}\cdot (\Pr[b'=b|z=\mathsf{hc}_I(x)]+\Pr[b'\neq b|z\neq \mathsf{hc}_I(x)]).\]
+\end{frame}
+\begin{frame}\frametitle{Proof (Cont.)}
+\[\Pr[b'=b|z=\mathsf{hc}_I(x)] = \Pr[\mathsf{PubK}^{\mathsf{eav}}_{\mathcal{A},\Pi}(n)=1]=\varepsilon(n).\]
+If $z \neq \mathsf{hc}_I(x)$, $m' = m_b\oplus \overline{\mathsf{hc}}_I(x) = m_{\overline{b}}\oplus \mathsf{hc}_I(x)$,
+\[\Pr[b'=b|z\neq \mathsf{hc}_I(x)] = \Pr[\mathsf{PubK}^{\mathsf{eav}}_{\mathcal{A},\Pi}(n)=0]=1-\varepsilon(n).\]
+\[\Pr[b'\neq b|z\neq \mathsf{hc}_I(x)] =\varepsilon(n).\]
+\[\Pr[\mathcal{A}_{\mathsf{hc}}(I,f_I(x))=\mathsf{hc}_I(x)] = \frac{1}{2}\cdot (\varepsilon(n)+\varepsilon(n)) = \varepsilon(n).\]
+\end{frame}
+\begin{frame}\frametitle{Encrypting Longer Messages}
+\begin{theorem}
+If $\exists$ TDP $\Pi$, then $\exists$ TDP $\widehat{\Pi}$ with a HCP $\mathsf{hc}$ for $\widehat{\Pi}$.
+\end{theorem}
+\textbf{Example}: If RSA assumption holds then the least-significant bit is hard-core for the RSA family of TDP.
+\newline
+
+an $\ell$-it message $m=m_1\cdots m_{\ell}$, the public key $I$, the ciphertext is
+\[\langle f_I(x_1), \mathsf{hc}_I(x_I)\oplus m_1\rangle,\dotsc,\langle f_I(x_{\ell}), \mathsf{hc}_I(x_{\ell})\oplus m_{\ell}\rangle,\]
+with $x_1,\dotsc,x_{\ell}$ chosen independently and \emph{u.r.a} from $\mathcal{D}_I$.
+\newline
+
+An alternative way: $x_1\gets \mathcal{D}_I$ and compute $x_{i+1} := f_I(x_i)$ for $i=1$ to $\ell$. the ciphertext is 
+\[\langle x_{\ell+1},\mathsf{hc}_I(x_1)\oplus m_1,\dotsc,\mathsf{hc}_I(x_{\ell})\oplus m_{\ell}\rangle.\]
+\end{frame}
 \section{Security Against Chosen-Ciphertext Attacks}
 \begin{frame}\frametitle{Scenarios of CCA in Public-Key Setting}
 \begin{enumerate}
@@ -233,6 +301,117 @@ $\Pi$ has \textbf{CCA/CCA2-secure} if $\forall$ \textsc{ppt} $\mathcal{A}$, $\ex
 Constructing a CCA2-secure scheme based on RSA problem as efficient as ``Textbook RSA''.
 \end{block}
 \end{frame}
+\section{Public-Key Encryption from TDP in ROM}
+%\section{The Random Oracle Methodology}
+\begin{frame}\frametitle{Random Oracle Model (ROM) -- Overview}
+\begin{itemize}
+\item \textbf{Random oracle (RO)}: a truly random function $H$ answers every possible query with a random response.
+\begin{itemize}
+\item \textbf{Consistent}: If $H$ ever outputs $y$ for an input $x$ ``on-the-fly'', then it always outputs the same answer given the same input.
+\item No one ``knows'' the entire function $H$.
+\end{itemize}
+\item \textbf{Random oracle model (ROM)}: the existence of a public RO.
+%\item \textbf{Standard Model}: the adversary is only limited by time and computational power.
+\item \textbf{Methodology}: for constructing proven security in ROM.
+\begin{enumerate}
+\item a scheme is designed and proven secure in ROM.
+\item Instantiate $H$ with a hash function $\hat{H}$, such as SHA-1.
+\end{enumerate}
+\item \alert{No one seriously claims that a random oracle exists}.\footnote{There exists schemes that are proven secure in ROM but are insecure no matter how the random oracle is instantiated.}
+\end{itemize}
+\emph{With ROM, it is easy to achieve proven security, while keeping the efficiency by appropriate instantiation.}
+\end{frame}
+%\begin{frame}\frametitle{ROM in Detail}
+%\begin{itemize}
+%\item \textbf{Consistent}: If $H$ ever outputs $y$ for an input $x$ ``on-the-fly'', then it always outputs the same answer given the same input.
+%\item No one ``knows'' the entire function $H$.
+%\item \textbf{PRF vs. RO}: PRF emulates RO, and has different usage:
+%\begin{itemize}
+%\item PRF: a way of defining what it means for a concrete keyed function to be pseudorandom.
+%\item RO: as part of the construction of the primitive, and so must be instantiated if we want a concrete realization.
+%\end{itemize}
+%\end{itemize}
+%\end{frame}
+\begin{frame}\frametitle{Simple Illustrations of ROM}
+A RO maps $n_1$-bit inputs to $n_2$-bit outputs.
+\begin{itemize}
+\item A RO as a OWF, experiment:
+\begin{enumerate}
+\item A random function $H$ is chosen.
+\item A random $x \in \{0,1\}^{n_1}$ is chosen, and $y := H(x)$ is evaluated.
+\item $\mathcal{A}$ is given $y$, and succeeds if it outputs $x'$: $H(x')=y$.
+\end{enumerate}
+\item A RO as a CRHF, experiment:
+\begin{enumerate}
+\item A random function $H$ is chosen.
+\item $\mathcal{A}$ succeeds if it outputs $x, x'$ with $H(x)=H(x')$ but $x\neq x'$.
+\end{enumerate}
+\item Constructing a PRF from a RO: $n_1=2n$, $n_2=n$.
+$ F_k(x) \overset{\text{def}}{=} H(k\| x),\;\; \abs{k}=\abs{x}=n.$
+\end{itemize}
+\end{frame}
+%\begin{frame}\frametitle{Is the Random Oracle Methodology Sound?}
+%\begin{itemize}
+%\item \textbf{Pro}:
+%\begin{itemize}
+%\item enables the design of more efficient schemes.
+%\item better than no proof at all.
+%\item only possible weaknesses are due to the hash function.
+%\item few real-world attacks on ``natural'' secure schemes in ROM.
+%\end{itemize}
+%\item \textbf{Con}:
+%\begin{itemize}
+%\item No proof that security in ROM implies real-world security.
+%\item The reduction can not see ``queries'' in the real world.
+%\item Not well understand what is a ``good'' CRHF/PRF like a RO.
+%\end{itemize}
+%\end{itemize}
+%\begin{itemize}
+%\item What does security in the ROM guarantee in the real world?
+%\item Are ROM fundamentally different from the standard model?
+%\end{itemize}
+%\end{frame}
+\begin{frame}\frametitle{Security Against CPA}
+\begin{construction}
+\begin{itemize}
+\item $\mathsf{Gen}$: $pk =  I $, $sk = \mathsf{td} $.
+\item $\mathsf{Enc}$: $r \gets \{0,1\}^*$, output $\langle f_I(r), H(r)\oplus m\rangle$.
+\item $\mathsf{Dec}$: input $(c_1,c_2)$; compute $r := f_{\mathsf{td}}^{-1}(c_1)$, output $H(r)\oplus c_2$.
+\end{itemize}
+\end{construction}
+\begin{theorem}
+If $f$ is TPD and $H$ is RO, Construction is CPA-secure.
+\end{theorem}
+\alert{$H$ can not be replaced by PRG, since the partial info on $r$ may be leaked by $c_1$.}
+\end{frame}
+\begin{frame}\frametitle{CCA-secure based on Private Key Encryption}
+\textbf{Idea}: PubK CCA = PrivK CCA + (Secret Key = TPD + RO).  
+\begin{construction}
+$\Pi' = (\mathsf{Gen}', \mathsf{Enc}', \mathsf{Dec}')$ is a private-key encryption scheme.
+\begin{itemize}
+\item $\mathsf{Gen}$: $pk = I$, $sk = \mathsf{td}$.
+\item $\mathsf{Enc}$: $r \gets D_I$ and compute $k := H(r)$, output $\langle f_I(r), \mathsf{Enc}'_k(m)\rangle$.
+\item $\mathsf{Dec}$: input $\langle c_1,c_2\rangle$, compute $r := f^{-1}_{\mathsf{td}}(c_1)$, $k:=H(r)$, output $\mathsf{Dec}'_k(c_2)$.
+\end{itemize}
+\end{construction}
+\begin{theorem}
+If $f$ is TDP, $\Pi'$ is CCA-secure, and $H$ is RO, Construction is CCA-secure.
+\end{theorem}
+\end{frame}
+\begin{frame}\frametitle{CCA-secure based on TPD in ROM}
+\textbf{Idea}: PubK CCA = TDP + 2 RO (one for enc, one for mac).  
+\begin{construction}
+\begin{itemize}
+\item $\mathsf{Gen}$: $pk = I$, $sk = \mathsf{td}$.
+\item $\mathsf{Enc}$: $r \gets D_I$, output $\langle c_1=f_I(r), c_2 = H(r)\oplus m, c_3=G(c_2\|m)\rangle$.
+\item $\mathsf{Dec}$: $r := f^{-1}_{\mathsf{td}}(c_1)$, $m := H(r)\oplus c_2$. If $G(c_2\|m) = c_3$ output $m$, otherwise $\perp$.
+\end{itemize}
+\end{construction}
+\begin{theorem}
+If $f$ is TDP, $G,H$ are ROs, Construction is CCA-secure.
+\end{theorem}
+\end{frame}
+
 \begin{frame}\frametitle{Private Key Encryption vs. Public Key Encryption}
 \begin{center}
 \begin{tabular}{|c|c|c|} \hline
@@ -245,270 +424,5 @@ Constructing a CCA2-secure scheme based on RSA problem as efficient as ``Textboo
 \textbf{Efficiency}               & fast         & slow     \\ \hline
 \end{tabular}	
 \end{center}
-\end{frame}
-\section{RSA Assumption}
-\begin{frame}\frametitle{The RSA Problem}
-\begin{block}{Recall group exponentiation on $\mathbb{Z}^*_N$}
-Define function $f_e\;:$ $\mathbb{Z}^*_N \to \mathbb{Z}^*_N$ by $f_e(x) =[x^e \bmod N]$. \\ If $\gcd(e,\phi(N))=1$, then $f_e$ is a permutation. \\
-If $d = [e^{-1} \bmod \phi(N)]$, then $f_d$ is the inverse of $f_e$.\\
-\textbf{$e$'th root of $c$}: $g^e = c$, $g = c^{1/e} = c^{d}$. 
-\end{block}
-\textbf{Idea}: factoring is hard\\ $\implies$ for $N=pq$, finding $p,q$ is hard\\ $\implies$ computing $\phi(N)=(p-1)(q-1)$ is hard\\ $\implies$ computations modulo $\phi(N)$ is not available\\ 
-\alert{\textbf{There is a gap.}}\\
-$\implies$ \textbf{RSA problem} [Rivest, Shamir, and Adleman] is hard:\\
-Given $y \in \mathbb{Z}^*_N$, compute $y^{-e}$, $e^{\text{th}}$-root of $y$ modulo $N$.
-\begin{alertblock}{Open problem}
-RSA problem is easier than factoring?
-\end{alertblock}
-\end{frame}
-\begin{frame}\frametitle{Generating RSA Problem}
-\begin{algorithm}[H]
-\SetKwInOut{Input}{input}
-\SetKwInOut{Output}{output}
-\SetKw{KwF}{find}
-\SetKw{KwC}{compute}
-\DontPrintSemicolon
-\caption{$\mathsf{GenRSA}$}
-\Input{Security parameter $1^n$}
-\Output{$N,e,d$}
-\BlankLine
-$(N,p,q) \gets \mathsf{GenModulus}(1^n)$\;
-$\phi(N) := (p-1)(q-1)$\;
-\KwF $e$ such that $\gcd(e,\phi(N))=1$\;
-\KwC $d := [e^{-1} \bmod \phi(N)]$\;
-\Return $N,e,d$\;
-\end{algorithm}
-\end{frame}
-\begin{frame}\frametitle{The RSA Assumption}
-The RSA experiment $\mathsf{RSAinv}_{\mathcal{A},\mathsf{GenRSA}}(n)$:
-\begin{enumerate}
-\item Run $\mathsf{GenRSA}(1^n)$ to obtain $(N,e,d)$.
-\item Choose $y \gets \mathbb{Z}^*_N$.
-\item $\mathcal{A}$ is given $N,e,y$, and outputs $x \in \mathbb{Z}^*_N$.
-\item $\mathsf{RSAinv}_{\mathcal{A},\mathsf{GenRSA}}(n)=1$ if $x^e \equiv y \pmod N$, and 0 otherwise.
-\end{enumerate}
-\begin{definition}
-\textbf{RSA problem is hard relative to} $\mathsf{GenRSA}$ if $\forall$ \textsc{ppt} algorithms $\mathcal{A}$, $\exists$ $\mathsf{negl}$ such that
-\[ \Pr[\mathsf{RSAinv}_{\mathcal{A},\mathsf{GenRSA}}(n) = 1] \le \mathsf{negl}(n).\]
-\end{definition}
-\end{frame}
-\section{``Textbook RSA'' Encryption}
-\begin{frame}\frametitle{``Textbook RSA''}
-\begin{construction}
-\begin{itemize}
-\item $\mathsf{Gen}$: on input $1^n$ run $\mathsf{GenRSA}(1^n)$ to obtain $N,e,d$. $pk = \langle N,e \rangle$ and $sk = \langle N,d \rangle$.
-\item $\mathsf{Enc}$: on input $pk$ and $m \in \mathbb{Z}^*_N$, $c:= [m^e \bmod N]$.
-\item $\mathsf{Dec}$: on input $sk$ and $m \in \mathbb{Z}^*_N$, $m:= [c^d \bmod N]$.
-\end{itemize}
-\end{construction}
-\begin{alertblock}{Insecurity}
-Since the ``textbook RSA'' is deterministic, it is insecure with respect to any of the definitions of security we have proposed. 
-\end{alertblock}
-\end{frame}
-\begin{frame}\frametitle{RSA Implementation Issues}
-\begin{itemize}
-\item \textbf{Encoding binary strings as elements of} $\mathbb{Z}^*_N$: $\ell = \|N\|$. Any binary string $m$ of length $\ell - 1$ can be viewed as an element of $Z_N$. Although $m$ may not be in $Z_N^*$, RSA still works.
-\item \textbf{Choice of} $e$: Either $e=3$ or a small $d$ are bad choices. \\
-      Recommended value: $e=65537=2^{16}+1$
-\item \textbf{Using the Chinese remainder theorem}: to speed up the decryption.\\
-\[ [c^d \bmod N] \leftrightarrow ([c^d \bmod p],[c^d \bmod q]). \]
-Assume that exponentiation modulo a $v$-bit integer takes $v^3$ operations. RSA decryption takes $(2n)^3=8n^3$, whereas using CRT takes $2n^3$. 
-\end{itemize}
-\end{frame}
-\begin{frame}\frametitle{Example of ``Textbook RSA''}
-\begin{exampleblock}{$N=253$, $p=11$, $q=23$, $e=3$, $d=147$, $\phi(N)=220$.}
-$m=0111001=57$.\\
-Encryption: $250 := [57^3 \bmod 253]$.\\
-Decryption: $57 := [250^{147} \bmod 253]$.
-\newline
-
-Using CTR,
-\[ [250^{[147 \bmod 10]} \bmod 11] = [8^7 \bmod 11] = 2\]
-\[ [250^{[147 \bmod 22]} \bmod 23] = [20^{15} \bmod 23] = 11\]
-$57 \leftrightarrow (2,11)$.
-\end{exampleblock}
-\end{frame}
-\begin{frame}\frametitle{Attacks on ``Textbook RSA'' with a small $e$}
-\textbf{Small $e$ and small $m$ make modular arithmetic useless.}
-\begin{itemize}
-\item If $e=3$ and $m < N^{1/3}$, then $c = m^3$ and $m=c^{1/3}$.
-\item In the hybrid encryption, 1024-bit RSA with 128-bit DES.
-\end{itemize}
-
-\textbf{A general attack when small $e$ is used:}
-\begin{itemize}
-\item $e=3$, the same message $m$ is sent to 3 different parties.
-\item $c_1= [ m^3 \bmod N_1]$, $c_2= [ m^3 \bmod N_2]$, $c_3= [ m^3 \bmod N_3]$.
-\item $N_1,N_2,N_3$ are coprime, and $N^*=N_1N_2N_3$, $\exists$ unique $\hat{c} < N^*$:\\
-$\hat{c} \equiv c_1 \pmod{N_1}$, $\hat{c} \equiv c_2 \pmod{N_2}$, $\hat{c} \equiv c_3 \pmod{N_3}$.
-\item With CRT, $\hat{c} \equiv m^3 \pmod{N^*}$. Since $m^3 < N^*$, $m = \hat{c}^{1/3}$.
-\end{itemize}
-\end{frame}
-\begin{comment}
-\begin{frame}\frametitle{A Quadratic Improvement in Recovering $m$}
-If $1 \le m < \mathcal{L} = 2^{\ell}$, there is an attack that recovers $m$  in time $\sqrt{\mathcal{L}}$.
-\begin{algorithm}[H]
-\SetKwInOut{Input}{input}
-\SetKwInOut{Output}{output}
-\SetKw{KwS}{set}
-\SetKw{KwT}{sort}
-\DontPrintSemicolon
-\caption{An attack on textbook RSA encryption}
-\Input{Public key $\langle N,e \rangle$; ciphertext $c$; parameter $\ell$}
-\Output{$m < 2^{\ell}$ such that $m^e \equiv c \pmod N$}
-\BlankLine
-
-\KwS $T := 2^{\alpha \ell}$ \tcc*[f]{$\frac{1}{2} < \text{constant}\; \alpha <1$}\;
-\lFor{$r=1$ \KwTo $T$}{$x_r := [c/r^e \bmod N]$}\;
-\KwT the pairs $\{ (r,x_r)\}^T_{r=1}$ by $x_r$\;
-\For{$s=1$ \KwTo $T$}{
-\If{$[s^e \bmod N] \overset{?}{=} x_r$ for some $r$}{
- \Return $[r\cdot s \bmod N]$\;
-}
-}
-\Return fail\;
-\end{algorithm}
-It can be shown that with good probability that $m=r\cdot s$:
-\[ c \equiv m^e = (r\cdot s)^e = r^e\cdot s^e \pmod N \]
-\end{frame}
-\end{comment}
-\begin{frame}\frametitle{Common Modulus Attacks}
-\textbf{Common Modulus Attacks}: the same modulus $N$.
-\newline
-
-\textbf{Case I}: for multiple users with their own secret keys.\\
-Each user can find $\phi(N)$ with his own $e,d$, then find others' $d$.
-\newline
-
-\textbf{Case II}: for the same message encrypted with two public keys.\\
-Assume $\gcd(e_1,e_2)=1$, $c_1 \equiv m^{e_1}$ and $c_2 \equiv m^{e_2} \pmod N$. $\exists X,Y$ such that $Xe_1 + Ye_2 = 1$.
-\[ c_1^X\cdot c_2^Y \equiv m^{Xe_1}m^{Ye_2} \equiv m^1 \pmod N.\]
-\end{frame}
-\begin{frame}\frametitle{CCA in ``Textbook RSA'' Encryption}
-\begin{exampleblock}{Recovering the message with CCA}
-$\mathcal{A}$ choose a random $r \gets \mathbb{Z}^*_N$ and compute $c' = [r^e\cdot c \bmod N]$, and get $m'$ with CCA. Then $m= [m'\cdot r^{-1}\bmod N]$.
-\[ m'\cdot r^{-1} \equiv (c')^dr^{-1} \equiv (r^e\cdot m^e)^dr^{-1} \equiv r^{ed}m^{ed}r^{-1} \equiv rmr^{-1} \equiv m.\]	
-\end{exampleblock}
-\begin{exampleblock}{Doubling the bid at an auction}
-The ciphertext of an bid is $c = [m^e \bmod N]$. $c'= [2^ec \bmod N]$.
-\[(c')^d \equiv (2^em^e)^d \equiv 2^{ed}m^{ed}\equiv 2m.\]
-\end{exampleblock}
-\end{frame}
-\section{RSA Encryption in Practice}
-\begin{frame}\frametitle{Padded RSA}
-\textbf{Idea}: add randomness to improve security.
-\begin{construction}
-Let $\ell$ be a function with $\ell(n) \le 2n-2$ for all $n$.
-\begin{itemize}
-\item $\mathsf{Gen}$: on input $1^n$, run $\mathsf{GenRSA}(1^n)$ to obtain $(N,e,d)$. Output $pk = \langle N,e \rangle$, and $sk = \langle N,d \rangle$.
-\item $\mathsf{Enc}$: on input $m \in \{0,1\}^{\ell(n)}$, choose a random string $r \gets \{0,1\}^{\|N\| - \ell(n)-1}$. Output $c:=[(r\|m)^e \bmod N]$.
-\item $\mathsf{Dec}$: compute $\hat{m} := [c^d \bmod N]$, and output the $\ell(n)$ low-order bits of $\hat{m}$.
-\end{itemize}
-\end{construction}
-$\ell$ should neither be too large ($r$ is too short in theory) nor be too small ($m$ is too short in practice).
-\begin{theorem}
-If the RSA problem is hard relative to $\mathsf{GenRSA}$, then Construction with $\ell(n)=\mathcal{O}(\log n)$ is CPA-secure.
-\end{theorem}
-\end{frame}
-\begin{comment}
-\begin{frame}\frametitle{PKCS \#1 v1.5 (RSAES-PKCS1-v1\_5)}
-\textbf{Public-Key Cryptography Standard (PKCS) \#1 version 1.5}:
-\begin{itemize}
-\item $N$ has $k$ bytes, $2^{8(k-1)} \le N < 2^{8k}$.
-\item Message $m$ has $D (\le k-11)$ bytes.
-\item Random pad $r$ has $(k-D-3)$ bytes without $\{0\}^8$.
-\item The ciphertext:
-\end{itemize}
-\[[(\{0\}^8\|\{0\}^610\|r\|\{0\}^8\|m)^e \bmod N]\] 
-\textbf{Security}: PKCS \#1 v1.5 is believed to be CPA-secure, although no proof based on the RSA assumption has ever been shown.
-\end{frame}
-\begin{frame}\frametitle{Attack on PKCS \#1 v1.5}
-\textbf{PKCS \#1 v1.5 used in HTTPS}:\\
-if the first 16 bits of message is not ``02'' which is standing for ``PKCK \#1'', then the web server returns error.\newline
-
-\textbf{CCA to infer the message $m$ of ciphertext $c$}:
-\begin{enumerate}
-\item choose a string $r$, compute $c' \gets r^e\cdot c = (r\cdot \mathsf{PKCS1}(m))^e$.
-\item send $c'$ to the web server. If the server does not return error, some bits of $m$ can be learned.
-\item change $r$ and learn other bits of $m$.
-\end{enumerate}
-
-\textbf{HTTPS Defense} [RFC 5246]: if not ``02'', set the message as a random string.
-\end{frame}
-\end{comment}
-\begin{frame}\frametitle{PKCK \#1 v2.1 (RSAES-OAEP)}
-\textbf{Optimal Asymmetric Encryption Padding} (OAEP): encode $m$ of length $n/2$ as $\hat{m}$ of length $2n$. $G, H$ are \textbf{Random Oracles}.
-\[ \hat{m}_1 := G(r)\oplus (m\| \{0\}^{n/2}), \hat{m} := \hat{m}_1 \| (r \oplus H(\hat{m}_1)).\]
-\begin{figure}
-\begin{center}
-\input{tikz/OAEP}
-\end{center}
-\end{figure}
-RSA-OAEP is CCA-secure in Random Oracle model. \footnote{It may not be secure when RO is instantiated.} [RFC 3447]
-\end{frame}
-\begin{frame}\frametitle{OAEP Improvements}
-\begin{columns}
-\begin{column}{5cm}
-\begin{figure}
-\begin{center}
-\input{tikz/OAEP-plus}
-\input{tikz/SAEP-plus}
-\end{center}
-\end{figure}
-\end{column}
-\begin{column}{5cm}
-\textbf{OAEP+}: $\forall $ trap-door permutation F, F-OAEP+ is CCA-secure.\newline
-
-\textbf{SAEP+}: RSA (e=3) is a trap-door permutation, RSA-SAEP+ is CCA-secure.\newline
-
-$W, G, H$ are Random Oracles.
-\end{column}
-\end{columns}
-\end{frame}
-\begin{frame}\frametitle{Remarks on RSA in Practice}
-\textbf{Key lengths} with comparable security :
-\begin{center}
-\begin{tabular}{|c|c|} \hline
-Symmetric & RSA  \\ \hline
-80 bits & 1024 bits   \\
-128 bits & 3072 bits  \\
-256 bits & 15360 bits \\ \hline
-\end{tabular}	
-\end{center}
-\alert{\textbf{Implementation attacks}}:\\
-\textbf{Timing attack}: 
-The time it takes to compute $c^d$ can expose $d$.
-\newline
-
-\textbf{Power attack}:
-The power consumption of a smartcard while it is computing $c^d$ can expose $d$.
-\newline
-
-\textbf{Key generation trouble} (in OpenSSL RSA key generation):\\
-Same $p$ will be generated by multiple devices (due to poor entropy at startup), but different $q$ (due to additional randomness).\\
-$N_1,N_2$ from different devices, $\gcd(N_1,N_2) = p$.\\
-Experiment result: factor 0.4\% of public HTTPS keys.
-\end{frame}
-\begin{frame}\frametitle{Faults Attack on RSA}
-\textbf{Faults attack}:
-A computer error during $c^d\bmod N$ can expose $d$.\newline
-
-Using CRT to speed up the decryption:
-\[ [c^d \bmod N] \leftrightarrow ([m_p \equiv c^d \pmod p],[m_q \equiv c^d \pmod q]).\]
-\textbf{Suppose error occurs when computing $m_q$, but no error in $m_p$.}\newline
-
-Then output is $m'$ where $m' \equiv c^d \pmod p$, $m' \not \equiv c^d \pmod q$.\\
-So $(m')^e \equiv c \pmod p$, $(m')^e \not \equiv c \pmod q$.\\
-\[\gcd((m')^e-c, N)=p.\]
-
-\textbf{A common defense}: check output. (but 10\% slowdown)
-\end{frame}
-\begin{frame}\frametitle{Summary}
-\begin{itemize}
-\item eavesdropper=CPA, CCA/CCA2 in public-key encryptions.
-\item hybrid argument, multiple encryptions.
-\item hybrid encryption, ``textbook RSA'', padded RSA, PKCS.
-\item small $e$, common modulus attacks, CCA, faults attack.
-\end{itemize}
 \end{frame}
 \end{document}

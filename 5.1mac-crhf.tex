@@ -586,9 +586,9 @@ h^s(IV\| (k\oplus \mathsf{ipad})) = k_1\| k_2.
 $(\widetilde{\mathsf{Gen}}, h)$ is CRHF. If $G$ is a PRG, then HMAC is secure.
 \end{theorem}
 \begin{itemize}
-\item HMAC is an industry standard (RFC2104) and is widely used in practice.
-\item HMAC is faster than CBC-MAC.
-\item Before HMAC, a common mistake was to use $H^s(k\| x)$.
+\item HMAC is an industry standard (RFC2104)
+\item HMAC is faster than CBC-MAC
+\item Before HMAC, a common mistake was to use $H^s(k\| x)$
 \item \alert{Verification timing attacks: (Keyczar crypto library (Python))} \\
 def Verify(key, msg, sig\underline{\ }bytes): \\
 $\qquad$ return HMAC(key, msg) == sig\underline{\ }bytes \\The problem:  implemented as a byte-by-byte comparison

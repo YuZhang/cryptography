@@ -22,24 +22,24 @@
 \item $a$ \textbf{divides} $b$: $a \mid b$ if $\exists c, ac=b$ (otherwise $a \nmid b$). \\$b$ is a \textbf{multiple} of $a$. If $a \notin \{1,b\}$, then $a$ is a \textbf{factor} of $b$. 
 \item $p > 1$ is \textbf{prime} if it has no factors.
 \item An integer $>1$ which is not prime is \textbf{composite}.
-\item $\forall a,b$, $\exists$ \textbf{quotient} $q$, \textbf{remainder} $r$: $a=qb+r$, and $0\le r < b$.
+%\item $\forall a,b$, $\exists$ \textbf{quotient} $q$, \textbf{remainder} $r$: $a=qb+r$, and $0\le r < b$.
 \item \textbf{Greatest common divisor} $\gcd(a,b)$ is the largest integer $c$ such that $c\mid a$ and $c\mid b$. $\gcd(0,b)=b$, $\gcd(0,0)$ undefined.
 \item $a$ and $b$ are \textbf{relatively prime (coprime)} if $\gcd(a,b)=1$.
 \item \textbf{Euclid's theorem}: there are infinitely many prime numbers.
 \end{itemize}
 \end{frame}
-\begin{frame}\frametitle{Fundamental Theorem of Arithmetic}
-\begin{itemize}
-\item \textbf{B\'{e}zout's lemma}: $\forall a,b,\;\exists\;X,Y:\;Xa+Yb=\gcd(a,b)$. $\gcd(a,b)$ is the smallest positive integer that can be expressed in this way.
-\item \textbf{Euclid's lemma}: If $c \mid ab$ and $\gcd(a,c)=1$, then $c \mid b$. \\
-If $p$ is prime and $p\mid ab$, then either $p \mid a$ or $p \mid b$.
-\item \textbf{Fundamental theorem of arithmetic}: $\forall N >1$, $N = \prod _i p_i^{e_i}$, $\{p_i\}$ are distinct primes and $e_i \ge 1$. This expression is unique.
-\end{itemize}
-\end{frame}
+%\begin{frame}\frametitle{Fundamental Theorem of Arithmetic}
+%\begin{itemize}
+%\item \textbf{B\'{e}zout's lemma}: $\forall a,b,\;\exists\;X,Y:\;Xa+Yb=\gcd(a,b)$. $\gcd(a,b)$ is the smallest positive integer that can be expressed in this way.
+%\item \textbf{Euclid's lemma}: If $c \mid ab$ and $\gcd(a,c)=1$, then $c \mid b$. \\
+%If $p$ is prime and $p\mid ab$, then either $p \mid a$ or $p \mid b$.
+%\item \textbf{Fundamental theorem of arithmetic}: $\forall N >1$, $N = \prod _i p_i^{e_i}$, $\{p_i\}$ are distinct primes and $e_i \ge 1$. This expression is unique.
+%\end{itemize}
+%\end{frame}
 \begin{frame}\frametitle{Modular Arithmetic}
 \begin{itemize}
 \item Remainder $r= [a\bmod N] = a - b\lfloor a/b\rfloor $  and $r<N$. $N$ is called \textbf{modulus}.
-\item \textbf{Reduction modulo} $N$: mapping $a$ to $[a \bmod N]$.
+%\item \textbf{Reduction modulo} $N$: mapping $a$ to $[a \bmod N]$.
 \item $\mathbb{Z}_N = \{0,1,\dots,N-1\} = \{a \bmod N | a \in \mathbb{Z}\}$.
 \item $a$ and $b$ are \textbf{congruent modulo} $N$: $a \equiv b \pmod N$ if $[a \bmod N] = [b \bmod N]$.
 \item $a$ is \textbf{invertible modulo} $N$ $\iff \gcd(a,N) = 1$. If $ab \equiv 1 \pmod N$, then $b=a^{-1}$ is \textbf{multiple inverse} of $a$ \textbf{modulo} $N$.
@@ -214,82 +214,102 @@ $y \gets g; z \gets 1$\;
 \Return $z$
 \end{algorithm}
 \end{frame}
-
-\section{Primes and Factoring}
-\begin{frame}\frametitle{Integer Factorization/Factoring}
-%The weak factoring experiment $\mathsf{wFactor}_{\mathcal{A}}(n)$:
-%\begin{enumerate}
-%\item Choose two $n$-bit integers $x_1, x_2$ at random.
-%\item $N := x_1\cdot x_2$.
-%\item $\mathcal{A}$ is given $N$, and outputs $x_1',x_2'$.
-%\item $\mathsf{wFactor}_{\mathcal{A}}(n) = 1 $ if $x_1'\cdot x_2' = N$ and 0 otherwise.
-%\end{enumerate}
-
-\begin{quote}
-``The problem of distinguishing prime numbers from composite numbers and of resolving the later into their prime factors is known to be one of the most important and useful in arithmetic.'' -- Gauss (1805)
-\end{quote}
-
-The ``hardest'' numbers to factor seem to be those having only large prime factors.
+\begin{frame}\frametitle{Algorithms for Factoring}
 \begin{itemize}
+\item \textbf{Factoring} $N=pq$. $p,q$ are of the same length $n$.
+\item \textbf{Trial division}: $\mathcal{O}(\sqrt{N}\cdot \mathsf{polylog}(N))$.
+\item \textbf{Pollard's $p-1$} method: effective when $p-1$ has ``small'' prime factors.
+\item \textbf{Pollard's rho} method: $\mathcal{O}(N^{1/4}\cdot \mathsf{polylog}(N))$.
+\item \textbf{Quadratic sieve} algorithm [Carl Pomerance]: sub-exponential time $\mathcal{O}(\exp(\sqrt{n\cdot \log n}))$.
 \item The best-known algorithm is the \textbf{general number field sieve} [Pollard] with time $\mathcal{O}(\exp(n^{1/3}\cdot(\log n)^{2/3}))$.
-\item RSA Factoring Challenge: RSA-768 (232 digits)
-\begin{itemize}
-\item Two years on hundreds of machines (2.2GHz/2GB, 1500 years)
-\item Factoring a 1024-bit integer: about 1000 times harder.
-\end{itemize}
 \end{itemize}
 \end{frame}
-\begin{frame}\frametitle{Generating Random Primes}
-\begin{algorithm}[H]
-\SetKwInOut{Input}{input}
-\SetKwInOut{Output}{output}
-\SetKw{KwB}{break}
-\SetKw{KwH}{halt}
-\DontPrintSemicolon
-\caption{Generating a random prime}
-\Input{Length $n$; parameter $t$}
-\Output{A random $n$-bit prime}
-\BlankLine
-\For{$i = 1$ \KwTo $t$}{
-  $p' \gets \{0,1\}^{n-1}$\;
-  $p := 1\| p'$\;
-  \lIf{$p$ is prime}{\Return $p$}\;
-}
-\Return fail
-\end{algorithm}
-To show its efficiency, we need understand two issues:
-\begin{itemize}
-\item the probability that a randomly-selected $n$-bit integer is prime.
-\item how to efficiently test whether a given integer $p$ is prime.
-\end{itemize}
-\end{frame}
-\begin{frame}\frametitle{The Distribution of Prime}
-\begin{theorem}[Prime number theorem]
-$\exists$ a constant $c$ such that, $\forall n>1$, a randomly selected $n$-bit number is prime with probability at least $c/n$.
-\end{theorem}
-The probability that a prime is \emph{not} chosen in $t = n^2/c$ iterations is
-\[ \left( 1-\frac{c}{n} \right)^t = \left( \left( 1-\frac{c}{n} \right)^{n/c} \right)^n \le \left( e^{-1} \right)^n = e^{-n}.
-\]
-The algorithm will fail with a negligible probability.
-\end{frame}
-\begin{frame}\frametitle{Testing Primality}
-\begin{itemize}
-\item \textbf{Trial division}: Divide $N$ by $a=2,3,\dotsc,\sqrt{N}.$
-\item \textbf{Probabilistic algorithm for approximately computing}:
-\begin{itemize}
-\item Atlantic City algorithm with two-sided error. 
-\item Monte Carlo algorithm with one-sided error.
-\item Las Vegas algorithm with zero-sided error.
-\end{itemize}
-\item \textbf{Fermat primality test}: $a^{N-1} \equiv 1 \pmod N$.
-\item $a$ is a \textbf{witness} that $N$ is composite if $a^{N-1} \not \equiv 1 \pmod N$.
-\item $a$ is a \textbf{liar} if $N$ is composite and $a^{N-1} \equiv 1 \pmod N$.
-\item \textbf{Carmichael numbers}: composite numbers without witnesses.
-\end{itemize}
-\begin{theorem}
-If $\exists$ a witness, then at least half the elements of $\mathbb{Z}_N^*$ are witnesses.
-\end{theorem}
-\end{frame}
+
+%\section{Primes and Factoring}
+%\begin{frame}\frametitle{Integer Factorization/Factoring}
+%%The weak factoring experiment $\mathsf{wFactor}_{\mathcal{A}}(n)$:
+%%\begin{enumerate}
+%%\item Choose two $n$-bit integers $x_1, x_2$ at random.
+%%\item $N := x_1\cdot x_2$.
+%%\item $\mathcal{A}$ is given $N$, and outputs $x_1',x_2'$.
+%%\item $\mathsf{wFactor}_{\mathcal{A}}(n) = 1 $ if $x_1'\cdot x_2' = N$ and 0 otherwise.
+%%\end{enumerate}
+%
+%\begin{quote}
+%``The problem of distinguishing prime numbers from composite numbers and of resolving the later into their prime factors is known to be one of the most important and useful in arithmetic.'' -- Gauss (1805)
+%\end{quote}
+%
+%The ``hardest'' numbers to factor seem to be those having only large prime factors.
+%\begin{itemize}
+%\item The best-known algorithm is the \textbf{general number field sieve} [Pollard] with time $\mathcal{O}(\exp(n^{1/3}\cdot(\log n)^{2/3}))$.
+%\item RSA Factoring Challenge: RSA-768 (232 digits)
+%\begin{itemize}
+%\item Two years on hundreds of machines (2.2GHz/2GB, 1500 years)
+%\item Factoring a 1024-bit integer: about 1000 times harder.
+%\end{itemize}
+%\end{itemize}
+%\end{frame}
+%\begin{frame}\frametitle{Generating Random Primes}
+%\begin{algorithm}[H]
+%\SetKwInOut{Input}{input}
+%\SetKwInOut{Output}{output}
+%\SetKw{KwB}{break}
+%\SetKw{KwH}{halt}
+%\DontPrintSemicolon
+%\caption{Generating a random prime}
+%\Input{Length $n$; parameter $t$}
+%\Output{A random $n$-bit prime}
+%\BlankLine
+%\For{$i = 1$ \KwTo $t$}{
+%  $p' \gets \{0,1\}^{n-1}$\;
+%  $p := 1\| p'$\;
+%  \lIf{$p$ is prime}{\Return $p$}\;
+%}
+%\Return fail
+%\end{algorithm}
+%To show its efficiency, we need understand two issues:
+%\begin{itemize}
+%\item the probability that a randomly-selected $n$-bit integer is prime.
+%\item how to efficiently test whether a given integer $p$ is prime.
+%\end{itemize}
+%\begin{theorem}[Prime number theorem]
+%$\exists$ a constant $c$ such that, $\forall n>1$, a randomly selected $n$-bit number is prime with probability at least $c/n$.
+%\end{theorem}
+%\begin{theorem}
+%If $N$ is prime, then the Miller-Rabin test always outputs ``prime''. If $N$ is composite, then the algorithm outputs ``prime'' with probability at most $2^{-t}\;$\footnote{Actually, it is at most $4^{-t}$.}.
+%\end{theorem}
+%\end{frame}
+
+%\begin{frame}\frametitle{The Distribution of Prime}
+%\begin{theorem}[Prime number theorem]
+%$\exists$ a constant $c$ such that, $\forall n>1$, a randomly selected $n$-bit number is prime with probability at least $c/n$.
+%\end{theorem}
+%The probability that a prime is \emph{not} chosen in $t = n^2/c$ iterations is
+%\[ \left( 1-\frac{c}{n} \right)^t = \left( \left( 1-\frac{c}{n} \right)^{n/c} \right)^n \le \left( e^{-1} \right)^n = e^{-n}.
+%\]
+%The algorithm will fail with a negligible probability.
+%\end{frame}
+%\begin{frame}\frametitle{Testing Primality}
+%\begin{itemize}
+%\item \textbf{Trial division}: Divide $N$ by $a=2,3,\dotsc,\sqrt{N}.$
+%\item \textbf{Probabilistic algorithm for approximately computing}:
+%\begin{itemize}
+%\item Atlantic City algorithm with two-sided error. 
+%\item Monte Carlo algorithm with one-sided error.
+%\item Las Vegas algorithm with zero-sided error.
+%\end{itemize}
+%\item \textbf{Fermat primality test}: $a^{N-1} \equiv 1 \pmod N$.
+%\item $a$ is a \textbf{witness} that $N$ is composite if $a^{N-1} \not \equiv 1 \pmod N$.
+%\item $a$ is a \textbf{liar} if $N$ is composite and $a^{N-1} \equiv 1 \pmod N$.
+%\item \textbf{Carmichael numbers}: composite numbers without witnesses.
+%\end{itemize}
+%\begin{theorem}
+%If $\exists$ a witness, then at least half the elements of $\mathbb{Z}_N^*$ are witnesses.
+%\end{theorem}
+%\begin{theorem}
+%If $N$ is prime, then the Miller-Rabin test always outputs ``prime''. If $N$ is composite, then the algorithm outputs ``prime'' with probability at most $2^{-t}\;$\footnote{Actually, it is at most $4^{-t}$.}.
+%\end{theorem}
+%\end{frame}
 \begin{comment}
 \begin{frame}\frametitle{The Miller-Rabin Primality Test}
 $N-1=2^ru$, $u$ is odd. $a \in \mathbb{Z}^*_N$ is a \textbf{strong witness} if
@@ -335,7 +355,6 @@ If $N$ is prime, then the Miller-Rabin test always outputs ``prime''. If $N$ is 
 \Return ``prime''
 \end{algorithm}
 \end{frame}
-\end{comment}
 \begin{frame}\frametitle{Examples of Primality Tests}
 \begin{exampleblock}{Liars in Fermat primality test}
 $2^{340} \equiv 1 \pmod {341}$,  but $341 = 11\cdot 31$.\\  
@@ -352,7 +371,7 @@ Carmichael numbers $< 10000$: \\
 %\end{align*}
 
 %\end{exampleblock}
-\end{frame}
+%\end{frame}
 \begin{frame}\frametitle{The Factoring Assumption}
 Let $\mathsf{GenModulus}(1^n)$ be a polynomial-time algorithm that, on input $1^n$, outputs $(N,p,q)$ where $N=pq$, and $p,q$ are $n$-bit primes except with probability negligible in $n$.
 \newline
@@ -368,16 +387,7 @@ The factoring experiment $\mathsf{Factor}_{\mathcal{A},\mathsf{GenModulus}}(n)$:
 \[ \Pr[\mathsf{Factor}_{\mathcal{A},\mathsf{GenModulus}}(n) = 1] \le \mathsf{negl}(n).\] 
 \end{definition}
 \end{frame}
-\begin{frame}\frametitle{Algorithms for Factoring}
-\begin{itemize}
-\item \textbf{Factoring} $N=pq$. $p,q$ are of the same length $n$.
-\item \textbf{Trial division}: $\mathcal{O}(\sqrt{N}\cdot \mathsf{polylog}(N))$.
-\item \textbf{Pollard's $p-1$} method: effective when $p-1$ has ``small'' prime factors.
-\item \textbf{Pollard's rho} method: $\mathcal{O}(N^{1/4}\cdot \mathsf{polylog}(N))$.
-\item \textbf{Quadratic sieve} algorithm [Carl Pomerance]: sub-exponential time $\mathcal{O}(\exp(\sqrt{n\cdot \log n}))$.
-\item The best-known algorithm is the \textbf{general number field sieve} [Pollard] with time $\mathcal{O}(\exp(n^{1/3}\cdot(\log n)^{2/3}))$.
-\end{itemize}
-\end{frame}
+\end{comment}
 \begin{comment}
 \begin{frame}\frametitle{Pollard's $p-1$ Method}
 \textbf{Idea}: Fermat's little theorem: $y = x^{(p-1)\cdot k} \equiv 1 \pmod p$. Then $(y-1) \equiv 0 \pmod p$ and $p \mid (y-1)$. So $p = \gcd(y-1,N)$. To make the exponent a large multiple of $(p-1)$:
@@ -532,7 +542,7 @@ The RSA experiment $\mathsf{RSAinv}_{\mathcal{A},\mathsf{GenRSA}}(n)$:
 \end{definition}
 \end{frame}
 
-\begin{comment}
+%\begin{comment}
 \begin{frame}\frametitle{Constructing One-Way Functions}
 \begin{algorithm}[H]
 \SetKwInOut{Input}{input}
@@ -566,17 +576,276 @@ Define a family of permutations with $\mathsf{GenRSA}$:
 \end{construction}
 Reduce the RSA problem to the inverting problem.
 \end{frame}
+%\end{comment}
+%\section{RSA Assumption}
+%\begin{frame}\frametitle{The RSA Problem}
+%\begin{block}{Recall group exponentiation on $\mathbb{Z}^*_N$}
+%Define function $f_e\;:$ $\mathbb{Z}^*_N \to \mathbb{Z}^*_N$ by $f_e(x) =[x^e \bmod N]$. \\ If $\gcd(e,\phi(N))=1$, then $f_e$ is a permutation. \\
+%If $d = [e^{-1} \bmod \phi(N)]$, then $f_d$ is the inverse of $f_e$.\\
+%\textbf{$e$'th root of $c$}: $g^e = c$, $g = c^{1/e} = c^{d}$. 
+%\end{block}
+%\textbf{Idea}: factoring is hard\\ $\implies$ for $N=pq$, finding $p,q$ is hard\\ $\implies$ computing $\phi(N)=(p-1)(q-1)$ is hard\\ $\implies$ computations modulo $\phi(N)$ is not available\\ 
+%\alert{\textbf{There is a gap.}}\\
+%$\implies$ \textbf{RSA problem} [Rivest, Shamir, and Adleman] is hard:\\
+%Given $y \in \mathbb{Z}^*_N$, compute $y^{-e}$, $e^{\text{th}}$-root of $y$ modulo $N$.
+%\begin{alertblock}{Open problem}
+%RSA problem is easier than factoring?
+%\end{alertblock}
+%\end{frame}
+%\begin{frame}\frametitle{Generating RSA Problem}
+%\begin{algorithm}[H]
+%\SetKwInOut{Input}{input}
+%\SetKwInOut{Output}{output}
+%\SetKw{KwF}{find}
+%\SetKw{KwC}{compute}
+%\DontPrintSemicolon
+%\caption{$\mathsf{GenRSA}$}
+%\Input{Security parameter $1^n$}
+%\Output{$N,e,d$}
+%\BlankLine
+%$(N,p,q) \gets \mathsf{GenModulus}(1^n)$\;
+%$\phi(N) := (p-1)(q-1)$\;
+%\KwF $e$ such that $\gcd(e,\phi(N))=1$\;
+%\KwC $d := [e^{-1} \bmod \phi(N)]$\;
+%\Return $N,e,d$\;
+%\end{algorithm}
+%\end{frame}
+%\begin{frame}\frametitle{The RSA Assumption}
+%The RSA experiment $\mathsf{RSAinv}_{\mathcal{A},\mathsf{GenRSA}}(n)$:
+%\begin{enumerate}
+%\item Run $\mathsf{GenRSA}(1^n)$ to obtain $(N,e,d)$.
+%\item Choose $y \gets \mathbb{Z}^*_N$.
+%\item $\mathcal{A}$ is given $N,e,y$, and outputs $x \in \mathbb{Z}^*_N$.
+%\item $\mathsf{RSAinv}_{\mathcal{A},\mathsf{GenRSA}}(n)=1$ if $x^e \equiv y \pmod N$, and 0 otherwise.
+%\end{enumerate}
+%\begin{definition}
+%\textbf{RSA problem is hard relative to} $\mathsf{GenRSA}$ if $\forall$ \textsc{ppt} algorithms $\mathcal{A}$, $\exists$ $\mathsf{negl}$ such that
+%\[ \Pr[\mathsf{RSAinv}_{\mathcal{A},\mathsf{GenRSA}}(n) = 1] \le \mathsf{negl}(n).\]
+%\end{definition}
+%\end{frame}
+\section{``Textbook RSA'' Encryption}
+\begin{frame}\frametitle{``Textbook RSA''}
+\begin{construction}
+\begin{itemize}
+\item $\mathsf{Gen}$: on input $1^n$ run $\mathsf{GenRSA}(1^n)$ to obtain $N,e,d$. $pk = \langle N,e \rangle$ and $sk = \langle N,d \rangle$.
+\item $\mathsf{Enc}$: on input $pk$ and $m \in \mathbb{Z}^*_N$, $c:= [m^e \bmod N]$.
+\item $\mathsf{Dec}$: on input $sk$ and $m \in \mathbb{Z}^*_N$, $m:= [c^d \bmod N]$.
+\end{itemize}
+\end{construction}
+\begin{alertblock}{Insecurity}
+Since the ``textbook RSA'' is deterministic, it is insecure with respect to any of the definitions of security we have proposed. 
+\end{alertblock}
+\end{frame}
+\begin{frame}\frametitle{RSA Implementation Issues}
+\begin{itemize}
+\item \textbf{Encoding binary strings as elements of} $\mathbb{Z}^*_N$: $\ell = \|N\|$. Any binary string $m$ of length $\ell - 1$ can be viewed as an element of $Z_N$. Although $m$ may not be in $Z_N^*$, RSA still works.
+\item \textbf{Choice of} $e$: Either $e=3$ or a small $d$ are bad choices. \\
+      Recommended value: $e=65537=2^{16}+1$
+\item \textbf{Using the Chinese remainder theorem}: to speed up the decryption.\\
+\[ [c^d \bmod N] \leftrightarrow ([c^d \bmod p],[c^d \bmod q]). \]
+Assume that exponentiation modulo a $v$-bit integer takes $v^3$ operations. RSA decryption takes $(2n)^3=8n^3$, whereas using CRT takes $2n^3$. 
+\end{itemize}
+\end{frame}
+\begin{frame}\frametitle{Example of ``Textbook RSA''}
+\begin{exampleblock}{$N=253$, $p=11$, $q=23$, $e=3$, $d=147$, $\phi(N)=220$.}
+$m=0111001=57$.\\
+Encryption: $250 := [57^3 \bmod 253]$.\\
+Decryption: $57 := [250^{147} \bmod 253]$.
+\newline
+
+Using CTR,
+\[ [250^{[147 \bmod 10]} \bmod 11] = [8^7 \bmod 11] = 2\]
+\[ [250^{[147 \bmod 22]} \bmod 23] = [20^{15} \bmod 23] = 11\]
+$57 \leftrightarrow (2,11)$.
+\end{exampleblock}
+\end{frame}
+\begin{frame}\frametitle{Attacks on ``Textbook RSA'' with a small $e$}
+\textbf{Small $e$ and small $m$ make modular arithmetic useless.}
+\begin{itemize}
+\item If $e=3$ and $m < N^{1/3}$, then $c = m^3$ and $m=c^{1/3}$.
+\item In the hybrid encryption, 1024-bit RSA with 128-bit DES.
+\end{itemize}
+
+\textbf{A general attack when small $e$ is used:}
+\begin{itemize}
+\item $e=3$, the same message $m$ is sent to 3 different parties.
+\item $c_1= [ m^3 \bmod N_1]$, $c_2= [ m^3 \bmod N_2]$, $c_3= [ m^3 \bmod N_3]$.
+\item $N_1,N_2,N_3$ are coprime, and $N^*=N_1N_2N_3$, $\exists$ unique $\hat{c} < N^*$:\\
+$\hat{c} \equiv c_1 \pmod{N_1}$, $\hat{c} \equiv c_2 \pmod{N_2}$, $\hat{c} \equiv c_3 \pmod{N_3}$.
+\item With CRT, $\hat{c} \equiv m^3 \pmod{N^*}$. Since $m^3 < N^*$, $m = \hat{c}^{1/3}$.
+\end{itemize}
+\end{frame}
+\begin{comment}
+\begin{frame}\frametitle{A Quadratic Improvement in Recovering $m$}
+If $1 \le m < \mathcal{L} = 2^{\ell}$, there is an attack that recovers $m$  in time $\sqrt{\mathcal{L}}$.
+\begin{algorithm}[H]
+\SetKwInOut{Input}{input}
+\SetKwInOut{Output}{output}
+\SetKw{KwS}{set}
+\SetKw{KwT}{sort}
+\DontPrintSemicolon
+\caption{An attack on textbook RSA encryption}
+\Input{Public key $\langle N,e \rangle$; ciphertext $c$; parameter $\ell$}
+\Output{$m < 2^{\ell}$ such that $m^e \equiv c \pmod N$}
+\BlankLine
+
+\KwS $T := 2^{\alpha \ell}$ \tcc*[f]{$\frac{1}{2} < \text{constant}\; \alpha <1$}\;
+\lFor{$r=1$ \KwTo $T$}{$x_r := [c/r^e \bmod N]$}\;
+\KwT the pairs $\{ (r,x_r)\}^T_{r=1}$ by $x_r$\;
+\For{$s=1$ \KwTo $T$}{
+\If{$[s^e \bmod N] \overset{?}{=} x_r$ for some $r$}{
+ \Return $[r\cdot s \bmod N]$\;
+}
+}
+\Return fail\;
+\end{algorithm}
+It can be shown that with good probability that $m=r\cdot s$:
+\[ c \equiv m^e = (r\cdot s)^e = r^e\cdot s^e \pmod N \]
+\end{frame}
 \end{comment}
+\begin{frame}\frametitle{Common Modulus Attacks}
+\textbf{Common Modulus Attacks}: the same modulus $N$.
+\newline
+
+\textbf{Case I}: for multiple users with their own secret keys.\\
+Each user can find $\phi(N)$ with his own $e,d$, then find others' $d$.
+\newline
+
+\textbf{Case II}: for the same message encrypted with two public keys.\\
+Assume $\gcd(e_1,e_2)=1$, $c_1 \equiv m^{e_1}$ and $c_2 \equiv m^{e_2} \pmod N$. $\exists X,Y$ such that $Xe_1 + Ye_2 = 1$.
+\[ c_1^X\cdot c_2^Y \equiv m^{Xe_1}m^{Ye_2} \equiv m^1 \pmod N.\]
+\end{frame}
+\begin{frame}\frametitle{CCA in ``Textbook RSA'' Encryption}
+\begin{exampleblock}{Recovering the message with CCA}
+$\mathcal{A}$ choose a random $r \gets \mathbb{Z}^*_N$ and compute $c' = [r^e\cdot c \bmod N]$, and get $m'$ with CCA. Then $m= [m'\cdot r^{-1}\bmod N]$.
+\[ m'\cdot r^{-1} \equiv (c')^dr^{-1} \equiv (r^e\cdot m^e)^dr^{-1} \equiv r^{ed}m^{ed}r^{-1} \equiv rmr^{-1} \equiv m.\]	
+\end{exampleblock}
+\begin{exampleblock}{Doubling the bid at an auction}
+The ciphertext of an bid is $c = [m^e \bmod N]$. $c'= [2^ec \bmod N]$.
+\[(c')^d \equiv (2^em^e)^d \equiv 2^{ed}m^{ed}\equiv 2m.\]
+\end{exampleblock}
+\end{frame}
+\section{RSA Encryption in Practice}
+\begin{frame}\frametitle{Padded RSA}
+\textbf{Idea}: add randomness to improve security.
+\begin{construction}
+Let $\ell$ be a function with $\ell(n) \le 2n-2$ for all $n$.
+\begin{itemize}
+\item $\mathsf{Gen}$: on input $1^n$, run $\mathsf{GenRSA}(1^n)$ to obtain $(N,e,d)$. Output $pk = \langle N,e \rangle$, and $sk = \langle N,d \rangle$.
+\item $\mathsf{Enc}$: on input $m \in \{0,1\}^{\ell(n)}$, choose a random string $r \gets \{0,1\}^{\|N\| - \ell(n)-1}$. Output $c:=[(r\|m)^e \bmod N]$.
+\item $\mathsf{Dec}$: compute $\hat{m} := [c^d \bmod N]$, and output the $\ell(n)$ low-order bits of $\hat{m}$.
+\end{itemize}
+\end{construction}
+$\ell$ should neither be too large ($r$ is too short in theory) nor be too small ($m$ is too short in practice).
+\begin{theorem}
+If the RSA problem is hard relative to $\mathsf{GenRSA}$, then Construction with $\ell(n)=\mathcal{O}(\log n)$ is CPA-secure.
+\end{theorem}
+\end{frame}
+\begin{comment}
+\begin{frame}\frametitle{PKCS \#1 v1.5 (RSAES-PKCS1-v1\_5)}
+\textbf{Public-Key Cryptography Standard (PKCS) \#1 version 1.5}:
+\begin{itemize}
+\item $N$ has $k$ bytes, $2^{8(k-1)} \le N < 2^{8k}$.
+\item Message $m$ has $D (\le k-11)$ bytes.
+\item Random pad $r$ has $(k-D-3)$ bytes without $\{0\}^8$.
+\item The ciphertext:
+\end{itemize}
+\[[(\{0\}^8\|\{0\}^610\|r\|\{0\}^8\|m)^e \bmod N]\] 
+\textbf{Security}: PKCS \#1 v1.5 is believed to be CPA-secure, although no proof based on the RSA assumption has ever been shown.
+\end{frame}
+\begin{frame}\frametitle{Attack on PKCS \#1 v1.5}
+\textbf{PKCS \#1 v1.5 used in HTTPS}:\\
+if the first 16 bits of message is not ``02'' which is standing for ``PKCK \#1'', then the web server returns error.\newline
+
+\textbf{CCA to infer the message $m$ of ciphertext $c$}:
+\begin{enumerate}
+\item choose a string $r$, compute $c' \gets r^e\cdot c = (r\cdot \mathsf{PKCS1}(m))^e$.
+\item send $c'$ to the web server. If the server does not return error, some bits of $m$ can be learned.
+\item change $r$ and learn other bits of $m$.
+\end{enumerate}
+
+\textbf{HTTPS Defense} [RFC 5246]: if not ``02'', set the message as a random string.
+\end{frame}
+\end{comment}
+\begin{frame}\frametitle{PKCK \#1 v2.1 (RSAES-OAEP)}
+\textbf{Optimal Asymmetric Encryption Padding} (OAEP): encode $m$ of length $n/2$ as $\hat{m}$ of length $2n$. $G, H$ are \textbf{Random Oracles}.
+\[ \hat{m}_1 := G(r)\oplus (m\| \{0\}^{n/2}), \hat{m} := \hat{m}_1 \| (r \oplus H(\hat{m}_1)).\]
+\begin{figure}
+\begin{center}
+\input{tikz/OAEP}
+\end{center}
+\end{figure}
+RSA-OAEP is CCA-secure in Random Oracle model. \footnote{It may not be secure when RO is instantiated.} [RFC 3447]
+\end{frame}
+\begin{frame}\frametitle{OAEP Improvements}
+\begin{columns}
+\begin{column}{5cm}
+\begin{figure}
+\begin{center}
+\input{tikz/OAEP-plus}
+\input{tikz/SAEP-plus}
+\end{center}
+\end{figure}
+\end{column}
+\begin{column}{5cm}
+\textbf{OAEP+}: $\forall $ trap-door permutation F, F-OAEP+ is CCA-secure.\newline
+
+\textbf{SAEP+}: RSA (e=3) is a trap-door permutation, RSA-SAEP+ is CCA-secure.\newline
+
+$W, G, H$ are Random Oracles.
+\end{column}
+\end{columns}
+\end{frame}
+\begin{frame}\frametitle{Remarks on RSA in Practice}
+\textbf{Key lengths} with comparable security :
+\begin{center}
+\begin{tabular}{|c|c|} \hline
+Symmetric & RSA  \\ \hline
+80 bits & 1024 bits   \\
+128 bits & 3072 bits  \\
+256 bits & 15360 bits \\ \hline
+\end{tabular}	
+\end{center}
+\alert{\textbf{Implementation attacks}}:\\
+\textbf{Timing attack}: 
+The time it takes to compute $c^d$ can expose $d$.
+\newline
+
+\textbf{Power attack}:
+The power consumption of a smartcard while it is computing $c^d$ can expose $d$.
+\newline
+
+\textbf{Key generation trouble} (in OpenSSL RSA key generation):\\
+Same $p$ will be generated by multiple devices (due to poor entropy at startup), but different $q$ (due to additional randomness).\\
+$N_1,N_2$ from different devices, $\gcd(N_1,N_2) = p$.\\
+Experiment result: factor 0.4\% of public HTTPS keys.
+\end{frame}
+\begin{frame}\frametitle{Faults Attack on RSA}
+\textbf{Faults attack}:
+A computer error during $c^d\bmod N$ can expose $d$.\newline
+
+Using CRT to speed up the decryption:
+\[ [c^d \bmod N] \leftrightarrow ([m_p \equiv c^d \pmod p],[m_q \equiv c^d \pmod q]).\]
+\textbf{Suppose error occurs when computing $m_q$, but no error in $m_p$.}\newline
+
+Then output is $m'$ where $m' \equiv c^d \pmod p$, $m' \not \equiv c^d \pmod q$.\\
+So $(m')^e \equiv c \pmod p$, $(m')^e \not \equiv c \pmod q$.\\
+\[\gcd((m')^e-c, N)=p.\]
+
+\textbf{A common defense}: check output. (but 10\% slowdown)
+\end{frame}
 \begin{frame}\frametitle{Summary}
 \begin{itemize}
 \item Primes, modular arithmetic.
-%\item Miller-Rabin primality testing.
-%\item Factoring, Pollard's $p-1$ and $\rho$ methods.
 \item $e^{\mathsf{th}}$-root modulo $N$, RSA.
 \end{itemize}
 \begin{block}{Textbook}
 ``\emph{A Computational Introduction to Number Theory and Algebra}''
 (Version 2) by Victor Shoup
 \end{block}
+\begin{itemize}
+\item RSA, ``textbook RSA'', padded RSA, PKCS.
+\item small $e$, common modulus attacks, CCA, faults attack.
+\end{itemize}
 \end{frame}
 \end{document}
