@@ -23,11 +23,10 @@ If $p$ is prime, then $\mathbb{Z}^*_p$ is cyclic.
 \end{theorem}
 \end{frame}
 \begin{frame}\frametitle{Examples of Cyclic Groups}
-\begin{exampleblock}{}
+\begin{exampleblock}{Are the following statements true or false?}
 \begin{itemize}
 \item $\mathbb{Z}_{15}$ with `$+$' is cyclic and the `$1$' is a generator.
-\item $\mathbb{Z}_{7}$ with `$+$' is cyclic and all non-zero elements are generators.
-\item For $\mathbb{Z}_7^*$, $2$ is not a generator, but $3$ is. 
+\item For $\mathbb{Z}_7^*$, $2$ is a generator, but $3$ is not.
 \end{itemize}
 \end{exampleblock}
 \begin{exampleblock}{}
@@ -47,6 +46,17 @@ If $\mathbb{G}$ is a cyclic group of order $q$, then $\exists$ a generator $g \i
 \item $\log_g1=0$ and $\log_g(h_1\cdot h_2) = [(\log_gh_1+\log_gh_2) \bmod q]$.
 \end{itemize}
 \end{frame}
+\begin{frame}\frametitle{Overview of Discrete Logarithm Algorithms}
+\begin{itemize}
+\item Given a generator $g \in \mathbb{G}$ and $y \in \langle g \rangle$, find $x$ such that $g^x=y$.
+\item \textbf{Brute force}: $\mathcal{O}(q)$, $q = \mathsf{ord}(g)$ is the order of $\langle g\rangle$.
+\item \textbf{Baby-step/giant-step} method [Shanks]: $\mathcal{O}(\sqrt{q}\cdot \mathsf{polylog}(q))$.
+\item \textbf{Pohlig-Hellman} algorithm: when $q$ has small factors.
+\item \textbf{Index calculus} method: $\mathcal{O}(\exp{(\sqrt{n\cdot \log n})})$.
+\item The best-known algorithm is the \textbf{general number field sieve} with time $\mathcal{O}(\exp(n^{1/3}\cdot(\log n)^{2/3}))$.
+\item Elliptic curve groups vs. $\mathbb{Z}_p^*$: more efficient for the honest parties, but that are equally hard for an adversary to break.\\ (Both 1024-bit $\mathbb{Z}_p^*$ and 132-bit elliptic curve need $2^{66}$ steps.)
+\end{itemize}
+\end{frame}
 \begin{frame}\frametitle{The Discrete Logarithm Assumption}
 The discrete logarithm experiment $\mathsf{DLog}_{\mathcal{A},\mathcal{G}}(n)$:
 \begin{enumerate}
@@ -59,17 +69,6 @@ The discrete logarithm experiment $\mathsf{DLog}_{\mathcal{A},\mathcal{G}}(n)$:
 \textbf{The discrete logarithm problem is hard relative to} $\mathcal{G}$ if $\forall$ \textsc{ppt} algorithm $\mathcal{A}$, $\exists$ $\mathsf{negl}$ such that
 \[ \Pr[\mathsf{DLog}_{\mathcal{A},\mathcal{G}}(n)=1] \le \mathsf{negl}(n).\]
 \end{definition}
-\end{frame}
-\begin{frame}\frametitle{Overview of Discrete Logarithm Algorithms}
-\begin{itemize}
-\item Given a generator $g \in \mathbb{G}$ and $y \in \langle g \rangle$, find $x$ such that $g^x=y$.
-\item \textbf{Brute force}: $\mathcal{O}(q)$, $q = \mathsf{ord}(g)$ is the order of $\langle g\rangle$.
-\item \textbf{Baby-step/giant-step} method [Shanks]: $\mathcal{O}(\sqrt{q}\cdot \mathsf{polylog}(q))$.
-\item \textbf{Pohlig-Hellman} algorithm: when $q$ has small factors.
-\item \textbf{Index calculus} method: $\mathcal{O}(\exp{(\sqrt{n\cdot \log n})})$.
-\item The best-known algorithm is the \textbf{general number field sieve} with time $\mathcal{O}(\exp(n^{1/3}\cdot(\log n)^{2/3}))$.
-\item Elliptic curve groups vs. $\mathbb{Z}_p^*$: more efficient for the honest parties, but that are equally hard for an adversary to break.\\ (Both 1024-bit $\mathbb{Z}_p^*$ and 132-bit elliptic curve need $2^{66}$ steps.)
-\end{itemize}
 \end{frame}
 \begin{comment}
 \begin{frame}\frametitle{The Baby-Step/Giant-Step Algorithm}
@@ -176,8 +175,7 @@ DDH problem is hard relative to $\mathcal{G}$ if $\forall$ \textsc{ppt} $\mathca
 DDH is easier than CDH and DL.
 \end{alertblock}
 \end{frame}
-\begin{comment}
-\begin{frame}\frametitle{Why Prime-Order Groups}
+\begin{frame}\frametitle{Using Prime-Order Groups}
 \begin{itemize}
 \item The discrete logarithm problem is hardest in such groups.
 \item Finding a generator in such groups is trivial.
@@ -188,11 +186,12 @@ DDH is easier than CDH and DL.
 and $\forall y \neq 1:$
 \[ \Pr[\mathsf{DH}_g(g^{x_1},g^{x_2})=y] = \frac{1}{q} \cdot \left(1-\frac{1}{q}\right) = \frac{1}{q} - \frac{1}{q^2}.
 \]
+However, $\mathbb{Z}^*_p$ does not have prime order.
 \end{frame}
 \begin{frame}\frametitle{Working in (Subgroups of) $\mathbb{Z}^*_p$}
 \begin{itemize}
-\item $y \in \mathbb{Z}^*_p$ is a \textbf{quadratic residue modulo} $p$ if $\exists x \in \mathbb{Z}^*_p$ such that $x^2 \equiv y \pmod p$. 
-\item The set of quadratic residues modulo $p$ is a subgroup with $(p-1)/2 = q$ elements, since $x^2 \equiv (p-x)^2 \pmod p$.
+\item $y \in \mathbb{Z}^*_p$ is a \textbf{quadratic residue modulo} $p$ if $\exists x \in \mathbb{Z}^*_p$ such that $x^2 \equiv y \pmod p$. \alert{(Q: show QRs in $\mathbb{Z}_{7}^{*}$)} %1, 4, 2, 2, 4, 1
+\item The set of QR is a subgroup with order $(p-1)/2$ ($x^2 \equiv (p-x)^2 \pmod p$).
 \item $p$ is a \textbf{strong prime} if $p=2q+1$ with $q$ prime.
 \end{itemize}
 \begin{algorithm}[H]
@@ -212,8 +211,7 @@ $g := x^2 \bmod p$\;
 \Return $p,q,g$
 \end{algorithm}
 \end{frame}
-\end{comment}
-\begin{frame}\frametitle{Recall Secure Key-Exchange Experiment}
+\begin{frame}\frametitle{Secure Key-Exchange Experiment}
 The key-exchange experiment $\mathsf{KE}^{\mathsf{eav}}_{\mathcal{A},\Pi}(n)$:
 \begin{enumerate}
 \item Two parties holding $1^n$ execute protocol $\Pi$. $\Pi$ results in a \textbf{transcript} $\mathsf{trans}$ containing all the messages sent by the parties, and a \textbf{key} $k$ that is output by each of the parties.
@@ -263,6 +261,41 @@ If $b=1$, then give true key; otherwise give random $g^z$.
 &\le \frac{1}{2} + \frac{1}{2}\cdot \left| \Pr\left[ \mathcal{A}(g^x,g^y,g^{xy})=1 \right] - \Pr\left[ \mathcal{A}(g^x,g^y,g^z)=1 \right] \right|
 \end{align*}
 \end{proof}
+\end{frame}
+\begin{frame}\frametitle{Example of DHKE}
+\begin{exampleblock}{$\mathbb{G} = \mathbb{Z}^*_{11}$}
+The order $q = ?$\\ %5
+The set of quadratic residues ?\\ %1, 4, 9, 5, 3, 3, 5, 9, 4, 1
+Is $g = 3$ a generator? \\ %3 : 1, 3, 9, 5, 4, 1
+$x = 3, y = 4$, what's the message from Bob to Alice?\\ %3^{4} = 4
+How does Alice compute the key?\\ % 4^{3} = 9
+How does Bob compute the key? % 5^{4} = 9 
+\end{exampleblock}
+\end{frame}
+\begin{frame}\frametitle{Triparties Key Exchange}
+\begin{columns}[C]
+\begin{column}{5cm}
+\begin{center}
+DH-based KE in 2 rounds:
+\begin{figure}
+\input{tikz/3parties-DHKE}
+\end{figure}
+Key$=g^{abc}$.
+\end{center}
+\end{column}
+\begin{column}{6cm}
+\begin{center}
+Joux's KE in 1 round:
+\begin{figure}
+\input{tikz/3parties-JOUX}
+\end{figure}
+Key$=e(P,P)^{abc}$ in bilinear map.
+\end{center}
+\end{column}
+\end{columns}
+\begin{block}{Open Problem}
+How to exchange keys between 4 parties in one round?
+\end{block}
 \end{frame}
 \begin{comment}
 \begin{frame}\frametitle{Constructing Collision-Resistant Hash Functions}

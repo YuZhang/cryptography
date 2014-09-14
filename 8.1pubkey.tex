@@ -9,6 +9,52 @@
 \tableofcontents
 \end{frame}
 \section{Definitions and Securities of Public-Key Encryption}
+\begin{frame}\frametitle{Limitations of Private-Key Cryptography}
+\begin{itemize}
+\item The key-distribution need physically meeting.
+\item The number of keys for $U$ users is $\Theta(U^2)$.
+\item Secure communication in open system:
+\end{itemize}
+\vspace{0.5cm}
+Solutions that are based on private-key cryptography are not sufficient to deal with the problem of secure communication in open systems where parties cannot physically meet, or where parties have transient interactions.
+\end{frame}
+\begin{frame}\frametitle{Merkle Puzzles (Key Exchange W/O TTP)}
+\begin{itemize}
+\item[Alice] prepares $2^{32}$ puzzles $\mathsf{Puzzle}_i$, and sends to Bob.\\
+\[\mathsf{Puzzle}_i \gets \mathsf{Enc}_{(0^{96}\|p_i)}(\text{``Puzzle \#''} x_i  \| k_i),\]
+where $\mathsf{Enc}$ is 128-bit, $p_i \gets \{0,1\}^{32}$ and $x_i,k_i \gets \{0,1\}^{128}$.
+\item[Bob] chooses $\mathsf{Puzzle}_j$ randomly, guesses $p_j$ in $2^{32}$ time, obtains $x_j,k_j$ and sends $x_j$ to Alice.
+\item[Alice] lookups puzzle with $x_j$, and uses $k_j$ as secret key.
+\item \textbf{Adversary} needs $2^{32+32}$ time.
+\end{itemize}
+\begin{block}{Better Gap?}
+Quadratic gap is best possible if we treat cipher as a black box oracle.
+\end{block}
+\end{frame}
+\begin{frame}\frametitle{Public-Key Revolution}
+\begin{itemize}
+\item In 1976, Whitfield Diffie and Martin Hellman published ``\emph{New Directions in Cryptography}''.
+\item \textbf{Asymmetric} or \textbf{public-key} encryption schemes:
+\begin{itemize}
+\item \textbf{Public key} as the encryption key.
+\item \textbf{Private key} as the decryption key.
+\end{itemize}
+\item \textbf{Public-key primitives}:
+\begin{itemize}
+\item Public-key encryption.
+\item Digital signatures. (non-repudiation)
+\item Interactive key exchange.
+\end{itemize}
+\item \textbf{Strength}:
+\begin{itemize}
+\item Key distribution over public channels.
+\item Reduce the need to store many keys.
+\item Enable security in open system.
+\end{itemize}
+\item \textbf{Weakness}: slow, active attack on public key distribution.
+%\item \textbf{Peoples}: Ralphe Merkle (his advisor at Stanford was Hellman), Michael Rabin, Rivest, Shamir, and Adleman.
+\end{itemize}
+\end{frame}
 \begin{frame}\frametitle{Definitions}
 \begin{figure}
 \begin{center}
@@ -42,13 +88,10 @@ $\Pi$ is \textbf{CPA-secure} if $\forall$ \textsc{ppt} $\mathcal{A}$, $\exists$ 
 No deterministic public-key encryption scheme is secure in the presence of an eavesdropper. 
 \end{theorem}
 \begin{proposition}
-If $\Pi$ is secure in the presence of an eavesdropper, then $\Pi$ also is CPA-secure.
+If $\Pi$ is secure in the presence of an eavesdropper, then $\Pi$ also is CPA-secure, and secure for multiple encryptions.
 \end{proposition}
-\begin{theorem}
-If $\Pi$ is secure in the presence of an eavesdropper, then $\Pi$ is secure for multiple encryptions.
-\end{theorem}
 \begin{proposition}
-\alert{Perfectly-secret public-key encryption is impossible.}
+Perfectly-secret public-key encryption is impossible.
 \end{proposition}
 \end{frame}
 
@@ -181,7 +224,7 @@ $\Pi^{\mathsf{hy}} = (\mathsf{Gen}^{\mathsf{hy}}, \mathsf{Enc}^{\mathsf{hy}}, \m
 \end{construction}
 \end{column}
 \end{columns}
-Hybrid encryption is a public-key encryption without any secret key in advance.
+\alert{Q: is hybrid encryption a public-key enc. or private-key enc. ?}
 \end{frame}
 \begin{frame}\frametitle{Security of Hybrid Encryption}
 \begin{theorem}

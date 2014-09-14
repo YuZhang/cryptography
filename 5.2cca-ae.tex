@@ -39,7 +39,6 @@ $\Pi_E = (\mathsf{Gen}_E, \mathsf{Enc}, \mathsf{Dec})$, $\Pi_M = (\mathsf{Gen}_M
 \end{itemize}
 \end{construction}
 \end{frame}
-\begin{comment}
 \begin{frame}\frametitle{Proof of CCA-Secure Encryption Schemes}
 \begin{theorem}
 If $\Pi_E$ is a CPA-secure private-key encryption scheme and $\Pi_M$ is a secure MAC with unique tags, then Construction $\Pi'$ is CCA-secure.
@@ -82,7 +81,6 @@ We need to prove the following claims.
 \]
 \end{proof}
 \end{frame}
-\end{comment}
 \section{Obtaining Privacy and Message Authentication}
 \begin{frame}\frametitle{Message Transmission Scheme}
 \begin{figure}
@@ -141,7 +139,6 @@ $10/01 \to 01/10 \to 1$, $00 \to 11 \to \bot$.
 Decryption: If $\mathsf{Vrfy}(\cdot) = 1$, then $\mathsf{Dec}(\cdot)$; otherwise output $\bot$.
 \end{itemize}
 \end{frame}
-\begin{comment}
 \begin{frame}\frametitle{Authenticated Encryption Theory and Practice}
 \begin{theorem}
 $\Pi_E$ is CPA-secure and $\Pi_E$ is a secure MAC with unique tages, $\Pi'$ deriving from encrypt-then-authenticate approach is secure.
@@ -149,13 +146,12 @@ $\Pi_E$ is CPA-secure and $\Pi_E$ is a secure MAC with unique tages, $\Pi'$ deri
 \textbf{GCM(Galois/Counter Mode)}: CTR encryption then Galois MAC. (RFC4106/4543/5647/5288 on IPsec/SSH/TLS)\\
 \textbf{EAX}: CTR encryption then CMAC.
 \begin{proposition}
-Encrypt-then-authenticate approach is secure if $\Pi_E$ is rand-CTR mode or rand-CBC mode.
+Authenticate-then-encrypt approach is secure if $\Pi_E$ is rand-CTR mode or rand-CBC mode.
 \end{proposition}
 \textbf{CCM (Counter with CBC-MAC)}: CBC-MAC then CTR encryption. (802.11i, RFC3610)\\
 \textbf{OCB (Offset Codebook Mode)}: integrating MAC into ENC. (two times fast as CCM, EAX)\\
-\textbf{All support AEAD (A.E. with associated data):} part of message is in clear, and all is authenticated.
+\textbf{All support AEAD (A.E. with associated data):} part of message is in clear, and all is authenticated
 \end{frame}
-\end{comment}
 \begin{frame}\frametitle{Remarks on Secure Message Transmission}
 \begin{itemize}
 \item Authentication may leak the message.
@@ -213,10 +209,10 @@ Encrypt-then-authenticate approach is secure if $\Pi_E$ is rand-CTR mode or rand
 \section{Deterministic Encryption (FYI)}
 \begin{frame}\frametitle{Deterministic CPA Security}
 \begin{itemize}
-\item \textbf{Deterministic encryption}: the same message is encrypted to the same ciphertext under the same key.
-\item \textbf{Application}: encrypted database index, disk encryption.
-\item \textbf{But no  deterministic encryption is CPA-secure.}
+\item \textbf{Application}: encrypted database index, disk encryption
+\item \textbf{Deterministic encryption}: the same message is encrypted to the same ciphertext under the same key. \\ \alert{Q: would it be  CPA-secure?}
 \item \textbf{Deterministic CPA Security}: CPA-secure if \emph{never encrypt same message twice} using same key. The pair $\left<k,m\right>$ is unique.
+\item \textbf{Deterministic Authenticated Encryption (DAE)}
 \item \textbf{\alert{Common Mistake}}: CBC/CTR with \textbf{fixed} $IV$.
 \begin{columns}[C]
 \column{.5\textwidth}
@@ -232,11 +228,11 @@ Adversary can query $(m_{q1}, m_{q2})$ and get $(c_{q1}, c_{q2})$; then output P
 \end{frame}
 \begin{frame}\frametitle{Synthetic $IV$ (SIV) for Det. Encryption}
 \begin{itemize}
-\item \textbf{Synthetic $IV$ (SIV)}: \\
-If $F$ is PRF, $\Pi:(\mathsf{Enc}_k(r,m), \mathsf{Dec}_k(r,s))$ is CPA-secure, then $\Pi_{\mathsf{det}}$ is det. CPA-secure scheme: \\ $(k_1,k_2) \gets \mathsf{Gen}$;
-$SIV \gets F_{k_1}(m)$; $s \gets \mathsf{Enc}_{k_2}(SIV,m)$; \\ output $c = \left<SIV,s \right>$.
-\item \textbf{Deterministic Authenticated Encryption (DAE)}: det. CPA-security and integrity.
-\item \textbf{DAE for free with SIV-CTR}: Tag $t := SIV \gets F_{k_1}(m) $ then $CTR_{k_2}$ encryption.
+\item \textbf{SIV} (fixed $IV$ for the same $\left<k,m\right>$): \\
+PRF $F$, CPA-secure $\Pi:(\mathsf{Enc}_k(r,m), \mathsf{Dec}_k(r,s))$\\ 
+$(k_1,k_2) \gets \mathsf{Gen}$; $SIV \gets F_{k_1}(m)$\\ 
+$c = \left<SIV,\mathsf{Enc}_{k_2}(SIV,m) \right>$.
+\item \textbf{DAE for free with SIV-CTR}: %Tag $t := SIV$ then $CTR_{k_2}$
 \begin{figure}
 \begin{center}
 \input{tikz/SIV-CTR}
