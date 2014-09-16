@@ -149,14 +149,19 @@ $\Pi$ has \textbf{indistinguishable encryptions in the presence of an eavesdropp
 \]
 where the probability it taken over the random coins used by $\mathcal{A}$.
 \end{definition}
-\alert{Q: It the OTP scheme indistinguishable in the presence of an eavesdropper?}
 \end{frame}
-\begin{frame}\frametitle{Understanding Definition of Indistinguishablity}
-\begin{exampleblock}{If the lowest bit of $m$ can be guessed from the ciphertext with probability $\frac{3}{4}$, is it secure?}
-Q: what are two messages provided by the adversary?\\
-Q: what is the probability of success in this indistinguishability experiment?
+\begin{frame}\frametitle{Understanding Definition of Indistinguishability}
+\begin{exampleblock}{Is the OTP scheme indistinguishable in the presence of an eavesdropper?}
 \end{exampleblock}
-\begin{exampleblock}{If the lowest 3 bits can be guessed with probability $\frac{3}{8}$, is it secure?}
+\begin{exampleblock}{If an adversary always fails in the experiments, is the scheme secure?}
+\end{exampleblock}
+\begin{exampleblock}{What's the probability of using the same key in two successive eavesdropping indistinguishability experiments?}
+\end{exampleblock}
+\begin{exampleblock}{If the lowest bit of message can be guessed from the ciphertext with probability $\frac{3}{4}$, is the scheme secure?}
+%Q: what are two messages provided by the adversary?\\
+%Q: what is the probability of success in this indistinguishability experiment?
+\end{exampleblock}
+\begin{exampleblock}{If the lowest 3 bits of message can be guessed from the ciphertext with probability $\frac{3}{8}$, is the scheme secure?}
 \end{exampleblock}
 %\begin{enumerate}
 %\item \textbf{No single bit} can be guessed in a randomly-chosen plaintext with probability significantly better than $1/2$.

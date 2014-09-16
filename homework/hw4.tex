@@ -21,6 +21,22 @@
 
 \maketitle
 
+\begin{problem}
+Let $F$ be a pseudorandom function. Show that the following MAC for messages of length $2n$ is insecure: The shared key is a random $k\in \{0,1\}^n$. To authenticate a message $m_1\| m_2$ with $\abs{m_1} =\abs{m_2} = n$, compute the tag $\langle F_k(m_1), F_k(F_k(m_2))\rangle$. 
+\end{problem}
 
+\begin{problem}
+Let $(\mathsf{Gen},H)$ be a collision-resistant hash function. Is $(\mathsf{Gen},\hat{H})$ defined by $(\hat{H}^s(x) \overset{\text{def}}{=} H^s(H^s(x))$ necessarily collision resistant? Prove your answer. 
+\end{problem}
+
+\begin{problem}
+For each of following modifications to the Merkle-Damg\r{a}rd transform, determine whether the result is collision resistant or not. If yes, provide a proof; if not, demonstrate an attack.
+\begin{enumerate}
+\item Modify the construction so that the input length is not included at all (i.e, output $z_B$ and not $z_{B+1} = h^s(z_B\| L)$).
+\item Modify the construction so that instead of outputting $z = h^s(z_B\| L)$, the algorithm outputs $z_B\|L$
+\item Instead of using an $IV$, just start the computation from $x_1$. That is, define $z_1 := x_1$ and then compute $z_i := h^s(z_{i-1}\|x_i)$ for $i=2,\dotsc,B+1$ and output $z_{B+1}$ as before.
+\item Instead of using a fixed $IV$, set $z_0 := L$ and then compute $z_i := h^s(z_{i-1}\|x_i)$ for $i=1,\dotsc,B$ and output $z_B$.
+\end{enumerate}
+\end{problem}
 
 \end{document}

@@ -591,7 +591,8 @@ $(\widetilde{\mathsf{Gen}}, h)$ is CRHF. If $G$ is a PRG, then HMAC is secure.
 \item Before HMAC, a common mistake was to use $H^s(k\| x)$
 \item \alert{Verification timing attacks: (Keyczar crypto library (Python))} \\
 def Verify(key, msg, sig\underline{\ }bytes): \\
-$\qquad$ return HMAC(key, msg) == sig\underline{\ }bytes \\The problem:  implemented as a byte-by-byte comparison
+$\qquad$ return HMAC(key, msg) == sig\underline{\ }bytes \\
+The problem:  implemented as a byte-by-byte comparison
 \item \alert{\emph{Don't implement it yourself.}}
 \end{itemize}
 \end{frame}

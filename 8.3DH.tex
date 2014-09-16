@@ -10,32 +10,64 @@
 \end{frame}
 \section{Cyclic Groups and Discrete Logrithms}
 \begin{frame}\frametitle{Cyclic Groups and Generators}
-$\mathbb{G}$ is a finite group and $g \in \mathbb{G}$, the set
-\[ \langle g \rangle \overset{\text{def}}{=} \{ g^0,g^1,\dotsc,\} = \{ g^0,g^1,\dotsc, g^{i-1}\}. \]
+$\mathbb{G}$ is finite and $g \in \mathbb{G}$, 
+$ \langle g \rangle \overset{\text{def}}{=} \{ g^0,g^1,\dotsc,\} = \{ g^0,g^1,\dotsc, g^{i-1}\}. $
 \begin{itemize}
 \item The \textbf{order} of $g$ is the smallest positive integer $i$ with $g^i=1$.
 \item $\mathbb{G}$ is a \textbf{cyclic group} if $\exists\;g$ has order $m = \abs{\mathbb{G}}$. $\langle g \rangle = \mathbb{G}$, $g$ is a \textbf{generator} of $\mathbb{G}$.
-\item $\langle g \rangle$ is a subgroup of $\mathbb{G}$, and $\abs{\langle g \rangle} \mid \abs{\mathbb{G}}$.
-\item If $\mathbb{G}$ is a group of prime order $p$, then $\mathbb{G}$ is cyclic. All elements of $\mathbb{G}$ except the identity are generators of $\mathbb{G}$.
-\end{itemize}
-\begin{theorem}
-If $p$ is prime, then $\mathbb{Z}^*_p$ is cyclic.
-\end{theorem}
-\end{frame}
-\begin{frame}\frametitle{Examples of Cyclic Groups}
-\begin{exampleblock}{Are the following statements true or false?}
-\begin{itemize}
-\item $\mathbb{Z}_{15}$ with `$+$' is cyclic and the `$1$' is a generator.
-\item For $\mathbb{Z}_7^*$, $2$ is a generator, but $3$ is not.
-\end{itemize}
-\end{exampleblock}
 \begin{exampleblock}{}
-$\mathbb{G}$ is a cyclic group of order $n$, and $g$ is a generator of $\mathbb{G}$. Then the mapping $f : \mathbb{Z}_n \to \mathbb{G}$ given by $f(a) = g^a$ is an isomorphism. For $a,a' \in \mathbb{Z}_n$,
-\[ f(a+a') = g^{[a+a' \bmod n]} = g^{a+a'} = g^a\cdot g^{a'} = f(a)\cdot f(a').\]
+\begin{itemize}
+\item Is $\mathbb{Z}_6^*$, $\mathbb{Z}_7^*$, or $\mathbb{Z}_8^*$ with `$\cdot$' cyclic? %{1, 5}
+\end{itemize}
 \end{exampleblock}
-\begin{alertblock}{}
-All cyclic groups of the same order are ``the same'' in an algebraic sense, but this is not true in a computational sense.
-\end{alertblock}
+\item $\langle g \rangle$ is a subgroup of $\mathbb{G}$, and $\abs{\langle g \rangle} \mid \abs{\mathbb{G}}$.
+\item If $p$ is prime, then $\mathbb{Z}^*_p$ is cyclic.
+\end{itemize}
+\end{frame}
+%\begin{frame}\frametitle{Examples of Cyclic Groups}
+%
+%\begin{exampleblock}{}
+%$\mathbb{G}$ is a cyclic group of order $n$, and $g$ is a generator of $\mathbb{G}$. Then the mapping $f : \mathbb{Z}_n \to \mathbb{G}$ given by $f(a) = g^a$ is an isomorphism. For $a,a' \in \mathbb{Z}_n$,
+%\[ f(a+a') = g^{[a+a' \bmod n]} = g^{a+a'} = g^a\cdot g^{a'} = f(a)\cdot f(a').\]
+%\end{exampleblock}
+%\begin{alertblock}{}
+%All cyclic groups of the same order are ``the same'' in an algebraic sense, but this is not true in a computational sense.
+%\end{alertblock}
+%\end{frame}
+\begin{frame}\frametitle{Using Prime-Order Groups}
+\begin{theorem}
+ If $\mathbb{G}$ is of prime order, then $\mathbb{G}$ is cyclic. All $g \in \mathbb{G}$ except the identity are generators.
+\end{theorem}
+\begin{itemize}
+\item The discrete logarithm problem is hardest in such groups.
+\item Finding a generator in such groups is trivial.
+\item Any non-zero exponent will be invertible modulo the order.
+\item A necessary condition for the DDH problem to be hard is that $\mathsf{DH}_g(h_1,h_2)$ by itself should be indistinguishable from a random group element. This is (almost) true for such groups.
+%\item However, $\mathbb{Z}^*_p$ does not have prime order.
+\end{itemize}
+\end{frame}
+\begin{frame}\frametitle{Generating Prime-Order (Sub)Groups in $\mathbb{Z}^*_p$}
+\begin{itemize}
+\item $y \in \mathbb{Z}^*_p$ is a \textbf{quadratic residue modulo} $p$ if $\exists x \in \mathbb{Z}^*_p$ such that $x^2 \equiv y \pmod p$. \alert{(Q: show QRs in $\mathbb{Z}_{7}^{*}$)} %1, 4, 2, 2, 4, 1
+\item The set of QR is a subgroup with order $(p-1)/2$ ($x^2 \equiv (p-x)^2 \pmod p$).
+\item $p$ is a \textbf{strong prime} if $p=2q+1$ with $q$ prime.
+\end{itemize}
+\begin{algorithm}[H]
+\SetKwInOut{Input}{input}
+\SetKwInOut{Output}{output}
+\SetKw{KwG}{generate}
+\SetKw{KwC}{choose}
+\DontPrintSemicolon
+\caption{A group generation algorithm $\mathcal{G}$}
+\Input{Security parameter $1^n$}
+\Output{Cyclic group $\mathbb{G}$, its order $q$, and  a generator $g$}
+\BlankLine
+\KwG a random $(n+1)$-bit strong prime $p$\;
+$q := (p-1)/2$\;
+\KwC an arbitrary $x \in \mathbb{Z}^*_p$ with $x \neq \pm 1 \bmod p$\;
+$g := x^2 \bmod p$\;
+\Return $p,q,g$
+\end{algorithm}
 \end{frame}
 \begin{frame}\frametitle{Discrete Logarithm}
 If $\mathbb{G}$ is a cyclic group of order $q$, then $\exists$ a generator $g \in \mathbb{G}$ such that $\{ g^0,g^1,\dotsc,g^{q-1}\} = \mathbb{G}$.
@@ -45,6 +77,9 @@ If $\mathbb{G}$ is a cyclic group of order $q$, then $\exists$ a generator $g \i
 \item If $g^{x'}=h$, then $\log_gh = [x' \bmod q]$.
 \item $\log_g1=0$ and $\log_g(h_1\cdot h_2) = [(\log_gh_1+\log_gh_2) \bmod q]$.
 \end{itemize}
+\begin{exampleblock}{}
+Show an instance of DL problem in $\mathbb{Z}_{7}^{*}$
+\end{exampleblock}
 \end{frame}
 \begin{frame}\frametitle{Overview of Discrete Logarithm Algorithms}
 \begin{itemize}
@@ -57,20 +92,6 @@ If $\mathbb{G}$ is a cyclic group of order $q$, then $\exists$ a generator $g \i
 \item Elliptic curve groups vs. $\mathbb{Z}_p^*$: more efficient for the honest parties, but that are equally hard for an adversary to break.\\ (Both 1024-bit $\mathbb{Z}_p^*$ and 132-bit elliptic curve need $2^{66}$ steps.)
 \end{itemize}
 \end{frame}
-\begin{frame}\frametitle{The Discrete Logarithm Assumption}
-The discrete logarithm experiment $\mathsf{DLog}_{\mathcal{A},\mathcal{G}}(n)$:
-\begin{enumerate}
-\item Run a group-generating algorithm $\mathcal{G}(1^n)$ to obtain $(\mathbb{G},q,g)$, where $\mathbb{G}$ is a cyclic group of order $q$ (with $\|q\|=n$), and $g$ is a generator of $\mathbb{G}$.
-\item Choose $h \gets \mathbb{G}$. ($x' \gets \mathbb{Z}_q$ and $h := g^{x'}$)
-\item $\mathcal{A}$ is given $\mathbb{G}, q, g, h$, and outputs $x \in \mathbb{Z}_q$.
-\item $\mathsf{DLog}_{\mathcal{A},\mathcal{G}}(n) = 1$ if $g^x = h$, and 0 otherwise. 
-\end{enumerate}
-\begin{definition}
-\textbf{The discrete logarithm problem is hard relative to} $\mathcal{G}$ if $\forall$ \textsc{ppt} algorithm $\mathcal{A}$, $\exists$ $\mathsf{negl}$ such that
-\[ \Pr[\mathsf{DLog}_{\mathcal{A},\mathcal{G}}(n)=1] \le \mathsf{negl}(n).\]
-\end{definition}
-\end{frame}
-\begin{comment}
 \begin{frame}\frametitle{The Baby-Step/Giant-Step Algorithm}
 \begin{figure}
 \begin{center}
@@ -106,8 +127,21 @@ compute the baby steps:
 \[ 17\cdot 2^3=20,\; 17\cdot 2^4=11,\; 17\cdot 2^5=22.\]
 $2^{25}=11=17\cdot 2^4$. So $\log_2 17=25-4=21$.
 \end{exampleblock}
-
 \end{frame}
+\begin{frame}\frametitle{The Discrete Logarithm Assumption}
+The discrete logarithm experiment $\mathsf{DLog}_{\mathcal{A},\mathcal{G}}(n)$:
+\begin{enumerate}
+\item Run a group-generating algorithm $\mathcal{G}(1^n)$ to obtain $(\mathbb{G},q,g)$, where $\mathbb{G}$ is a cyclic group of order $q$ (with $\|q\|=n$), and $g$ is a generator of $\mathbb{G}$.
+\item Choose $h \gets \mathbb{G}$. ($x' \gets \mathbb{Z}_q$ and $h := g^{x'}$)
+\item $\mathcal{A}$ is given $\mathbb{G}, q, g, h$, and outputs $x \in \mathbb{Z}_q$.
+\item $\mathsf{DLog}_{\mathcal{A},\mathcal{G}}(n) = 1$ if $g^x = h$, and 0 otherwise. 
+\end{enumerate}
+\begin{definition}
+\textbf{The discrete logarithm problem is hard relative to} $\mathcal{G}$ if $\forall$ \textsc{ppt} algorithm $\mathcal{A}$, $\exists$ $\mathsf{negl}$ such that
+\[ \Pr[\mathsf{DLog}_{\mathcal{A},\mathcal{G}}(n)=1] \le \mathsf{negl}(n).\]
+\end{definition}
+\end{frame}
+\begin{comment}
 \begin{frame}\frametitle{The Pohlig-Hellman Algorithm}
 \textbf{Idea}: when $q$ is known and has small factors, reduces the discrete logarithm instance to multiple instances in groups of smaller order.
 \newline
@@ -175,42 +209,6 @@ DDH problem is hard relative to $\mathcal{G}$ if $\forall$ \textsc{ppt} $\mathca
 DDH is easier than CDH and DL.
 \end{alertblock}
 \end{frame}
-\begin{frame}\frametitle{Using Prime-Order Groups}
-\begin{itemize}
-\item The discrete logarithm problem is hardest in such groups.
-\item Finding a generator in such groups is trivial.
-\item Any non-zero exponent will be invertible modulo the order.
-\item A necessary condition for the DDH problem to be hard is that $\mathsf{DH}_g(h_1,h_2)$ by itself should be indistinguishable from a random group element. This is (almost) true for such groups:
-\end{itemize}
-\[ \Pr[\mathsf{DH}_g(g^{x_1},g^{x_2})=1] = 1 -\left(1-\frac{1}{q}\right)^2 = \frac{2}{q} - \frac{1}{q^2}, \]
-and $\forall y \neq 1:$
-\[ \Pr[\mathsf{DH}_g(g^{x_1},g^{x_2})=y] = \frac{1}{q} \cdot \left(1-\frac{1}{q}\right) = \frac{1}{q} - \frac{1}{q^2}.
-\]
-However, $\mathbb{Z}^*_p$ does not have prime order.
-\end{frame}
-\begin{frame}\frametitle{Working in (Subgroups of) $\mathbb{Z}^*_p$}
-\begin{itemize}
-\item $y \in \mathbb{Z}^*_p$ is a \textbf{quadratic residue modulo} $p$ if $\exists x \in \mathbb{Z}^*_p$ such that $x^2 \equiv y \pmod p$. \alert{(Q: show QRs in $\mathbb{Z}_{7}^{*}$)} %1, 4, 2, 2, 4, 1
-\item The set of QR is a subgroup with order $(p-1)/2$ ($x^2 \equiv (p-x)^2 \pmod p$).
-\item $p$ is a \textbf{strong prime} if $p=2q+1$ with $q$ prime.
-\end{itemize}
-\begin{algorithm}[H]
-\SetKwInOut{Input}{input}
-\SetKwInOut{Output}{output}
-\SetKw{KwG}{generate}
-\SetKw{KwC}{choose}
-\DontPrintSemicolon
-\caption{A group generation algorithm $\mathcal{G}$}
-\Input{Security parameter $1^n$}
-\Output{Cyclic group $\mathbb{G}$, its order $q$, and  a generator $g$}
-\BlankLine
-\KwG a random $(n+1)$-bit strong prime $p$\;
-$q := (p-1)/2$\;
-\KwC an arbitrary $x \in \mathbb{Z}^*_p$ with $x \neq \pm 1 \bmod p$\;
-$g := x^2 \bmod p$\;
-\Return $p,q,g$
-\end{algorithm}
-\end{frame}
 \begin{frame}\frametitle{Secure Key-Exchange Experiment}
 The key-exchange experiment $\mathsf{KE}^{\mathsf{eav}}_{\mathcal{A},\Pi}(n)$:
 \begin{enumerate}
@@ -267,7 +265,8 @@ If $b=1$, then give true key; otherwise give random $g^z$.
 The order $q = ?$\\ %5
 The set of quadratic residues ?\\ %1, 4, 9, 5, 3, 3, 5, 9, 4, 1
 Is $g = 3$ a generator? \\ %3 : 1, 3, 9, 5, 4, 1
-$x = 3, y = 4$, what's the message from Bob to Alice?\\ %3^{4} = 4
+If $x > 2$ and $y = x + 1$, what is $x$ and $y$ ?\\ %3, 4
+What's the message from Bob to Alice?\\ %3^{4} = 4
 How does Alice compute the key?\\ % 4^{3} = 9
 How does Bob compute the key? % 5^{4} = 9 
 \end{exampleblock}

@@ -18,6 +18,33 @@
 \vspace{0.5cm}
 Solutions that are based on private-key cryptography are not sufficient to deal with the problem of secure communication in open systems where parties cannot physically meet, or where parties have transient interactions.
 \end{frame}
+\begin{frame}\frametitle{Needham-Schroeder Protocol}
+\begin{itemize}
+\item Key Distribution Center (KDC) as Trusted Third Party (TTP).
+\item $E_{Bob}(k)$ is a \textbf{ticket} to access $Bob$, $k$ is \textbf{session key}.
+\item Used in MIT's Kerberos protocol (in Windows).
+\end{itemize}
+\begin{columns}[t]
+\begin{column}{5cm}
+\begin{figure}[t]
+\begin{center}
+\input{tikz/KDC}
+\end{center}
+\end{figure}
+\end{column}
+\begin{column}{5cm}
+\textbf{Strength}:
+\begin{itemize}
+\item each one stores one key
+\item no updates
+\end{itemize}
+\textbf{Weakness}:
+\begin{itemize}
+\item single-point-of-failure
+\end{itemize}
+\end{column}
+\end{columns}
+\end{frame}
 \begin{frame}\frametitle{Merkle Puzzles (Key Exchange W/O TTP)}
 \begin{itemize}
 \item[Alice] prepares $2^{32}$ puzzles $\mathsf{Puzzle}_i$, and sends to Bob.\\
@@ -84,14 +111,16 @@ $\Pi$ is \textbf{CPA-secure} if $\forall$ \textsc{ppt} $\mathcal{A}$, $\exists$ 
 \end{definition}
 \end{frame}
 \begin{frame}\frametitle{Security Properties of Public-Key Encryption}
+\begin{exampleblock}{} Symmetric ciphers are possible to encrypt a 32-bit message and obtain a 32-bit ciphertext (e.g. with the one time pad). Can the same be done with a public-key system?
+\end{exampleblock}
 \begin{theorem}
-No deterministic public-key encryption scheme is secure in the presence of an eavesdropper. 
+\alert{Q: Would a deterministic public-key encryption scheme be secure in the presence of an eavesdropper?}
 \end{theorem}
 \begin{proposition}
-If $\Pi$ is secure in the presence of an eavesdropper, then $\Pi$ also is CPA-secure, and secure for multiple encryptions.
+\alert{Q: If $\Pi$ is secure in the presence of an eavesdropper, is $\Pi$ also CPA-secure? and is it secure for multiple encryptions?}
 \end{proposition}
 \begin{proposition}
-Perfectly-secret public-key encryption is impossible.
+\alert{Q: is perfectly-secret public-key encryption possible?}
 \end{proposition}
 \end{frame}
 
@@ -333,6 +362,20 @@ $\Pi$ has \textbf{CCA/CCA2-secure} if $\forall$ \textsc{ppt} $\mathcal{A}$, $\ex
 \[ \Pr\left[\mathsf{PubK}^{\mathsf{cca}}_{\mathcal{A},\Pi}(n)=1\right] \le \frac{1}{2} + \mathsf{negl}(n). \]
 \end{definition}
 \end{frame}
+\begin{frame}\frametitle{Examples}
+\begin{exampleblock}{Let $(Gen, E, D)$ be CCA-secure on message space $\{0, 1\}^{128}$. Which of the following is also CCA-secure?}
+\begin{itemize}
+\item $E'(pk, m) = (E(pk, m), 0^{128})$\\
+$D'(sk, (c_{1}, c_{2})) = \left\{ 
+  \begin{array}{l l}
+    D(sk, c_{1}) & \quad \text{if}\ c_{2} = 0^{128}\\
+    \bot &  \quad \text{otherwise}\\
+  \end{array} \right. $
+\item $E'(pk, m)= (E(pk, m), E(pk, 0^{128}))$\\
+$D'(sk, (c_{1}, c_{2})) = D(sk, c_{1})$
+\end{itemize}
+\end{exampleblock}
+\end{frame}
 \begin{frame}{State of the Art on CCA2-secure Encryption}
 \begin{itemize}
 \item \textbf{Zero-Knowledge Proof}: complex, and impractical. (e.g., Dolev-Dwork-Naor)
@@ -427,6 +470,7 @@ If $f$ is TPD and $H$ is RO, Construction is CPA-secure.
 \end{theorem}
 \alert{$H$ can not be replaced by PRG, since the partial info on $r$ may be leaked by $c_1$.}
 \end{frame}
+
 \begin{frame}\frametitle{CCA-secure based on Private Key Encryption}
 \textbf{Idea}: PubK CCA = PrivK CCA + (Secret Key = TPD + RO).  
 \begin{construction}

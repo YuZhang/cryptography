@@ -115,6 +115,7 @@ Practical solutions for one-way computation.
     f(x) & \quad \text{if $x[0,1,2,3] \neq 1010$}\\
     x & \quad \text{otherwise}\\
   \end{array} \right. $
+\item more examples in homework
 \end{itemize}
 \end{exampleblock}
 \end{frame}
@@ -191,7 +192,7 @@ If $F$ is a length-preserving PRF, then $F^{(4)}$ is a strong PRP that maps $2n$
 %\end{frame}
 \begin{frame}\frametitle{Necessary Assumptions}
 \begin{theorem}
-Assume that $\exists$ OWP. Then $\exists$ PRG, PRF, strong PRP, CCA-secure private-key encryption schemes, and secure MAC.
+Assume that $\exists$ OWP. Then $\exists$ PRG, PRF, strong PRP, and CCA-secure private-key encryption schemes.
 \end{theorem}
 \begin{proposition}
 If $\exists$ a private-key encryption scheme that has indistinguishable encryptions in the presence of an eavesdropper, then $\exists$ an OWF.
@@ -202,8 +203,8 @@ $f(k,m,r) \overset{\text{def}}{=} (\mathsf{Enc}_k(m,r),m)$.
 \end{frame}
 \begin{frame}\frametitle{Summary}
 \begin{itemize}
-\item OWF implies secure private-key encryption scheme and MAC.
-\item Secure private-key encryption scheme/MAC implies OWF.
+\item OWF implies secure private-key encryption scheme.
+\item Secure private-key encryption scheme implies OWF.
 \end{itemize}
 \end{frame}
 \end{document}
