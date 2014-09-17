@@ -256,7 +256,7 @@ If $b=1$, then give true key; otherwise give random $g^z$.
 &= \frac{1}{2}\cdot \Pr\left[ \mathcal{A}(g^x,g^y,g^{xy})=1 \right] + \frac{1}{2}\cdot \Pr\left[ \mathcal{A}(g^x,g^y,g^z)=0 \right]\\
 &= \frac{1}{2}\cdot \Pr\left[ \mathcal{A}(g^x,g^y,g^{xy})=1 \right] + \frac{1}{2}\cdot (1-\Pr\left[ \mathcal{A}(g^x,g^y,g^z)=1 \right])\\
 &= \frac{1}{2} + \frac{1}{2}\cdot \left( \Pr\left[ \mathcal{A}(g^x,g^y,g^{xy})=1 \right] - \Pr\left[ \mathcal{A}(g^x,g^y,g^z)=1 \right] \right)\\
-&\le \frac{1}{2} + \frac{1}{2}\cdot \left| \Pr\left[ \mathcal{A}(g^x,g^y,g^{xy})=1 \right] - \Pr\left[ \mathcal{A}(g^x,g^y,g^z)=1 \right] \right|
+&\le \frac{1}{2} + \frac{1}{2}\cdot \mathsf{negl}(n) %\left| \Pr\left[ \mathcal{A}(g^x,g^y,g^{xy})=1 \right] - \Pr\left[ \mathcal{A}(g^x,g^y,g^z)=1 \right] \right|
 \end{align*}
 \end{proof}
 \end{frame}
@@ -354,6 +354,13 @@ If the DDH problem is hard relative to $\mathcal{G}$, then the Elgamal encryptio
 \end{theorem}
 \end{frame}
 \begin{frame}\frametitle{Example of Elgamal Encryption}
+\textbf{Encoding binary strings}:
+\begin{itemize}
+\item the subgroup of quadratic residues modulo a strong prime $p = (2q+1)$.
+\item a string $\hat{m} \in \{0,1\}^{n-1}$, $n = \|q\|$.
+\item map $\hat{m}$ to the plaintext $m = [(\hat{m}+1)^2 \bmod p]$.
+\item The mapping is one-to-one and efficiently invertible.
+\end{itemize}
 \begin{exampleblock}{$q=83$, $p=2q+1=167$, $g=2^2=4 \pmod{167}$, $\hat{m}=011101$}
 The receiver chooses secrete key $37 \in \mathbb{Z}_{83}$.\\
 The public key is $pk=\langle 167,83,4,[4^{37} \bmod 167]=76\rangle$.\\
@@ -365,7 +372,7 @@ Decryption: $m= [44\cdot (132^{37})^{-1}] \equiv [44\cdot 66] \equiv 65 \pmod{16
 65 has the two square roots 30 and 137, and $30 < q$, so $\hat{m}=29$.
 \end{exampleblock}
 \end{frame}
-\begin{comment}
+%\begin{comment}
 \begin{frame}{Proof of Security of Elgamal Encryption Scheme}
 \begin{proof}
 \textbf{Idea}: Prove that $\Pi$ is secure in the presence of an eavesdropper by reducing an algorithm $D$ for DDH problem to the eavesdropper $\mathcal{A}$.
@@ -398,26 +405,19 @@ Since the DDH problem is hard,
 \[  \mathsf{negl}(n) \ge \abs{\Pr[D(g^x,g^y,g^z)=1] - \Pr[D(g^x,g^y,g^{xy})=1]}\]
 \[ =\abs{\frac{1}{2}-\varepsilon(n)}. \]
 \end{frame}
-\end{comment}
+%\end{comment}
 \begin{frame}\frametitle{CCA in Elgamal Encryption}
 \begin{exampleblock}{Constructing the ciphertext of the message $m\cdot m'$.}
 Given $pk=\langle g, h\rangle$, $c = \langle c_1, c_2\rangle$, $c_1=g^y$, $c_2=h^y\cdot m$, \\ \textbf{Method I}: compute
 $c_2' := c_2\cdot m'$, and $c' = \langle c_1, c_2'\rangle$.
-\[\frac{c_2'}{c_1^x} = \frac{h^y\cdot m\cdot m'}{g^{xy}} = \frac{g^{xy}\cdot m\cdot m'}{g^{xy}} = m\cdot m'.\]
+\[\frac{c_2'}{c_1^x} = ? \]%\frac{h^y\cdot m\cdot m'}{g^{xy}} = \frac{g^{xy}\cdot m\cdot m'}{g^{xy}} = m\cdot m'.\]
 \textbf{Method II}: compute $c_1'' := c_1\cdot g^{y''}$, and $c_2'' := c_2\cdot h^{y''}\cdot m'$.
-\[c_1''=g^y\cdot g^{y''} = g^{y+y''}\;\text{and}\; c_2''=h^ym\cdot h^{y''}m'=h^{y+y''}mm'\]
+\[c_1''=g^y\cdot g^{y''} = g^{y+y''}\;\text{and}\; c_2''= ? \] %h^ym\cdot h^{y''}m'=h^{y+y''}mm'\]
 so $c''=\langle c_1'',c_2''\rangle$ is an encryption of $m\cdot m'$.
 \end{exampleblock}
 \end{frame}
 \begin{frame}\frametitle{Elgamal Implementation Issues}
 \begin{itemize}
-\item \textbf{Encoding binary strings}: depends on the particular type of group.
-\begin{itemize}
-\item the subgroup of quadratic residues modulo a strong prime $p = (2q+1)$.
-\item a string $\hat{m} \in \{0,1\}^{n-1}$, $n = \|q\|$.
-\item map $\hat{m}$ to the plaintext $m = [(\hat{m}+1)^2 \bmod p]$.
-\item The mapping is one-to-one and efficiently invertible.
-\end{itemize}
 \item \textbf{Sharing public parameters}: $\mathcal{G}$ generates parameters $\mathbb{G},q,g$.
 \begin{itemize}
 \item generated ``once-and-for-all''.
@@ -426,7 +426,7 @@ so $c''=\langle c_1'',c_2''\rangle$ is an encryption of $m\cdot m'$.
 \end{itemize}
 \end{itemize}
 \begin{alertblock}{Parameter sharing}
-In the case of Elgamal, the public parameters can be shared, but in the case of RSA, parameters cannot be shared.
+In the case of Elgamal, the public parameters can be shared. In the case of RSA, can parameters be shared?
 \end{alertblock}
 \end{frame}
 \begin{frame}\frametitle{Summary}

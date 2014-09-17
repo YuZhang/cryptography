@@ -289,6 +289,22 @@ $(\mathsf{Gen}_I, \mathsf{Samp}, f)$ is OWP.
 Deterministic polynomial-time algorithm $\mathsf{hc}$ is a \textbf{hard-core predicate} of $\Pi$ if $\forall$ \textsc{ppt} $\mathcal{A}$, $\exists$ $\mathsf{negl}$ such that
 \[ \Pr[\mathcal{A}(I,f_I(x)) = \mathsf{hc}_I(x)] \le \frac{1}{2} +\mathsf{negl}(n). \]
 \end{frame}
+\begin{frame}\frametitle{Examples}
+\begin{exampleblock}{Let $f$ with $<I, \mathsf{td}>$ be a TDP. Which of the following $f'$ is also a TDP?}
+\begin{itemize}
+\item $f'(x) = f(x)\| 000$
+\item $f'(x) = f(x)\| \mathsf{td}$
+\item $f'(x\|x') = f(x)\|\mathsf{Inv}_{\mathsf{td}}(f(x'))$
+\item $f'(x\|x') = f(x)\|f(x')$
+\item $f'(x) = f(x) \oplus I$
+\item $ f'(x) = \left\{
+  \begin{array}{l l}
+    f(x) & \quad \text{if $x[0,1,2,3] \neq 1010$}\\
+    x & \quad \text{otherwise}\\
+  \end{array} \right. $
+\end{itemize}
+\end{exampleblock}
+\end{frame}
 \begin{frame}\frametitle{Public-key Encryption Schemes from TDPs}
 \begin{construction}
 \begin{itemize}
@@ -300,6 +316,9 @@ Deterministic polynomial-time algorithm $\mathsf{hc}$ is a \textbf{hard-core pre
 \begin{theorem}
 If $\widehat{\Pi}=(\widehat{Gen},f)$ is TDP, and $\mathsf{hc}$ is HCP for $\widehat{\Pi}$, then Construction $\Pi$ is CPA-secure.
 \end{theorem}
+\begin{exampleblock}{Is the following scheme is secure?}
+$\mathsf{Enc}_{I}(m) = f_I(m)$, $\mathsf{Dec}_{\mathsf{td}}(c) = f^{-1}_I(c)$.
+\end{exampleblock}
 \end{frame}
 \begin{frame}\frametitle{Proof}
 \textbf{Idea}: $\mathsf{hc}_I(x)$ is pseudorandom. Reduce $\mathcal{A}_{\mathsf{hc}}$ for $\mathsf{hc}$ to $\mathcal{A}$ for $\Pi$.
@@ -313,26 +332,26 @@ If $\widehat{\Pi}=(\widehat{Gen},f)$ is TDP, and $\mathsf{hc}$ is HCP for $\wide
 \end{frame}
 \begin{frame}\frametitle{Proof (Cont.)}
 \[\Pr[b'=b|z=\mathsf{hc}_I(x)] = \Pr[\mathsf{PubK}^{\mathsf{eav}}_{\mathcal{A},\Pi}(n)=1]=\varepsilon(n).\]
-If $z \neq \mathsf{hc}_I(x)$, $m' = m_b\oplus \overline{\mathsf{hc}}_I(x) = m_{\overline{b}}\oplus \mathsf{hc}_I(x)$,
+If $z \neq \mathsf{hc}_I(x)$, $m' = m_b\oplus \overline{\mathsf{hc}}_I(x) = m_{\overline{b}}\oplus \mathsf{hc}_I(x)$,\\ which means $m_{\overline{b}}$ is encrypted.
 \[\Pr[b'=b|z\neq \mathsf{hc}_I(x)] = \Pr[\mathsf{PubK}^{\mathsf{eav}}_{\mathcal{A},\Pi}(n)=0]=1-\varepsilon(n).\]
 \[\Pr[b'\neq b|z\neq \mathsf{hc}_I(x)] =\varepsilon(n).\]
 \[\Pr[\mathcal{A}_{\mathsf{hc}}(I,f_I(x))=\mathsf{hc}_I(x)] = \frac{1}{2}\cdot (\varepsilon(n)+\varepsilon(n)) = \varepsilon(n).\]
 \end{frame}
-\begin{frame}\frametitle{Encrypting Longer Messages}
-\begin{theorem}
-If $\exists$ TDP $\Pi$, then $\exists$ TDP $\widehat{\Pi}$ with a HCP $\mathsf{hc}$ for $\widehat{\Pi}$.
-\end{theorem}
-\textbf{Example}: If RSA assumption holds then the least-significant bit is hard-core for the RSA family of TDP.
-\newline
-
-an $\ell$-it message $m=m_1\cdots m_{\ell}$, the public key $I$, the ciphertext is
-\[\langle f_I(x_1), \mathsf{hc}_I(x_I)\oplus m_1\rangle,\dotsc,\langle f_I(x_{\ell}), \mathsf{hc}_I(x_{\ell})\oplus m_{\ell}\rangle,\]
-with $x_1,\dotsc,x_{\ell}$ chosen independently and \emph{u.r.a} from $\mathcal{D}_I$.
-\newline
-
-An alternative way: $x_1\gets \mathcal{D}_I$ and compute $x_{i+1} := f_I(x_i)$ for $i=1$ to $\ell$. the ciphertext is 
-\[\langle x_{\ell+1},\mathsf{hc}_I(x_1)\oplus m_1,\dotsc,\mathsf{hc}_I(x_{\ell})\oplus m_{\ell}\rangle.\]
-\end{frame}
+%\begin{frame}\frametitle{Encrypting Longer Messages}
+%\begin{theorem}
+%If $\exists$ TDP $\Pi$, then $\exists$ TDP $\widehat{\Pi}$ with a HCP $\mathsf{hc}$ for $\widehat{\Pi}$.
+%\end{theorem}
+%\textbf{Example}: If RSA assumption holds then the least-significant bit is hard-core for the RSA family of TDP.
+%\newline
+%
+%an $\ell$-it message $m=m_1\cdots m_{\ell}$, the public key $I$, the ciphertext is
+%\[\langle f_I(x_1), \mathsf{hc}_I(x_I)\oplus m_1\rangle,\dotsc,\langle f_I(x_{\ell}), \mathsf{hc}_I(x_{\ell})\oplus m_{\ell}\rangle,\]
+%with $x_1,\dotsc,x_{\ell}$ chosen independently and \emph{u.r.a} from $\mathcal{D}_I$.
+%\newline
+%
+%An alternative way: $x_1\gets \mathcal{D}_I$ and compute $x_{i+1} := f_I(x_i)$ for $i=1$ to $\ell$. the ciphertext is 
+%\[\langle x_{\ell+1},\mathsf{hc}_I(x_1)\oplus m_1,\dotsc,\mathsf{hc}_I(x_{\ell})\oplus m_{\ell}\rangle.\]
+%\end{frame}
 \section{Security Against Chosen-Ciphertext Attacks}
 \begin{frame}\frametitle{Scenarios of CCA in Public-Key Setting}
 \begin{enumerate}

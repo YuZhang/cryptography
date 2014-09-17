@@ -51,7 +51,7 @@ A signature scheme $\Pi$ is \textbf{existentially unforgeable under an adaptive 
 \end{definition}
 \end{frame}
 \section{RSA Signatures}
-\begin{frame}\frametitle{``Textbook RSA''}
+\begin{frame}\frametitle{Insecurity of ``Textbook RSA''}
 \begin{construction}
 \begin{itemize}
 \item $\mathsf{Gen}$: on input $1^n$ run $\mathsf{GenRSA}(1^n)$ to obtain $N,e,d$. $pk = \langle N,e \rangle$ and $sk = \langle N,d \rangle$.
@@ -59,19 +59,16 @@ A signature scheme $\Pi$ is \textbf{existentially unforgeable under an adaptive 
 \item $\mathsf{Vrfy}$: on input $pk$ and $m \in \mathbb{Z}^*_N$, $m \overset{?}{=} [\sigma^e \bmod N]$.
 \end{itemize}
 \end{construction}
-\begin{alertblock}{Insecurity}
-The ``textbook RSA'' is insecure. 
-\end{alertblock}
-\end{frame}
-\begin{frame}\frametitle{Insecurity of ``Textbook RSA''}
 \begin{itemize}
 \item \textbf{A no-message attack}:
 choose an arbitrary $\sigma \in \mathbb{Z}^*_N$ and compute $m := [\sigma^e \bmod N]$. Output the forgery $(m,\sigma)$.
+\begin{exampleblock}{$pk = \left<15, 3\right>,\ \sigma = 2,\ m = ?\ m^{d} = ?$}
+\end{exampleblock}
 \item \textbf{Forging a signature on an arbitrary message}:\\
 To forge a signature on $m$, choose a random $m_1$, set $m_2 := [m/m_1 \bmod N]$,  obtain signatures $\sigma_1, \sigma_2$ on $m_1, m_2$. \\
-$\sigma := [\sigma_1\cdot \sigma_2 \bmod N]$ is a valid signature on $m$.
+\alert{Q: $\sigma := [\underline{\qquad} \bmod N]$ is a valid signature on $m$.}
 \end{itemize}
-\[\sigma^e \equiv (\sigma_1\cdot \sigma_2)^e \equiv (m^d_1\cdot m^d_2)^e \equiv m_1^{ed}\cdot m_2^{ed} \equiv m_1m_2 \equiv m \pmod N.\]
+%\[\sigma^e \equiv (\sigma_1\cdot \sigma_2)^e \equiv (m^d_1\cdot m^d_2)^e \equiv m_1^{ed}\cdot m_2^{ed} \equiv m_1m_2 \equiv m \pmod N.\]
 \end{frame}
 \begin{frame}\frametitle{Hashed RSA}
 \begin{itemize}
@@ -98,7 +95,7 @@ $\Pi = (\mathsf{Gen}_S, \mathsf{Sign}, \mathsf{Vrfy})$, $\Pi_H = (\mathsf{Gen}_H
 If $\Pi$ is existentially unforgeable under an adaptive CMA and $\Pi_H$ is collision resistant, then Construction is existentially unforgeable under an adaptive CMA.
 \end{theorem}
 \end{frame}
-\begin{comment}
+%\begin{comment}
 \begin{frame}\frametitle{Proof of Security of ``Hash-and-Sign'' Paradigm}
 \textbf{Idea}: a forgery must involve either finding a collision in $H$ or forging a signature with respect to $\Pi$.
 \begin{proof}
@@ -130,7 +127,7 @@ Reduce $\mathcal{A}$ for $\Pi$ to $\mathcal{A}'$.
 \end{figure}
 $\Pr[\mathsf{SF} \land \overline{\mathsf{coll}}] = \Pr[\mathsf{Sigforge}_{\mathcal{A},\Pi}(n)=1]$.
 \end{frame}
-\end{comment}
+%\end{comment}
 \section{One-Time Signature Scheme}
 \begin{frame}\frametitle{One-Time Signature (OTS)}
 \textbf{One-Time Signature (OTS)}: sign only one message with one secret.\\
@@ -170,19 +167,20 @@ If $f$ is OWF, $\Pi$ is OTS for messages of length polynomial $\ell$.
 \begin{frame}\frametitle{Example of Lamport's OTS}
 \begin{exampleblock}{Signing $m=011$}
 \[ sk =
-\begin{pmatrix} {\color{red} x_{1,0}} & x_{2,0} & x_{3,0} \\
-x_{1,1} & {\color{red} x_{2,1}} & {\color{red} x_{3,1}} 
+\begin{pmatrix} { x_{1,0}} & x_{2,0} & x_{3,0} \\
+x_{1,1} & { x_{2,1}} & { x_{3,1}} 
 \end{pmatrix}
-\implies \sigma = (x_{1,0},x_{2,1},x_{3,1})\]
+\implies \sigma = \underline{\qquad}\]
+
 $\sigma = (x_1,x_2,x_3)$:
 \[ pk =
-\begin{pmatrix} {\color{red} y_{1,0}} & y_{2,0} & y_{3,0} \\
-y_{1,1} & {\color{red} y_{2,1}} & {\color{red} y_{3,1}} 
+\begin{pmatrix} { y_{1,0}} & y_{2,0} & y_{3,0} \\
+y_{1,1} & { y_{2,1}} & {y_{3,1}} 
 \end{pmatrix}
-\implies \begin{array}{l} f(x_1) \overset{?}{=} y_{1,0} \\ f(x_2) \overset{?}{=} y_{2,1} \\ f(x_3) \overset{?}{=} y_{3,1} \end{array} \]
+\implies \begin{array}{l} f(x_1) \overset{?}{=} \underline{\qquad} \\ f(x_2) \overset{?}{=} \underline{\qquad} \\ f(x_3) \overset{?}{=} \underline{\qquad} \end{array} \]
 \end{exampleblock}
 \end{frame}
-\begin{comment}
+%\begin{comment}
 \begin{frame}\frametitle{Proof of Lamport's OTS Security}
 \textbf{Idea}: If $m \neq m'$, then $\exists i^*, m_{i*} = b^* \neq m'_{i*}$. So to forge a signature on $m$ can invert a single $y_{i^*,b^*}$ at least.
 \begin{proof}
