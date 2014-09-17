@@ -1,0 +1,79 @@
+\documentclass[11pt]{article}
+
+% set 1-inch margins in the document
+\usepackage[margin=1in]{geometry}
+\usepackage{amsthm}
+\usepackage{amsmath}
+\usepackage{amssymb,amsfonts}
+\theoremstyle{definition}
+
+% include this if you want to import graphics files with /includegraphics
+\usepackage{graphicx}
+\providecommand{\abs}[1]{\lvert#1\rvert}
+
+% info for header block in upper right hand corner
+
+\newtheorem{problem}{Problem}
+
+\title{HIT --- Cryptography --- Homework 5}
+
+\begin{document}
+
+\maketitle
+
+%\begin{problem}
+%This question concerns the Euler phi function.
+%\begin{enumerate}
+%\item Let  $p$ be a prime and $e \ge 1$ an integer. Show that $\phi(p^e) = p^{e-1}(p-1)$.
+%\item Let $p,q$ be relatively prime. Show that $\phi(pq) = \phi(p)\cdot \phi(q)$. (You may use the Chinese remainder theorem.)
+%\item Prove Theorem: $N = \prod_ip_i^{e_i}$, $\{p_i\}$ are distinct primes, $\phi(N) = \prod_ip_i^{e_i-1}(p_i-1)$.
+%\end{enumerate}
+%\end{problem}
+
+\begin{problem}
+Compute $[101^{4,800,000,023} \bmod 35]$ (by hand).
+\end{problem}
+
+\begin{problem}
+Let $N=pq$ be a product of two distinct primes. Show that if $\phi(N)$ and $N$ are known, then it is possible to compute $p$ and $q$ in polynomial time.
+\end{problem}
+
+\begin{problem}
+Consider the following key-exchange protocol:
+\begin{enumerate}
+\item Alice chooses $k,r \gets \{0,1\}^n$ at random, and sends $s:=k\oplus r$ to Bob.
+\item Bob chooses $t \gets \{0,1\}^n$ at random and sends $u := s\oplus t$ to Alice.
+\item Alice computes $w := u\oplus r$ and sends $w$ to Bob.
+\item Alice outputs $k$ and Bob computes $w \oplus t$.
+\end{enumerate}
+Show that Alice and Bob output the same key. Analyze the security of the scheme (i.e. either prove its security or show a concrete attack by an eavesdropper).
+\end{problem}
+
+\begin{problem}
+Consider the following public-key encryption scheme. The public key is $(\mathbb{G},q,g,h)$ and the private key is $x$, generated exactly as in the El Gamal encryption scheme. In order to encrypt a bit $b$, the sender does the following:
+\begin{itemize}
+\item If $b=0$ then choose a random $y \gets \mathbb{Z}_q$ and compute $c_1= g^y$ and $c_2=h^y$. The ciphertext is $\langle c_1,c_2\rangle$.
+\item If $b=1$ then choose independent random $y,z \gets \mathbb{Z}_q$ and compute $c_1= g^y$ and $c_2=g^z$, and set the ciphertext is $\langle c_1,c_2\rangle$.
+\end{itemize}
+(a) Show that it is possible to decrypt efficiently given knowledge of $x$. (b) Prove that this encryption scheme is CPA-secure if the decisional Diffie-Hellman problem is hard relative to $\mathcal{G}$
+\end{problem}
+
+\begin{problem}
+The natural way of applying hybrid encryption to the El Gamal encryption scheme is as follows. The public key is $pk = \langle \mathbb{G},q,g,h\rangle $ as in the El Gamal scheme, and to encrypt a message $m$ the sender chooses random $k \gets \{0,1\}^n$ and sends
+\[ \langle g^r, h^r\cdot k, \mathsf{Enc}_k(m)\rangle, \]
+where $r\gets \mathbb{Z}_q$ is chosen at random and $\mathsf{Enc}$ represents a private-key encryption scheme. Suggest an improvement that results in a shorter ciphertext containing only a \emph{single} group element followed by a private-key encryption of $m$.
+\end{problem}
+
+\begin{problem}
+For each of the following variants of the definition of security for signatures, state whether textbook RSA is secure and prove your answer: 
+\begin{itemize}
+\item (a) In this first variant, the experiment is as follows: the adversary is given the public key $pk$ and a random message $m$. The adversary is then allowed to query the signing oracle once on a single message that does not equal $m$. Following this, the adversary outputs a signature $\sigma$ and succeeds if $\mathsf{Vrfy}_{pk}(m,\sigma)=1$. As usual, security is said to hold if the adversary can succeed in this experiment with at most negligible probability.	
+\item (b) The second variant is as above, except that the adversary is not allowed to query the signing oracle at all.
+\end{itemize}
+\end{problem}
+
+\begin{problem}
+Consider the Lamport one-time signature scheme. Describe an adversary who obtains signatures on two messages of its choice and can then forge signatures on any message it likes.
+\end{problem}
+
+\end{document}
