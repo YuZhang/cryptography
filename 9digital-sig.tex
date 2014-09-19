@@ -11,16 +11,17 @@
 \section{Definitions of Digital Signatures}
 \begin{frame}{Digital Signatures -- An Overview}
 \begin{itemize}
-\item \textbf{Digital signature scheme} is a mathematical scheme for demonstrating the authenticity/integrity of a digital message.
-\item allow a \textbf{signer} $S$ to ``\textbf{sign}'' a message with its own $sk$, anyone who knows $S$'s $pk$ can \textbf{verify} the authenticity/integrity.
+\item \textbf{Digital signature scheme} is a mathematical scheme for demonstrating the authenticity/integrity of a digital message
+\item allow a \textbf{signer} $S$ to ``\textbf{sign}'' a message with its own $sk$, anyone who knows $S$'s $pk$ can \textbf{verify} the authenticity/integrity
 \item (Comparing to MAC) digital signature is:
 \begin{itemize}
-\item publicly verifiable.
-\item transferable.
-\item non-repudiation.
-\item but slow.
+\item publicly verifiable
+\item transferable
+\item non-repudiation
+\item but slow
 \end{itemize}
-\item Digital signature is NOT the ``inverse'' of public-key encryption.
+\item \alert{Q: What are the differences between digital signatures and handwritten signatures?}
+\item Digital signature is NOT the ``inverse'' of public-key encryption
 \end{itemize}
 \end{frame}
 \begin{frame}\frametitle{The Syntax of Digital Signature Scheme}
@@ -49,6 +50,8 @@ A signature scheme $\Pi$ is \textbf{existentially unforgeable under an adaptive 
 \[ \Pr [\mathsf{Sigforge}_{\mathcal{A},\Pi }(n)=1] \le \mathsf{negl}(n).
 \]
 \end{definition}
+\begin{exampleblock}{Q: What's the difference on the ability of adversary between MAC and digital signature? What if an adversary is not limited to PPT?}
+\end{exampleblock}
 \end{frame}
 \section{RSA Signatures}
 \begin{frame}\frametitle{Insecurity of ``Textbook RSA''}
@@ -130,7 +133,7 @@ $\Pr[\mathsf{SF} \land \overline{\mathsf{coll}}] = \Pr[\mathsf{Sigforge}_{\mathc
 %\end{comment}
 \section{One-Time Signature Scheme}
 \begin{frame}\frametitle{One-Time Signature (OTS)}
-\textbf{One-Time Signature (OTS)}: sign only one message with one secret.\\
+\textbf{One-Time Signature (OTS)}: Under a weaker attack scenario, sign only one message with one secret.\\
 The OTS experiment $\mathsf{Sigforge}_{\mathcal{A},\Pi }^{\text{1-time}}(n)$:
 \begin{enumerate}
 \item $(pk,sk) \gets \mathsf{Gen}(1^n)$.
@@ -281,7 +284,7 @@ If OWF exists, then $\exists$ (stateless) secure signature scheme.
 \end{theorem}
 \end{frame}
 \section{The Digital Signature Standard (DSS)}
-\begin{frame}\frametitle{Construction of DSS}
+\begin{frame}\frametitle{Construction of DSS/DSA}
 DSS uses Digital Signature Algorithm (DSA, a variant of ElGamal signature scheme). [FIPS 186]
 \begin{construction}
 $\mathcal{G}$ outputs $(p,q,g)$: (1) $p$ and $q$ are primes with $\|q\| =n$;\\
@@ -296,7 +299,7 @@ $pk = \langle H,p,q,g,y\rangle$. $sk=\langle H,p,q,g,x\rangle$.
 \end{itemize}
 \end{construction}
 \end{frame}
-\begin{frame}\frametitle{Correctness and Security of DSS}
+\begin{frame}\frametitle{Correctness and Security of DSS/DSA}
 \[r = [[g^k \bmod p] \bmod q]\; \text{and}\; s= [(\hat{m}+xr)\cdot k^{-1} \bmod q],\; \hat{m}=H(m). \]
 \begin{align*}g^{\hat{m}s^{-1}}y^{rs^{-1}} &= g^{\hat{m}\cdot (\hat{m}+xr)^{-1}k}g^{xr\cdot (\hat{m}+xr)^{-1}k} \pmod p \\
 	&= g^{(\hat{m}+xr)\cdot (\hat{m}+xr)^{-1}k} \pmod p \\  

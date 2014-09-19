@@ -121,11 +121,11 @@ The time complexity is $\mathcal{O}(\sqrt{q}\cdot \mathsf{polylog}(q))$.
 \begin{frame}\frametitle{Example of Baby-Step/Giant-Step Algorithm}
 \begin{exampleblock}{In $\mathbb{Z}^*_{29}$, $q=28$, $g=2$, $y=17$.}
 $t=5$, compute the giant steps:
-\[2^0=1,\; 2^5=3,\; 2^{10}=9,\; 2^{15}=27,\; 2^{20}=23,\; 2^{25}=11. \]
+\[2^0=1,\; 2^5=?,\; 2^{10}=?,\; 2^{15}=?,\; 2^{20}=?,\; 2^{25}=? \]
 compute the baby steps:
-\[17\cdot 2^0=17,\; 17\cdot 2^1=5,\; 17\cdot 2^2=10,\]
-\[ 17\cdot 2^3=20,\; 17\cdot 2^4=11,\; 17\cdot 2^5=22.\]
-$2^{25}=11=17\cdot 2^4$. So $\log_2 17=25-4=21$.
+\[17\cdot 2^0=17,\; 17\cdot 2^1=?,\; 17\cdot 2^2=?,\]
+\[ 17\cdot 2^3=?,\; 17\cdot 2^4=?,\; 17\cdot 2^5=?\]
+$2^{x} = 17\cdot 2^y$. So $\log_2 17=x-y=21$
 \end{exampleblock}
 \end{frame}
 \begin{frame}\frametitle{The Discrete Logarithm Assumption}
@@ -232,7 +232,7 @@ A key-exchange protocol $\Pi$ is secure in the presence of an eavesdropper if $\
 \end{figure}
 \end{column}
 \begin{column}{6cm}
-$k_A = k_B = k = g^{xy}$.
+\alert{Q: $k_A = k_B = k = ?$}
 \newline
 	
 $\widehat{\mathsf{KE}}^{\mathsf{eav}}_{\mathcal{A},\Pi}$ denote an experiment where if $b=0$ the adversary is given $\hat{k} \gets \mathbb{G}$.
@@ -432,8 +432,8 @@ In the case of Elgamal, the public parameters can be shared. In the case of RSA,
 \begin{frame}\frametitle{Summary}
 \begin{itemize}
 \item cyclic group, discrete log., baby-step/giant-step
-\item CDH, DDH, DHKE protocol.
-\item Elgamal encryption, sharing public parameters.
+\item CDH, DDH, DHKE protocol
+\item Elgamal encryption, sharing public parameters
 \end{itemize}
 \end{frame}
 \end{document}
