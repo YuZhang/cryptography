@@ -9,20 +9,6 @@
 \tableofcontents
 \end{frame}
 \section{Stream Ciphers and Multiple Encryption}
-\begin{frame}\frametitle{Stream Ciphers}
-\begin{itemize}
-\item \textbf{Stream cipher}: Encrypting by XORing with pseudorandom stream.
-\item \textbf{State of the art}: No standardized and popular one\footnote{eStream project worked on it. Salsa20/12 is a promising candidate.}. Security is questionable, e.g.\  RC4 in WEP protocol in 802.11, and Linear Feedback Shift Registers (LFSRs).
-\end{itemize}
-\begin{figure}
-\begin{center}
-\includegraphics[width=50mm]{pic/A5-1_GSM_cipher} 
-\end{center}
-\end{figure}
-\begin{alertblock}{WARNING}
-Don't use any stream cipher. If necessary, construct one from a block cipher.
-\end{alertblock}
-\end{frame}
 \begin{frame}\frametitle{Security for Multiple Encryptions}
 The multiple-message eavesdropping experiment $\mathsf{PrivK}^{\mathsf{mult}}_{\mathcal{A},\Pi}(n)$:
 \begin{enumerate}
@@ -43,9 +29,26 @@ $\Pi$ has \textbf{indistinguishable multiple encryptions in the presence of an e
 \]
 \end{definition}
 \begin{alertblock}{Question:}
-$\Pi = (\mathsf{Gen}, \mathsf{Enc}, \mathsf{Dec})$ for which $\mathsf{Enc}$ is a \textbf{deterministic} function of the key and the message.  Does $\Pi$ have indistinguishable multiple encryptions in the presence of an eavesdropper?
+\begin{itemize}
+\item Does any cipher we have learned so far have indistinguishable multiple encryptions in the presence of an eavesdropper?
+\item Generally, if $\Pi$'s encryption function is \textbf{deterministic}, is $\Pi$ multiple-encryption-secure?
+\end{itemize}
 \end{alertblock}
 %For the deterministic encryption, the adversary generates $m_0^1 = m_0^2$ and $m_1^1 \neq m_1^2$ and then outputs $b'=0$ if $c^1 = c^2$, otherwise $b'=1$.
+\end{frame}
+\begin{frame}\frametitle{Stream Ciphers}
+\begin{itemize}
+\item \textbf{Stream cipher}: Encrypting by XORing with pseudorandom stream
+\item \textbf{State of the art}: No standardized and popular one\footnote{eStream project worked on it. Salsa20/12 is a promising candidate.}\\ Security is questionable, e.g., RC4 in WEP protocol in 802.11, Linear Feedback Shift Registers (LFSRs)
+\end{itemize}
+\begin{figure}
+\begin{center}
+\includegraphics[width=50mm]{pic/A5-1_GSM_cipher} 
+\end{center}
+\end{figure}
+\begin{alertblock}{WARNING}
+Don't use any stream cipher. If necessary, construct one from a block cipher.
+\end{alertblock}
 \end{frame}
 \begin{frame}\frametitle{Secure Multiple Encryptions Using a Stream Cipher}
 \begin{figure}
@@ -53,42 +56,42 @@ $\Pi = (\mathsf{Gen}, \mathsf{Enc}, \mathsf{Dec})$ for which $\mathsf{Enc}$ is a
 \input{tikz/synchronizedmode}
 \end{center}
 \end{figure}
-%Initial vector $IV$ is chosen \emph{u.a.r}.\\
+Initial vector $IV$ is chosen \emph{u.a.r} and public\\
 \alert{Q: which mode is better in your opinion?}
 \end{frame}
 \begin{frame}\frametitle{Related Keys: Real World Cases}
-Keys for multiple enc. must be independent.
+Keys (the $IV$-key pair) for multiple enc. must be independent
 \begin{exampleblock}{Attacks on 802.11b WEP}
-Unsynchronized mode: $\mathsf{Enc}(m_i) := \left< IV_i, G(IV_i\|k) \oplus m_i\right>$.\\
+Unsynchronized mode: $\mathsf{Enc}(m_i) := \left< IV_i, G(IV_i\|k) \oplus m_i\right>$\\
 \begin{itemize}
-\item Length of $IV$ is 24 bits, repeat $IV$ after $2^{24} \approx$ 16M frames.
-\item On some WiFi cards, $IV$ resets to $0$ after power cycle.
-\item $IV_i = IV_{i-1} + 1$. For RC4, recover $k$ after 40,000 frames.
+\item Length of $IV$ is 24 bits, repeat $IV$ after $2^{24} \approx$ 16M frames
+\item On some WiFi cards, $IV$ resets to $0$ after power cycle
+\item $IV_i = IV_{i-1} + 1$. For RC4, recover $k$ after 40,000 frames
 \end{itemize}
 \end{exampleblock}
 \end{frame}
 \section{Security Against Chosen-Plaintext Attacks (CPA)}
 \begin{frame}\frametitle{Chosen-Plaintext Attacks (CPA)}
-\textbf{CPA}: the adversary has the ability to obtain the encryption of plaintexts of its choice.
+\textbf{CPA}: the adversary has the ability to obtain the encryption of plaintexts of its choice
 
 \begin{exampleblock}{A story in WWII}
 \begin{itemize}
-\item Navy cryptanalysts believe the ciphertext ``AF'' means ``Midway island'' in Japanese messages.
-\item But the general did not believe that Midway island would be attacked.
-\item Navy cryptanalysts sent a plaintext that the freshwater supplies at Midway island were low.
-\item Japanese intercepted the plaintext and sent a ciphertext that ``AF'' was low in water.
-\item The US forces dispatched three aircraft carriers and won.
+\item Navy cryptanalysts believe the ciphertext ``AF'' means ``Midway island'' in Japanese messages
+\item But the general did not believe that Midway island would be attacked
+\item Navy cryptanalysts sent a plaintext that the freshwater supplies at Midway island were low
+\item Japanese intercepted the plaintext and sent a ciphertext that ``AF'' was low in water
+\item The US forces dispatched three aircraft carriers and won
 \end{itemize}
 \end{exampleblock}
 \end{frame}
 \begin{frame}\frametitle{Security Against CPA}
 The CPA indistinguishability experiment $\mathsf{PrivK}^{\mathsf{cpa}}_{\mathcal{A},\Pi}(n)$:
 \begin{enumerate}
-	\item $k \gets \mathsf{Gen}(1^n)$.
-	\item $\mathcal{A}$ is given input $1^n$ and \textbf{oracle access} $\mathcal{A}^{\mathsf{Enc}_k(\cdot)}$ to $\mathsf{Enc}_k(\cdot)$, outputs $m_0, m_1$ of the same length.
-	\item $b \gets \{0,1\}$. Then $c \gets \mathsf{Enc}_k(m_b)$ is given to $\mathcal{A}$.
-	\item $\mathcal{A}$ \textbf{continues to have oracle access} to $\mathsf{Enc}_k(\cdot)$, outputs $b'$.
-	\item If $b' = b$, $\mathcal{A}$ succeeded $\mathsf{PrivK}^{\mathsf{cpa}}_{\mathcal{A},\Pi}=1$, otherwise 0.
+	\item $k \gets \mathsf{Gen}(1^n)$
+	\item $\mathcal{A}$ is given input $1^n$ and \textbf{oracle access} $\mathcal{A}^{\mathsf{Enc}_k(\cdot)}$ to $\mathsf{Enc}_k(\cdot)$, outputs $m_0, m_1$ of the same length
+	\item $b \gets \{0,1\}$. Then $c \gets \mathsf{Enc}_k(m_b)$ is given to $\mathcal{A}$
+	\item $\mathcal{A}$ \textbf{continues to have oracle access} to $\mathsf{Enc}_k(\cdot)$, outputs $b'$
+	\item If $b' = b$, $\mathcal{A}$ succeeded $\mathsf{PrivK}^{\mathsf{cpa}}_{\mathcal{A},\Pi}=1$, otherwise 0
 \end{enumerate}
 \begin{figure}
 \begin{center}
@@ -102,11 +105,13 @@ $\Pi$ has \textbf{indistinguishable encryptions under a CPA (CPA-secure)} if $\f
 \[ \Pr\left[\mathsf{PrivK}^{\mathsf{cpa}}_{\mathcal{A},\Pi}(n)=1\right] \le \frac{1}{2} + \mathsf{negl}(n).
 \]
 \end{definition}
+\begin{itemize}
+\item \alert{Q: Is any cipher we have learned so far CPA-secure? Why?}
+\end{itemize}
 \begin{proposition}
 Any private-key encryption scheme that is CPA-secure also is \textbf{multiple-encryption} CPA-secure.
 \end{proposition}
 \begin{itemize}
-\item CPA-secure means $\mathsf{Enc}$ is probabilistic.
 \item \alert{Q: does \textbf{multiple-encryption-security} mean CPA-security?} (homework)
 %\item \textbf{Fixed-length} CPA-secure encryption scheme can be used to construct a \textbf{arbitrary-length} CPA-secure one quite easily.
 \end{itemize}
@@ -119,10 +124,10 @@ Any private-key encryption scheme that is CPA-secure also is \textbf{multiple-en
 \end{center}
 \end{figure}
 \begin{itemize}
-\item \textbf{Keyed function} $F : \{0,1\}^* \times \{0,1\}^* \to \{0,1\}^*$. \\
-$F_k : \{0,1\}^* \to \{0,1\}^*$, $F_k(x) \overset{\text{def}}{=} F(k,x)$.
-\item \textbf{Look-up table $f$}: $\{0,1\}^n \to \{0,1\}^n$ with size \alert{ = ? bits}. %$n\cdot2^n$.
-\item \textbf{Function family $\mathsf{Func}_n$}: all functions $\{0,1\}^n \to \{0,1\}^n$. $|\mathsf{Func}_n| = 2^{n\cdot2^n}$.
+\item \textbf{Keyed function} $F : \{0,1\}^* \times \{0,1\}^* \to \{0,1\}^*$ \\
+$F_k : \{0,1\}^* \to \{0,1\}^*$, $F_k(x) \overset{\text{def}}{=} F(k,x)$
+\item \textbf{Look-up table $f$}: $\{0,1\}^n \to \{0,1\}^n$ with size \alert{ = ? bits} %$n\cdot2^n$.
+\item \textbf{Function family $\mathsf{Func}_n$}: all functions $\{0,1\}^n \to \{0,1\}^n$. $|\mathsf{Func}_n| = 2^{n\cdot2^n}$
 \end{itemize}
 \end{frame}
 \begin{frame}\frametitle{Definition of Pseudorandom Function}
@@ -134,8 +139,8 @@ $\forall\;$ \textsc{ppt} distinguishers $D$,
 \]
 where $f$ is chosen \emph{u.a.r} from $\mathsf{Func}_n$.
 \end{definition}
-\begin{exampleblock}{Q: Is the fixed-length OTP a PRF?}
-\end{exampleblock}
+\begin{alertblock}{Q: Is the fixed-length OTP a PRF?}
+\end{alertblock}
 %\textbf{PRG vs. PRF}:
 %\begin{itemize}
 %\item Pseudorandomness over a set of strings vs. a set of functions.
@@ -143,7 +148,7 @@ where $f$ is chosen \emph{u.a.r} from $\mathsf{Func}_n$.
 %\end{itemize}
 %\textbf{Existence}: if PRG exists. In practice, block ciphers may be PRF.
 \end{frame}
-\begin{frame}\frametitle{Question}
+\begin{frame}\frametitle{Questions}
 \begin{exampleblock}{Let $F: \{0,1\}^{n} \times \{0,1\}^{n} \to \{0,1\}^{n}$ be a secure PRF. Is $G$ a secure PRF?}
 \begin{itemize}
 \item $G((k_{1},k_{2}), x) = F(k_{1},x) \| F(k_{2},x)$
@@ -236,14 +241,11 @@ If $F$ is a PRF, then $\Pi$ is CPA-secure for arbitrary-length messages.
 \end{frame}
 \begin{frame}\frametitle{Pseudorandom Permutations}
 \begin{itemize}
-\item \textbf{Bijection}: $F$ is one-to-one and onto.
-\item \textbf{Permutation}: A bijective function from a set to itself.
-\item \textbf{Keyed permutation}: $\forall k, F_k(\cdot)$ is permutation.
-\item $F$ is a bijection $\iff F^{-1}$ is a bijection.
+\item \textbf{Bijection}: $F$ is one-to-one and onto
+\item \textbf{Permutation}: A bijective function from a set to itself
+\item \textbf{Keyed permutation}: $\forall k, F_k(\cdot)$ is permutation
+\item $F$ is a bijection $\iff F^{-1}$ is a bijection
 \end{itemize}
-\begin{proposition}
-If $F$ is a pseudorandom permutation then it is a PRF.
-\end{proposition}
 \begin{definition}
 An efficient, keyed permutation $F$ is a \textbf{strong pseudorandom permutation (PRP)} if
 $\forall\;$ \textsc{ppt} distinguishers $D$,
@@ -251,8 +253,10 @@ $\forall\;$ \textsc{ppt} distinguishers $D$,
 \]
 where $f$ is chosen \emph{u.a.r} from the set of permutations on $n$-bit strings.
 \end{definition}
+\begin{alertblock}{If $F$ is a pseudorandom permutation then is it a PRF?}
+\end{alertblock}
 \end{frame}
-\begin{frame}\frametitle{Question}
+\begin{frame}\frametitle{Questions}
 \begin{exampleblock}{Let $X = \{ 0,1\}$ (1 bit), answer the following questions.}
 \begin{enumerate}
 \item What are the functions in the permutation over $X$?
@@ -379,14 +383,14 @@ $IV$ for record $\#i$ is last CT block of record $\#(i-1)$.
 \end{frame}
 \begin{frame}\frametitle{Remarks on Block Ciphers}
 \begin{itemize}
-\item \textbf{Block length} should be sufficiently large.
-\item \textbf{Message tampering} is not with message confidentiality.
-\item \textbf{Padding}: TLS: For $n>0$, $n$ byte pad is $n,n,\dots,n$.
-If no pad needed, add a dummy block.
+\item \textbf{Block length} should be sufficiently large
+\item \textbf{Message tampering} is not with message confidentiality
+\item \textbf{Padding}: TLS: For $n>0$, $n$ byte pad is $n,n,\dots,n$
+If no pad needed, add a dummy block
 \item \textbf{Stream ciphers vs. block ciphers}: 
 \begin{itemize}
-\item Steam ciphers are faster but have lower security.
-\item It is possible to use block ciphers in ``stream-cipher mode''. 
+\item Steam ciphers are faster but have lower security
+\item It is possible to use block ciphers in ``stream-cipher mode''
 \end{itemize}
 \end{itemize}
 \begin{exampleblock}{Performance: Crypto++ 5.6, AMD Opetron 2.2GHz}
@@ -428,21 +432,21 @@ $\Pi$ has \textbf{indistinguishable encryptions under a CCA (CCA-secure)} if $\f
 \]
 \end{definition}
 \end{frame}
-\begin{frame}\frametitle{Remarks on CCA-security}
+\begin{frame}\frametitle{Understanding CCA-security}
 \begin{itemize}
-\item In real world, the adversary might conduct CCA by influencing what gets decrypted.
+\item In real world, the adversary might conduct CCA by influencing what gets decrypted
 \begin{itemize}
-\item If the communication is not authenticated, then an adversary may send certain ciphertexts on behalf of the honest party.
+\item If the communication is not authenticated, then an adversary may send certain ciphertexts on behalf of the honest party
 \end{itemize}
-\item CCA-security implies ``\textbf{non-malleability}''.
-\item None of the above scheme is CCA-secure. 
+\item CCA-security implies ``\textbf{non-malleability}''
+\item None of the above scheme is CCA-secure
 \end{itemize}
 \begin{exampleblock}{CCA against Construction \ref{thm:cpa}}
 $\mathcal{A}$ gives $m_{0}, m_{1}$ and gets $c = \left<r, F_k(r)\oplus m_{b}\right>$, 
 and then queries $c'$ which is the same with $c$ except that a single bit is flipped. 
 The $m' = c' \oplus F_k(r)$ should be the same with $m_{b}$ \alert{except \underline{$\qquad$}?}
 \end{exampleblock}
-\alert{Q: Show that the above modes (CBC, OFB and CTR) are also not CCA-secure (homework)}
+\alert{Q: Show that the above modes (CBC, OFB and CTR) are also not CCA-secure. (homework)}
 \end{frame}
 \begin{frame}\frametitle{Summary}
 \begin{itemize}

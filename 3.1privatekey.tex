@@ -70,8 +70,8 @@ Random number generators should be designed for cryptographic use, not \verb|ran
 \begin{frame}\frametitle{Negligible Success Probability}
 \begin{itemize}
 \item A function $f$ is \textbf{negligible} if for every polynomial $p(\cdot)$
-there exists an $N$ such that for all integers $n > N$ it holds that $f(n) < \frac{1}{p(n)}$.\\
-\alert{Q: is $\left( \frac{3}{n} \right)^{9}$ negligible? is $\frac{n^{2}}{2^{n}}$ negligible?}
+there exists an $N$ such that for all integers $n > N$ it holds that $f(n) < \frac{1}{p(n)}$.
+\item \alert{Q: is $\left( \frac{3}{n} \right)^{9}$ negligible? is $\frac{n^{2}}{2^{n}}$ negligible?}
 \item \alert{Q: is $ \mathsf{negl}_1(n)+\mathsf{negl}_2(n)$ negligible?}
 \item \alert{Q: is $ poly(n)\cdot\mathsf{negl}(n)$ negligible?}
 %\item Problem $\mathsf{X}$ is \emph{hard} if $\mathsf{X}$ cannot be solved by any polynomial-time algorithm except with negligible probability.
@@ -212,6 +212,7 @@ The pragmatic approach is to take many sequences of random numbers from a given 
 \item $D(x)=0$ if $\text{max-run-of-}0(x) \le 10\cdot \log{n}$
 \end{itemize}
 \end{exampleblock}
+How many tests shall we need?
 \end{frame}
 \begin{frame}\frametitle{Intuition for Defining Pseudorandom}
 \textbf{Intuition}: Generate a long string from a short truly random seed, and the pseudorandom string is indistinguishable from truly random strings.

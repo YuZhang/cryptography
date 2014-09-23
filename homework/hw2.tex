@@ -19,11 +19,7 @@
 \maketitle
 
 \begin{problem}
-Prove that the indistinguishable encryptions in the presence of an eavesdropper cannot be satisfied if $\Pi$ can encrypt arbitrary-length messages and the adversary is not restricted to output equal-length messages in experiment $\mathsf{PrivK}^{\mathsf{eav}}_{\mathcal{A},\Pi}(n)$.
-\end{problem}
-
-\begin{problem}
-Present a construction of a variable output-length pseudorandom generator from any pseudorandom function. Prove that your construction satisfies Definition: `a variable output-length pseudorandom generator'.
+Assuming the existence of a variable output-length pseudorandom generator, present a construction of variable-length encryption scheme, and prove that your construction has indistinguishable encryptions in the presence of an eavesdropper. {\small Hint: the construction of secure fixed-length encryption scheme also holds here.}
 \end{problem}
 
 \begin{problem}
@@ -32,19 +28,19 @@ Assuming the existence of a pseudorandom function, prove that there exists an en
 \end{problem}
 
 \begin{problem}
-Present a construction of a variable output-length pseudorandom generator from any pseudorandom function. Prove that your construction is PRG.
-\end{problem}
-
-\begin{problem}
 Present formulas for decryption of all the different modes of operation for encryption: ECB, CBC, OFB, CTR. For which modes can decryption be parallelized?
 \end{problem}
 
 \begin{problem}
-Show that the CBC mode do not yield CPA-secure encryption in the case that the $IV$ is predicable.
+Present a construction of a variable output-length pseudorandom generator from any pseudorandom function. Prove that your construction satisfies Definition: `a variable output-length pseudorandom generator'.
 \end{problem}
 
 \begin{problem}
-Show that the CBC, OFB and CTR modes do not yield CCA-secure encryption schemes (regardless of F). (hint: If one bit of Ciphertext is flipped, so does one bit of Plaintext.)
+Show that the CBC mode do not yield CPA-secure encryption in the case that the $IV$ is predicable. {\small Hint: The messages presented by the adversary could be constructed from the predicable $IV$ and previous queries.}
+\end{problem}
+
+\begin{problem}
+Show that the CBC, OFB and CTR modes do not yield CCA-secure encryption schemes (regardless of F). {\small Hint: If one bit of Ciphertext is flipped, so does one bit of Plaintext.}
 \end{problem}
 
 \end{document}
