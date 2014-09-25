@@ -38,5 +38,14 @@ For each of following modifications to the Merkle-Damg\r{a}rd transform, determi
 \item Instead of using a fixed $IV$, set $z_0 := L$ and then compute $z_i := h^s(z_{i-1}\|x_i)$ for $i=1,\dotsc,B$ and output $z_B$.
 \end{enumerate}
 \end{problem}
-
+\begin{problem}
+We have learned that CCA-secure encryption schemes can be constructed by Enc-then-MAC in the class. Is there any other way to achieve CCA-secure scheme? For example, (1) do you think the following scheme is CCA-secure? And why?
+\begin{itemize}
+\item message $m \in \{0,1 \}^{n/2}$ and key $k \in \{0,1 \}^{n}$. In encryption, choose a random string $r \gets \{0,1 \}^{n/2}$ and ciphertext $c := F_{k}(r\| m)$, where $F$ is a strong PRP.
+\end{itemize}
+Furthermore, no matter what is your answer to the above question, (2) do you think CCA-security implies secure Authenticated Encryption (A.E.)? And why?
+\end{problem}
+\begin{problem}
+Show a message transmission scheme that achieves authentication communication (with integrity and authenticity) but is not a secure A.E (without confidentiality).
+\end{problem}
 \end{document}

@@ -104,7 +104,7 @@ Practical solutions for one-way computation.
 \end{itemize}
 \end{frame}
 \begin{frame}{Examples}
-\begin{exampleblock}{$f$ is OWF. Is $f'$ OWF?}
+\begin{exampleblock}{$f:\ \{0,1\}^{128} \to \{0,1\}^{128}$ is a OWF. Is $f'$ OWF?}
 \begin{itemize}
 \item $f'(x) = f(x)\| x$
 \item $f'(x) = f(x)\oplus 1^{\abs{x}}$
@@ -117,7 +117,7 @@ Practical solutions for one-way computation.
   \end{array} \right. $
 \item $ f'(x) = \left\{ 
   \begin{array}{l l}
-    f(x) & \quad \text{if $x \neq 1010$}\\
+    f(x) & \quad \text{if $x \neq 1010\|0^{124}$}\\
     x & \quad \text{otherwise}\\
   \end{array} \right. $
 \item more examples in homework

@@ -67,13 +67,13 @@ A MAC $\Pi$ is \textbf{existentially unforgeable under an adaptive CMA} if $\for
 \]
 \end{definition}
 \end{frame}
-\begin{frame}\frametitle{Examples}
+\begin{frame}\frametitle{Questions}
 \begin{exampleblock}{Suppose $\left<S, V\right>$ are CMA-secure,  are $\left<S', V'\right>$ secure?}
 \begin{itemize}
 %\item Suppose an attacker can find $m_{0} \neq m_{1}$ s.t. $t_{0} = t_{1}$ for $\frac{1}{8}$.
 %\item Suppose tag is always $32$ bits long.
 \item $S'_{k_{1},k_{2}}(m) = (S_{k1}(m),S_{k_{2}}(m))$\\
-$V'_{k_{1},k_{2}}(m,(t_{1},t_{2})) = V_{k1}(m,t_{1})\ \text{and}\ V_{k_{2}}(m,t_{2})$
+$V'_{k_{1},k_{2}}(m,(t_{1},t_{2})) = V_{k1}(m,t_{1}) \land V_{k_{2}}(m,t_{2})$
 \item $S'_{k}(m) = (S_{k}(m),S_{k}(m))$\\
 $ V'_{k}(m,(t_{1},t_{2})) = \left\{ 
   \begin{array}{l l}
@@ -81,15 +81,17 @@ $ V'_{k}(m,(t_{1},t_{2})) = \left\{
     0 & \quad \text{otherwise}\\
   \end{array} \right. $
 \item $S'_{k}(m) = (S_{k}(m),S_{k}(0^{n}))$\\
-$ V'_{k}(m,(t_{1},t_{2})) = V_{k}(m,t_{1})\ \text{and}\ V_{k}(0^{n},t_{2})$
-\item $S'_{k}(m) = S_{k}(m)$\\
+$ V'_{k}(m,(t_{1},t_{2})) = V_{k}(m,t_{1}) \land  V_{k}(0^{n},t_{2})$
+\item $S'_{k}(m) = S_{k}(m)$, 
 $ V'_{k}(m,t) = \left\{ 
   \begin{array}{l l}
     V_{k}(m,t) & \quad \text{if $m \neq 0^{n}$}\\
     1 & \quad \text{otherwise}\\
   \end{array} \right. $
 \item $S'_{k}(m) = S_{k}(m)\ \text{without the LSB}$ \\
-$V'_{k}(m,t) = V_{k}(m,t\| 0)\ \text{or}\ V_{k}(m,t\| 1)$
+$V'_{k}(m,t) = V_{k}(m,t\| 0)\ \lor \ V_{k}(m,t\| 1)$
+\item $S'_{k}(m) = (S_{k}(m),m)$, 
+$V'_{k}(m,(t_{1},t_{2})) = V_{k}(m,t_{1}) \land t_{2} = m$
 \end{itemize}
 \end{exampleblock}
 \end{frame}
@@ -346,7 +348,7 @@ $\Pi$ ($H$, $H^s$) is \textbf{collision resistant} if $\forall$ \textsc{ppt} $\m
 \item \textbf{Pre-image resistance}: Given $s$ and $y = H^s(x)$, it is hard to find $x'$ such that $H^s(x')=y$.
 \end{itemize}
 \end{frame}
-\begin{frame}{Examples}
+\begin{frame}{Questions}
 \begin{exampleblock}{$H$ is CRHF. Is $H'$ CRHF?}
 \begin{itemize}
 \item $H'(m) = H(m)\oplus H(m\oplus 1^{\abs{m}})$ % H(000) = H(111)

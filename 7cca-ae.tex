@@ -25,6 +25,7 @@ $\Pi$ has \textbf{indistinguishable encryptions under a CCA (CCA-secure)} if $\f
 \end{definition}
 \end{frame}
 \begin{frame}\frametitle{Constructing CCA-Secure Encryption Schemes}
+\textbf{Idea}: Make decryption oracle useless. CCA = CPA-then-MAC.
 \begin{figure}
 \begin{center}
 \input{tikz/CCA}
@@ -33,9 +34,9 @@ $\Pi$ has \textbf{indistinguishable encryptions under a CCA (CCA-secure)} if $\f
 \begin{construction}
 $\Pi_E = (\mathsf{Gen}_E, \mathsf{Enc}, \mathsf{Dec})$, $\Pi_M = (\mathsf{Gen}_M, \mathsf{Mac}, \mathsf{Vrfy})$. $\Pi'$:
 \begin{itemize}
-\item $\mathsf{Gen}'(1^n)$: $k_1 \gets \mathsf{Gen}_E(1^n)$ and $k_2 \gets \mathsf{Gen}_M(1^n)$.
-\item $\mathsf{Enc}'_{k_1,k_2}(m)$: $c \gets \mathsf{Enc}_{k_1}(m)$, $t \gets \mathsf{Mac}_{k_2}(c)$ and output $\left< c,t \right>$.
-\item $\mathsf{Dec}'_{k_1,k_2}(\left< c,t \right>)$: If $\mathsf{Vrfy}_{k_2}(c,t) \overset{?}{=} 1$, output $\mathsf{Dec}_{k_1}(c)$; otherwise output ``failure'' $\bot$.
+\item $\mathsf{Gen}'(1^n)$: $k_1 \gets \mathsf{Gen}_E(1^n)$ and $k_2 \gets \mathsf{Gen}_M(1^n)$
+\item $\mathsf{Enc}'_{k_1,k_2}(m)$: $c \gets \mathsf{Enc}_{k_1}(m)$, $t \gets \mathsf{Mac}_{k_2}(c)$ and output $\left< c,t \right>$
+\item $\mathsf{Dec}'_{k_1,k_2}(\left< c,t \right>) = \mathsf{Dec}_{k_1}(c)\ \text{if}\ \mathsf{Vrfy}_{k_2}(c,t) \overset{?}{=} 1;\ \text{otherwise}\ \bot$
 \end{itemize}
 \end{construction}
 \end{frame}
@@ -43,7 +44,6 @@ $\Pi_E = (\mathsf{Gen}_E, \mathsf{Enc}, \mathsf{Dec})$, $\Pi_M = (\mathsf{Gen}_M
 \begin{theorem}
 If $\Pi_E$ is a CPA-secure private-key encryption scheme and $\Pi_M$ is a secure MAC with unique tags, then Construction $\Pi'$ is CCA-secure.
 \end{theorem}
-\textbf{Idea}: The decryption oracle is useless. CCA = CPA-then-MAC. 
 \begin{proof}
 $\mathsf{VQ}$: $\mathcal{A}$ submits a ``new'' query to oracle $\mathsf{Dec}'$ and $\mathsf{Vrfy}=1$.
 \[ \Pr[\mathsf{PrivK}^{\mathsf{cca}}_{\mathcal{A},\Pi'}(n)=1] \le \Pr[\mathsf{VQ}] + \Pr[\mathsf{PrivK}^{\mathsf{cca}}_{\mathcal{A},\Pi'}(n)=1 \land \overline{\mathsf{VQ}}] \]
@@ -108,8 +108,36 @@ $\Pi'$ achieves \textbf{authenticated communication} if $\forall$ \textsc{ppt} $
 \]
 \end{definition}
 \begin{definition}
-$\Pi'$ is \textbf{secure (authenticated encryption)} if it is both CCA-secure and also achieves authenticated communication.\footnote{CPA security and integrity imply CCA security.}
+$\Pi'$ is \textbf{secure Authenticated Encryption (A.E.)} if it is both CCA-secure and also achieves authenticated communication.%\footnote{CPA security and integrity imply CCA security.}
 \end{definition}
+\begin{alertblock}{Does CCA-security imply A.E.? (homework)}
+\end{alertblock}
+\end{frame}
+\begin{frame}\frametitle{Questions}
+\begin{exampleblock}{Suppose $(E, D)$ provides A.E. Which of the following systems provide A.E.? }
+\begin{itemize}
+\item $E'_{k}(m) = \left( E_{k}(m), E_{k}(m)\right)$ and $D'_{k}(c_{1}, c_{2}) = D_{k}(c_{1})$ %n
+\item $E'_{k}(m) = \left( E_{k}(m), 0\right)$ and %y
+$ D'_{k}(c, b) = \left\{ 
+  \begin{array}{l l}
+    D_{k}(c) & \quad \text{if $b = 0$}\\
+    \perp & \quad \text{otherwise}\\
+  \end{array} \right. $
+\item $E'_{k}(m) = E_{k}(m)\oplus1^*$ and $D'_{k}(c) = D_{k}(c\oplus 1^{*})$ %y
+\item $E'_{k}(m) = \left( E_{k}(m), E_{k}(m)\right)$ and %n
+$ D'_{k}(c_{1}, c_{2}) = \left\{ 
+  \begin{array}{l l}
+    D_{k}(c_{1}) & \ \text{if $D_{k}(c_{1}) = D_{k}(c_{2})$}\\
+    \perp & \ \text{otherwise}\\
+  \end{array} \right. $
+\item $E'_{k}(m) = \left( E_{k}(m), H(m)\right)$ ($H$ is a CRHF) and %n
+$ D'_{k}(c, h) = \left\{ 
+  \begin{array}{l l}
+    D_{k}(c) & \ \text{if $H(D_{k}(c))=h$}\\
+    \perp & \ \text{otherwise}\\
+  \end{array} \right. $ 
+\end{itemize}
+\end{exampleblock}
 \end{frame}
 \begin{frame}\frametitle{Combining Encryption and Authentication}
 \begin{figure}
