@@ -30,7 +30,7 @@ Let $(\mathsf{Gen},H)$ be a collision-resistant hash function. Is $(\mathsf{Gen}
 \end{problem}
 
 \begin{problem}
-For each of following modifications to the Merkle-Damg\r{a}rd transform, determine whether the result is collision resistant or not. If yes, provide a proof; if not, demonstrate an attack.
+For each of following modifications to the Merkle-Damg\r{a}rd transform, determine whether the result is collision resistant or not. If yes, provide a proof; if not, demonstrate an attack. {\small Hint: you may use two facts on hash function: (1) $h(x) = x$ is collision resistant. Although $x$ is leaked, there is no collision. (2) A crhf $h$ can be constructed from another crhf $g$ by letting $h(x) = x\|0$ for $x = 0$ and letting $h(x) = g(x)\|1$ for $x \ne 0$. }
 \begin{enumerate}
 \item Modify the construction so that the input length is not included at all (i.e, output $z_B$ and not $z_{B+1} = h^s(z_B\| L)$).
 \item Modify the construction so that instead of outputting $z = h^s(z_B\| L)$, the algorithm outputs $z_B\|L$
@@ -39,7 +39,7 @@ For each of following modifications to the Merkle-Damg\r{a}rd transform, determi
 \end{enumerate}
 \end{problem}
 \begin{problem}
-We have learned that CCA-secure encryption schemes can be constructed by Enc-then-MAC in the class. Is there any other way to achieve CCA-secure scheme? For example, (1) do you think the following scheme is CCA-secure? And why?
+We have learned that CCA-secure encryption schemes can be constructed by Enc-then-MAC in the class. Is there any other way to achieve CCA-secure scheme but without MAC? For example, (1) do you think the following scheme is CCA-secure? And why?
 \begin{itemize}
 \item message $m \in \{0,1 \}^{n/2}$ and key $k \in \{0,1 \}^{n}$. In encryption, choose a random string $r \gets \{0,1 \}^{n/2}$ and ciphertext $c := F_{k}(r\| m)$, where $F$ is a strong PRP.
 \end{itemize}
