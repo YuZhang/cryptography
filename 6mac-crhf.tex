@@ -139,7 +139,7 @@ $D$ distinguishes $F_k$; $\mathcal{A}$ attacks $\Pi$.
 \[ \Pr[D^{f(\cdot)}(1^n)=1] = \Pr[\mathsf{Macforge}_{\mathcal{A},\tilde{\Pi}}(n) = 1] \le 2^{-n}.\]
 (2) If $F_k$ is used, conduct the experiment $\mathsf{Macforge}_{\mathcal{A},\Pi}(n)$. 
 \[ \Pr[D^{F_k(\cdot)}(1^n)=1] = \Pr[\mathsf{Macforge}_{\mathcal{A},\Pi}(n) = 1] = \varepsilon(n).\]
-According to the definition of PGF,
+According to the definition of PRF,
 \[ \left| \Pr[D^{F_k(\cdot)}(1^n)=1] - \Pr[D^{f(\cdot)}(1^n)=1] \right| \ge \varepsilon(n) - 2^{-n}. \]
 \end{proof}
 \end{frame}
@@ -330,7 +330,7 @@ The collision-finding experiment $\mathsf{Hashcoll}_{\mathcal{A},\Pi}(n)$:
 \item $\mathsf{Hashcoll}_{\mathcal{A},\Pi}(n) =1 \iff x\ne x' \land H^s(x) = H^s(x')$.
 \end{enumerate}
 \begin{definition}
-$\Pi$ ($H$, $H^s$) is \textbf{collision resistant} if $\forall$ \textsc{ppt} $\mathcal{A}$, $\exists\;\mathsf{negl}$ such that
+$\Pi$ ($\mathsf{Gen}$, $H^s$) is \textbf{collision resistant} if $\forall$ \textsc{ppt} $\mathcal{A}$, $\exists\;\mathsf{negl}$ such that
 \[ \Pr[\mathsf{Hashcoll}_{\mathcal{A},\Pi}(n)=1] \le \mathsf{negl}(n).
 \]
 \end{definition}
