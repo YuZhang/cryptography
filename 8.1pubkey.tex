@@ -442,14 +442,14 @@ A RO maps $n_1$-bit inputs to $n_2$-bit outputs.
 \begin{itemize}
 \item A RO as a OWF, experiment:
 \begin{enumerate}
-\item A random function $H$ is chosen.
-\item A random $x \in \{0,1\}^{n_1}$ is chosen, and $y := H(x)$ is evaluated.
-\item $\mathcal{A}$ is given $y$, and succeeds if it outputs $x'$: $H(x')=y$.
+\item A random function $H$ is chosen
+\item A random $x \in \{0,1\}^{n_1}$ is chosen, and $y := H(x)$ is evaluated
+\item $\mathcal{A}$ is given $y$, and succeeds if it outputs $x'$: $H(x')=y$
 \end{enumerate}
 \item A RO as a CRHF, experiment:
 \begin{enumerate}
-\item A random function $H$ is chosen.
-\item $\mathcal{A}$ succeeds if it outputs $x, x'$ with $H(x)=H(x')$ but $x\neq x'$.
+\item A random function $H$ is chosen
+\item $\mathcal{A}$ succeeds if it outputs $x, x'$ with $H(x)=H(x')$ but $x\neq x'$
 \end{enumerate}
 \item Constructing a PRF from a RO: $n_1=2n$, $n_2=n$.
 $ F_k(x) \overset{\text{def}}{=} H(k\| x),\;\; \abs{k}=\abs{x}=n.$
@@ -477,13 +477,24 @@ $ F_k(x) \overset{\text{def}}{=} H(k\| x),\;\; \abs{k}=\abs{x}=n.$
 %\end{itemize}
 %\end{frame}
 \begin{frame}\frametitle{Security Against CPA}
+\textbf{Idea}: PubK CPA = PrivK CPA + (Secret Key = TDP + RO)
+\begin{columns}[t]
+\begin{column}{5cm}
+\begin{figure}[t]
+\begin{center}
+\input{tikz/tdp-cpa}
+\end{center}
+\end{figure}\end{column}
+\begin{column}{5cm}
 \begin{construction}
 \begin{itemize}
-\item $\mathsf{Gen}$: $pk =  I $, $sk = \mathsf{td} $.
-\item $\mathsf{Enc}$: $r \gets \{0,1\}^*$, output $\langle f_I(r), H(r)\oplus m\rangle$.
-\item $\mathsf{Dec}$: input $(c_1,c_2)$; compute $r := f_{\mathsf{td}}^{-1}(c_1)$, output $H(r)\oplus c_2$.
+\item $\mathsf{Gen}$: $pk =  I $, $sk = \mathsf{td} $
+\item $\mathsf{Enc}$: $r \gets \{0,1\}^*$, output $\langle c_{1}=f_I(r), c_{2}=H(r)\oplus m\rangle$
+\item $\mathsf{Dec}$: $r := f_{\mathsf{td}}^{-1}(c_1)$, output $H(r)\oplus c_2$
 \end{itemize}
 \end{construction}
+\end{column}
+\end{columns}
 \begin{theorem}
 If $f$ is TPD and $H$ is RO, Construction is CPA-secure.
 \end{theorem}
@@ -492,27 +503,51 @@ If $f$ is TPD and $H$ is RO, Construction is CPA-secure.
 
 \begin{frame}\frametitle{CCA-secure based on Private Key Encryption}
 \textbf{Idea}: PubK CCA = PrivK CCA + (Secret Key = TPD + RO).  
+
+\begin{columns}[t]
+\begin{column}{5cm}
+\begin{figure}[t]
+\begin{center}
+\input{tikz/tdp-cca1}
+\end{center}
+\end{figure}\end{column}
+\begin{column}{5cm}
 \begin{construction}
-$\Pi' = (\mathsf{Gen}', \mathsf{Enc}', \mathsf{Dec}')$ is a private-key encryption scheme.
 \begin{itemize}
+\item $\Pi'$ is PrivK
 \item $\mathsf{Gen}$: $pk = I$, $sk = \mathsf{td}$.
-\item $\mathsf{Enc}$: $r \gets D_I$ and compute $k := H(r)$, output $\langle f_I(r), \mathsf{Enc}'_k(m)\rangle$.
-\item $\mathsf{Dec}$: input $\langle c_1,c_2\rangle$, compute $r := f^{-1}_{\mathsf{td}}(c_1)$, $k:=H(r)$, output $\mathsf{Dec}'_k(c_2)$.
+\item $\mathsf{Enc}$: $k := H(r), r \gets D_I$, output $\langle c_1= f_I(r), c_2 = \mathsf{Enc}'_k(m)\rangle$.
+\item $\mathsf{Dec}$: $r := f^{-1}_{\mathsf{td}}(c_1)$, $k:=H(r)$, output $\mathsf{Dec}'_k(c_2)$.
 \end{itemize}
 \end{construction}
+
+\end{column}
+\end{columns}
+
+
 \begin{theorem}
 If $f$ is TDP, $\Pi'$ is CCA-secure, and $H$ is RO, Construction is CCA-secure.
 \end{theorem}
 \end{frame}
 \begin{frame}\frametitle{CCA-secure based on TPD in ROM}
-\textbf{Idea}: PubK CCA = TDP + 2 RO (one for enc, one for mac).  
+\textbf{Idea}: PubK CCA = TDP + 2 RO (one for enc, one for mac)
+\begin{columns}[t]
+\begin{column}{5cm}
+\begin{figure}[t]
+\begin{center}
+\input{tikz/tdp-cca2}
+\end{center}
+\end{figure}\end{column}
+\begin{column}{5cm}
 \begin{construction}
 \begin{itemize}
-\item $\mathsf{Gen}$: $pk = I$, $sk = \mathsf{td}$.
-\item $\mathsf{Enc}$: $r \gets D_I$, output $\langle c_1=f_I(r), c_2 = H(r)\oplus m, c_3=G(c_2\|m)\rangle$.
-\item $\mathsf{Dec}$: $r := f^{-1}_{\mathsf{td}}(c_1)$, $m := H(r)\oplus c_2$. If $G(c_2\|m) = c_3$ output $m$, otherwise $\perp$.
+\item $\mathsf{Gen}$: $pk = I$, $sk = \mathsf{td}$
+\item $\mathsf{Enc}$: $r \gets D_I$, output $\langle c_1=f_I(r), c_2 = H(r)\oplus m, c_3=G(c_2\|m)\rangle$
+\item $\mathsf{Dec}$: $r := f^{-1}_{\mathsf{td}}(c_1)$, $m := H(r)\oplus c_2$. If $G(c_2\|m) = c_3$ output $m$, otherwise $\perp$
 \end{itemize}
 \end{construction}
+\end{column}
+\end{columns}
 \begin{theorem}
 If $f$ is TDP, $G,H$ are ROs, Construction is CCA-secure.
 \end{theorem}
