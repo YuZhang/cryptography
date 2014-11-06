@@ -92,6 +92,7 @@ Show an instance of DL problem in $\mathbb{Z}_{7}^{*}$
 \item Elliptic curve groups vs. $\mathbb{Z}_p^*$: more efficient for the honest parties, but that are equally hard for an adversary to break.\\ (Both 1024-bit $\mathbb{Z}_p^*$ and 132-bit elliptic curve need $2^{66}$ steps.)
 \end{itemize}
 \end{frame}
+\begin{comment}
 \begin{frame}\frametitle{The Baby-Step/Giant-Step Algorithm}
 \begin{figure}
 \begin{center}
@@ -128,6 +129,7 @@ compute the baby steps:
 $2^{x} = 17\cdot 2^y$. So $\log_2 17=x-y=21$
 \end{exampleblock}
 \end{frame}
+\end{comment}
 \begin{frame}\frametitle{The Discrete Logarithm Assumption}
 The discrete logarithm experiment $\mathsf{DLog}_{\mathcal{A},\mathcal{G}}(n)$:
 \begin{enumerate}
@@ -223,7 +225,7 @@ A key-exchange protocol $\Pi$ is secure in the presence of an eavesdropper if $\
 \end{definition}
 \end{frame}
 \begin{frame}\frametitle{Diffie-Hellman Key-Exchange Protocol}
-\begin{columns}[h]
+\begin{columns}[]
 \begin{column}{5cm}
 \begin{figure}
 \begin{center}
@@ -272,7 +274,7 @@ How does Bob compute the key? % 5^{4} = 9
 \end{exampleblock}
 \end{frame}
 \begin{frame}\frametitle{Triparties Key Exchange}
-\begin{columns}[C]
+\begin{columns}[]
 \begin{column}{5cm}
 \begin{center}
 DH-based KE in 2 rounds:
@@ -342,13 +344,24 @@ Since $g$ is chosen \emph{u.a.r}, the probability that $g$ is equal to the fixed
 \end{frame}
 \begin{frame}\frametitle{The Elgamal Encryption Scheme}
 An algorithm $\mathcal{G}$, on input $1^n$, outputs a description of a cyclic group $\mathbb{G}$, its order $q$ (with $\|q\| = n$), and a generator $g$.
+\begin{columns}[]
+\begin{column}{5cm}
+\begin{figure}
+\begin{center}
+\input{tikz/elgamal-con.tex}
+\end{center}
+\end{figure}
+\end{column}
+\begin{column}{6cm}
 \begin{construction}
 \begin{itemize}
-\item $\mathsf{Gen}$: on input $1^n$ run $\mathcal{G}(1^n)$ to obtain $(\mathbb{G},q,g)$. Choose a random $x \gets \mathbb{Z}_q$ and compute $h := g^x$.  $pk = \langle \mathbb{G},q,g,h \rangle$ and $sk = \langle \mathbb{G},q,g,x \rangle$.
-\item $\mathsf{Enc}$: on input $pk$ and $m \in \mathbb{G}$, choose a random $y \gets \mathbb{Z}_q$ and output $\langle c_1, c_2 \rangle = \langle g^y, h^y\cdot m\rangle$.
-\item $\mathsf{Dec}$: on input $sk$ and $\langle c_1, c_2 \rangle$, output $m:=c_2/c_1^x$.
+\item $\mathsf{Gen}$: run $\mathcal{G}(1^n)$ to obtain $(\mathbb{G},q,g)$. A random $x \gets \mathbb{Z}_q$ and $h := g^x$.  $pk = \langle \mathbb{G},q,g,h \rangle$ and $sk = \langle \mathbb{G},q,g,x \rangle$
+\item $\mathsf{Enc}$: a random $y \gets \mathbb{Z}_q$ and output $\langle c_1, c_2 \rangle = \langle g^y, h^y\cdot m\rangle$
+\item $\mathsf{Dec}$: $m:=c_2/c_1^x$
 \end{itemize}
 \end{construction}
+\end{column}
+\end{columns}
 \begin{theorem}
 If the DDH problem is hard relative to $\mathcal{G}$, then the Elgamal encryption scheme is CPA-secure.
 \end{theorem}
