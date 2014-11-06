@@ -1,6 +1,6 @@
 \input{main.tex}
 
-\title{Cryptographic Protocols}
+\title{Cryptographic Protocols (Zoo)}
 
 \begin{document}
 \maketitle
@@ -12,12 +12,13 @@
 \begin{frame}\frametitle{Protocols}
 \begin{itemize}
 \item \textbf{Communications protocol} is a formal description of digital message formats and the rules for exchanging those messages for a specific purpose.
-\item Protocols are to communications what algorithms are to computations.
-\item Everyone involved in the protocol must know the protocol and all of the steps to follow in advance.
-\item Everyone involved in the protocol must agree to follow it.
-\item The protocol must be unambiguous; each step must be well defined and there must be no chance of a misunderstanding.
-\item The protocol must be complete; there must be a specified action for every possible situation.
-\item It should not be possible to do more or learn more than what is specified in the protocol.
+\begin{itemize}
+\item Protocols are to communications what algorithms are to computations
+\item Everyone must know it and agree to follow it
+\end{itemize}
+\item Unambiguous: each step must be well defined and there must be no chance of a misunderstanding
+\item Complete: there must be a specified action for every possible situation
+\item It should not be possible to do more or learn more than what is specified in the protocol
 \end{itemize}
 \end{frame}
 \begin{frame}\frametitle{Protocol Types}
@@ -38,23 +39,33 @@
 \item \textbf{Active cheaters}: disrupt the protocol in progress in an attempt to cheat.
 \end{itemize}
 \end{frame}
-\section{Three-Pass Protocol}
+\section{SSL/TLS Handshaking}
+\begin{frame}\frametitle{Simplified SSL/TLS Handshaking}
+\textbf{Purpose}: generate 4 secret keys with authenticated server\\
+\textbf{Requirement}: the client has the public key of Trusted Third Party\\
+the server has the certificate of its own $pk$ issued by TTP
+\begin{figure}
+\begin{center}
+\input{tikz/ssl}
+\end{center}
+\end{figure}
+\end{frame}
+\section{Three-Pass Protocol and Interlock Protocol}
 \begin{frame}\frametitle{Three-Pass Protocol}
-\textbf{Purpose}: communication without shared keys.\\
-\textbf{Requirement}: $\mathsf{Dec}_{k_1}(\mathsf{Enc}_{k_2}(\mathsf{Enc}_{k_1}(m))) = \mathsf{Enc}_{k_2}(m)$.\\
-\textbf{Shamir Protocol}: $p$ is a prime, find $e,d$ with $\gcd(e,p-1)=1$ and $ed \equiv 1 \pmod{p-1}$.
+\textbf{Purpose}: communication without shared keys\\
+\textbf{Requirement}: $\mathsf{Dec}_{k_1}(\mathsf{Enc}_{k_2}(\mathsf{Enc}_{k_1}(m))) = \mathsf{Enc}_{k_2}(m)$\\
+\textbf{Shamir Protocol}: $p$ is a prime, find $e,d$ with $\gcd(e,p-1)=1$ and $ed \equiv 1 \pmod{p-1}$
 
 \begin{figure}
 \begin{center}
 \input{tikz/threepass}
 \end{center}
 \end{figure}
-$c_2^{d_B} = c_1^{d_A\cdot d_B} = c^{e_B\cdot d_A\cdot d_B} = m^{e_A\cdot e_B\cdot d_A\cdot d_B} = m^{e_Ad_A\cdot e_Bd_B} = m$.
-\textbf{Weakness}: insecurity under the man-in-the-middle attack.
+$c_2^{d_B} = c_1^{d_A\cdot d_B} = c^{e_B\cdot d_A\cdot d_B} = m^{e_A\cdot e_B\cdot d_A\cdot d_B} = m^{e_Ad_A\cdot e_Bd_B} = m$
+\textbf{Weakness}: insecurity under the man-in-the-middle attack
 \end{frame}
-\section{Interlock Protocol}
 \begin{frame}\frametitle{The Man-In-The-Middle Attack}
-Also called \textbf{bucket-brigade attack}: A form of active eavesdropping in which the attacker makes independent connections with the victims and relays messages between them, making them believe that they are talking directly to each other.
+Also called \textbf{bucket-brigade attack}: A form of active eavesdropping in which the attacker makes independent connections with the victims and relays messages between them, making them believe that they are talking directly to each other
 \begin{figure}
 \begin{center}
 \input{tikz/man-in-middle}
@@ -69,10 +80,10 @@ Also called \textbf{bucket-brigade attack}: A form of active eavesdropping in wh
 \end{center}
 \end{figure}
 \end{frame}
-\section{Blind/Group/Ring Signature}
+\section{Blind/Group Signature}
 \begin{frame}\frametitle{Blind Signature}
 \textbf{Blind signature} is a form of digital signature in which the message is blinded before it is signed.\\
-Alice asks for Signer to sign $m$ blindly and then sends to Bob.
+Alice asks for Signer to sign $m$ blindly and then sends to Bob
 \begin{figure}
 \begin{center}
 \input{tikz/blindsignature}
@@ -81,22 +92,23 @@ Alice asks for Signer to sign $m$ blindly and then sends to Bob.
 \[s \equiv s'r^{-1} \equiv m'^dr^{-1} \equiv (mr^e)^dr^{-1} \equiv m^d.\]
 \end{frame}
 \begin{frame}\frametitle{Group Signature}
-\textbf{Group Signature}: allowing a member of a group to anonymously sign a message on behalf of the group (with a group manager).
+\textbf{Group Signature}: allowing a member of a group to anonymously sign a message on behalf of the group (with a group manager)
 \begin{itemize}
 \item \textbf{Soundness}: valid sigs by members verify correctly
 \item \textbf{Unforaeable}: only members can create valid sigs
-\item \textbf{Anonymity}: signer can be determined only by manager.
-\item \textbf{Traceability}: manager can trace which member signed.
-\item \textbf{Unlinkability}: cannot tell if two sigs were from same signer.
-\item \textbf{Exculpability}: cannot forge a sig for other/non members.
+\item \textbf{Anonymity}: signer can be determined only by manager
+\item \textbf{Traceability}: manager can trace which member signed
+\item \textbf{Unlinkability}: cannot tell if two sigs were from same signer
+\item \textbf{Exculpability}: cannot forge a sig for other/non members
 \end{itemize}
 \textbf{A trivial group signature with trusted manager GM}:\\
 \begin{itemize}
-\item \textbf{KeyGen}: GM generates a secret key list for each member and publishes all of public keys.
-\item \textbf{Sign}: sign with an unused secret key.
-\item \textbf{Verify}: try all of public keys.
+\item \textbf{KeyGen}: GM generates a secret key list for each member and publishes all of public keys
+\item \textbf{Sign}: sign with an unused secret key
+\item \textbf{Verify}: try all of public keys
 \end{itemize}
 \end{frame}
+\begin{comment}
 \begin{frame}\frametitle{Ring Signature}
 \textbf{Ring Signature}: Group signature without group manager, and:
 \begin{itemize}
@@ -114,6 +126,7 @@ hash function $H: \{0,1\}^* \to G_1$.
 \[ e(H(m),P) = \Pi_ie(Y_i, \sigma_i) \]
 \end{itemize}
 \end{frame}
+\end{comment}
 \section{Secret Sharing/Threshold Crytpography}
 \begin{frame}\frametitle{Secret Sharing}
 \textbf{Purpose}: distribute a secret amongst a group of $n$ participants, each of whom is allocated a share of the secret. The secret can be reconstructed only when a sufficient number of shares $t$ are combined together. It is called $(t, n)$-\textbf{threshold scheme}.
@@ -137,23 +150,23 @@ hash function $H: \{0,1\}^* \to G_1$.
 \textbf{Chinese remainder theorem}: the shares of secret are generated by reduction modulo some relatively prime integers, and the secret is recovered by solving the system of congruences using the CRT.
 \end{frame}
 \begin{frame}\frametitle{Threshold Cryptography}
-\textbf{$(t,n)$-threshold scheme}: at least $t$ of parties can efficiently decrypt/sign the ciphertext, while less than $t$ have no useful information.\\
+\textbf{$(t,n)$-threshold scheme}: at least $t$ of parties can efficiently decrypt/sign the ciphertext, while less than $t$ have no useful information\\
 
 \textbf{Threshold Elgamal Cryptosystem}:
 \begin{itemize}
-\item \textbf{Key sharing}: $sk = s, pk=h=g^s$. Party $i$ obtains a share $s_i$ with Shamir's scheme  ($(t, n)$-threshold secret sharing) such that $s = \Sigma_i s_i\cdot \lambda_i$ with public info $\lambda_i$ and publishes $h_i = g^{s_i}$.
-\item \textbf{Enc}: $y \gets \mathbb{Z}_q$, $\left<c_1,c_2\right>=\left<g^y,h^y\cdot m\right>$.
-\item \textbf{Dec}: Party $i$ outputs $d_i = c_1^{s_i}$ and ZKP of $\log_gh_i = \log_{c_1} d_i$.
-\[ m = c_2/\Pi_i d_i^{\lambda_i}. \]
-$c_2/\Pi_i d_i^{\lambda_i} = c_2/\Pi_i c_1^{s_i\cdot \lambda_i} = c_2/c_1^{\Sigma_i s_i\cdot \lambda_i} = c_2/c_1^s=m.$
+\item \textbf{Key sharing}: $sk = s, pk=h=g^s$. Party $i$ obtains a share $s_i$ with Shamir's scheme  ($(t, n)$-threshold secret sharing) such that $s = \Sigma_i s_i\cdot \lambda_i$ with public info $\lambda_i$ and publishes $h_i = g^{s_i}$
+\item \textbf{Enc}: $y \gets \mathbb{Z}_q$, $\left<c_1,c_2\right>=\left<g^y,h^y\cdot m\right>$
+\item \textbf{Dec}: Party $i$ outputs $d_i = c_1^{s_i}$ and ZKP of $\log_gh_i = \log_{c_1} d_i$
+\[ m = c_2/\Pi_i d_i^{\lambda_i} \]
+$c_2/\Pi_i d_i^{\lambda_i} = c_2/\Pi_i c_1^{s_i\cdot \lambda_i} = c_2/c_1^{\Sigma_i s_i\cdot \lambda_i} = c_2/c_1^s=m$
 \end{itemize}
 \end{frame}
 \section{Commitment Scheme}
 \begin{frame}\frametitle{Commitment Scheme}
-\textbf{Commitment scheme} allows one to commit to a value while keeping it hidden, with the ability to reveal the committed value.
+\textbf{Commitment scheme} allows one to commit to a value while keeping it hidden, with the ability to reveal the committed value
 \newline
 
-\textbf{Coin flipping over Internet}: Alice flips the coin, Bob guesses.
+\textbf{Coin flipping over Internet}: Alice flips the coin, Bob guesses
 \begin{figure}
 \begin{center}
 \input{tikz/coinflipping}
@@ -163,18 +176,18 @@ $c_2/\Pi_i d_i^{\lambda_i} = c_2/\Pi_i c_1^{s_i\cdot \lambda_i} = c_2/c_1^{\Sigm
 \section{Zero Knowledge Proofs}
 \begin{frame}\frametitle{Zero-Knowledge Proof}
 \begin{itemize}
-\item \textbf{Interactive proof system} is an abstract machine that models computation as the exchange of messages between two parties: verifier and prover.
-\item \textbf{Proof of knowledge}: an interactive proof in which \textbf{prover} succeeds convincing \textbf{verifier} that it knows something.
-\item \textbf{Zero-knowledge proof (ZKP)}: an interactive proof \emph{without revealing anything other than the veracity of the statement}.
+\item \textbf{Interactive proof system} is an abstract machine that models computation as the exchange of messages between two parties: verifier and prover
+\item \textbf{Proof of knowledge}: an interactive proof in which \textbf{prover} succeeds convincing \textbf{verifier} that it knows something
+\item \textbf{Zero-knowledge proof (ZKP)}: an interactive proof \emph{without revealing anything other than the veracity of the statement}
 \begin{itemize}
-\item \textbf{Completeness}: if the statement is true, the honest ``verifier'' will be convinced by an honest prover.
-\item \textbf{Soundness}: if the statement is false, no cheating prover can convince the honest verifier.
-\item \textbf{Existence}: If OWF exists, ZKP exists for any NP-set.
+\item \textbf{Completeness}: if the statement is true, the honest ``verifier'' will be convinced by an honest prover
+\item \textbf{Soundness}: if the statement is false, no cheating prover can convince the honest verifier
+\item \textbf{Existence}: If OWF exists, ZKP exists for any NP-set
 \end{itemize}
 \end{itemize}
 \end{frame}
 \begin{frame}\frametitle{A Toy Example of ZKP}
-Alice {\color{red} \LARGE \Ladiesroom} proves to Bob {\color{blue} \LARGE \Gentsroom} that she knows the secret word used to open a magic door in a cave.
+Alice {\color{red} \LARGE \Ladiesroom} proves to Bob {\color{blue} \LARGE \Gentsroom} that she knows the secret word used to open a magic door in a cave
 \begin{figure}
 \begin{center}
 \input{tikz/zkp}
@@ -182,7 +195,7 @@ Alice {\color{red} \LARGE \Ladiesroom} proves to Bob {\color{blue} \LARGE \Gents
 \end{figure}
 \end{frame}
 \begin{frame}\frametitle{Schnorr Protocol}
-\textbf{Schnorr protocol}: Alice proves to Bob the knowledge of $x=\log_gy$ in the discrete log problem.
+\textbf{Schnorr protocol}: Alice proves to Bob the knowledge of $x=\log_gy$ in the discrete log problem
 \begin{figure}
 \begin{center}
 \input{tikz/schnorr}
@@ -191,7 +204,7 @@ Alice {\color{red} \LARGE \Ladiesroom} proves to Bob {\color{blue} \LARGE \Gents
 If Alice can foresee $c$, Alice can cheat with $t=g^s/y$ when $c=1$.
 \end{frame}
 \begin{frame}\frametitle{ZKP of the Ability to Break RSA}
-\textbf{Purpose}: Alice convinces Bob that she knows Charlie's private key $d$ for RSA problem $\langle N,e,d \rangle$, but she doesn't want to tell Bob $d$.
+\textbf{Purpose}: Alice convinces Bob that she knows Charlie's private key $d$ for RSA problem $\langle N,e,d \rangle$, but she doesn't want to tell Bob $d$
 \begin{figure}
 \begin{center}
 \input{tikz/zkp-rsa}
@@ -203,7 +216,7 @@ If Alice can manipulate $c$, Alice can cheat with $c = m^e$.
 \begin{frame}\frametitle{Oblivious Transfer}
 \textbf{Oblivious transfer (OT)} protocol: a sender remains oblivious as to whether or which info has been transferred.\\
 
-\textbf{Rabin's OT protocol}: RSA problem $\langle N, e, d\rangle $.
+\textbf{Rabin's OT protocol}: RSA problem $\langle N, e, d\rangle $
 \begin{figure}
 \begin{center}
 \input{tikz/rabinOT}
@@ -221,8 +234,8 @@ If $y \neq \pm x$, then Bob can factorize $N$ with $\gcd(y-x,N)$ and find $d$. S
 \end{frame}
 \section{Secure Multi-Party Computation}
 \begin{frame}\frametitle{Secure Multi-Party Computation}
-\textbf{Secure multi-party computation (MPC)}: enable parties to jointly compute a function over their inputs, while at the same time keeping these inputs private.\\
-\textbf{Dining Cryptographers Problem}: how to perform a secure MPC of the boolean-OR function. 
+\textbf{Secure multi-party computation (MPC)}: enable parties to jointly compute a function over their inputs, while at the same time keeping these inputs private\\
+\textbf{Dining Cryptographers Problem}: how to perform a secure MPC of the boolean-OR function
 \begin{columns}
 \begin{column}{4cm}
 \begin{figure}
@@ -233,33 +246,33 @@ If $y \neq \pm x$, then Bob can factorize $N$ with $\gcd(y-x,N)$ and find $d$. S
 \end{column}
 \begin{column}{6cm}
 \begin{itemize}
-\item at most one {\color{red} \LARGE \Gentsroom} (1), other {\color{blue} \LARGE \Gentsroom} (0).
-\item every two adjacent people establish a shared one-bit secret.
-\item everyone shouts the XOR of two shared secrets and its own bit.
-\item output the XOR of all of what everyone shouts. If $1$, there is a {\color{red} \LARGE \Gentsroom}, otherwise there is none.
+\item at most one {\color{red} \LARGE \Gentsroom} (1), other {\color{blue} \LARGE \Gentsroom} (0)
+\item every two adjacent people establish a shared one-bit secret
+\item everyone shouts the XOR of two shared secrets and its own bit
+\item output the XOR of all of what everyone shouts. If $1$, there is a {\color{red} \LARGE \Gentsroom}, otherwise there is none
 \end{itemize}
 \end{column}
 \end{columns}
 \end{frame}
 \section{Quantum Cryptography}
 \begin{frame}\frametitle{Why Quantum Cryptography?}
-Quantum cryptography taps the natural uncertainty of the quantum world.
+Quantum cryptography taps the natural uncertainty of the quantum world
 \begin{itemize}
-\item \textbf{Superposition}: object doesn't have definite properties (location, speed) but has probabilities over them.
-\item \textbf{Interference}: probabilities can be negative.
-\item \textbf{Entanglement}: properties of many particles can be correlated.
-\item \textbf{Measurement}: object's properties collapse to definite value when measured, collapsing also properties of other entangled objects.
+\item \textbf{Superposition}: object doesn't have definite properties (location, speed) but has probabilities over them
+\item \textbf{Interference}: probabilities can be negative
+\item \textbf{Entanglement}: properties of many particles can be correlated
+\item \textbf{Measurement}: object's properties collapse to definite value when measured, collapsing also properties of other entangled objects
 \end{itemize}
 \end{frame}
 \begin{frame}\frametitle{State-of-the-Art of Quantum Cryptography}
 \begin{itemize}
-\item (Unsurprisingly) there is \textbf{no proof} that quantum computers are more powerful than classical computers/Boolean circuits/Turing machines.
-\item There are \textbf{polynomial} algorithms for quantum computers solving problems unknown to be solvable classically in poly-time: factoring and discrete logs.
-\item There are \textbf{hard} problem with no quantum poly-time algorithm: NPC, inverting many candidate OWF, private key encryption and signature schemes.
+\item (Unsurprisingly) there is \textbf{no proof} that quantum computers are more powerful than classical computers/Boolean circuits/Turing machines
+\item There are \textbf{polynomial} algorithms for quantum computers solving problems unknown to be solvable classically in poly-time: factoring and discrete logs
+\item There are \textbf{hard} problem with no quantum poly-time algorithm: NPC, inverting many candidate OWF, private key encryption and signature schemes
 \end{itemize}
 \end{frame}
 \begin{frame}[fragile]\frametitle{Quantum Key Distribution}
-\textbf{Purpose}: Using photon polarization states to transmit the information in a public channel against eavesdroppers.
+\textbf{Purpose}: Using photon polarization states to transmit the information in a public channel against eavesdroppers
 
 \begin{exampleblock}{BB84 protocol: C. H. Bennett and G. Brassard (1984)}
 {\centering	
@@ -278,15 +291,16 @@ Shared secret key & \verb#0 1  0 1# \\ \hline
 \end{tabular}
 }
 \begin{itemize}
-\item Two bases are public.
-\item Eavesdropping would change the photon polarization states.
-\item Check for the presence of eavesdropping by comparing a subset of shared bit string.
+\item Two bases are public
+\item Eavesdropping would change the photon polarization states
+\item Check for the presence of eavesdropping by comparing a subset of shared bit string
 \end{itemize}
 \end{exampleblock}
 \end{frame}
 
 \begin{frame}\frametitle{Summary}
 \begin{itemize}
+\item SSL/TLS handshaking
 \item Shamir three-pass protocol
 \item interlock protocol, man-in-the-middle attack
 \item blind/group/ring signature

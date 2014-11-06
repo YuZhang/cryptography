@@ -1,7 +1,5 @@
 \input{main.tex}
-
 \title{CCA-Secure and Authentication Encryption}
-
 \begin{document}
 \maketitle
 \begin{frame}
@@ -242,7 +240,7 @@ Authenticate-then-encrypt approach is secure if $\Pi_E$ is rand-CTR mode or rand
 \item \textbf{Deterministic CPA Security}: CPA-secure if \emph{never encrypt same message twice} using same key. The pair $\left<k,m\right>$ is unique.
 \item \textbf{Deterministic Authenticated Encryption (DAE)}
 \item \textbf{\alert{Common Mistake}}: CBC/CTR with \textbf{fixed} $IV$.
-\begin{columns}[C]
+\begin{columns}[]
 \column{.5\textwidth}
 \begin{figure}
 \begin{center}
@@ -302,3 +300,7 @@ $c = \left<SIV,\mathsf{Enc}_{k_2}(SIV,m) \right>$.
 \end{frame}
 %\end{comment}
 \end{document}
+
+
+
+
