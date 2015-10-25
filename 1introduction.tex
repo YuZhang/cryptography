@@ -11,19 +11,19 @@
 \section{Cryptography and Modern Cryptography}
 \begin{frame}\frametitle{What is Cryptography?}
 \begin{itemize}
-\item \textbf{Cryptography}: from Greek \emph{krypt\'os}, ``hidden, secret''; and \emph{gr\'{a}phin}, ``writing''.
+\item \textbf{Cryptography}: from Greek \emph{krypt\'os}, ``hidden, secret''; and \emph{gr\'{a}phin}, ``writing''
 \item \textbf{Cryptography}: the art of writing or solving codes.\\ (Concise oxford dictionary 2006)
 \item \textbf{Codes}: a system of prearranged signals, especially used to ensure secrecy in transmitting messages. \\ (\emph{code word} in cryptography)
-\item \textbf{1980s}: from Classic to Modern; from Military to Everyone.
-\item \textbf{Modern cryptography}: the scientific study of techniques for securing digital information, transactions, and distributed computations.
+\item \textbf{1980s}: from Classic to Modern; from Military to Everyone
+\item \textbf{Modern cryptography}: the scientific study of techniques for securing digital information, transactions, and distributed computations
 \end{itemize}
 \end{frame}
 \section{The Setting of Private-Key Encryption}
 \begin{frame}\frametitle{Private-Key Encryption}
 \begin{itemize}
-\item \textbf{Goal}: to construct a \textbf{ciphers} (encryption schemes) for providing secret communication between two parties sharing \textbf{private-key} (the symmetric-key) in advance.
-\item \textbf{Implicit assumption}: there is some way of initially sharing a key in a secret manner.
-\item \textbf{Disk encryption}: the same user at different points in time.
+\item \textbf{Goal}: to construct a \textbf{ciphers} (encryption schemes) for providing secret communication between two parties sharing \textbf{private-key} (the symmetric-key) in advance
+\item \textbf{Implicit assumption}: there is some way of initially sharing a key in a secret manner
+\item \textbf{Disk encryption}: the same user at different points in time
 \end{itemize}
 \end{frame}
 \begin{frame}\frametitle{The Syntax of Encryption}
@@ -33,19 +33,19 @@
 \end{center}
 \end{figure}
 \begin{itemize}
-\item key $k \in \mathcal{K}$, plaintext (or message) $m \in \mathcal{M}$, ciphertext $c \in \mathcal{C}$.
-\item \textbf{Key-generation} algorithm~$k \gets \mathsf{Gen}$.
-\item \textbf{Encryption} algorithm~$c:= \mathsf{Enc}_k(m)$.
-\item \textbf{Decryption} algorithm~$m:= \mathsf{Dec}_k(c)$.
-\item \textbf{Encryption scheme}: $\Pi = (\mathsf{Gen}, \mathsf{Enc}, \mathsf{Dec})$.
-\item \textbf{Basic correctness requirement}: $\mathsf{Dec}_k(\mathsf{Enc}_k(m)) = m$.
+\item key $k \in \mathcal{K}$, plaintext (or message) $m \in \mathcal{M}$, ciphertext $c \in \mathcal{C}$
+\item \textbf{Key-generation} algorithm~$k \gets \mathsf{Gen}$
+\item \textbf{Encryption} algorithm~$c:= \mathsf{Enc}_k(m)$
+\item \textbf{Decryption} algorithm~$m:= \mathsf{Dec}_k(c)$
+\item \textbf{Encryption scheme}: $\Pi = (\mathsf{Gen}, \mathsf{Enc}, \mathsf{Dec})$
+\item \textbf{Basic correctness requirement}: $\mathsf{Dec}_k(\mathsf{Enc}_k(m)) = m$
 \end{itemize}
 \end{frame}
 \begin{frame}\frametitle{Securing Key vs Obscuring Algorithm}
 \begin{itemize}
-\item Easier to maintain secrecy of a short key.
-\item In case the key is exposed, easier for the honest parties to change the key.
-\item In case many pairs of people, easier to use the same algorithm, but different keys.
+\item Easier to maintain secrecy of a short key
+\item In case the key is exposed, easier for the honest parties to change the key
+\item In case many pairs of people, easier to use the same algorithm, but different keys
 \end{itemize}
 \begin{alertblock}{Kerckhoffs's principle}
 \begin{quote}
@@ -55,9 +55,9 @@ The cipher method must not be required to be secret, and it must be able to fall
 \end{frame}
 \begin{frame}\frametitle{Why ``Open Cryptographic Design''}
 \begin{itemize}
-\item Published designs undergo public scrutiny are to be stronger.
-\item Better for security flaws to be revealed by ``ethical hackers''.
-\item Reverse engineering of the code (or leakage by industrial espionage) poses a serious threat to security.
+\item Published designs undergo public scrutiny are to be stronger
+\item Better for security flaws to be revealed by ``ethical hackers''
+\item Reverse engineering of the code (or leakage by industrial espionage) poses a serious threat to security
 \item Enable the establishment of standards.
 \end{itemize}
 \end{frame}
@@ -133,9 +133,9 @@ For $j = 0, 1, \dotsc , 25$, $q_j$ is the probability of $j$th letter in the cip
 \end{frame}
 \begin{frame}[fragile]\frametitle{Mono-Alphabetic Substitution}
 \begin{itemize}
-\item \textbf{Idea}: To map each character to a different one in an arbitrary manner.
+\item \textbf{Idea}: To map each character to a different one in an arbitrary manner
 \item \textbf{Strength}: Key space is large $\approx 2^{88}$. \alert{Q: how to count?}
-\item \textbf{Weakness}: The mapping of each letter is fixed.
+\item \textbf{Weakness}: The mapping of each letter is fixed
 \end{itemize}
 \begin{exampleblock}{Example}
 \verb|abcdefghijklmnopqrstuvwxyz|\\
@@ -147,10 +147,10 @@ Ciphertext: \verb|??????????????|
 \end{frame}
 \begin{frame}[fragile]\frametitle{Attack with Statistical Patterns}
 \begin{enumerate}
-\item Tabulate the frequency of letters in the ciphertext.
-\item Compare it to those in English text.
-\item Guess the most frequent letter corresponds to \verb|e|, and so on.
-\item Choose the plaintext that does ``make sense''. (Not trivial)
+\item Tabulate the frequency of letters in the ciphertext
+\item Compare it to those in English text
+\item Guess the most frequent letter corresponds to \verb|e|, and so on
+\item Choose the plaintext that does ``make sense'' (Not trivial)
 \end{enumerate}
 \begin{table}
 \begin{center}
@@ -229,9 +229,9 @@ respecting it.
 \end{frame}
 \begin{frame}[fragile]\frametitle{Kasiski's Method (to find $t$)}
 \begin{itemize}
-\item To identify repeated patterns of length 2 or 3.
-\item The distance between such appearances is a multiple of $t$.
-\item $t$ is the greatest common divisor of all the distances.
+\item To identify repeated patterns of length 2 or 3
+\item The distance between such appearances is a multiple of $t$
+\item $t$ is the greatest common divisor of all the distances
 \end{itemize}
 \begin{exampleblock}{Example (Key is `beads')}
 \begin{semiverbatim}
@@ -258,9 +258,9 @@ Security must be guaranteed for any adversary within the class of adversaries ha
 \end{itemize}
 \begin{alertblock}{Lessons learned}
 \begin{itemize}
-\item Sufficient key space principle.
-\item Designing secure cipher is a hard task.
-\item Complexity does not imply security. (then what does?)
+\item Sufficient key space principle
+\item Designing secure cipher is a hard task
+\item Complexity does not imply security (then what does?)
 \item Arbitrary adversary principle
 \end{itemize}
 \end{alertblock}
@@ -268,9 +268,9 @@ Security must be guaranteed for any adversary within the class of adversaries ha
 \section{The Basic Principles of Modern Cryptography}
 \begin{frame}\frametitle{Three Main Principles of Modern Cryptography}
 \begin{enumerate}
-\item The formulation of a rigorous \textbf{definition} of security / threat model.
-\item When the security of a cipher relies on an unproven \textbf{assumption}, this assumption must be precisely stated and be as minimal as possible.
-\item Cipher should be accompanied by a rigorous \textbf{proof} of security with the above definition and the above assumption.
+\item The formulation of a rigorous \textbf{definition} of security / threat model
+\item When the security of a cipher relies on an unproven \textbf{assumption}, this assumption must be precisely stated and be as minimal as possible
+\item Cipher should be accompanied by a rigorous \textbf{proof} of security with the above definition and the above assumption
 \end{enumerate}
 \end{frame}
 \begin{frame}\frametitle{Why Principle 1 -- Formulation of Exact Definitions}
