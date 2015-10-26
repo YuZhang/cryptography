@@ -1,3 +1,5 @@
+通知：周三照常上课
+
 Slides for Cryptography course at Harbin Institute of Technology
 ==========
 
