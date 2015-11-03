@@ -462,6 +462,31 @@ $\Delta X = 1011 = B, \Delta Y = 0010 = 2$ for 8 times, so $(B, 2) = 8$
 \end{figure}
 \end{frame}
 %\end{comment}
+\begin{frame}\frametitle{Remarks on Block Ciphers}
+\begin{itemize}
+\item \textbf{Block length} should be sufficiently large
+\item \textbf{Message tampering} is not with message confidentiality
+\item \textbf{Padding}: TLS: For $n>0$, $n$ byte pad is $n,n,\dots,n$
+If no pad needed, add a dummy block
+\item \textbf{Stream ciphers vs. block ciphers}: 
+\begin{itemize}
+\item Steam ciphers are faster but have lower security
+\item It is possible to use block ciphers in ``stream-cipher mode''
+\end{itemize}
+\end{itemize}
+\begin{exampleblock}{Performance: Crypto++ 5.6, AMD Opetron 2.2GHz}
+\begin{center}
+\begin{tabular}{|c|c|c|} \hline
+                      & \textbf{Block/key size} & \textbf{Speed MB/sec} \\ \hline
+\textbf{RC4}          &         & 126 \\  
+\textbf{Salsa20/12}   &         & 643 \\ 
+\textbf{Sosemanuk}    &         & 727 \\ 
+\textbf{3DES}	      & 64/168  & 13  \\
+\textbf{AES-128}      & 128/128 & 109 \\ \hline 
+\end{tabular}	
+\end{center}
+\end{exampleblock}
+\end{frame}
 \begin{frame}\frametitle{Comics on S-box [xkcd:153]}
 If you got a big keyspace, let me search it.
 \begin{figure}

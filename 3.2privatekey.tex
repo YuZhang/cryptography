@@ -128,6 +128,7 @@ Any private-key encryption scheme that is CPA-secure also is \textbf{multiple-en
 $F_k : \{0,1\}^* \to \{0,1\}^*$, $F_k(x) \overset{\text{def}}{=} F(k,x)$
 \item \textbf{Look-up table $f$}: $\{0,1\}^n \to \{0,1\}^n$ with size \alert{ = ? bits} %$n\cdot2^n$.
 \item \textbf{Function family $\mathsf{Func}_n$}: all functions $\{0,1\}^n \to \{0,1\}^n$. $|\mathsf{Func}_n| = 2^{n\cdot2^n}$
+\item \textbf{Length Preserving}: $\ell_{key}(n) = \ell_{in}(n) = \ell_{out}(n)$
 \end{itemize}
 \end{frame}
 \begin{frame}\frametitle{Definition of Pseudorandom Function}
@@ -267,17 +268,18 @@ where $f$ is chosen \emph{u.a.r} from the set of permutations on $n$-bit strings
 \item Could you give a (or another) PRP over $X = \{ 0,1\}^{128}$?
 \end{enumerate}
 \end{exampleblock}
+\begin{proposition}
+IF $F$ is a PRP and additionally $\ell_{in} (n) \ge n$, then $F$ is also a PRF.
+\end{proposition}
 \end{frame}
-%\begin{frame}\frametitle{Block Cipher and Modes of Operation}
-%\begin{itemize}
-%\item \textbf{Block cipher}: A practical (strong) PRP.
-%\begin{itemize}
-%\item Not encryption scheme, but a building block of encryption scheme.
-%\item Block cipher itself is not CPA-secure.
-%\end{itemize}
-%\item \textbf{Modes of Operation}: A way of encrypting arbitrary-length messages using a block cipher/PRP.
-%\end{itemize}
-%\end{frame}
+\section{Modes of Operation}
+\begin{frame}\frametitle{PRF, PRP, PRG, and Modes of Operation}
+\textbf{Modes of Operation:}
+\begin{itemize} 
+\item A way of encrypting arbitrary-length messages using a PRP or PRF
+\item A way of constructing a PRG from a PRP or PRF
+\end{itemize}
+\end{frame}
 \begin{frame}\frametitle{Electronic Code Book (ECB) Mode}
 \begin{figure}
 \begin{center}
@@ -381,31 +383,6 @@ $IV$ for record $\#i$ is last CT block of record $\#(i-1)$.
 \verb#    AES_ENCRYPT or AES_DECRYPT);# \\
 \end{exampleblock}
 \end{frame}
-\begin{frame}\frametitle{Remarks on Block Ciphers}
-\begin{itemize}
-\item \textbf{Block length} should be sufficiently large
-\item \textbf{Message tampering} is not with message confidentiality
-\item \textbf{Padding}: TLS: For $n>0$, $n$ byte pad is $n,n,\dots,n$
-If no pad needed, add a dummy block
-\item \textbf{Stream ciphers vs. block ciphers}: 
-\begin{itemize}
-\item Steam ciphers are faster but have lower security
-\item It is possible to use block ciphers in ``stream-cipher mode''
-\end{itemize}
-\end{itemize}
-\begin{exampleblock}{Performance: Crypto++ 5.6, AMD Opetron 2.2GHz}
-\begin{center}
-\begin{tabular}{|c|c|c|} \hline
-                      & \textbf{Block/key size} & \textbf{Speed MB/sec} \\ \hline
-\textbf{RC4}          &         & 126 \\  
-\textbf{Salsa20/12}   &         & 643 \\ 
-\textbf{Sosemanuk}    &         & 727 \\ 
-\textbf{3DES}	      & 64/168  & 13  \\
-\textbf{AES-128}      & 128/128 & 109 \\ \hline 
-\end{tabular}	
-\end{center}
-\end{exampleblock}
-\end{frame}
 %\begin{frame}\frametitle{PRP/PRF Switching Lemma (FYI)}
 %\begin{lemma}
 %$\forall\;$ \textsc{ppt} distinguishers $D$,
@@ -447,6 +424,12 @@ and then queries $c'$ which is the same with $c$ except that a single bit is fli
 The $m' = c' \oplus F_k(r)$ should be the same with $m_{b}$ \alert{except \underline{$\qquad$}?}
 \end{exampleblock}
 \alert{Q: Show that the above modes (CBC, OFB and CTR) are also not CCA-secure. (homework)}
+\end{frame}
+\begin{frame}\frametitle{Padding-Oracle Attacks}
+\textbf{PKCK \#5 Padding}:  append $b$ bytes of $b$ to the message in order to make the total length a multiple of the block length (append a dummy block if neeeded). 
+The decryption server will return a \textbf{Bad Padding Error} for incorrect padding\\
+\textbf{Padding-Oracle Attacks}: in a one-block CBC, by modifying the 1st byte of $IV$, attacker can learn whether $m$ is NULL. If yes, error will occur. If no error, then learn whether $m$ is 1 byte by modifying the 2nd byte of $IV$ and so on. Once learning the length of $m$, attacker can learn the last byte of $m$ (How? Read the IMC 2nd Ed.) \\ 
+\textbf{Real-world Example}: CAPTCHA server will return an error when deciphering the CT of a CAPTCHA text received from a user 
 \end{frame}
 \begin{frame}\frametitle{Summary}
 \begin{itemize}
