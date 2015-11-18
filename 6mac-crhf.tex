@@ -360,6 +360,15 @@ $\Pi$ ($\mathsf{Gen}$, $H^s$) is \textbf{collision resistant} if $\forall$ \text
 \end{itemize}
 \end{exampleblock}
 \end{frame}
+\begin{frame}{Applications of Hash Functions}
+\begin{itemize}
+\item \textbf{Fingerprinting and Deduplication}: $H(alargefile)$ for virus fingerprinting, deduplication, P2P file sharing
+\item \textbf{Merkle Trees}: $H(H(H(file1), H(file2)), H(H(file3), H(file4)))$ fingerprinting multiple files / parts of a file
+\item \textbf{Passward Hashing}: $(salt, H(salt, pw))$ mitigating the risk of leaking password stored in the clear 
+\item \textbf{Key Derivation}: $H(secret)$ deriving a key from a high-entropy (but not necessarily uniform) shared secret
+\item \textbf{Commitment Schemes}: $H(info)$ hiding the commited info; binding the commitment to a info
+\end{itemize}
+\end{frame}
 %\end{comment}
 %\begin{frame}\frametitle{Applications of Hash Functions}
 %\begin{itemize}

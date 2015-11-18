@@ -139,11 +139,14 @@ A function $\mathsf{hc}\; : \; \{0,1\}^* \to \{0,1\}$ is a \textbf{hard-core pre
 \begin{theorem}
 $f$ is OWF. Then $\exists$ an OWF $g$ along with an HCP $\mathsf{gl}$ for $g$. If $f$ is a permutation then so is $g$.
 \end{theorem}
-\alert{Q: is $\mathsf{gl}(x) = \bigoplus^{n}_{i=1} x_i$ the HCP of any OWF?}\\
-
+\begin{alertblock}{}
+\alert{Q: is $\mathsf{gl}(x) = \bigoplus^{n}_{i=1} x_i$ the HCP of any OWF?}
+\end{alertblock}
+\begin{proof}
 $g(x,r) \overset{\text{def}}{=} (f(x), r)$, for $\abs{x} = \abs{r}$, and define
 \[ \mathsf{gl}(x,r) \overset{\text{def}}{=} \bigoplus^{n}_{i=1} x_i \cdot r_i. \]
 $r$ is a random subset of $\{ 1,\dotsc, n \}$. [Goldreich and Levin]
+\end{proof}
 \end{frame}
 \section{From OWF to PRP (FYI)}
 \begin{frame}\frametitle{PRG from OWP: Blum-Micali Generator}
