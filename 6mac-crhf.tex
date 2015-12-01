@@ -466,11 +466,11 @@ It is \textbf{hard/difficult/challenging/impossible} to \textbf{imagine/believe}
 \begin{construction}
 Construct \textbf{variable-length} CRHF $(\mathsf{Gen}, H)$ from fixed-length $(\mathsf{Gen}, h)$ ($2\ell$ bits $\to \ell$ bits, $\ell = \ell(n)$):
 \begin{itemize}
-\item $\mathsf{Gen}$: remains unchanged.
+\item $\mathsf{Gen}$: remains unchanged
 \item $H$: key $s$ and string $x \in \{0,1\}^*$, $L=|x|< 2^{\ell}$:
 \begin{itemize}
-\item $B := \lceil \frac{L}{\ell} \rceil$ (\# blocks). \textbf{Pad $x$ with 0s}.  $\ell$-bit blocks $x_1,\dotsc,x_B$. $x_{B+1} := L$, $L$ is encoded using $\ell$ bits.
-\item $z_0 := IV = 0^\ell$. For $i=1,\dotsc,B+1$, compute $z_i := h^s(z_{i-1}\| x_i)$.
+\item $B := \lceil \frac{L}{\ell} \rceil$ (\# blocks). \textbf{Pad $x$ with 0s}.  $\ell$-bit blocks $x_1,\dotsc,x_B$. $x_{B+1} := L$, $L$ is encoded using $\ell$ bits
+\item $z_0 := IV = 0^\ell$. For $i=1,\dotsc,B+1$, compute $z_i := h^s(z_{i-1}\| x_i)$
 \end{itemize}
 \end{itemize}
 \end{construction}
@@ -484,8 +484,8 @@ If $(\mathsf{Gen},h)$ is a fixed-length CRHF, then $(\mathsf{Gen},H)$ is a CRHF.
 Two messages $x \ne x'$ of respective lengths $L$ and $L'$ such that $H^s(x) = H^s(x')$. \# blocks are $B$ and $B'$. \\
 $x_{B+1} := L$ is necessary since \textbf{Padding with 0s} will lead to the same input with different messages.
 \begin{enumerate}
-\item $L \ne L'$: $z_B\| L \ne z_{B'}\| L'$.
-\item $L = L'$: $z_{i^*-1}\| x_{i^*} \ne z_{i^*-1}'\| x_{i^*}'$.
+\item $L \ne L'$: $z_B\| L \ne z_{B'}\| L'$
+\item $L = L'$: $z_{i^*-1}\| x_{i^*} \ne z_{i^*-1}'\| x_{i^*}'$
 \end{enumerate}
 So there must be $x \neq x'$ such that $h^s(x) = h^s(x')$.
 \end{proof}
@@ -493,26 +493,28 @@ So there must be $x \neq x'$ such that $h^s(x) = h^s(x')$.
 \begin{frame}\frametitle{CRHF from Block Cipher}
 \begin{columns}
 \column{.5\textwidth}
-Davies-Meyer:
+Davies-Meyer (SHA-1/2, MD5)
 \begin{figure}
 \begin{center}
 \input{tikz/Davies-Meyer.tex}
 \end{center}
 \end{figure}
-Used by SHA-1/2, MD5\\
 $h_{i} = F_{m_{i}}(h_{i-1}) \oplus h_{i-1}$
 \column{.5\textwidth}
-Miyaguchi-Preneel:
+Miyaguchi-Preneel (Whirlpool)
 \begin{figure}
 \begin{center}
 \input{tikz/Miyaguchi-Preneel.tex}
 \end{center}
 \end{figure}
-Used by Whirlpool\\
 $h_{i} = F_{h_{i-1}}(m_{i}) \oplus h_{i-1} \oplus m$
 \end{columns}
 $\quad$\\
-\alert{Q: what if $h_{i} = F_{m_{i}}(h_{i-1})$ without XOR with $h_{i-1}$? }
+\begin{theorem}
+If $F$ is modeled as an ideal cipher, then Davies-Meyer construction yields a CRHF.
+\end{theorem}
+\alert{Q: what if $h_{i} = F_{m_{i}}(h_{i-1})$ without XOR with $h_{i-1}$? }\\
+\alert{Q: what if $F$ is not ideal such that $\exists x, F_k(x)=x$?}
 \end{frame}
 \begin{frame}\frametitle{Cryptographic Hash Functions: SHA-1 and MD5}
 \begin{columns}[c]
@@ -538,8 +540,8 @@ $W_t$/$M_t$ is the expanded message word of round $t$;
 $K_t$ is the round constant of round $t$;
 $\boxplus$ denotes addition modulo $2^{32}$.
 \begin{itemize}
-\item Finding a collision in 128-bit MD5 requires time $2^{20.96}$. 
-\item Finding a collision in 160-bit SHA-1 requires time $2^{51}$.
+\item Finding a collision in 128-bit MD5 requires time $2^{20.96}$
+\item Finding a collision in 160-bit SHA-1 requires time $2^{51}$
 \end{itemize}
 \end{frame}
 \section{HMAC}
@@ -583,16 +585,16 @@ $(\widetilde{\mathsf{Gen}}, h)$ is a fixed-length CRHF. $(\widetilde{\mathsf{Gen
 $IV$, $\mathsf{opad}$ (0x36), $\mathsf{ipad}$ (0x5C) are fixed constants of length $n$.
 HMAC:
 \begin{itemize}
-\item $\mathsf{Gen}(1^n)$: Output $(s, k)$. $s \gets \widetilde{\mathsf{Gen}}, k \gets \{0,1\}^n$ \emph{u.a.r}.
-\item $\mathsf{Mac}_{s,k}(m)$: $t := H_{IV}^s\Big((k \oplus \mathsf{opad}) \| H_{IV}^s\big((k \oplus \mathsf{ipad}) \| m\big)\Big)$.
-\item $\mathsf{Vrfy}_{s,k}(m,t)$: $1 \iff t \overset{?}{=} \mathsf{Mac}_{s,k}(m)$.
+\item $\mathsf{Gen}(1^n)$: Output $(s, k)$. $s \gets \widetilde{\mathsf{Gen}}, k \gets \{0,1\}^n$ \emph{u.a.r}
+\item $\mathsf{Mac}_{s,k}(m)$: $t := H_{IV}^s\Big((k \oplus \mathsf{opad}) \| H_{IV}^s\big((k \oplus \mathsf{ipad}) \| m\big)\Big)$
+\item $\mathsf{Vrfy}_{s,k}(m,t)$: $1 \iff t \overset{?}{=} \mathsf{Mac}_{s,k}(m)$
 \end{itemize}
 \end{construction}
 \end{frame}
 \begin{frame}\frametitle{Security of HMAC}
 \begin{theorem}
 \[ G(k) \overset{\text{def}}{=} h^s(IV\| (k\oplus \mathsf{opad})) \| 
-h^s(IV\| (k\oplus \mathsf{ipad})) = k_1\| k_2.
+h^s(IV\| (k\oplus \mathsf{ipad})) = k_1\| k_2
 \]
 $(\widetilde{\mathsf{Gen}}, h)$ is CRHF. If $G$ is a PRG, then HMAC is secure.
 \end{theorem}
@@ -604,14 +606,14 @@ $(\widetilde{\mathsf{Gen}}, h)$ is CRHF. If $G$ is a PRG, then HMAC is secure.
 def Verify(key, msg, sig\underline{\ }bytes): \\
 $\qquad$ return HMAC(key, msg) == sig\underline{\ }bytes \\
 The problem:  implemented as a byte-by-byte comparison
-\item \alert{\emph{Don't implement it yourself.}}
+\item \alert{\emph{Don't implement it yourself}}
 \end{itemize}
 \end{frame}
 \begin{frame}\frametitle{Summary}
 \begin{itemize}
-\item adaptive CMA, replay attack, birthday attack. 
-\item existential unforgeability, collision resistance.
-\item CBC-MAC, CRHF, Merkle-Damg\r{a}rd transform, NMAC, HMAC. 
+\item adaptive CMA, replay attack, birthday attack 
+\item existential unforgeability, collision resistance
+\item CBC-MAC, CRHF, Merkle-Damg\r{a}rd transform, NMAC, HMAC
 \end{itemize}
 \end{frame}
 \end{document}
