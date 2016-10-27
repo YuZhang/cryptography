@@ -1,0 +1,11 @@
+\begin{tikzpicture}[font=\footnotesize]
+\node (A) at (0,0) [label=below:User] {\Lisa};
+\node (B) [right of = A, node distance = 4cm,label=below:Web Server] {\Left\Bart};
+\node (C) at (2,4) [rounded corners=1ex,minimum width=2cm,label distance=-2cm] {\Homer};
+\node at (3.5,3.5) {CAPTCHA Server};  
+\draw[-latex] (B) -- (A) node [midway,above] {(1) $Enc_k(w)$};
+\draw[-latex] (A.350) -- (B.190) node [midway,below] {(4) $w$};
+\draw[-latex] (A.90) -- (C.240) node [sloped,midway,above] {(2) $Enc_k(w)$};
+\draw[-latex] (C.250) -- (A.80)  node [sloped,midway,below] {(3) Image of $w$ or error};
+\draw[latex-latex] (C.320) -- (B.70) node [sloped,midway,above] {(0) shared key $k$};
+\end{tikzpicture}

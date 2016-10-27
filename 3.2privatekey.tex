@@ -112,7 +112,7 @@ $\Pi$ has \textbf{indistinguishable encryptions under a CPA (CPA-secure)} if $\f
 Any private-key encryption scheme that is CPA-secure also is \textbf{multiple-encryption} CPA-secure.
 \end{proposition}
 \begin{itemize}
-\item \alert{Q: does \textbf{multiple-encryption-security} mean CPA-security?} (homework)
+\item \alert{Q: Does \textbf{multiple-encryption-security} mean CPA-security?} (homework)
 %\item \textbf{Fixed-length} CPA-secure encryption scheme can be used to construct a \textbf{arbitrary-length} CPA-secure one quite easily.
 \end{itemize}
 \end{frame}
@@ -426,10 +426,47 @@ The $m' = c' \oplus F_k(r)$ should be the same with $m_{b}$ \alert{except \under
 \alert{Q: Show that the above modes (CBC, OFB and CTR) are also not CCA-secure. (homework)}
 \end{frame}
 \begin{frame}\frametitle{Padding-Oracle Attacks}
-\textbf{PKCK \#5 Padding}:  append $b$ bytes of $b$ to the message in order to make the total length a multiple of the block length (append a dummy block if neeeded). 
-The decryption server will return a \textbf{Bad Padding Error} for incorrect padding\\
-\textbf{Padding-Oracle Attacks}: in a one-block CBC, by modifying the 1st byte of $IV$, attacker can learn whether $m$ is NULL. If yes, error will occur. If no error, then learn whether $m$ is 1 byte by modifying the 2nd byte of $IV$ and so on. Once learning the length of $m$, attacker can learn the last byte of $m$ (How? Read the IMC 2nd Ed.) \\ 
-\textbf{Real-world Example}: CAPTCHA server will return an error when deciphering the CT of a CAPTCHA text received from a user 
+\textbf{PKCK \#5 Padding}:  append $b$ bytes of $b$ to the message in order to make the total length a multiple of the block length (append a dummy block if needed). The decryption server will return a \textbf{Bad Padding Error} for incorrect padding.\\
+\textbf{Padding-Oracle Attacks}: 
+\begin{itemize}
+\item In a one-block CBC, by modifying the 1st byte of $IV$, attacker can learn whether $m$ is NULL. If yes, error will occur. 
+\end{itemize}
+\begin{columns}[c]
+\column{.5\textwidth}
+\begin{figure}
+\begin{center}
+\input{tikz/CBC-small}
+\end{center}
+\end{figure}
+\column{.5\textwidth}
+\begin{itemize}
+\item append $\{b\}^b$ as a dummy block if $m$ is NULL
+\item change the 1st byte of $IV$ from $x$ to $y$, get decrypted block $(x \oplus y \oplus b) \| \{b\}^{b-1}$, and trigger an error
+\end{itemize}
+\end{columns}
+\end{frame}
+\begin{frame}\frametitle{Padding-Oracle Attacks (Cont.)}
+\begin{figure}
+\begin{center}
+\input{tikz/CBC-small}
+\end{center}
+\end{figure}
+\begin{itemize}
+\item If no error, then learn whether $m$ is 1 byte by modifying the 2nd byte of $IV$ and so on (changing the ciphertext)
+\item Once learn the length of $m$, learn the last byte of $m$ ($s$) by modifying the one before the last block in the ciphertext
+\item $m_{last} = \cdots s \| \{b\}^{b}$, $c_{last-1} = \cdots t \| \{\cdot \}^{b} $
+\item modify $c_{last-1}$ to $c_{last-1}' = \cdots u \| (\{\cdot \}^{b} \oplus \{b\}^{b} \oplus \{b+1\}^{b}) $
+\item \alert{Q: If no padding error, then $s$ = ?}
+% s ^ t = u  ^ (b+1),  s= u ^ (b+1) ^ t
+\end{itemize}
+\end{frame}
+\begin{frame}\frametitle{Padding-Oracle Attacks: Real-world Case}
+CAPTCHA server will return an error when deciphering the CT of a CAPTCHA text received from a user.
+\begin{figure}
+\begin{center}
+\input{tikz/padding-oracle}
+\end{center}
+\end{figure}
 \end{frame}
 \begin{frame}\frametitle{Summary}
 \begin{itemize}
@@ -437,7 +474,7 @@ The decryption server will return a \textbf{Bad Padding Error} for incorrect pad
 \item PRG, PRF, PRP, stream cipher, block cipher
 \item Security/construction against eavesdropping/CPA
 \item EBC, CBC, OFB, CTR
-\item CCA
+\item CCA, padding-oracle attack
 \end{itemize}
 \end{frame}
 \end{document}

@@ -1,6 +1,4 @@
-通知：周三照常上课
-
-Slides for Cryptography course at Harbin Institute of Technology
+## Slides for Cryptography Course at Harbin Institute of Technology
 ==========
 
 ## Requirement
