@@ -144,7 +144,7 @@ According to the definition of PRF,
 \end{proof}
 \end{frame}
 \begin{frame}\frametitle{Extension to Variable-Length Messages}
-\begin{exampleblock}{For variable-Length Messages, would the following suggestions be secure?}
+\begin{exampleblock}{For variable-length messages, would the following suggestions be secure?}
 \begin{itemize}
 \item \textbf{Suggestion 1}: XOR all the blocks together and authenticate the result. $t := \mathsf{Mac}_k'(\oplus_i m_i)$.
 \item \textbf{Suggestion 2}: Authenticate each block separately. $t_i := \mathsf{Mac}_k'(m_i)$.
@@ -270,7 +270,7 @@ If $F$ is a PRF, Construction is a secure \textbf{fixed-length} MAC.
 \end{figure}
 \item \textbf{Encrypt last block (ECBC-MAC)}: Use two keys $k_1, k_2$. Get $t$ with $k_1$ by CBC-MAC, then output $\hat{t} := F_{k_2}(t)$.
 \end{itemize}
-\alert{Q: to authenticate a voice stream, which approach do you prefer?}
+\alert{Q: To authenticate a voice stream, which approach do you prefer?}
 \end{frame}
 \begin{comment}
 \begin{frame}{Brute-force Attack against CBC-MAC}
@@ -290,7 +290,7 @@ Improvement: Add a random string $r$, and output $(r, \mathsf{Mac}_{k'}(t\|r))$ 
 \begin{frame}\frametitle{MAC Padding}
 Padding must be invertible!\[ m_0\neq m_1 \Rightarrow \mathsf{pad}(m_0) \neq \mathsf{pad}(m_1). \]
 \textbf{ISO}: pad with ``100\dots00''. Add dummy block if needed.\\
-\alert{Q: what if no dummy block?} \\
+\alert{Q: What if no dummy block?} \\
 \textbf{CMAC (Cipher-based MAC from NIST)}: key$=(k,k_1,k_2)$.
 \begin{figure}
 \begin{center}
