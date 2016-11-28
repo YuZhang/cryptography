@@ -510,6 +510,7 @@ if the first 16 bits of message is not ``02'' which is standing for ``PKCK \#1''
 \textbf{HTTPS Defense} [RFC 5246]: if not ``02'', set the message as a random string.
 \end{frame}
 \end{comment}
+
 \begin{frame}\frametitle{PKCK \#1 v2.1 (RSAES-OAEP)}
 \textbf{Optimal Asymmetric Encryption Padding} (OAEP): encode $m$ of length $n/2$ as $\hat{m}$ of length $2n$. $G, H$ are \textbf{Random Oracles}.
 \[ \hat{m}_1 := G(r)\oplus (m\| \{0\}^{n/2}), \hat{m} := \hat{m}_1 \| (r \oplus H(\hat{m}_1)).\]
@@ -518,9 +519,22 @@ if the first 16 bits of message is not ``02'' which is standing for ``PKCK \#1''
 \input{tikz/OAEP}
 \end{center}
 \end{figure}
-RSA-OAEP is CCA-secure in Random Oracle model. \footnote{It may not be secure when RO is instantiated.} [RFC 3447]\\
 \alert{Q: How to decipher?}
 \end{frame}
+
+\begin{frame}\frametitle{PKCK \#1 v2.1 (RSAES-OAEP) (Cont.)}
+RSA-OAEP is CCA-secure in Random Oracle model. \footnote{It may not be secure when RO is instantiated.} [RFC 3447]
+\begin{figure}
+\begin{center}
+\input{tikz/OAEP}
+\end{center}
+\end{figure}
+CPA: To learn $r$, attacker has to learn $\hat{m}_1$ from $(\hat{m}_1\|\hat{m})^e$\\
+
+CCA: Effective decryption query is disabled by checking "00...0" in the plaintext before the response\\
+
+\end{frame}
+
 \begin{frame}\frametitle{OAEP Improvements}
 \begin{columns}
 \begin{column}{5cm}
