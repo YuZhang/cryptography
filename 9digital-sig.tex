@@ -131,6 +131,124 @@ Reduce $\mathcal{A}$ for $\Pi$ to $\mathcal{A}'$.
 $\Pr[\mathsf{SF} \land \overline{\mathsf{coll}}] = \Pr[\mathsf{Sigforge}_{\mathcal{A},\Pi}(n)=1]$.
 \end{frame}
 %\end{comment}
+
+\section{Digital Signature from the Discrete-Log Problem}
+
+\begin{frame}\frametitle{Identification Schemes}
+An identification scheme $\Pi = (\mathsf{Gen}, \mathcal{P}_1, \mathcal{P}_2, \mathcal{V})$ is a 3-round protocol between the prover and the verifier. The attacker can do eavesdropping and has an access to an oracle $\mathsf{Trans}_{sk}$ to learn $(I, r, s)$ by executing the protocol as a verifier.
+\begin{figure}
+\begin{center}
+\input{tikz/identification}
+\end{center}
+\end{figure}
+\end{frame}
+
+\begin{frame}\frametitle{Identification Schemes: Definition}
+The identification experiment $\mathsf{Ident}_{\mathcal{A},\Pi }(n)$:
+\begin{enumerate}
+\item $(pk,sk) \gets \mathsf{Gen}(1^n)$.
+\item $\mathcal{A}$ is given input $1^n$ and oracle access to $\mathsf{Trans}_{sk}(\cdot)$, and outputs a message $I$.
+\item A uniform challenge $r$ is chosen and given to $\mathcal{A}$, and $\mathcal{A}$ outpus $s$. ($\mathcal{A}$ may continue to query the oracle.)
+\item $\mathsf{Ident}_{\mathcal{A},\Pi }(n) = 1 \iff \mathcal{V}(pk, r, s) \overset{?}{=} I$. 
+\end{enumerate}
+\begin{definition}
+An identification scheme $\Pi = (\mathsf{Gen}, \mathcal{P}_1, \mathcal{P}_2, \mathcal{V})$ is \textbf{secure} if $\forall$ \textsc{ppt} $\mathcal{A}$, $\exists$ $\mathsf{negl}$ such that:
+\[ \Pr [\mathsf{Ident}_{\mathcal{A},\Pi }(n) = 1] \le \mathsf{negl}(n).
+\]
+\end{definition}
+\end{frame}
+
+\begin{frame}\frametitle{The Fiat-Shamir Transform}
+The Fiat-Shamir transform  constructs a (non-interactive) signature scheme by letting the signer run the protocol by itself.
+\begin{construction}
+Let $\Pi = (\mathsf{Gen}_{\mathsf{id}}, \mathcal{P}_1, \mathcal{P}_2, \mathcal{V})$ be an identification scheme.
+\begin{itemize}
+\item $\mathsf{Gen}$: $(pk, sk) \gets \mathsf{Gen}_{\mathsf{id}}$. A function $H : \{0,1\}^* \to \Omega_{pk}$ (a set of challenges).
+\item $\mathsf{Sign}$: On input $sk$ and $m \in \{0,1\}^*$, do
+\begin{enumerate}
+\item Compute $(I, \mathsf{st}) \gets \mathcal{P}_1(sk)$
+\item Compute $r := H(I, m)$
+\item Compute $s := \mathcal{P}_2(sk, \mathsf{st}, r)$
+\end{enumerate}
+Outpus the signature $r, s$.
+\item $\mathsf{Vrfy}$: $I := \mathcal{V}(pk, r, s)$. Output $1 \iff H(I, m) \overset{?}{=} r.$
+\end{itemize}
+\end{construction}
+\begin{theorem}
+If $\Pi$ is a secure identification scheme and $H$ is a random oracle, then the Fiat-Shamir transform results a secure signature scheme.
+\end{theorem}
+\end{frame}
+
+\begin{frame}\frametitle{The Schnorr Identification Scheme}
+\begin{figure}
+\begin{center}
+\input{tikz/identification-schnorr}
+\end{center}
+\end{figure}
+\begin{theorem}
+If the discrete-log problem is hard, then the Schnorr identification scheme is secure.
+\end{theorem}
+\end{frame}
+
+\begin{frame}\frametitle{Proof of the Schnorr Identification Scheme}
+\textbf{Idea}: If the attacker can let $g^s \cdot y^{-r} = I$, then the attacker can compute $x$.
+\begin{proof}
+Reduce $\mathcal{A}'$ inverting $y$ to $\mathcal{A}$ attacking the Schnorr  scheme:
+\begin{enumerate}
+\item $\mathcal{A}'$ as a verifier, answering all queries, runs $\mathcal{A}$ as a prover.
+\item When $\mathcal{A}$ outputs $I$, $\mathcal{A}'$ choose $r_1 \in \mathbb{Z}_q$ and give it to $\mathcal{A}$, who responds with $s_1$.
+\item Run $\mathcal{A}$ a second time, send $r_2 \in \mathbb{Z}_q$ to  $\mathcal{A}$ who responds with $s_2$. 
+\item If $g^{s_1} \cdot h^{-r_1} = I$ and $g^{s_2} \cdot h^{-r_2} = I$ and $r_1 \neq r_2$ then output $x = [ (s_1 - s_2)\cdot (r_1 - r_2)^{-1} \mod q]$. Else, output nothing.
+\end{enumerate}
+\end{proof}
+\end{frame}
+
+\begin{frame}\frametitle{The Schnorr Signature Scheme}
+\begin{construction}
+\begin{itemize}
+\item $\mathsf{Gen}$: $(\mathcal{G}, q, g) \gets \mathcal{G}(1^n)$. Choose $x \in \mathbb{Z}_q$ and set $y := g^x$. The private key is $x$ and the public key is $(\mathcal{G}, q, g, y)$. A function $H : \{0,1\}^* \to \mathbb{Z}_q$.
+\item $\mathsf{Sign}$: On input $x$ and $m \in \{0,1\}^*$, do
+\begin{enumerate}
+\item Compute $I := g^k$, where a uniform $k \in \mathbb{Z}_q$
+\item Compute $r := H(I, m)$
+\item Compute $s := [ rx + k \mod q]$
+\end{enumerate}
+Outpus the signature $(r, s)$.
+\item $\mathsf{Vrfy}$: Compute $I := g^s \cdot y^{-r}$ and output $1 \iff H(I, m) \overset{?}{=} r.$
+\end{itemize}
+\end{construction}
+\end{frame}
+
+\begin{frame}\frametitle{DSS/DSA}
+DSS (Digital Signature Standard) uses Digital Signature Algorithm (DSA, a variant of ElGamal signature scheme). [FIPS 186]
+\begin{construction}
+$\mathcal{G}$ outputs $(p,q,g)$: (1) $p$ and $q$ are primes with $\|q\| =n$;\\
+(2) $q|(p-1)$ but $q^2 \nmid (p-1)$;\\
+(3) $g$ is a generator of the subgroup of $\mathbb{Z}^*_p$ of order $q$.
+\begin{itemize}
+\item $\mathsf{Gen}$: $(p,q,g) \gets \mathcal{G}$. hash function $H : \{0,1\}^* \to \mathbb{Z}_q$. \\
+$x \gets \mathbb{Z}_q$ and $y:= [g^x \bmod p]$.\\
+$pk = \langle H,p,q,g,y\rangle$. $sk=\langle H,p,q,g,x\rangle$.
+\item $\mathsf{Sign}$: $k\gets \mathbb{Z}^*_q$ and $r:= [[g^k \bmod p] \bmod q]$, $s:= [(H(m)+xr)\cdot k^{-1} \bmod q]$. Output $(r,s)$.
+\item $\mathsf{Vrfy}$: $u_1 := [H(m)\cdot s^{-1} \bmod q]$, $u_2 := [r\cdot s^{-1} \bmod q]$. Output $1 \iff r \overset{?}{=} [[g^{u_1}y^{u_2} \bmod p]\bmod q].$
+\end{itemize}
+\end{construction}
+\end{frame}
+
+\begin{frame}\frametitle{Correctness and Security of DSS/DSA}
+\[r = [[g^k \bmod p] \bmod q]\; \text{and}\; s= [(\hat{m}+xr)\cdot k^{-1} \bmod q],\; \hat{m}=H(m). \]
+\begin{align*}g^{\hat{m}s^{-1}}y^{rs^{-1}} &= g^{\hat{m}\cdot (\hat{m}+xr)^{-1}k}g^{xr\cdot (\hat{m}+xr)^{-1}k} \pmod p \\
+	&= g^{(\hat{m}+xr)\cdot (\hat{m}+xr)^{-1}k} \pmod p \\  
+	&= g^k \pmod p.
+	\end{align*}
+\[ [[g^k \bmod p] \bmod q] = r.\]
+Security of DSS relies on the hardness of discrete log problem.\\
+The entropy, secrecy and uniqueness of $k$ is critical.
+\begin{alertblock}{Insecurity}
+No proof of security for DSS based on discrete log assumption.
+\end{alertblock}
+\end{frame}
+
 \section{One-Time Signature Scheme}
 \begin{frame}\frametitle{One-Time Signature (OTS)}
 \textbf{One-Time Signature (OTS)}: Under a weaker attack scenario, sign only one message with one secret.\\
@@ -196,6 +314,7 @@ Reduce $\mathcal{I}$ inverting $y$ to $\mathcal{A}$ attacking $\Pi$:
 \[\Pr[\mathcal{I}\;\; \text{succeeds} ] \ge \frac{1}{2\ell}\Pr[\mathcal{A}\;\;  \text{succeeds}] \]
 \end{proof}
 \end{frame}
+
 \begin{frame}\frametitle{Stateful Signature Scheme}
 \textbf{Idea}: OTS by signing with \textbf{``new'' key} derived from \textbf{``old'' state}. 
 \begin{definition}[Stateful signature scheme]
@@ -233,6 +352,7 @@ The signature is $(pk_{i+1},\sigma_i,\{m_j,pk_{j+1},\sigma_j\}^{i-1}_{j=1})$.\\
 \item each node $pk_w$ ``certifies'' its children $pk_{w0}\| pk_{w1}$ or $w$.
 \end{itemize}
 \end{frame}
+
 \begin{comment}
 \begin{frame}\frametitle{Construction of ``Tree-Based'' Signatures}
 \begin{construction}
@@ -283,35 +403,7 @@ If OWF exist, then $\exists$ OTS (for messages of arbitrary length).
 If OWF exists, then $\exists$ (stateless) secure signature scheme.
 \end{theorem}
 \end{frame}
-\section{The Digital Signature Standard (DSS)}
-\begin{frame}\frametitle{Construction of DSS/DSA}
-DSS uses Digital Signature Algorithm (DSA, a variant of ElGamal signature scheme). [FIPS 186]
-\begin{construction}
-$\mathcal{G}$ outputs $(p,q,g)$: (1) $p$ and $q$ are primes with $\|q\| =n$;\\
-(2) $q|(p-1)$ but $q^2 \nmid (p-1)$;\\
-(3) $g$ is a generator of the subgroup of $\mathbb{Z}^*_p$ of order $q$.
-\begin{itemize}
-\item $\mathsf{Gen}$: $(p,q,g) \gets \mathcal{G}$. hash function $H : \{0,1\}^* \to \mathbb{Z}_q$. \\
-$x \gets \mathbb{Z}_q$ and $y:= [g^x \bmod p]$.\\
-$pk = \langle H,p,q,g,y\rangle$. $sk=\langle H,p,q,g,x\rangle$.
-\item $\mathsf{Sign}$: $k\gets \mathbb{Z}^*_q$ and $r:= [[g^k \bmod p] \bmod q]$, $s:= [(H(m)+xr)\cdot k^{-1} \bmod q]$. Output $(r,s)$.
-\item $\mathsf{Vrfy}$: $u_1 := [H(m)\cdot s^{-1} \bmod q]$, $u_2 := [r\cdot s^{-1} \bmod q]$. Output $1 \iff r \overset{?}{=} [[g^{u_1}y^{u_2} \bmod p]\bmod q].$
-\end{itemize}
-\end{construction}
-\end{frame}
-\begin{frame}\frametitle{Correctness and Security of DSS/DSA}
-\[r = [[g^k \bmod p] \bmod q]\; \text{and}\; s= [(\hat{m}+xr)\cdot k^{-1} \bmod q],\; \hat{m}=H(m). \]
-\begin{align*}g^{\hat{m}s^{-1}}y^{rs^{-1}} &= g^{\hat{m}\cdot (\hat{m}+xr)^{-1}k}g^{xr\cdot (\hat{m}+xr)^{-1}k} \pmod p \\
-	&= g^{(\hat{m}+xr)\cdot (\hat{m}+xr)^{-1}k} \pmod p \\  
-	&= g^k \pmod p.
-	\end{align*}
-\[ [[g^k \bmod p] \bmod q] = r.\]
-Security of DSS relies on the hardness of discrete log problem.\\
-The entropy, secrecy and uniqueness of $k$ is critical.
-\begin{alertblock}{Insecurity}
-No proof of security for DSS based on discrete log assumption.
-\end{alertblock}
-\end{frame}
+
 \section{Certificates and Public-Key Infrastructures}
 \begin{frame}\frametitle{Certificates}
 \begin{figure}
@@ -357,9 +449,10 @@ No proof of security for DSS based on discrete log assumption.
 \end{frame}
 \begin{frame}\frametitle{Summary}
 \begin{itemize}
-\item Textbook RSA, Hashed RSA, Hash-and-Sign, Lamport's OTS, DSS.
-\item Stateful/Chain-based/Tree-based/Stateless Signature Scheme.
-\item Certificates, PKI, CA, Web-of-trust, Invalidation.
+\item Textbook RSA, Hashed RSA, Hash-and-Sign
+\item Identification, Fiat-Shamir Transform, Schnorr Signature, DSS/DSA
+\item Lamport's OTS, Stateful/Chain-based/Tree-based/Stateless Signature
+\item Certificates, PKI, CA, Web-of-trust, Invalidation
 \end{itemize}
 \end{frame}
 \end{document}

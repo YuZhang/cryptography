@@ -1,0 +1,13 @@
+\begin{tikzpicture}[font=\footnotesize]
+\node (A) at (0,0) {\Lisa};
+\node (B) [right of = A, node distance = 3cm] {\Left\Bart};
+\node (p) [below of =A, node distance = 1cm] {Prover ($x$)};
+\node (v) [below of =B, node distance = 1cm] {Verifier ($\mathbb{G}, q, g, y$)};
+\node (g) [below of =p, node distance = 1cm] {$k \gets \mathbb{Z}_q$; $I := g^k$};
+\draw[-latex] ($(g)+(1.2,0)$) -- +(1.5cm,0) node [midway,above] {$I$};
+\node (y) [below of=v, node distance=2cm] {$r \gets \mathbb{Z}_q$};
+\draw[-latex] ($(y)-(0.8,0)$) -- +(-1.5cm,0) node [midway,above] {$r$};
+\node (s) [below of= g, node distance = 2cm] {$s := [ rx +k \mod q ]$};
+\draw[-latex] ($(s)+(1.5,0)$) -- +(1.5cm,0) node [midway,above] {$s$};
+\node (h2) [below of=y, node distance=1.5cm] {$g^s \cdot y^{-r} \overset{?}{=} I$};
+\end{tikzpicture}

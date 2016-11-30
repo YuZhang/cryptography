@@ -1,0 +1,13 @@
+\begin{tikzpicture}[font=\footnotesize]
+\node (A) at (0,0) {\Lisa};
+\node (B) [right of = A, node distance = 3cm] {\Left\Bart};
+\node (p) [below of =A, node distance = 1cm] {Prover ($sk$)};
+\node (v) [below of =B, node distance = 1cm] {Verifier ($pk$)};
+\node (g) [below of =p, node distance = 1cm] {$(I, \mathsf{st})\gets \mathcal{P}_1(sk)$};
+\draw[-latex] ($(g)+(1.2,0)$) -- +(1.5cm,0) node [midway,above] {$I$};
+\node (y) [below of=v, node distance=2cm] {$r \gets \Omega_{pk}$};
+\draw[-latex] ($(y)-(0.8,0)$) -- +(-1.5cm,0) node [midway,above] {$r$};
+\node (s) [below of= g, node distance = 2cm] {$s := \mathcal{P}_2(sk, \mathsf{st}, r)$};
+\draw[-latex] ($(s)+(1.2,0)$) -- +(1.5cm,0) node [midway,above] {$s$};
+\node (h2) [below of=y, node distance=1.5cm] {$\mathcal{V}(pk, r, s) \overset{?}{=} I$};
+\end{tikzpicture}
