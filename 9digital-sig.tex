@@ -340,7 +340,7 @@ Use a single public key $pk_1$, sign each $m_i$ and $pk_{i+1}$ with $sk_i$: \[\s
 The signature is $(pk_{i+1},\sigma_i,\{m_j,pk_{j+1},\sigma_j\}^{i-1}_{j=1})$.\\
 \textbf{Weakness}: stateful, not efficient, revealing all previous messages.
 \end{frame}
-\begin{frame}\frametitle{``Tree-Based'' Signatures -- Merkle Tree}
+\begin{frame}\frametitle{``Tree-Based'' Signatures}
 \textbf{Idea}: generate a chain of keys for each message and sign the key chain.
 \begin{figure}
 \begin{center}
