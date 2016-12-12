@@ -9,6 +9,69 @@
 \tableofcontents
 \end{frame}
 
+\section{Information-Theoretic MACs}
+
+\begin{frame}\frametitle{Definition of Information-Theoretic MAC Security}
+It is impossible to achieve "perfect" MAC, as the adversary can output a valid tag with probability $1/2^{\abs{t}}$ at least.
+\newline
+
+The one-time MAC experiment $\mathsf{Macforge}^{\mathsf{1-time}}_{\mathcal{A},\Pi }$:
+\begin{enumerate}
+\item $k \gets \mathsf{Gen}$.
+\item $\mathcal{A}$ outputs a message $m'$, and is given a tag $t' \gets \mathsf{Mac}_k(m')$, and outputs $(m,t)$.
+\item $\mathsf{Macforge}^{\mathsf{1-time}}_{\mathcal{A},\Pi }=1 \iff$ $\mathsf{Vrfy}_k(m,t)=1$ $\land$ $m \neq m'$. 
+\end{enumerate}
+\begin{definition}
+A MAC $\Pi$ is \textbf{one-time $\varepsilon$-secure} if $\forall$ \textsc{ppt} $\mathcal{A}$:
+\[ \Pr [\mathsf{Macforge}^{\mathsf{1-time}}_{\mathcal{A},\Pi}=1] \le \varepsilon.
+\]
+\end{definition}
+\end{frame}
+
+\begin{frame}\frametitle{Construction of Information-Theoretic MACs}
+\begin{definition}
+A function $h$: $\mathcal{K} \times \mathcal{M} \to \mathcal{T}$ is a \textbf{Strongly Universal Function (SUF)} if for all distinct $m, m' \in \mathcal{M}$ and all $t, t' \in \mathcal{T}$, it holds that:
+\[ \Pr [h_k(m) = t  \land h_k(m') = t'] = 1 / \abs{\mathcal{T}}^2.
+\]
+where the probability is taken over uniform choice of $k \in \mathcal{K}$.
+\end{definition}
+\begin{construction}
+\begin{itemize}
+\item Let $h$: $\mathcal{K} \times \mathcal{M} \to \mathcal{T}$ be an SUF.
+\item $\mathsf{Gen}$: $k \gets \{0,1\}^n$ \emph{u.a.r}.
+\item $\mathsf{Mac}_k(m)$: $t := h_k(m)$.
+\item $\mathsf{Vrfy}_k(m,t)$: $1 \iff t \overset{?}{=} h_k(m)$. (If $m \in \mathcal{M}$, then output 0.)
+\end{itemize}
+\end{construction}
+\begin{theorem}
+If $h$ is an SUF, Construction is a $1/\abs{\mathcal{T}}-$secure MAC.
+\end{theorem}
+\end{frame}
+\begin{frame}\frametitle{Construction of An SUF}
+\begin{theorem}
+For any prime $P$, the function $h$ is an SUF:
+\[ h_{a,b}(m) \overset{\mathsf{def}}{=} [ a \cdot m + b \mod p]
+\]
+\end{theorem}
+\begin{proof}
+$h_{a,b}(m) = t$ and $h_{a,b}(m') = t'$, only if 
+$a \cdot m + b  = t \mod p$  and  $a \cdot m' + b = t' \mod p$. We have $a = [(t-t') \cdot (m - m')^{-1} \mod p]$ and $b = [t - a \cdot m \mod p]$, which means there is a unique key $(a, b)$. Since there are $\abs{\mathcal{T}}^2$ keys, 
+\[ \Pr [h_k(m) = t  \land h_k(m') = t'] = \frac{1}{\abs{\mathcal{T}^2}}.
+\]
+\end{proof}
+\end{frame}
+\begin{frame}\frametitle{Limitations on Information-Theoretic MACs}
+Any $\ell$-time $2^{-n}$-secure MAC requires keys of length at least $(\ell +1) \cdot n$. 
+\begin{theorem}
+Let $\Pi$ be a 1-time $2^{-n}$-secure MAC where all keys are the same length. Then the keys must have length at least $2n$.
+\end{theorem}
+\begin{proof}
+Let $\mathcal{K}(t) \overset{\mathsf{def}}{=} \{ k | \mathsf{Vrfy}_k(m, t) = 1\}$. For any $t$, $\abs{\mathcal{K}(t)} \leq 2^{-n} \cdot \abs{\mathcal{K}(t)}$. Otherwise, $(m, t)$ would be a valid forgery with probability at least $\abs{\mathcal{K}(t)}/\abs{\mathcal{K}}> 2^{-n}$. The probablity that $\mathcal{A}$ outputs a valid forgery is at least
+\[ \sum_{t} \Pr [\mathsf{Mac}_k(m) = t] \cdot \frac{1}{\abs{\mathcal{K}(m, t)}} \geq \sum_{t} \Pr [\mathsf{Mac}_k(m) = t] \cdot \frac{2^n}{\abs{\mathcal{K}}} = \frac{2^n}{\abs{\mathcal{K}}} 
+\]
+As the probability is at most $2^{-n}$, $\abs{\mathcal{K}} \geq 2^{2n}$. Since all keys have the same length, each key must have length at least $2n$.
+\end{proof} 
+\end{frame}
 \section{Primes and Factoring}
 \begin{frame}\frametitle{Integer Factorization/Factoring}
 \begin{quote}
