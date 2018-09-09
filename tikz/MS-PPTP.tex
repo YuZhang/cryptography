@@ -1,8 +1,8 @@
 \begin{tikzpicture}
-\node [label=below:Client, label=above:$k$] (sender) {\Lisa};
+\node [label=below:Client, label=above:$k$] (sender) {\Alice};
 \node (c) at ($(sender)+(4cm,0.5cm)$) {$\left[ m_1\|m_2\|m_3\right] \oplus PRG(k)$};
 \node (c1) [below of = c, node distance = 1cm] {$\left[s_1\|s_2\|s_3\right] \oplus PRG(k)$};
-\node (receiver) at ($(sender)+(8cm,0)$) [label=below:Server, label=above:$k$] {\Left\Bart};
+\node (receiver) at ($(sender)+(8cm,0)$) [label=below:Server, label=above:$k$] {\Bob};
 \draw[-latex] (sender.east |- c) -- (c) -- (receiver.west |- c);
 \draw[-latex] (receiver.west |- c1) -- (c1) -- (sender.east |- c1);
 \end{tikzpicture}

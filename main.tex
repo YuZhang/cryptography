@@ -17,12 +17,46 @@
 \usepackage[T1]{fontenc}
 \usepackage{lmodern}
 \usepackage{tikz}
-\usepackage{simpsons}
 \usepackage{marvosym}
 \usepackage{color}
 \usepackage{multirow}
 \usepackage{pgffor}
 \usepackage[slide,algoruled,titlenumbered,vlined,noend,linesnumbered,]{algorithm2e}
+
+
+\usepackage{tikzducks}
+
+\newcommand{\Alice}[0]{\begin{tikzpicture}[scale=0.6]
+  \duck[body=yellow!50!brown!50!white,
+  longhair=red!50!brown,
+  jacket=blue!50!black]
+  \end{tikzpicture}}
+
+\newcommand{\Bob}[0]{\begin{tikzpicture}[scale=0.6]
+  \duck[grumpy, body=yellow!50!brown!50!white, tshirt=
+  white, jacket=black, tie=black, hat=black]
+  \end{tikzpicture}
+}
+
+\newcommand{\Adversary}[0]{
+  \begin{tikzpicture}[scale=0.6]
+      \duck[cape=black,mask=black]
+      \fill[black,rotate=24] (0.1,0.21) rectangle (1.1,0.23)
+      (1.2,0.22) ellipse (0.15 and 0.03) (1.08,0.22)
+      ellipse (0.03 and 0.15);
+      \end{tikzpicture}
+}
+
+\newcommand{\God}[0]{
+  \definecolor{pskin}{RGB}{255,200,184}%
+      \definecolor{phair}{RGB}{249,249,139}%
+      \begin{tikzpicture}[scale=0.6]
+      \duck[body=pskin!80!white,longhair=phair,tshirt=magenta!60!white,jacket=magenta!40!white,necklace=white!85!yellow]
+      \path (0.7,2) rectangle (1.4,2.55);
+      \fill[yellow!80!orange,rotate=-10,xshift=-11,yshift=5]
+      \duckpathcrown;
+      \end{tikzpicture}
+}
 
 \usefonttheme{structurebold}
 

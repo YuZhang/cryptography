@@ -1,5 +1,5 @@
 \begin{tikzpicture}[rc/.style={rounded corners=1ex, minimum width=1cm, minimum height=0.7cm}]
-\node (sender) {\Lisa};
+\node (sender) {\Alice};
 \node (bart) [below of = sender] {Alice};
 \node (enc) [draw, right of = sender, rc, dotted, node distance = 2cm] {$\mathsf{Enc}$};
 \node (mac) [draw, below of = enc, rc, node distance = 1.5cm] {$\mathsf{Sign}$};
@@ -7,12 +7,12 @@
 \node (c) [right of = enc, node distance = 2cm] {$c$};
 \node (t) [right of = mac, node distance = 2cm] {$\sigma$};
 \node (gen) [draw, above of = c, rc,node distance = 1cm] {$\mathsf{Gen}$};
-%\node (adv) [below of = c, node distance = 1cm] {\Burns};
+%\node (adv) [below of = c, node distance = 1cm] {\Adversary};
 %\node (burns) [below of = adv] {Adversary};
 \node (dec) [draw, right of = c, dotted,  rc,node distance = 2cm] {$\mathsf{Dec}$};
 \node (ver) [draw, below of = dec, rc, node distance = 1.5cm] {$\mathsf{Vrfy}$};
 \node (k2) [above of = dec, node distance = 1cm] {$pk$};
-\node (receiver) [right of = dec, node distance = 2cm] {\Left\Bart};
+\node (receiver) [right of = dec, node distance = 2cm] {\Bob};
 \node (lisa) [below of = receiver] {Bob};
 \draw[ dotted, -latex] (sender) -- (enc) node [midway, above] {$m$};
 \draw[ dotted] (enc) -- (c); \draw[ dotted, -latex] (c) -- (dec);
