@@ -1,8 +1,8 @@
 \begin{tikzpicture}[font=\footnotesize]
-\node (A) at (0,0) {\Lisa};
+\node (A) at (0,0) {\Alice};
 \node (r) at (0,-1) {a random $r$};
-\node (B) [right of = A, node distance = 4cm] {\Left\Bart};
-\node (KDC) at (2,3.5) [rounded corners=1ex,minimum width=2cm,label distance=-2cm,label=right:Signer] {\Homer};
+\node (B) [right of = A, node distance = 4cm] {\Bob};
+\node (KDC) at (2,3.5) [rounded corners=1ex,minimum width=2cm,label distance=-2cm,label=right:Signer] {\Bob};
 \node at (3,2.7) {$pk=e$, $sk = d$};  
 \draw[-latex] (A) -- (B) node [midway,above] {$s \equiv s'r^{-1}$};
 \draw[-latex] (A.90) -- (KDC.240) node [sloped,midway,above] {$m' \equiv mr^e$

@@ -1,7 +1,7 @@
 \begin{tikzpicture}[font=\footnotesize]
-\node (A) at (0,0) [label=below:User] {\Lisa};
-\node (B) [right of = A, node distance = 4cm,label=below:Web Server] {\Left\Bart};
-\node (C) at (2,4) [rounded corners=1ex,minimum width=2cm,label distance=-2cm] {\Homer};
+\node (A) at (0,0) [label=below:User] {\Alice};
+\node (B) [right of = A, node distance = 4cm,label=below:Web Server] {\Bob};
+\node (C) at (2,4) [rounded corners=1ex,minimum width=2cm,label distance=-2cm] {\Bob};
 \node at (3.5,3.5) {CAPTCHA Server};  
 \draw[-latex] (B) -- (A) node [midway,above] {(1) $Enc_k(w)$};
 \draw[-latex] (A.350) -- (B.190) node [midway,below] {(4) $w$};
