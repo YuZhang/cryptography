@@ -179,7 +179,7 @@ where the probability it taken over the random coins used by $\mathcal{A}$.
 \textbf{Intuition}: No partial information leaks.
 \begin{definition}
 $\Pi$ is \textbf{semantically secure in the presence of an eavesdropper} if $\forall$ \textsc{ppt} $\mathcal{A}$, $\exists \mathcal{A'}$ such that $\forall$ distribution $X = (X_1, \dots)$ and $\forall f, h$,
-\[ \left|\Pr[\mathcal{A}(1^n,\mathsf{Enc}_k(m),h(m))=f(m)]-\Pr[\mathcal{A}(1^n,h(m))=f(m)]\right| 
+\[ \left|\Pr[\mathcal{A}(1^n,\mathsf{Enc}_k(m),h(m))=f(m)]-\Pr[\mathcal{A}'(1^n,h(m))=f(m)]\right| 
 \]
 \[ \le \mathsf{negl}(n).
 \]
