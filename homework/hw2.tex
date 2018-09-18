@@ -23,13 +23,17 @@ Assuming the existence of a variable output-length pseudorandom generator, prese
 \end{problem}
 
 \begin{problem}
+Assume $f(s)$ and $f'(s)$ are PRGs. Is $g(s)=f(s) \oplus f'(s)$ also necessarily a PRG? How about $g(s)=f(s) \oplus s$?
+\end{problem}
+
+\begin{problem}
 Assuming the existence of a pseudorandom function, prove that there exists an encryption scheme that has indistinguishable multiple encryptions in the presence of an eavesdropper, but is not CPA-secure.
 {\small Hint: You will need to use the fact that in a CPA the adversary can choose its queries to the encryption oracle adaptively (i.e., new query may be constructed from previous queries).}
 \end{problem}
 
-\begin{problem}
-Present formulas for decryption of all the different modes of operation for encryption: ECB, CBC, OFB, CTR. For which modes can decryption be parallelized?
-\end{problem}
+%\begin{problem}
+%Present formulas for decryption of all the different modes of operation for encryption: ECB, CBC, OFB, CTR. For which modes can decryption be parallelized?
+%\end{problem}
 
 \begin{problem}
 Present a construction of a variable output-length pseudorandom generator from any pseudorandom function. Prove that your construction satisfies Definition: `a variable output-length pseudorandom generator'.
