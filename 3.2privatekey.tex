@@ -29,12 +29,17 @@ $\Pi$ has \textbf{indistinguishable multiple encryptions in the presence of an e
 \]
 \end{definition}
 \begin{alertblock}{Question:}
-\begin{itemize}
-\item Does any cipher we have learned so far have indistinguishable multiple encryptions in the presence of an eavesdropper?
-\item Generally, if $\Pi$'s encryption function is \textbf{deterministic}, is $\Pi$ multiple-encryption-secure?
-\end{itemize}
+Does any cipher we have learned so far have indistinguishable multiple encryptions in the presence of an eavesdropper?
 \end{alertblock}
-%For the deterministic encryption, the adversary generates $m_0^1 = m_0^2$ and $m_1^1 \neq m_1^2$ and then outputs $b'=0$ if $c^1 = c^2$, otherwise $b'=1$.
+\end{frame}
+\begin{frame}\frametitle{Attack On Deterministic Multiple Encryptions}
+\begin{alertblock}{Question:}
+Generally, if $\Pi$'s encryption function is \textbf{deterministic}, i.e., a plaintext will be always encrypted into the same ciphertext with the same key, is $\Pi$ multiple-encryption-secure?
+\end{alertblock}
+
+\begin{exampleblock}{Attack:}
+For the deterministic encryption, the adversary may generate $m_0^1 = m_0^2$ and $m_1^1 \neq m_1^2$, and then outputs $b'=0$ if $c^1 = c^2$, otherwise $b'=1$.
+\end{exampleblock}
 \end{frame}
 \begin{frame}\frametitle{Stream Ciphers}
 \begin{itemize}
@@ -152,7 +157,6 @@ where $f$ is chosen \emph{u.a.r} from $\mathsf{Func}_n$.
 \begin{itemize}
 \item $G((k_{1},k_{2}), x) = F(k_{1},x) \| F(k_{2},x)$
 \item $G(k,x) = F(k, x\oplus 1^{n})$
-\item $G(k,x) = reverse(F(k,x))$
 \item $ G(k,x) = \left\{ 
   \begin{array}{l l}
     F(k,x) & \quad \text{when}\ x \neq 0^{n}\\

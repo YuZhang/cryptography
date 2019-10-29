@@ -1,0 +1,216 @@
+\input{main.tex}
+
+\title{Chosen Plaintext Attack \\ and \\ Pseudorandom Function}
+
+\begin{document}
+\maketitle
+\begin{frame}
+\frametitle{Outline}
+\tableofcontents
+\end{frame}
+\section{Chosen-Plaintext Attacks (CPA)}
+\begin{frame}\frametitle{Electronic Code Book (ECB) Mode}
+\begin{figure}
+\begin{center}
+\input{tikz/ECB}
+\end{center}
+\end{figure}
+\begin{itemize}
+\item \alert{Q: is it indistinguishable in the presence of an eavesdropper?}
+\end{itemize}
+\end{frame}
+\begin{frame}\frametitle{Attack on ECB mode}
+\begin{figure}
+\begin{center}
+\includegraphics[width=100mm]{pic/ecb} 
+\end{center}
+\end{figure}
+\end{frame}
+\begin{frame}\frametitle{Chosen-Plaintext Attacks (CPA)}
+\textbf{CPA}: the adversary has the ability to obtain the encryption of plaintexts of its choice
+\begin{exampleblock}{A story in WWII}
+\begin{itemize}
+\item Navy cryptanalysts believe the ciphertext ``AF'' means ``Midway island'' in Japanese messages
+\item But the general did not believe that Midway island would be attacked
+\item Navy cryptanalysts sent a plaintext that the freshwater supplies at Midway island were low
+\item Japanese intercepted the plaintext and sent a ciphertext that ``AF'' was low in water
+\item The US forces dispatched three aircraft carriers and won
+\end{itemize}
+\end{exampleblock}
+\end{frame}
+\begin{frame}\frametitle{Security Against CPA}
+The CPA indistinguishability experiment $\mathsf{PrivK}^{\mathsf{cpa}}_{\mathcal{A},\Pi}(n)$:
+\begin{enumerate}
+	\item $k \gets \mathsf{Gen}(1^n)$
+	\item $\mathcal{A}$ is given input $1^n$ and \textbf{oracle access} $\mathcal{A}^{\mathsf{Enc}_k(\cdot)}$ to $\mathsf{Enc}_k(\cdot)$, outputs $m_0, m_1$ of the same length
+	\item $b \gets \{0,1\}$. Then $c \gets \mathsf{Enc}_k(m_b)$ is given to $\mathcal{A}$
+	\item $\mathcal{A}$ \textbf{continues to have oracle access} to $\mathsf{Enc}_k(\cdot)$, outputs $b'$
+	\item If $b' = b$, $\mathcal{A}$ succeeded $\mathsf{PrivK}^{\mathsf{cpa}}_{\mathcal{A},\Pi}=1$, otherwise 0
+\end{enumerate}
+\begin{figure}
+\begin{center}
+\input{tikz/pri-cpa-exp.tex}
+\end{center}
+\end{figure}
+\end{frame}
+\begin{frame}\frametitle{CPA Security}
+\begin{definition}\label{def:cap-ind}
+$\Pi$ has \textbf{indistinguishable encryptions under a CPA (CPA-secure)} if $\forall$ \textsc{ppt} $\mathcal{A}$, $\exists$ $\mathsf{negl}$ such that
+\[ \Pr\left[\mathsf{PrivK}^{\mathsf{cpa}}_{\mathcal{A},\Pi}(n)=1\right] \le \frac{1}{2} + \mathsf{negl}(n).
+\]
+\end{definition}
+\begin{itemize}
+\item \alert{Q: Is any cipher we have learned so far CPA-secure? Why?}
+\end{itemize}
+\end{frame}
+\section{Pseudorandom Functions}
+\begin{frame}\frametitle{Concepts on Pseudorandom Functions}
+\begin{figure}
+\begin{center}
+\input{tikz/keyed-func.tex}
+\end{center}
+\end{figure}
+\begin{itemize}
+\item \textbf{Keyed function} $F : \{0,1\}^* \times \{0,1\}^* \to \{0,1\}^*$ \\
+$F_k : \{0,1\}^* \to \{0,1\}^*$, $F_k(x) \overset{\text{def}}{=} F(k,x)$
+\item \textbf{Look-up table $f$}: $\{0,1\}^n \to \{0,1\}^n$ with size \alert{ = ? bits} %$n\cdot2^n$.
+\item \textbf{Function family $\mathsf{Func}_n$}: all functions $\{0,1\}^n \to \{0,1\}^n$. $|\mathsf{Func}_n| = 2^{n\cdot2^n}$
+\item \textbf{Length Preserving}: $\ell_{key}(n) = \ell_{in}(n) = \ell_{out}(n)$
+\end{itemize}
+\end{frame}
+\begin{frame}\frametitle{Definition of Pseudorandom Function}
+\textbf{Intuition}: A PRF $F$ generates a function $F_k$ that is indistinguishable from truly random selected function $f$ (look-up table) in $\mathsf{Func}_n$.\\ However, the function has \textbf{exponential length}. Give $D$ the deterministic \textbf{oracle access $D^{\mathcal{O}}$} to the functions $\mathcal{O}$.
+\begin{definition}
+An efficient length-preserving, keyed function $F$ is a \textbf{pseudorandom function (PRF)} if
+$\forall\;$ \textsc{ppt} distinguishers $D$,
+\[ \left|\Pr[D^{F_k(\cdot)}(1^n)=1] - \Pr[D^{f(\cdot)}(1^n)=1]\right| \le \mathsf{negl}(n),
+\]
+where $f$ is chosen \emph{u.a.r} from $\mathsf{Func}_n$.
+\end{definition}
+\begin{alertblock}{Q: Is the fixed-length OTP a PRF?}
+\end{alertblock}
+%\textbf{PRG vs. PRF}:
+%\begin{itemize}
+%\item Pseudorandomness over a set of strings vs. a set of functions.
+%\item A PRG --- an instance of keyed PRF.
+%\end{itemize}
+%\textbf{Existence}: if PRG exists. In practice, block ciphers may be PRF.
+\end{frame}
+\begin{frame}\frametitle{Questions}
+\begin{exampleblock}{Let $F: \{0,1\}^{n} \times \{0,1\}^{n} \to \{0,1\}^{n}$ be a secure PRF. Is $G$ a secure PRF?}
+\begin{itemize}
+\item $G((k_{1},k_{2}), x) = F(k_{1},x) \| F(k_{2},x)$
+\item $ G(k,x) = \left\{ 
+  \begin{array}{l l}
+    F(k,x) & \quad \text{when}\ x \neq 0^{n}\\
+    0^{n} & \quad \text{otherwise}\\
+  \end{array} \right. $
+\item $G(k,x) = F(k,x)\bigoplus F(k, x\oplus 1^{n})$
+\end{itemize}
+\end{exampleblock}
+\end{frame}
+\section{Constructing CPA-Secure Encryption Schemes}
+\begin{frame}\frametitle{CPA-Security from Pseudorandom Function}
+\begin{columns}[t]
+\begin{column}{4cm}
+\begin{figure}
+\begin{center}
+\input{tikz/encryptionwithpf}
+\end{center}
+\end{figure}
+\end{column}
+\begin{column}{6cm}
+\begin{construction}\label{thm:cpa}
+\begin{itemize}
+\item Fresh random string $r$.
+\item $F_k(r)$: $\abs{k} = \abs{m} = \abs{r} = n$.
+\item $\mathsf{Gen}$: $k \in \{0,1\}^n$.
+\item $\mathsf{Enc}$: $s := F_k(r)\oplus m$, $c := \left<r, s\right>$.
+\item $\mathsf{Dec}$: $m := F_k(r)\oplus s$.
+\end{itemize}
+\end{construction}
+\begin{theorem}\label{thm:prf}
+If $F$ is a PRF, this fixed-length encryption scheme $\Pi$ is CPA-secure.
+\end{theorem}
+\end{column}
+\end{columns}
+\end{frame}
+\begin{frame}\frametitle{Proof of CPA-Security from PRF}
+\textbf{Idea}: First, analyze the security in an idealized world where $f$ is used in $\tilde{\Pi}$; next, claim that if $\Pi$ is insecure when $F_k$ was used then this would imply $F_k$ is not PRF by reduction.
+\begin{proof}
+(1) Analyze $\Pr[\mathsf{Break}]$, $\mathsf{Break}$ means $\mathsf{PrivK}_{\mathcal{A},\tilde{\Pi}}^{\mathsf{cpa}}(n) = 1$:  \\
+$\mathcal{A}$ collects $\{ \left< r_i, f(r_i) \right> \}$, $i=1,\dots,q(n)$ with $q(n)$ queries; \\
+The challenge $c=\left<r_c, f(r_c)\oplus m_b\right>$. \\
+\begin{itemize}
+\item $\mathsf{Repeat}$: $r_c \in \{ r_i \}$ with probability $\frac{q(n)}{2^n}$. $\mathcal{A}$ can know $m_b$.
+\item $\overline{\mathsf{Repeat}}$: As OTP, $\Pr[\mathsf{Break}]=\frac{1}{2}$ 
+\end{itemize}
+\[
+\begin{split}
+	\Pr[\mathsf{Break}] & =\Pr[\mathsf{Break} \land \mathsf{Repeat}] + \Pr[\mathsf{Break} \land \overline{\mathsf{Repeat}}] \\
+	&\le \Pr[\mathsf{Repeat}] + \Pr[\mathsf{Break} | \overline{\mathsf{Repeat}}] \\
+	&\le \frac{q(n)}{2^n} + \frac{1}{2}.
+\end{split}
+\]
+\end{proof}
+\end{frame}
+\begin{frame}\frametitle{Proof of CPA-Security from PRF (Cont.)}
+\begin{proof}
+(2) Reduce $D$ to $\mathcal{A}$:
+\begin{figure}
+\begin{center}
+\input{tikz/pgfD}
+\end{center}
+\end{figure}
+{\footnotesize 
+$ \Pr[D^{F_k(\cdot)}(1^n)=1] = \Pr[\mathsf{PrivK}_{\mathcal{A},\Pi}^{\mathsf{cpa}}(n) = 1] = \frac{1}{2} + \varepsilon(n). $
+$ \Pr[D^{f(\cdot)}(1^n)=1] = \Pr[\mathsf{PrivK}_{\mathcal{A},\tilde{\Pi}}^{\mathsf{cpa}}(n) = 1] = \Pr[\mathsf{Break}] \le \frac{1}{2} + \frac{q(n)}{2^n}. $
+$\Pr[D^{F_k(\cdot)}(1^n)=1] - \Pr[D^{f(\cdot)}(1^n)=1] \ge \varepsilon(n) - \frac{q(n)}{2^n}.$
+$\varepsilon(n)$ is negligible.
+}
+\end{proof}
+\end{frame}
+
+\begin{frame}\frametitle{Cipher Block Chaining (CBC) Mode}
+\begin{figure}
+\begin{center}
+\input{tikz/CBC}
+\end{center}
+\end{figure}
+\end{frame}
+\begin{frame}\frametitle{Output Feedback (OFB) Mode}
+\begin{figure}
+\begin{center}
+\input{tikz/OFB}
+\end{center}
+\end{figure}
+\end{frame}
+\begin{frame}\frametitle{Counter (CTR) Mode}
+\begin{figure}
+\begin{center}
+\input{tikz/CTR}
+\end{center}
+\end{figure}
+\begin{itemize}
+\item $ctr$ is an $IV$
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]\frametitle{$IV$ Should Not Be Predictable}
+If $IV$ is predictable, then CBC/OFB/CTR mode is not CPA-secure.\\
+\alert{Q: Why? (homework)}
+\begin{exampleblock}{Bug in SSL/TLS 1.0}
+$IV$ for record $\#i$ is last CT block of record $\#(i-1)$.
+\end{exampleblock}
+\begin{exampleblock}{API in OpenSSL}
+\verb#void AES_cbc_encrypt (# \\
+\verb#    const unsigned char *in,# \\
+\verb#    unsigned char       *out,# \\
+\verb#    size_t              length,# \\
+\verb#    const AES_KEY       *key,# \\
+\verb#    unsigned char       *ivec,   #  \alert{\textbf{User supplies $IV$}} \\
+\verb#    AES_ENCRYPT or AES_DECRYPT);# \\
+\end{exampleblock}
+\end{frame}
+\end{document}
