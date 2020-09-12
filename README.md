@@ -1,9 +1,9 @@
 ## Cryptography Course Slides
-==========
+
+[![made-with-latex](https://img.shields.io/badge/Made%20with-LaTeX-1f425f.svg)](https://www.latex-project.org/)  [![CC BY-SA 4.0][cc-by-sa-shield]][cc-by-sa]
+
 
 Yu Zhang, Harbin Insitute of Technology, 2012, 2014, 2015, 2016, 2017, 2018, 2019, 2020
-
- [![CC BY-SA 4.0][cc-by-sa-shield]][cc-by-sa]
 
 ## Requirement
 
