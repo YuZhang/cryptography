@@ -2,12 +2,15 @@
 
 [![made-with-latex](https://img.shields.io/badge/Made%20with-LaTeX-1f425f.svg)](https://www.latex-project.org/)  [![CC BY-SA 4.0][cc-by-sa-shield]][cc-by-sa]
 
+Yu Zhang, Harbin Insitute of Technology, 2011, 2012, 2014, 2015, 2016, 2017, 2018, 2019, 2020
 
-Yu Zhang, Harbin Insitute of Technology, 2012, 2014, 2015, 2016, 2017, 2018, 2019, 2020
 
-## Requirement
 
-* Developed with MacTeX
+- New ! 增加了中文课程讲义，在lecturenotes-Chinese目录下
+
+## Requirement for compiling slides
+
+* Developed with [MacTeX](https://www.tug.org/mactex/)
 * [Simpsons font](/simpsons.zip/): [Installation](http://tex.stackexchange.com/questions/28567/how-to-install-and-use-simpsons-font)
 
 ## References
