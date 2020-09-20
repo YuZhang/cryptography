@@ -64,7 +64,8 @@ Limit the power of adversary (against brute force with pr. 1 in time linear in $
  \alert{Q: $f(x) = x^{2} $, is $g(x) =  \frac{x^{3}}{f(x)}$ polynomial?}
 \item A \textbf{probabilistic} algorithm has the capability of ``tossing coins''.\\
 Random number generators should be designed for cryptographic use, not \verb|random()| in C. 
-\item \alert{Open question}: Does probabilistic adversaries are more powerful than deterministic ones? 
+\item \alert{Open question}: Does probabilistic adversaries are more powerful than deterministic ones?  
+$\mathcal{P} = \mathcal{BPP}$ ? 
 \end{itemize}
 \end{frame}
 \begin{frame}\frametitle{Negligible Success Probability}
@@ -212,6 +213,8 @@ The pragmatic approach is to take many sequences of random numbers from a given 
 \item $D(x)=0$ if $\text{max-run-of-}0(x) \le 10\cdot \log{n}$
 \end{itemize}
 \end{exampleblock}
+Pseudorandomness means being \textbf{next-bit unpredictable},\\
+$G$ passes all next bit tests $\iff$ $G$ passes all statistical tests.
 How many tests shall we need?
 \end{frame}
 \begin{frame}\frametitle{Intuition for Defining Pseudorandom}
@@ -234,8 +237,6 @@ where $r$ is chosen \emph{u.a.r} from $\{0,1\}^{\ell(n)}$, the \textbf{seed} $s$
 \end{enumerate}
 \end{definition}
 \begin{itemize}
-\item Pseudorandomness means being \textbf{next-bit unpredictable},\\
-$G$ passes all next bit tests $\iff$ $G$ passes all statistical tests.
 \item \textbf{Existence}: Under the weak assumption that \emph{one-way functions} exists, or $\mathcal{P} \ne \mathcal{NP}$
 \end{itemize}
 \end{frame}
