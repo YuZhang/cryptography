@@ -87,7 +87,7 @@ Unsynchronized mode: $\mathsf{Enc}(m_i) := \left< IV_i, G(IV_i\|k) \oplus m_i\ri
 \end{itemize}
 \end{exampleblock}
 \end{frame}
-\begin{frame}\frametitle{Security Against CPA}
+\begin{frame}\frametitle{CPA Indistinguishability Experiment}
 The CPA indistinguishability experiment $\mathsf{PrivK}^{\mathsf{cpa}}_{\mathcal{A},\Pi}(n)$:
 \begin{enumerate}
 	\item $k \gets \mathsf{Gen}(1^n)$
@@ -102,7 +102,7 @@ The CPA indistinguishability experiment $\mathsf{PrivK}^{\mathsf{cpa}}_{\mathcal
 \end{center}
 \end{figure}
 \end{frame}
-\begin{frame}\frametitle{CPA Security for Multiple Encryptions}
+\begin{frame}\frametitle{Definition of CPA Security}
 \begin{definition}\label{def:cap-ind}
 $\Pi$ has \textbf{indistinguishable encryptions under a CPA (CPA-secure)} if $\forall$ \textsc{ppt} $\mathcal{A}$, $\exists$ $\mathsf{negl}$ such that
 \[ \Pr\left[\mathsf{PrivK}^{\mathsf{cpa}}_{\mathcal{A},\Pi}(n)=1\right] \le \frac{1}{2} + \mathsf{negl}(n).
@@ -112,7 +112,7 @@ $\Pi$ has \textbf{indistinguishable encryptions under a CPA (CPA-secure)} if $\f
 \item \alert{Q: Is any cipher we have learned so far CPA-secure? Why?}
 \end{itemize}
 \begin{proposition}
-Any private-key encryption scheme that is CPA-secure also is \textbf{multiple-encryption} CPA-secure.
+Any private-key encryption scheme that is CPA-secure also is \textbf{multiple-encryption-secure}.
 \end{proposition}
 \begin{itemize}
 \item \alert{Q: Does \textbf{multiple-encryption-security} mean CPA-security?} (homework)
@@ -153,6 +153,8 @@ where $f$ is chosen \emph{u.a.r} from $\mathsf{Func}_n$.
 %\textbf{Existence}: if PRG exists. In practice, block ciphers may be PRF.
 \end{frame}
 \begin{frame}\frametitle{Questions}
+\begin{alertblock}{Q: Without knowing the key and the oracle access, could anyone learn something about the output from the input with a non-negligible probability?} 
+\end{alertblock}
 \begin{exampleblock}{Let $F: \{0,1\}^{n} \times \{0,1\}^{n} \to \{0,1\}^{n}$ be a secure PRF. Is $G$ a secure PRF?}
 \begin{itemize}
 \item $G((k_{1},k_{2}), x) = F(k_{1},x) \| F(k_{2},x)$
@@ -199,7 +201,17 @@ If $F$ is a PRF, this fixed-length encryption scheme $\Pi$ is CPA-secure.
 \begin{frame}\frametitle{Proof of CPA-Security from PRF}
 \textbf{Idea}: First, analyze the security in an idealized world where $f$ is used in $\tilde{\Pi}$; next, claim that if $\Pi$ is insecure when $F_k$ was used then this would imply $F_k$ is not PRF by reduction.
 \begin{proof}
-(1) Analyze $\Pr[\mathsf{Break}]$, $\mathsf{Break}$ means $\mathsf{PrivK}_{\mathcal{A},\tilde{\Pi}}^{\mathsf{cpa}}(n) = 1$:  \\
+Reduce $D$ to $\mathcal{A}$:
+\begin{figure}
+\begin{center}
+\input{tikz/pgfD}
+\end{center}
+\end{figure}
+\end{proof}
+\end{frame}
+\begin{frame}\frametitle{Proof of CPA-Security from PRF (Cont.)}
+\begin{proof}
+Analyze $\Pr[\mathsf{Break}]$, $\mathsf{Break}$ means $\mathsf{PrivK}_{\mathcal{A},\tilde{\Pi}}^{\mathsf{cpa}}(n) = 1$:  \\
 $\mathcal{A}$ collects $\{ \left< r_i, f(r_i) \right> \}$, $i=1,\dots,q(n)$ with $q(n)$ queries; \\
 The challenge $c=\left<r_c, f(r_c)\oplus m_b\right>$. \\
 \begin{itemize}
@@ -213,16 +225,7 @@ The challenge $c=\left<r_c, f(r_c)\oplus m_b\right>$. \\
 	&\le \frac{q(n)}{2^n} + \frac{1}{2}.
 \end{split}
 \]
-\end{proof}
-\end{frame}
-\begin{frame}\frametitle{Proof of CPA-Security from PRF (Cont.)}
-\begin{proof}
-(2) Reduce $D$ to $\mathcal{A}$:
-\begin{figure}
-\begin{center}
-\input{tikz/pgfD}
-\end{center}
-\end{figure}
+
 {\footnotesize 
 $ \Pr[D^{F_k(\cdot)}(1^n)=1] = \Pr[\mathsf{PrivK}_{\mathcal{A},\Pi}^{\mathsf{cpa}}(n) = 1] = \frac{1}{2} + \varepsilon(n). $
 $ \Pr[D^{f(\cdot)}(1^n)=1] = \Pr[\mathsf{PrivK}_{\mathcal{A},\tilde{\Pi}}^{\mathsf{cpa}}(n) = 1] = \Pr[\mathsf{Break}] \le \frac{1}{2} + \frac{q(n)}{2^n}. $
@@ -231,7 +234,7 @@ $\varepsilon(n)$ is negligible.
 }
 \end{proof}
 \end{frame}
-\begin{frame}\frametitle{Remarks on CPA-Security from PRF}
+\begin{frame}\frametitle{CPA-Security from PRF for Arbitrary-Length Messages}
 \begin{itemize}
 \item For arbitrary-length messages, $m = m_1, \dots , m_{\ell}$
 \[ c := \left< r_1, F_k(r_1) \oplus m_1, r_2, F_k(r_2) \oplus m_2, \dots, r_\ell, F_k(r_\ell) \oplus m_\ell\right>
@@ -428,7 +431,7 @@ The $m' = c' \oplus F_k(r)$ should be the same with $m_{b}$ \alert{except \under
 \alert{Q: Show that the above modes (CBC, OFB and CTR) are also not CCA-secure. (homework)}
 \end{frame}
 \begin{frame}\frametitle{Padding-Oracle Attacks}
-\textbf{PKCK \#5 Padding}:  append $b$ bytes of $b$ to the message in order to make the total length a multiple of the block length (append a dummy block if needed). The decryption server will return a \textbf{Bad Padding Error} for incorrect padding.\\
+\textbf{PKCS \#5 Padding}:  append $b$ bytes of $b$ to the message in order to make the total length a multiple of the block length (append a dummy block if needed). The decryption server will return a \textbf{Bad Padding Error} for incorrect padding.\\
 \textbf{Padding-Oracle Attacks}: 
 \begin{itemize}
 \item In a one-block CBC, by modifying the 1st byte of $IV$, attacker can learn whether $m$ is NULL. If yes, error will occur. 
