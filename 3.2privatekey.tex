@@ -430,6 +430,14 @@ The $m' = c' \oplus F_k(r)$ should be the same with $m_{b}$ \alert{except \under
 \end{exampleblock}
 \alert{Q: Show that the above modes (CBC, OFB and CTR) are also not CCA-secure. (homework)}
 \end{frame}
+\begin{frame}\frametitle{Padding-Oracle Attacks: Real-world Case}
+CAPTCHA server will return an error when deciphering the CT of a CAPTCHA text received from a user.
+\begin{figure}
+\begin{center}
+\input{tikz/padding-oracle}
+\end{center}
+\end{figure}
+\end{frame}
 \begin{frame}\frametitle{Padding-Oracle Attacks}
 \textbf{PKCS \#5 Padding}:  append $b$ bytes of $b$ to the message in order to make the total length a multiple of the block length (append a dummy block if needed). The decryption server will return a \textbf{Bad Padding Error} for incorrect padding.\\
 \textbf{Padding-Oracle Attacks}: 
@@ -464,14 +472,6 @@ The $m' = c' \oplus F_k(r)$ should be the same with $m_{b}$ \alert{except \under
 \item \alert{Q: If no padding error, then $s$ = ?}
 % s ^ t = u  ^ (b+1),  s= u ^ (b+1) ^ t
 \end{itemize}
-\end{frame}
-\begin{frame}\frametitle{Padding-Oracle Attacks: Real-world Case}
-CAPTCHA server will return an error when deciphering the CT of a CAPTCHA text received from a user.
-\begin{figure}
-\begin{center}
-\input{tikz/padding-oracle}
-\end{center}
-\end{figure}
 \end{frame}
 \begin{frame}\frametitle{Summary}
 \begin{itemize}
