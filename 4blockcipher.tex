@@ -337,7 +337,7 @@ Without I/O pairs of any $f$, we know the inputs of $f_1$ and $f_3$ and the XOR 
 \item \textbf{Triple-DES} (3DES): strong, but small block length and slow.
 \end{itemize}
 \end{frame}
-\section{AES -- The Advanced Encryption Standard (FYI)}
+\section{AES -- The Advanced Encryption Standard}
 \begin{frame}\frametitle{AES -- The Advanced Encryption Standard}
 \begin{itemize}
 \item In 1997, NIST calls for AES.
@@ -387,8 +387,9 @@ $s \gets s\oplus k_{R}$\;
 \emph{See an animation of Rijndael!}.
 \end{frame}
 %\begin{comment}
-\section{Differential and Linear Cryptanalysis -- A Brief Look (FYI)}
+\section{Differential and Linear Cryptanalysis -- A Brief Look}
 \begin{frame}\frametitle{Linear Cryptanalysis}
+Reference: ``A Tutorial on Linear and Differential Cryptanalysis'' \url{www.engr.mun.ca/~howard/PAPERS/ldc_tutorial.pdf}
 \begin{itemize}
 \item Linear relationships between the input and output: \\
 the bit positions $i_1, ... ,i_\ell$ and $i_1', ... , i_\ell'$ have \textbf{bias} $p$ if for randomly-chosen input $x$ and key $k$, it holds that $y=F_k(x)$,
