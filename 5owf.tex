@@ -107,7 +107,7 @@ Practical solutions for one-way computation.
 \begin{exampleblock}{$f:\ \{0,1\}^{128} \to \{0,1\}^{128}$ is a OWF. Is $f'$ OWF?}
 \begin{itemize}
 \item $f'(x) = f(x)\| x$
-\item $f'(x) = f(x)\oplus 1^{\abs{x}}$
+%\item $f'(x) = f(x)\oplus 1^{\abs{x}}$
 \item $f'(x\|x') = f(x)\|x'$
 \item $f'(x) = f(x) \oplus f(x)$
 \item $ f'(x) = \left\{ 
@@ -145,10 +145,10 @@ $f$ is OWF. Then $\exists$ an OWF $g$ along with an HCP $\mathsf{gl}$ for $g$. I
 \begin{proof}
 $g(x,r) \overset{\text{def}}{=} (f(x), r)$, for $\abs{x} = \abs{r}$, and define
 \[ \mathsf{gl}(x,r) \overset{\text{def}}{=} \bigoplus^{n}_{i=1} x_i \cdot r_i. \]
-$r$ is a random subset of $\{ 1,\dotsc, n \}$. [Goldreich and Levin]
+$r$ is generated uniformly at random. [Goldreich and Levin]
 \end{proof}
 \end{frame}
-\section{From OWF to PRP (FYI)}
+\section{From OWF to PRP}
 \begin{frame}\frametitle{PRG from OWP: Blum-Micali Generator}
 \begin{theorem}
 $f$ is an OWP and $\mathsf{hc}$ is an HCP of $f$. Then $G(s) \overset{\text{def}}{=} (f(s), \mathsf{hc}(s))$ constitutes a PRG with expansion factor $\ell(n) = n+1$, then $\forall$ polynomial $p(n) > n$, $\exists$ a PRG with expansion factor $\ell(n) = p(n)$.
