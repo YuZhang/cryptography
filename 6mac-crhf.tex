@@ -650,9 +650,6 @@ where the probability is taken over uniform choice of $k \in \mathcal{K}$.
 \item $\mathsf{Vrfy}_k(m,t)$: $1 \iff t \overset{?}{=} h_k(m)$. (If $m \notin \mathcal{M}$, then output 0.)
 \end{itemize}
 \end{construction}
-\begin{theorem}
-If $h$ is an SUF, Construction is a $1/\abs{\mathcal{T}}-$secure MAC.
-\end{theorem}
 \end{frame}
 \begin{frame}\frametitle{Construction of An SUF}
 \begin{theorem}
@@ -664,6 +661,21 @@ For any prime $P$, the function $h$ is an SUF:
 $h_{a,b}(m) = t$ and $h_{a,b}(m') = t'$, only if 
 $a \cdot m + b  = t \mod p$  and  $a \cdot m' + b = t' \mod p$. We have $a = [(t-t') \cdot (m - m')^{-1} \mod p]$ and $b = [t - a \cdot m \mod p]$, which means there is a unique key $(a, b)$. Since there are $\abs{\mathcal{T}}^2$ keys, 
 \[ \Pr [h_k(m) = t  \land h_k(m') = t'] = \frac{1}{\abs{\mathcal{T}}^2}.
+\]
+\end{proof}
+\end{frame}
+\begin{frame}\frametitle{Security of Construction from An SUF}
+\begin{theorem}
+If $h$ is an SUF, Construction is a $1/\abs{\mathcal{T}}-$secure MAC.
+\end{theorem}
+\begin{proof}
+We assume that $\mathcal{A}$ is deterministic without loss of generality. The adversary receives tag $t’$ for the message $m’$, where $m’$ is fixed.
+\[
+\begin{split}
+\Pr [\mathsf{Macforge}_{\mathcal{A},\Pi}^{1-\mathsf{time}} = 1] &=  \sum_{t' \in \mathcal{T}} \Pr [\mathsf{Macforge}_{\mathcal{A},\Pi}^{1-\mathsf{time}} = 1 \land h_k(m')=t'] \\
+&= \sum_{t' \in \mathcal{T}} \Pr [h_k(m)=t \land h_k(m')=t'] \\
+&= \sum_{t' \in \mathcal{T}} \frac{1}{\abs{\mathcal{T}^2}} =  \frac{1}{\abs{\mathcal{T}}}
+\end{split}
 \]
 \end{proof}
 \end{frame}
