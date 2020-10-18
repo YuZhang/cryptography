@@ -609,10 +609,12 @@ Before HMAC's $H^s(k \| H^s(k \| x))$, a common mistake was to use:
 \begin{itemize}
 \item HMAC is an industry standard (RFC2104)
 \item HMAC is faster than CBC-MAC
-\item \alert{Verification timing attacks: (Keyczar crypto library (Python))} \\
+\item \alert{Verification timing attacks:} \\
+Keyczar crypto library (Python): \\
 def Verify(key, msg, sig\underline{\ }bytes): \\
 $\qquad$ return HMAC(key, msg) == sig\underline{\ }bytes \\
 The problem:  implemented as a byte-by-byte comparison
+\item In Xbox 360, a difference of 2.2 milliseconds between rejection times of i vs. i + 1 bytes.
 \item \alert{\emph{Don't implement it yourself}}
 \end{itemize}
 \end{frame}

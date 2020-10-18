@@ -6,7 +6,7 @@
 \frametitle{Outline}
 \tableofcontents
 \end{frame}
-\section{Constructing CCA-Secure Encryption Schemes}
+\section{Authenticated Encryptions}
 \begin{frame}\frametitle{Recall Security Against CCA}
 The CCA indistinguishability experiment $\mathsf{PrivK}^{\mathsf{cca}}_{\mathcal{A},\Pi}(n)$:
 \begin{enumerate}
@@ -22,64 +22,6 @@ $\Pi$ has \textbf{indistinguishable encryptions under a CCA (CCA-secure)} if $\f
 \]
 \end{definition}
 \end{frame}
-\begin{frame}\frametitle{Constructing CCA-Secure Encryption Schemes}
-\textbf{Idea}: Make decryption oracle useless. CCA = CPA-then-MAC.
-\begin{figure}
-\begin{center}
-\input{tikz/CCA}
-\end{center}
-\end{figure}
-\begin{construction}
-$\Pi_E = (\mathsf{Gen}_E, \mathsf{Enc}, \mathsf{Dec})$, $\Pi_M = (\mathsf{Gen}_M, \mathsf{Mac}, \mathsf{Vrfy})$. $\Pi'$:
-\begin{itemize}
-\item $\mathsf{Gen}'(1^n)$: $k_1 \gets \mathsf{Gen}_E(1^n)$ and $k_2 \gets \mathsf{Gen}_M(1^n)$
-\item $\mathsf{Enc}'_{k_1,k_2}(m)$: $c \gets \mathsf{Enc}_{k_1}(m)$, $t \gets \mathsf{Mac}_{k_2}(c)$ and output $\left< c,t \right>$
-\item $\mathsf{Dec}'_{k_1,k_2}(\left< c,t \right>) = \mathsf{Dec}_{k_1}(c)\ \text{if}\ \mathsf{Vrfy}_{k_2}(c,t) \overset{?}{=} 1;\ \text{otherwise}\ \bot$
-\end{itemize}
-\end{construction}
-\end{frame}
-\begin{frame}\frametitle{Proof of CCA-Secure Encryption Schemes}
-\begin{theorem}
-If $\Pi_E$ is a CPA-secure private-key encryption scheme and $\Pi_M$ is a secure MAC with unique tags, then Construction $\Pi'$ is CCA-secure.
-\end{theorem}
-\begin{proof}
-$\mathsf{VQ}$: $\mathcal{A}$ submits a ``new'' query to oracle $\mathsf{Dec}'$ and $\mathsf{Vrfy}=1$.
-\[ \Pr[\mathsf{PrivK}^{\mathsf{cca}}_{\mathcal{A},\Pi'}(n)=1] \le \Pr[\mathsf{VQ}] + \Pr[\mathsf{PrivK}^{\mathsf{cca}}_{\mathcal{A},\Pi'}(n)=1 \land \overline{\mathsf{VQ}}] \]
-We need to prove the following claims.
-\begin{enumerate}
-\item $\Pr[\mathsf{VQ}]$ is negligible.
-\item $\Pr[\mathsf{PrivK}^{\mathsf{cca}}_{\mathcal{A},\Pi'}(n)=1 \land \overline{\mathsf{VQ}}] \le \frac{1}{2} + \mathsf{negl}(n)$. 
-\end{enumerate}
-\end{proof}
-\end{frame}
-\begin{frame}\frametitle{Proof of ``$\Pr[\mathsf{VQ}]$ is negligible''}
-\textbf{Idea}: Reduce $\mathcal{A}_M$ (attacking $\Pi_M$ with an oracle $\mathsf{Mac}_{k_2}(\cdot)$) to $\mathcal{A}$.
-\begin{proof}
-\begin{itemize}
-\item $\mathcal{A}_M$ chooses $i \gets \{1,\dotsc,q(n)\}$ \emph{u.a.r}.
-\item Run $\mathcal{A}$ with the encryption/decryption oracles.
-\item If the $i$th decryption oracle query from $\mathcal{A}$ uses a ``new'' $c$, output $(c,t)$ and stop.
-\item $\mathsf{Macforge}_{\mathcal{A}_M,\Pi_M }(n)=1$ only if $\mathsf{VQ}$ occurs.
-\item $\mathcal{A}_M$ correctly guesses $i$ with probability $1/q(n)$.
-\end{itemize}
-\[ \Pr [\mathsf{Macforge}_{\mathcal{A}_M,\Pi_M }(n)=1] \ge \Pr[\mathsf{VQ}]/q(n).
-\]
-\end{proof}
-\end{frame}
-\begin{frame}\frametitle{Proof of ``$\Pr[\mathsf{PrivK}^{\mathsf{cca}}_{\mathcal{A},\Pi'}(n)=1 \land \overline{\mathsf{VQ}}] \le \frac{1}{2} + \mathsf{negl}(n)$''}
-\textbf{Idea}: Reduce $\mathcal{A}_E$ (attacking $\Pi_E$ with an oracle $\mathsf{Enc}_{k_1}(\cdot)$) to $\mathcal{A}$.
-\begin{proof}
-\begin{itemize}
-\item Run $\mathcal{A}$ with the encryption/decryption oracles.
-\item Run $\mathsf{PrivK}^{\mathsf{cpa}}_{\mathcal{A}_E,\Pi_E}$ as $\mathsf{PrivK}^{\mathsf{cca}}_{\mathcal{A},\Pi'}$.
-\item $\mathcal{A}_E$ outputs the same $b'$ that is output by $\mathcal{A}$.
-\item $\Pr[\mathsf{PrivK}^{\mathsf{cpa}}_{\mathcal{A}_E,\Pi_E}(n)=1 \land \overline{\mathsf{VQ}}] = \Pr[\mathsf{PrivK}^{\mathsf{cca}}_{\mathcal{A},\Pi'}(n)=1 \land \overline{\mathsf{VQ}}]$ unless $\mathsf{VQ}$ occurs.
-\end{itemize}
-\[ \Pr [\mathsf{PrivK}^{\mathsf{cpa}}_{\mathcal{A}_E,\Pi_E }(n)=1] \ge \Pr[\mathsf{PrivK}^{\mathsf{cca}}_{\mathcal{A},\Pi'}(n)=1 \land \overline{\mathsf{VQ}}].
-\]
-\end{proof}
-\end{frame}
-\section{Obtaining Privacy and Message Authentication}
 \begin{frame}\frametitle{Message Transmission Scheme}
 \begin{figure}
 \begin{center}
@@ -121,14 +63,14 @@ $ D'_{k}(c, b) = \left\{
     D_{k}(c) & \quad \text{if $b = 0$}\\
     \perp & \quad \text{otherwise}\\
   \end{array} \right. $
-\item $E'_{k}(m) = E_{k}(m)\oplus1^*$ and $D'_{k}(c) = D_{k}(c\oplus 1^{*})$ %y
+%\item $E'_{k}(m) = E_{k}(m)\oplus1^*$ and $D'_{k}(c) = D_{k}(c\oplus 1^{*})$ %y
 \item $E'_{k}(m) = \left( E_{k}(m), E_{k}(m)\right)$ and %n E?(k,m)=(c1,c2) will output c1 != c2. The attacker then outputs (c1,c1)
 $ D'_{k}(c_{1}, c_{2}) = \left\{ 
   \begin{array}{l l}
     D_{k}(c_{1}) & \ \text{if $D_{k}(c_{1}) = D_{k}(c_{2})$}\\
     \perp & \ \text{otherwise}\\
   \end{array} \right. $
-\item $E'_{k}(m) = \left( E_{k}(m), H(m)\right)$ ($H$ is a CRHF) and %n
+\item $E'_{k}(m) = \left( E_{k}(m), H(m)\right)$ ($H$ is a CRHF) and %n H leaks m.
 $ D'_{k}(c, h) = \left\{ 
   \begin{array}{l l}
     D_{k}(c) & \ \text{if $H(D_{k}(c))=h$}\\
@@ -165,17 +107,74 @@ $10/01 \to 01/10 \to 1$, $00 \to 11 \to \bot$.
 Decryption: If $\mathsf{Vrfy}(\cdot) = 1$, then $\mathsf{Dec}(\cdot)$; otherwise output $\bot$.
 \end{itemize}
 \end{frame}
+\begin{frame}\frametitle{Constructing Authenticated Encryption Schemes}
+\textbf{Idea}: Make decryption oracle useless. AE(/CCA-secure) = CPA-then-MAC.
+\begin{figure}
+\begin{center}
+\input{tikz/CCA}
+\end{center}
+\end{figure}
+\begin{construction}
+$\Pi_E = (\mathsf{Gen}_E, \mathsf{Enc}, \mathsf{Dec})$, $\Pi_M = (\mathsf{Gen}_M, \mathsf{Mac}, \mathsf{Vrfy})$. $\Pi'$:
+\begin{itemize}
+\item $\mathsf{Gen}'(1^n)$: $k_1 \gets \mathsf{Gen}_E(1^n)$ and $k_2 \gets \mathsf{Gen}_M(1^n)$
+\item $\mathsf{Enc}'_{k_1,k_2}(m)$: $c \gets \mathsf{Enc}_{k_1}(m)$, $t \gets \mathsf{Mac}_{k_2}(c)$ and output $\left< c,t \right>$
+\item $\mathsf{Dec}'_{k_1,k_2}(\left< c,t \right>) = \mathsf{Dec}_{k_1}(c)\ \text{if}\ \mathsf{Vrfy}_{k_2}(c,t) \overset{?}{=} 1;\ \text{otherwise}\ \bot$
+\end{itemize}
+\end{construction}
+\end{frame}
+\begin{frame}\frametitle{Proof of AE(/CCA-Secure) Encryption Schemes}
+\begin{theorem}
+If $\Pi_E$ is a CPA-secure private-key encryption scheme and $\Pi_M$ is a secure MAC with unique tags, then Construction $\Pi'$ is AE(/CCA-secure).
+\end{theorem}
+\begin{proof}
+$\mathsf{VQ}$: $\mathcal{A}$ submits a ``new'' query to oracle $\mathsf{Dec}'$ and $\mathsf{Vrfy}=1$.
+\[ \Pr[\mathsf{PrivK}^{\mathsf{cca}}_{\mathcal{A},\Pi'}(n)=1] \le \Pr[\mathsf{VQ}] + \Pr[\mathsf{PrivK}^{\mathsf{cca}}_{\mathcal{A},\Pi'}(n)=1 \land \overline{\mathsf{VQ}}] \]
+We need to prove the following claims.
+\begin{enumerate}
+\item $\Pr[\mathsf{VQ}]$ is negligible.
+\item $\Pr[\mathsf{PrivK}^{\mathsf{cca}}_{\mathcal{A},\Pi'}(n)=1 \land \overline{\mathsf{VQ}}] \le \frac{1}{2} + \mathsf{negl}(n)$. 
+\end{enumerate}
+\end{proof}
+\end{frame}
+\begin{frame}\frametitle{Proof of ``$\Pr[\mathsf{VQ}]$ is negligible''}
+\textbf{Idea}: Reduce $\mathcal{A}_M$ (attacking $\Pi_M$ with an oracle $\mathsf{Mac}_{k_2}(\cdot)$) to $\mathcal{A}$.
+\begin{proof}
+\begin{itemize}
+\item $\mathcal{A}_M$ chooses $i \gets \{1,\dotsc,q(n)\}$ \emph{u.a.r}.
+\item Run $\mathcal{A}$ with the encryption/decryption oracles.
+\item If the $i$th decryption oracle query from $\mathcal{A}$ uses a ``new'' $c$, output $(c,t)$ and stop.
+\item $\mathsf{Macforge}_{\mathcal{A}_M,\Pi_M }(n)=1$ only if $\mathsf{VQ}$ occurs.
+\item $\mathcal{A}_M$ correctly guesses $i$ with probability $1/q(n)$.
+\end{itemize}
+\[ \Pr [\mathsf{Macforge}_{\mathcal{A}_M,\Pi_M }(n)=1] \ge \Pr[\mathsf{VQ}]/q(n).
+\]
+\end{proof}
+\end{frame}
+\begin{frame}\frametitle{Proof of ``$\Pr[\mathsf{PrivK}^{\mathsf{cca}}_{\mathcal{A},\Pi'}(n)=1 \land \overline{\mathsf{VQ}}] \le \frac{1}{2} + \mathsf{negl}(n)$''}
+\textbf{Idea}: Reduce $\mathcal{A}_E$ (attacking $\Pi_E$ with an oracle $\mathsf{Enc}_{k_1}(\cdot)$) to $\mathcal{A}$.
+\begin{proof}
+\begin{itemize}
+\item Run $\mathcal{A}$ with the encryption/decryption oracles.
+\item Run $\mathsf{PrivK}^{\mathsf{cpa}}_{\mathcal{A}_E,\Pi_E}$ as $\mathsf{PrivK}^{\mathsf{cca}}_{\mathcal{A},\Pi'}$.
+\item $\mathcal{A}_E$ outputs the same $b'$ that is output by $\mathcal{A}$.
+\item $\Pr[\mathsf{PrivK}^{\mathsf{cpa}}_{\mathcal{A}_E,\Pi_E}(n)=1 \land \overline{\mathsf{VQ}}] = \Pr[\mathsf{PrivK}^{\mathsf{cca}}_{\mathcal{A},\Pi'}(n)=1 \land \overline{\mathsf{VQ}}]$ unless $\mathsf{VQ}$ occurs.
+\end{itemize}
+\[ \Pr [\mathsf{PrivK}^{\mathsf{cpa}}_{\mathcal{A}_E,\Pi_E }(n)=1] \ge \Pr[\mathsf{PrivK}^{\mathsf{cca}}_{\mathcal{A},\Pi'}(n)=1 \land \overline{\mathsf{VQ}}].
+\]
+\end{proof}
+\end{frame}
 \begin{frame}\frametitle{Authenticated Encryption Theory and Practice}
 \begin{theorem}
-$\Pi_E$ is CPA-secure and $\Pi_E$ is a secure MAC with unique tages, $\Pi'$ deriving from encrypt-then-authenticate approach is secure.
+$\Pi_E$ is CPA-secure and $\Pi_M$ is a secure MAC with unique tages, $\Pi'$ deriving from encrypt-then-authenticate approach is secure.
 \end{theorem}
 \textbf{GCM(Galois/Counter Mode)}: CTR encryption then Galois MAC. (RFC4106/4543/5647/5288 on IPsec/SSH/TLS)\\
-\textbf{EAX}: CTR encryption then CMAC.
+\textbf{EAX}: CTR encryption then CMAC (Cipher-based MAC).
 \begin{proposition}
 Authenticate-then-encrypt approach is secure if $\Pi_E$ is rand-CTR mode or rand-CBC mode.
 \end{proposition}
 \textbf{CCM (Counter with CBC-MAC)}: CBC-MAC then CTR encryption. (802.11i, RFC3610)\\
-\textbf{OCB (Offset Codebook Mode)}: integrating MAC into ENC. (two times fast as CCM, EAX)\\
+\textbf{OCB (Offset Codebook Mode)}: integrating MAC into encryption. (two times fast as CCM, EAX)\\
 \textbf{All support AEAD (A.E. with associated data):} part of message is in clear, and all is authenticated
 \end{frame}
 \begin{frame}\frametitle{Remarks on Secure Message Transmission}
@@ -198,41 +197,7 @@ Authenticate-then-encrypt approach is secure if $\Pi_E$ is rand-CTR mode or rand
 \end{itemize}
 \end{frame}
 %\begin{comment}
-\section{Key Derivation Function (FYI)}
-\begin{frame}\frametitle{Key Derivation Function (KDF)}
-\textbf{Key Derivation Function (KDF)} generates many keys from a secret source key $sk$.
-\newline
-
-\textbf{For uniformly random $sk$}: $F$ is PRF, $ctx$ is a unique string identifying application,
-\[\mathsf{KDF}(sk,ctx,l) = \left<F_{sk}(ctx\|0),F_{sk}(ctx\|1)\cdots,F_{sk}(ctx\|l)\right>.\]
-
-\textbf{For not-uniform $sk$}: extract-then-expand paradigm.\\
-\begin{itemize}
-\item[extract:] HKDF $k \gets \mathsf{HMAC}(salt,sk)$. $salt$ is a random number.
-\item[expand:] as the above.
-\end{itemize}
-\end{frame}
-\begin{frame}\frametitle{ Password-Based KDF (PBKDF)}
-\textbf{Key stretching} increases the time of testing key (with slow hash function).
-\newline
-
-\textbf{Key strengthening} increases the length/randomness of key (with salt).
-\newline
-
-\textbf{PKCS\#5 (PBKDF1)}: $H^{(c)}(pwd\|salt)$, iterate hash function $c$ times.
-\newline
-
-\textbf{Attack}: either try the enhanced key (larger key space), or else try the initial key (longer time per key).
-\end{frame}
-\begin{frame}\frametitle{IV, Nonce, Counter and Salt}
-\begin{itemize}
-\item[IV] an input to a cryptographic primitive, providing randomness. 
-\item[nonce] a number used only once to sign a communication.
-\item[counter] a sequence number used as nonce.
-\item[salt] consists of random bits, creating the input to a function. 
-\end{itemize}
-\end{frame}
-\section{Deterministic Encryption (FYI)}
+\section{Deterministic Encryptions}
 \begin{frame}\frametitle{Deterministic CPA Security}
 \begin{itemize}
 \item \textbf{Application}: encrypted database index, disk encryption
@@ -268,10 +233,9 @@ $c = \left<SIV,\mathsf{Enc}_{k_2}(SIV,m) \right>$.
 \end{frame}
 \begin{frame}\frametitle{Wide Block PRP for Det. Encryption}
 \begin{itemize}
-\item \textbf{Just PRP}: If $F$ is PRP, then $F$ is also det. CPA-secure.
-\item \textbf{PRP-based DAE}: $\mathsf{Enc}_k(m\| 0^{\ell})$. In $\mathsf{Dec}$, if $\neq 0^{\ell}$, output $\perp$.
-\item \textbf{Narrow block} may leak info. as some blocks are the same.
 \item \textbf{Wide block PRP}: PRP with longer block length (e.g. a sector on disk) from PRP with short block length (e.g. AES).
+\item \textbf{PRP-based DAE}: If $F$ is PRP, then $F$ is also det. CPA-secure. $\mathsf{Enc}_k(m\| 0^{\ell})$. In $\mathsf{Dec}$, if $\neq 0^{\ell}$, output $\perp$.
+\item \textbf{Narrow block} may leak info. as some blocks are the same.
 \item \textbf{Standards}: CBC-mask-CBC (CMC) and ECB-mask-ECB (EME) in IEEE P1619.2.
 \item \textbf{Cost}: 2x slower than SIV due to two-pass encryption.
 \end{itemize}
@@ -279,6 +243,7 @@ $c = \left<SIV,\mathsf{Enc}_{k_2}(SIV,m) \right>$.
 \begin{frame}\frametitle{Tweakable Encryption}
 \begin{itemize}
 \item \textbf{Encryption without expansion}: $\mathcal{M} = \mathcal{C}$ implies det. encryption without integrity (e.g., disk encryption).
+\item \textbf{Tweak}: like $IV$, different tweak for different block.
 \item \textbf{Trivial solution}: $k_t = F_k(t), t=1,\dots,\ell.$
 \item \textbf{Tweakable block ciphers}: many PRPs from one key $\mathcal{K} \times \mathcal{T} \times \mathcal{X} \to \mathcal{X}$, $\mathcal{T}$ is the set of tweaks.
 \item \textbf{XTS}: XEX(Xor-Encrypt-Xor)-based tweaked-codebook mode with ciphertext stealing. (XTS-AES, NIST SP 800-38E)
@@ -291,11 +256,46 @@ $c = \left<SIV,\mathsf{Enc}_{k_2}(SIV,m) \right>$.
 \end{figure}
 \end{itemize}
 \end{frame}
+\section{Key Derivation Function}
+\begin{frame}\frametitle{Key Derivation Function (KDF)}
+\textbf{Key Derivation Function (KDF)} generates many keys from a secret source key $sk$.
+\newline
+
+\textbf{For uniformly random $sk$}: $F$ is PRF, $ctx$ is a unique string identifying application,
+\[\mathsf{KDF}(sk,ctx,l) = \left<F_{sk}(ctx\|0),F_{sk}(ctx\|1)\cdots,F_{sk}(ctx\|l)\right>.\]
+
+\textbf{For not-uniform $sk$}: extract-then-expand paradigm.\\
+\begin{itemize}
+\item[extract:] HKDF $k \gets \mathsf{HMAC}(salt,sk)$. $salt$ is a random number.
+\item[expand:] as the above.
+\end{itemize}
+\end{frame}
+\begin{frame}\frametitle{ Password-Based KDF (PBKDF)}
+\textbf{Key stretching} increases the time of testing key (with slow hash function).
+\newline
+
+\textbf{Key strengthening} increases the length/randomness of key (with salt).
+\newline
+
+\textbf{PKCS\#5 (PBKDF1)}: $H^{(c)}(pwd\|salt)$, iterate hash function $c$ times.
+\newline
+
+\textbf{Attacker}: either try the enhanced key (larger key space), or else try the initial key (longer time per key).
+\end{frame}
+\begin{frame}\frametitle{IV, Nonce, Counter and Salt}
+\begin{itemize}
+\item[IV] an input to a cryptographic primitive, providing randomness. 
+\item[nonce] a number used only once to sign a communication.
+\item[counter] a sequence number used as nonce or IV.
+\item[tweak] an input used only once for each block in a cipher.
+\item[salt] consists of random bits, creating the input to a function. 
+\end{itemize}
+\end{frame}
 \begin{frame}\frametitle{Summary}
 \begin{itemize}
-\item CCA-secure, AE, det. enc., det. CPA-secure, DAE.
-\item Enc-then-auth, KDF, SIV, wide block cipher, tweakable encryption.
-\item SIV-CTR, PBKDF, salt, enc. w/o expansion, CTS.
+\item CCA-secure, Authenticated Encryption, Enc-then-Auth(/MAC).
+\item SIV, Wide Block Cipher, Tweakable Encryption, CTS.
+\item PBKDF, salt.
 \end{itemize}
 \end{frame}
 %\end{comment}
