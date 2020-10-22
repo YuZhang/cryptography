@@ -143,10 +143,10 @@
 
     - 无扩展加密（Encryption without expansion）: 明文空间与密文空间相同 $\mathcal{M} = \mathcal{C}$ 意味着没有完整性保护的确定性加密，例如磁盘加密。
     - Tweak是一个类似初始向量的值，在同一密钥下，不同的tweak构造不同的PRP。每一个块采用不同的tweak。
-    - 一种简单的解决方法：以一个Tweak $t$来生成密钥 $k_t = F_k(t), t=1,\dots,\ell$，但效率不高，需要更有效的方法。
     - 可调块密码（Tweakable block ciphers）：用一个密钥生成许多PRP $\mathcal{K} \times \mathcal{T} \times \mathcal{X} \to \mathcal{X}$, $\mathcal{T}$ 是tweak集合。
+    - 一种简单的解决方法：以一个Tweak $t$来生成密钥 $k_t = F_k(t), t=1,\dots,\ell$，但要加密两次效率不高，需要更有效的方法。
     - XTS：XEX(Xor-Encrypt-Xor)-based tweaked-codebook mode with ciphertext stealing。 (XTS-AES, NIST SP 800-38E)
-    - XEX: $c = F_k(m\oplus x)\oplus x$，其中 $x=F_k(I)\otimes 2^j$ 在 Galois 领域，在扇区 $I$中块 $j$ 对应的tweak是 $(I,j)$ 。
+    - XEX: $c = F_k(m\oplus x)\oplus x$，其中在 Galois 域上 $x=F_k(I)\otimes 2^j$ ，在扇区 $I$中块 $j$ 对应的tweak是 $(I,j)$ 。
     - Ciphertext stealing (CTS)：无需填充（padding），没有扩展。
 
 19. 密钥派生函数（**Key Derivation Function (KDF)**）
