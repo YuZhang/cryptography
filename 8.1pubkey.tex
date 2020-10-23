@@ -18,9 +18,9 @@
 \vspace{0.5cm}
 Solutions that are based on private-key cryptography are not sufficient to deal with the problem of secure communication in open systems where parties cannot physically meet, or where parties have transient interactions.
 \end{frame}
-\begin{frame}\frametitle{Needham-Schroeder Protocol}
+\begin{frame}\frametitle{Needham-Schroeder Protocol for  Symmetric Key}
 \begin{itemize}
-\item Key Distribution Center (KDC) as Trusted Third Party (TTP).
+\item Key Distribution Center (KDC) as Trusted Third Party (TTP), which has the shared key with Alice, and with Bob, respectively.
 \item $E_{Bob}(k)$ is a \textbf{ticket} to access $Bob$, $k$ is \textbf{session key}.
 \item Used in MIT's Kerberos protocol (in Windows).
 \end{itemize}
@@ -78,7 +78,7 @@ Quadratic gap is best possible if we treat cipher as a black box oracle.
 \item Reduce the need to store many keys.
 \item Enable security in open system.
 \end{itemize}
-\item \textbf{Weakness}: slow, active attack on public key distribution.
+\item \textbf{Weakness}: 2 or 3 orders of magnitude slower than private-key encryptions, active attack on public key distribution.
 %\item \textbf{Peoples}: Ralphe Merkle (his advisor at Stanford was Hellman), Michael Rabin, Rivest, Shamir, and Adleman.
 \end{itemize}
 \end{frame}
@@ -225,7 +225,7 @@ If $\Pi$ has indistinguishable encryptions in the presence of an eavesdropper, t
 \end{comment}
 
 \begin{frame}\frametitle{Construction of Hybrid Encryption}
-To speed up the encryption of long message, use private-key encryption $\Pi'$ in tandem with public-key encryption $\Pi$.
+To speed up the encryption, use private-key encryption $\Pi'$ (data-encapsulation mechanism, DEM) in tandem with public-key encryption $\Pi$ (key-encapsulation mechanism, KEM).
 \begin{columns}
 \begin{column}{5cm}
 \begin{figure}
