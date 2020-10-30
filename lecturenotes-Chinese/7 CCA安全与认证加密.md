@@ -1,9 +1,7 @@
 # 7 CCA安全与认证加密
 
 1. 本节学习用于抵抗CCA攻击的加密方案以及同时保证通信机密性和真实性的认证加密方案。
-
 2. 目录：CCA安全加密，认证加密，确定性加密，密钥派生函数。
-
 3. 回顾CCA不可区分实验
 
    - CCA不可区分实验 $\mathsf{PrivK}^{\mathsf{cca}}_{\mathcal{A},\Pi}(n)$:
@@ -12,50 +10,43 @@
    	3. 挑战者生成随机比特 $b \gets \{0,1\}$，将挑战密文 $c \gets \mathsf{Enc}_k(m_b)$ 发送给 $\mathcal{A}$；
    	4. $\mathcal{A}$ 继续对除了挑战密文$c$之外的预言机的访问，输出$b'$；如果$b' = b$，则$\mathcal{A}$成功$\mathsf{PrivK}^{\mathsf{cca}}_{\mathcal{A},\Pi}=1$，否则 0。
    - 定义：一个加密方案是CCA安全的，如果实验成功的概率与1/2之间的差异是可忽略的。
-
 4. 消息传递方案
-
-  - CCA安全与消息的真实性有关，下面学习同时保护消息机密性和真实性的消息传递方案。
-
-  -  密钥生成（**Key-generation**） 算法输出 $k \gets \mathsf{Gen'}(1^n)$. $k = (k_1,k_2)$. $k_1 \gets \mathsf{Gen}_E(1^n)$, $k_2 \gets \mathsf{Gen}_M(1^n)$.
-  - 消息传递（**Message transmission** ）算法由 $\mathsf{Enc}_{k_1}(\cdot)$ 和 $\mathsf{Mac}_{k_2}(\cdot)$ 生成，输出 $c \gets \mathsf{EncMac'}_{k_1,k_2}(m)$.
-  - 解密（**Decryption**）算法由 $\mathsf{Dec}_{k_1}(\cdot)$ 和 $\mathsf{Vrfy}_{k_2}(\cdot)$ 生成，输出 $m \gets \mathsf{Dec}'_{k_1,k_2}(c)$ 或 $\bot$.
-  - 正确性需求: $\mathsf{Dec}'_{k_1,k_2}(\mathsf{EncMac}'_{k_1,k_2}(m)) = m$.
-  - 注：在解密算法中，当密文没有通过真实性验证时，输出空；这意味着未认证的密文无法解密。
+   - CCA安全与消息的真实性有关，下面学习同时保护消息机密性和真实性的消息传递方案。
+   - 密钥生成（**Key-generation**） 算法输出 $k \gets \mathsf{Gen'}(1^n)$. $k = (k_1,k_2)$. $k_1 \gets \mathsf{Gen}_E(1^n)$, $k_2 \gets \mathsf{Gen}_M(1^n)$.
+   - 消息传递（**Message transmission** ）算法由 $\mathsf{Enc}_{k_1}(\cdot)$ 和 $\mathsf{Mac}_{k_2}(\cdot)$ 生成，输出 $c \gets \mathsf{EncMac'}_{k_1,k_2}(m)$.
+   - 解密（**Decryption**）算法由 $\mathsf{Dec}_{k_1}(\cdot)$ 和 $\mathsf{Vrfy}_{k_2}(\cdot)$ 生成，输出 $m \gets \mathsf{Dec}'_{k_1,k_2}(c)$ 或 $\bot$.
+   - 正确性需求: $\mathsf{Dec}'_{k_1,k_2}(\mathsf{EncMac}'_{k_1,k_2}(m)) = m$.
+   - 注：在解密算法中，当密文没有通过真实性验证时，输出空；这意味着未认证的密文无法解密。
 
 5. 定义安全消息传递
-
-  - 先定义保护真实性的认证通信，然后定义同时保护机密性和真实性的认证加密。
-  - 安全消息传递实验（**secure message transmission**） $\mathsf{Auth}_{\mathcal{A},\Pi'}(n)$:
-    1. $k = (k_1,k_2) \gets \mathsf{Gen}'(1^n)$.
-    2. $\mathcal{A}$ 输入 $1^n$ 和对 $\mathsf{EncMac'}_k$的预言机访问，并输出 $c \gets \mathsf{EncMac'}_{k}(m)$.
-    3.  $m := \mathsf{Dec}'_k(c)$. $\mathsf{Auth}_{\mathcal{A},\Pi'}(n) = 1 \iff m \ne \bot \land\; m \notin \mathcal{Q}$.
-  - 定义：$\Pi'$ 实现认证通信（ **authenticated communication**），如果 $\forall$ ppt $\mathcal{A}$, $\exists\; \mathsf{negl}$ 使得，$ \Pr[\mathsf{Auth}_{\mathcal{A},\Pi'}(n) = 1] \le \mathsf{negl}(n). $
-  - 定义：$\Pi'$ 是安全的认证加密（**secure Authenticated Encryption (A.E.)**）， 如果其既是CCA安全的也是实现了认证通信。
-  - 问题：CCA安全意味着A.E.吗？（作业）
+   - 先定义保护真实性的认证通信，然后定义同时保护机密性和真实性的认证加密。
+   - 安全消息传递实验（**secure message transmission**） $\mathsf{Auth}_{\mathcal{A},\Pi'}(n)$:
+  1. $k = (k_1,k_2) \gets \mathsf{Gen}'(1^n)$.
+     2. $\mathcal{A}$ 输入 $1^n$ 和对 $\mathsf{EncMac'}_k$的预言机访问，并输出 $c \gets \mathsf{EncMac'}_{k}(m)$.
+     3. $m := \mathsf{Dec}'_k(c)$. $\mathsf{Auth}_{\mathcal{A},\Pi'}(n) = 1 \iff m \ne \bot \land\; m \notin \mathcal{Q}$.
+   - 定义：$\Pi'$ 实现认证通信（ **authenticated communication**），如果 $\forall$ ppt $\mathcal{A}$, $\exists\; \mathsf{negl}$ 使得，$ \Pr[\mathsf{Auth}_{\mathcal{A},\Pi'}(n) = 1] \le \mathsf{negl}(n). $
+   - 定义：$\Pi'$ 是安全的认证加密（**secure Authenticated Encryption (A.E.)**）， 如果其既是CCA安全的也是实现了认证通信。
+   - 问题：CCA安全意味着A.E.吗？（作业）
 
 6. 关于认证加密的例题
-
-  - 如果认为是安全的，那么利用反证法证明；
-  - 如果认为是不安全的，那么或者可以伪造消息，或者破解明文；
+   - 如果认为是安全的，那么利用反证法证明；
+   - 如果认为是不安全的，那么或者可以伪造消息，或者破解明文；
 
 7. 加密和认证组合
-
-  - 加密和认证如何组合来同时保护机密性和真实性？
-  - 加密并认证（**Encrypt-and-authenticate**） (例如, SSH)：$ c \gets \mathsf{Enc}_{k_1}(m),\; t \gets \mathsf{Mac}_{k_2}(m).$
-  - 先认证后加密（**Authenticate-then-encrypt**） (例如, SSL)：$ t \gets \mathsf{Mac}_{k_2}(m),\; c \gets \mathsf{Enc}_{k_1}(m\| t).$
-  - 先加密后认证（**Encrypt-then-authenticate**） (例如, IPsec)：$ c \gets \mathsf{Enc}_{k_1}(m),\; t \gets \mathsf{Mac}_{k_2}(c). $
+   - 加密和认证如何组合来同时保护机密性和真实性？
+   - 加密并认证（**Encrypt-and-authenticate**） (例如, SSH)：$ c \gets \mathsf{Enc}_{k_1}(m),\; t \gets \mathsf{Mac}_{k_2}(m).$
+   - 先认证后加密（**Authenticate-then-encrypt**） (例如, SSL)：$ t \gets \mathsf{Mac}_{k_2}(m),\; c \gets \mathsf{Enc}_{k_1}(m\| t).$
+   - 先加密后认证（**Encrypt-then-authenticate**） (例如, IPsec)：$ c \gets \mathsf{Enc}_{k_1}(m),\; t \gets \mathsf{Mac}_{k_2}(c). $
 
 8. 分析组合的安全性
-
-  - 采用全或无（All-or-nothing）分析，即一种组合方案要么在全部情况下都是安全的，要么只要存在一个不安全的反例就被认为是不安全的；
-  - 加密并认证: $\mathsf{Mac}'_k(m) = (m, \mathsf{Mac}_k(m))$. *注：认证可能泄漏消息。*
-  - 先认证后加密: *注：加密不能阻止对密文篡改。*
-    - $\mathsf{Trans}: 0 \to 00; 1 \to 10/01$; $\mathsf{Enc}'$ 采用CTR模式; $c = \mathsf{Enc}'(\mathsf{Trans}(m\| \mathsf{Mac}(m)))$.
-    - 将 $c$ 的前两个比特翻转并且验证密文是否有效。$10/01 \to 01/10 \to 1$, $00 \to 11 \to \bot$.
-    - 如果有效，消息的第一比特是1，否则是0； 
-    - 对于任何MAC，这都不是CCA安全的；
-  - 先加密后认证: 解密: 如果 $\mathsf{Vrfy}(\cdot) = 1$， 那么 $\mathsf{Dec}(\cdot)$； 否则，输出 $\bot$。下面来证明。
+   - 采用全或无（All-or-nothing）分析，即一种组合方案要么在全部情况下都是安全的，要么只要存在一个不安全的反例就被认为是不安全的；
+   - 加密并认证: $\mathsf{Mac}'_k(m) = (m, \mathsf{Mac}_k(m))$. *注：认证可能泄漏消息。*
+   - 先认证后加密: *注：加密不能阻止对密文篡改。*
+     1. $\mathsf{Trans}: 0 \to 00; 1 \to 10/01$; $\mathsf{Enc}'$ 采用CTR模式; $c = \mathsf{Enc}'(\mathsf{Trans}(m\| \mathsf{Mac}(m)))$.
+     2. 将 $c$ 的前两个比特翻转并且验证密文是否有效。$10/01 \to 01/10 \to 1$, $00 \to 11 \to \bot$.
+     3. 如果有效，消息的第一比特是1，否则是0； 
+     4. 对于任何MAC，这都不是CCA安全的；
+   - 先加密后认证: 解密: 如果 $\mathsf{Vrfy}(\cdot) = 1$， 那么 $\mathsf{Dec}(\cdot)$； 否则，输出 $\bot$。下面来证明。
 
 9. 构造AE/CCA安全的加密方案
 
@@ -68,11 +59,16 @@
 
 10. AE/CCA安全加密方案证明
 
-   - 定理：如果 $\Pi_E$ 是CPA安全的私钥加密方案并且 $\Pi_M$ 是一个安全的MAC，那么构造 $\Pi'$ 是CCA安全的。
-   - 证明：$\mathsf{VQ}$ （有效查询）: $\mathcal{A}$ 向预言机$\mathsf{Dec}'$提交一个新查询并且 $\mathsf{Vrfy}=1$。*注：VQ表示敌手向预言机查询可经过验证并解密。*
-   - $ \Pr[\mathsf{PrivK}^{\mathsf{cca}}_{\mathcal{A},\Pi'}(n)=1] \le \Pr[\mathsf{VQ}] + \Pr[\mathsf{PrivK}^{\mathsf{cca}}_{\mathcal{A},\Pi'}(n)=1 \land \overline{\mathsf{VQ}}] $
-   - 我们需要证明以下：
+    - 定理：如果 $\Pi_E$ 是CPA安全的私钥加密方案并且 $\Pi_M$ 是一个安全的MAC，那么构造 $\Pi'$ 是CCA安全的。
+
+    - 证明：$\mathsf{VQ}$ （有效查询）: $\mathcal{A}$ 向预言机$\mathsf{Dec}'$提交一个新查询并且 $\mathsf{Vrfy}=1$。*注：VQ表示敌手向预言机查询可经过验证并解密。*
+
+    - $ \Pr[\mathsf{PrivK}^{\mathsf{cca}}_{\mathcal{A},\Pi'}(n)=1] \le \Pr[\mathsf{VQ}] + \Pr[\mathsf{PrivK}^{\mathsf{cca}}_{\mathcal{A},\Pi'}(n)=1 \land \overline{\mathsf{VQ}}] $
+
+    - 我们需要证明以下：
+
       - $\Pr[\mathsf{VQ}]$ 是可忽略的；敌手无法利用解密预言机获得有效查询；
+
       - $\Pr[\mathsf{PrivK}^{\mathsf{cca}}_{\mathcal{A},\Pi'}(n)=1 \land \overline{\mathsf{VQ}}] \le \frac{1}{2} + \mathsf{negl}(n)$；在无法利用解密预言机时难以破解加密方案。
 
 11. 证明敌手无法利用解密预言机获得有效查询
@@ -99,30 +95,30 @@
 13. 认证加密理论与实践
 
     - 定理：$\Pi_E$ 是CPA安全的并且 $\Pi_M$ 是一个带有唯一标签的安全MAC（强安全MAC），那么由先加密后认证得到的 $\Pi'$ 是安全的。*注：强安全MAC是指一个消息只有一个有效标签*
-    - GCM (Galois/Counter Mode): 先CTR加密，然后 Galois MAC. (RFC4106/4543/5647/5288 on IPsec/SSH/TLS)
+    - GCM (Galois/Counter Mode): 先CTR加密，然后做 Galois MAC. (RFC4106/4543/5647/5288 on IPsec/SSH/TLS)
     - EAX: 先CTR 加密，然后 CMAC（Cipher-based MAC）。
     - 定理：先认证后加密方法是安全的，如果 $\Pi_E$ 是CTR模式或者CBC模式。
     - CCM (Counter with CBC-MAC): 先 CBC-MAC 后 CTR 加密。 (802.11i, RFC3610)
     - OCB (Offset Codebook Mode): 将MAC整合到加密中。 (是CCM, EAX的2倍快)
-    - 上述方案都支持 AEAD (A.E. with associated data): 部分是明文并且整个消息被认证。
+    - 上述方案都支持 AEAD (A.E. with associated data): 部分是明文并且整个消息被认证。这在实践中是很常用的，例如一个IP报文需要加密，但IP头部需要以明文方式传输。
 
 14. 安全消息传递补充
 
-    - 认证可能泄漏消息；
+    - 认证可能泄漏消息；*注：完整性不同于机密性*
     - 安全消息传递意味着CCA安全性，但反之未必；
     - 不同安全目标应该采用不同的密钥；否则，可能泄漏消息，例如 $\mathsf{Mac}_k(c)=\mathsf{Dec}_k(c)$。
     - 实现可能摧毁理论上的安全性：
-       - Padding Oracle 攻击（in TLS 1.0）: 解密返回两种类型错误: padding error, MAC error；敌手通过猜测来获得最后一字节，如果没有padding错误；参考之前在CCA部分学习的Padding Oracle攻击；
-       - 攻击非原子解密（in SSH Binary Packet Protocol）：解密时，分三步 (1)解密消息长度； (2)读取长度所的包数； (3) 检查MAC；敌手针对这种非原子解密过程，实施攻击分三步 (1)发送密文 $c$; (2)发送 $l$ 个包直到“MAC error”发生；(3)获得密文对应的明文 $l = \mathsf{Dec}(c)$。
+       - Padding Oracle 攻击（TLS 1.0）: 解密返回两种类型错误: padding error，MAC error；敌手通过猜测来获得最后一字节，如果没有padding错误；参考之前在CCA部分学习的Padding Oracle攻击；
+       - 攻击非原子解密（SSH Binary Packet Protocol）：解密时，分三步 (1)解密消息长度； (2)读取长度所的包数； (3) 检查MAC；敌手针对这种非原子解密过程，实施攻击分三步 (1)发送密文 $c$；(2)发送 $l$ 个包直到“MAC error”发生；(3)获得密文对应的明文 $l = \mathsf{Dec}(c)$。
 
 15. 确定性CPA安全（**Deterministic CPA Security**）
 
     - 应用：在加密数据库索引后，检索时需要加密明文来检索密文；在磁盘加密中，密文大小需要与明文一样大。
     - 确定性加密（Deterministic encryption）：相同的消息在相同密钥下被加密为相同的密文。问题：这样能实现CPA安全吗？
-    - 确定性CPA安全（Deterministic CPA Security）: 如果从来不用相同的密钥加密同一个消息两次，实现CPA安全，即密钥和消息对$\left<k,m\right>$ 是唯一的。
+    - 确定性CPA安全（Deterministic CPA Security）: 如果从来不用相同的密钥加密同一个消息两次，实现CPA安全，即密钥和消息对$\left<k,m\right>$ 是唯一的。*注：消息是可重复的，密钥也可重复，但同一密钥不能重复加密同一消息*
     - 确定性认证加密（Deterministic Authenticated Encryption，DAE）：与上面的概念类似。
     - 常见错误：在 CBC/CTR 模式中采用固定的$IV$。
-    - 敌手能够查询 $(m_{q1}, m_{q2})$ 并且得到 $(c_{q1}, c_{q2})$；然后输出明文：$ IV\oplus c_{q1} \oplus m_{q2}$ 并且期待密文： $c_{q2}$。
+    - 敌手能够查询 $(m_{q1}, m_{q2})$ 并且得到 $(c_{q1}, c_{q2})$；然后输出明文：$ IV\oplus c_{q1} \oplus m_{q2}$ 并且期待密文： $c_{q2}$。*注：第一个PRF的输入就是$ IV\oplus IV\oplus c_{q1} \oplus m_{q2} = c_{q1} \oplus m_{q2}$ *
 
 16. 合成初始向量法（**Synthetic** IV **(SIV)**）
 
@@ -166,7 +162,7 @@
 
 21. IV，Nonce，Counter，Tweak和Salt
 
-    - IV：密码学要件的输入，提供随机性。
+    - IV：密码学原语的输入，提供随机性。
     - nonce：用来标记一次通信的只使用一次的一个数。
     - counter：一个连续的数，用作nonce或IV。
     - tweak：在一个密码中对每个块只用一次的输入。
