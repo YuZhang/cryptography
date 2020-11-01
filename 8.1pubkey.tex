@@ -277,6 +277,21 @@ A public-key encryption scheme can be constructed from any trapdoor permutation.
 \end{center}
 \end{figure}
 \end{frame}
+\begin{frame}\frametitle{Families of Functions}
+\begin{figure}
+\begin{center}
+\input{tikz/owff}
+\end{center}
+\end{figure}
+\begin{definition}
+$\Pi = (\mathsf{Gen}, \mathsf{Samp}, f)$ is a \textbf{family of functions} if:
+\begin{enumerate}
+\item \textbf{Parameter-generation} algorithm: $I \gets \mathsf{Gen}(1^n)$.
+\item \textbf{sampling} algorithm: $x \gets \mathsf{Samp}(I)$.
+\item The deterministic \textbf{evaluation} algorithm: $y := f_I(x)$.
+\end{enumerate}
+\end{definition}
+\end{frame}
 \begin{frame}\frametitle{Definition of Families of Trapdoor Permutations}
 A tuple of polynomial-time algorithms $\Pi = (\mathsf{Gen}, \mathsf{Samp}, f, \mathsf{Inv})$ is a \textbf{family of trapdoor permutations (TDP)} if:
 \begin{itemize}
