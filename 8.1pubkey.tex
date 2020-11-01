@@ -453,20 +453,20 @@ Constructing a CCA2-secure scheme based on RSA problem as efficient as ``Textboo
 %\end{itemize}
 %\end{frame}
 \begin{frame}\frametitle{Simple Illustrations of ROM}
-A RO maps $n_1$-bit inputs to $n_2$-bit outputs.
+An RO maps $n_1$-bit inputs to $n_2$-bit outputs.
 \begin{itemize}
-\item A RO as a OWF, experiment:
+\item An RO as an OWF, experiment:
 \begin{enumerate}
 \item A random function $H$ is chosen
 \item A random $x \in \{0,1\}^{n_1}$ is chosen, and $y := H(x)$ is evaluated
 \item $\mathcal{A}$ is given $y$, and succeeds if it outputs $x'$: $H(x')=y$
 \end{enumerate}
-\item A RO as a CRHF, experiment:
+\item An RO as a CRHF, experiment:
 \begin{enumerate}
 \item A random function $H$ is chosen
 \item $\mathcal{A}$ succeeds if it outputs $x, x'$ with $H(x)=H(x')$ but $x\neq x'$
 \end{enumerate}
-\item Constructing a PRF from a RO: $n_1=2n$, $n_2=n$.
+\item Constructing a PRF from an RO: $n_1=2n$, $n_2=n$.
 $ F_k(x) \overset{\text{def}}{=} H(k\| x),\;\; \abs{k}=\abs{x}=n.$
 \end{itemize}
 \end{frame}
@@ -581,4 +581,21 @@ If $f$ is TDP, $G,H$ are ROs, Construction is CCA-secure.
 \end{tabular}	
 \end{center}
 \end{frame}
+
+\begin{frame}\frametitle{Key Size Comparison}
+NIST recommends the \textbf{key lengths} (in bits) with comparable security. NIST deems a 112-bit effective key length acceptable for security until the year 2030, but recommends 128-bit or higher key lengths for applications where security is required beyond then.
+\newline
+\begin{center}
+\begin{tabular}{|c|c|c|} \hline
+AES & RSA ($N$)/DH ($p$) & ECC (order $q$) \\ \hline	
+56 & 512 & 112 \\
+80 & 1024 & 160 \\
+112 & 2048 & 224 \\
+128 & 3072 & 256 \\
+192 & 7680 & 384 \\
+256 & 15360 & 521 \\ \hline	
+\end{tabular}	
+\end{center}
+\end{frame}
+
 \end{document}
