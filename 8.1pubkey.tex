@@ -492,7 +492,7 @@ $ F_k(x) \overset{\text{def}}{=} H(k\| x),\;\; \abs{k}=\abs{x}=n.$
 %\end{itemize}
 %\end{frame}
 \begin{frame}\frametitle{Security Against CPA}
-\textbf{Idea}: PubK CPA = PrivK CPA + (Secret Key = TDP + RO)
+\textbf{Idea}: PubK CPA = PrivK + (Secret Key = TDP + RO)
 \begin{columns}[t]
 \begin{column}{5cm}
 \begin{figure}[t]
@@ -593,7 +593,7 @@ AES & RSA ($N$)/DH ($p$) & ECC (order $q$) \\ \hline
 112 & 2048 & 224 \\
 128 & 3072 & 256 \\
 192 & 7680 & 384 \\
-256 & 15360 & 521 \\ \hline	
+256 & 15360 & 512 \\ \hline	
 \end{tabular}	
 \end{center}
 \end{frame}
