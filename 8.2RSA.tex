@@ -14,7 +14,7 @@
 \item \textbf{RSA}: Ron Rivest, Adi Shamir and Leonard Adleman, in 1977
 \item \textbf{RSA problem}: Given $N = pq$ (two distinct big prime numbers) and $y \in \mathbb{Z}^*_N$, compute $y^{-e}$, $e^{\text{th}}$-root of $y$ modulo $N$
 \item \alert{Open problem}:RSA problem is easier than factoring $N$?
-\item \textbf{Certification}: PKCS\#1 (RFC3447), ANSI X9.31, IEEE 1363
+\item \textbf{Standards}: PKCS\#1 (RFC3447/8017), ANSI X9.31, IEEE 1363
 \item \textbf{Key sizes}: 1,024 to 4,096 bit
 \item \textbf{Best public cryptanalysis}: a 768 bit key has been broken
 \item \textbf{RSA Challenge}: break RSA-2048 to win \$200,000 USD
@@ -123,12 +123,12 @@ $\mathbb{Z}_{15}^* = ?$ $\mathbb{Z}_{13}^* = ?$}
 %\[mg = m\cdot g \overset{\text{def}}{=} \underbrace{g+\cdots +g}_{m\; \text{times}}.\]
 \[ g^m \overset{\text{def}}{=} \underbrace{g\circ g\circ \cdots \circ g}_{m\; \text{times}}. \]
 \begin{theorem}
-$\mathbb{G}$ is a finite group. Then $\forall g \in \mathbb{G}, g^{\abs{\mathbb{G}}}=1$.
+Euler's theorem: $\mathbb{G}$ is a finite group. Then $\forall g \in \mathbb{G}, g^{\abs{\mathbb{G}}}=1$.
 \end{theorem}
-\begin{exampleblock}{Calculate all exponentiation of $3 \in \mathbb{Z}_{7}^*$}
+\begin{exampleblock}{alculate all exponentiation of $3 \in \mathbb{Z}_{7}^*$}
 \end{exampleblock}
 \begin{corollary}
-$\forall g \in \mathbb{G}$ and $i$, $g^i \equiv g^{[i \bmod {\abs{\mathbb{G}}}]}$.
+Fermat's little theorem: $\forall g \in \mathbb{G}$ and $i$, $g^i \equiv g^{[i \bmod {\abs{\mathbb{G}}}]}$.
 \end{corollary}
 \begin{exampleblock}{Calculate $3^{78} \in \mathbb{Z}_{7}^*$}
 \end{exampleblock}
@@ -160,7 +160,7 @@ Best (asymptotic) algorithm: about $O(n\log n)$.
 \BlankLine
 $y \gets g; z \gets 1$\;
 \For{$i = 0$ \KwTo $n$}{
-  \lIf{$x_i == 1$}{$z \gets z \times y$}\;
+  \lIf{$x_i == 1$}{$z \gets z \times y$}
   $y \gets y^2$\;
 }
 \Return $z$
@@ -306,13 +306,13 @@ $29 \leftrightarrow ([1 \bmod 5],[-1 \bmod 7])$, $[29^{100} \bmod 35] \leftright
 \For{$i = 1$ \KwTo $t$}{
   $p' \gets \{0,1\}^{n-1}$\;
   $p := 1\| p'$\;
-  \lIf{$p$ is prime}{\Return $p$}\;
+  \lIf{$p$ is prime}{\Return $p$}
 }
 \Return fail
 \end{algorithm}
 \begin{itemize}
 \item $\exists$ a constant $c$ such that, $\forall n>1$, a randomly selected $n$-bit number is prime with probability at least $c/n$.
-\item If $N$ is prime, then the Miller-Rabin test always outputs ``prime''. If $N$ is composite, then the algorithm outputs ``prime'' with probability at most $2^{-t}$.
+\item If $N$ is prime, then the Miller-Rabin primality test always outputs ``prime''. If $N$ is composite, then the algorithm outputs ``prime'' with probability at most $2^{-t}$.
 \end{itemize}
 \end{frame}
 \begin{frame}\frametitle{Generating RSA Problem}
@@ -421,7 +421,7 @@ If $1 \le m < \mathcal{L} = 2^{\ell}$, there is an attack that recovers $m$  in 
 \BlankLine
 
 \KwS $T := 2^{\alpha \ell}$ \tcc*[f]{$\frac{1}{2} < \text{constant}\; \alpha <1$}\;
-\lFor{$r=1$ \KwTo $T$}{$x_r := [c/r^e \bmod N]$}\;
+\lFor{$r=1$ \KwTo $T$}{$x_r := [c/r^e \bmod N]$}
 \KwT the pairs $\{ (r,x_r)\}^T_{r=1}$ by $x_r$\;
 \For{$s=1$ \KwTo $T$}{
 \If{$[s^e \bmod N] \overset{?}{=} x_r$ for some $r$}{
@@ -430,7 +430,7 @@ If $1 \le m < \mathcal{L} = 2^{\ell}$, there is an attack that recovers $m$  in 
 }
 \Return fail\;
 \end{algorithm}
-It can be shown that with good probability that $m=r\cdot s$:
+%It can be shown that with good probability that $m=r\cdot s$:
 \end{frame}
 %\end{comment}
 \begin{frame}\frametitle{Common Modulus Attacks}
@@ -444,7 +444,9 @@ Each user can find $\phi(N)$ with his own $e,d$, then find others' $d$.
 \textbf{Case II}: for the same message encrypted with two public keys.\\
 Assume $\gcd(e_1,e_2)=1$, $c_1 \equiv m^{e_1}$ and $c_2 \equiv m^{e_2} \pmod N$. $\exists X,Y$ such that $Xe_1 + Ye_2 = 1$\footnote{B\'{e}zout's lemma}.
 \[ c_1^X\cdot c_2^Y \equiv m^{Xe_1}m^{Ye_2} \equiv m^1 \pmod N.\]
-\begin{exampleblock}{$N = 15, e_{1} = 3, e_{2} = 5, c_{1} = 8, c_{2} = 2, m = ?$ } %m=2
+\begin{exampleblock}{An example of common modulus attack}
+$N = 15, e_{1} = 3, e_{2} = 5, c_{1} = 8, c_{2} = 2, m = ?$ 
+%m=2
 %X = 2, Y = -1, 8^{2} 2^{-1} = 2
 \end{exampleblock}
 \end{frame}
@@ -512,16 +514,20 @@ if the first 16 bits of message is not ``02'' which is standing for ``PKCK \#1''
 \end{comment}
 
 \begin{frame}\frametitle{PKCK \#1 v2.1 (RSAES-OAEP)}
-\textbf{Optimal Asymmetric Encryption Padding} (OAEP): encode $m$ of length $n/2$ as $\hat{m}$ of length $2n$. $G, H$ are \textbf{Random Oracles}.
-\[ \hat{m}_1 := G(r)\oplus (m\| \{0\}^{n/2}), \hat{m} := \hat{m}_1 \| (r \oplus H(\hat{m}_1)).\]
+\textbf{Optimal Asymmetric Encryption Padding} (OAEP): encode $m$ of length $n/2$ as $s\| t$ of length $2n$. $G, H$ are \textbf{Random Oracles}.
+%\[ \hat{m}_1 := G(r)\oplus (m\| \{0\}^{n/2}), \hat{m} := \hat{m}_1 \| (r \oplus H(\hat{m}_1)).\]
 \begin{figure}
 \begin{center}
 \input{tikz/OAEP}
 \end{center}
 \end{figure}
-\alert{Q: How to decipher?}
+\alert{Q: How to decipher?}\\
+RSA-OAEP is CCA-secure in Random Oracle model. \footnote{It may not be secure when RO is instantiated.} [RFC 3447] \\
+CPA: To learn $r$, attacker has to learn $s$ from $(s\| t)^e$\\
+CCA: Effective decryption query is disabled by checking "00...0" in the plaintext before the response\\
 \end{frame}
 
+\begin{comment}
 \begin{frame}\frametitle{PKCK \#1 v2.1 (RSAES-OAEP) (Cont.)}
 RSA-OAEP is CCA-secure in Random Oracle model. \footnote{It may not be secure when RO is instantiated.} [RFC 3447]
 \begin{figure}
@@ -534,7 +540,7 @@ CPA: To learn $r$, attacker has to learn $\hat{m}_1$ from $(\hat{m}_1\|\hat{m})^
 CCA: Effective decryption query is disabled by checking "00...0" in the plaintext before the response\\
 
 \end{frame}
-
+\end{comment}
 \begin{frame}\frametitle{OAEP Improvements}
 \begin{columns}
 \begin{column}{5cm}
