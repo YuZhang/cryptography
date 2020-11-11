@@ -20,8 +20,9 @@ $ \langle g \rangle \overset{\text{def}}{=} \{ g^0,g^1,\dotsc,\} = \{ g^0,g^1,\d
 \item Is $\mathbb{Z}_6^*$, $\mathbb{Z}_7^*$, or $\mathbb{Z}_8^*$ with `$\cdot$' cyclic? %{1, 5}
 \end{itemize}
 \end{exampleblock}
-\item $\langle g \rangle$ is a subgroup of $\mathbb{G}$, and $\abs{\langle g \rangle} \mid \abs{\mathbb{G}}$.
-\item If $p$ is prime, then $\mathbb{Z}^*_p$ is cyclic.
+\item \textbf{Lagrange's theorem}: $\langle g \rangle$ is a subgroup of $\mathbb{G}$, and $\abs{\langle g \rangle} \mid \abs{\mathbb{G}}$.
+\item For proof, see https://brilliant.org/wiki/lagranges-theorem/.
+%\item If $p$ is prime, then $\mathbb{Z}^*_p$ is cyclic.
 \end{itemize}
 \end{frame}
 %\begin{frame}\frametitle{Examples of Cyclic Groups}
@@ -34,10 +35,36 @@ $ \langle g \rangle \overset{\text{def}}{=} \{ g^0,g^1,\dotsc,\} = \{ g^0,g^1,\d
 %All cyclic groups of the same order are ``the same'' in an algebraic sense, but this is not true in a computational sense.
 %\end{alertblock}
 %\end{frame}
+\begin{frame}\frametitle{Discrete Logarithm}
+If $\mathbb{G}$ is a cyclic group of order $q$, then $\exists$ a generator $g \in \mathbb{G}$ such that $\{ g^0,g^1,\dotsc,g^{q-1}\} = \mathbb{G}$.
+\begin{itemize}
+\item $\forall h \in \mathbb{G}$, $\exists$ a unique $x \in \mathbb{Z}_q$ such that $g^x = h$.
+\item $x= \log_gh$ is the \textbf{\textbf{discrete logarithm} of $h$ with respect to $g$}.
+\item If $g^{x'}=h$, then $\log_gh = [x' \bmod q]$.
+\item $\log_g1=0$ and $\log_g(h_1\cdot h_2) = [(\log_gh_1+\log_gh_2) \bmod q]$.
+\end{itemize}
+\begin{exampleblock}{}
+Show an instance of DL problem in $\mathbb{Z}_{7}^{*}$
+\end{exampleblock}
+\end{frame}
+\begin{frame}\frametitle{Overview of Discrete Logarithm Algorithms}
+\begin{itemize}
+\item Given a generator $g \in \mathbb{G}$ and $y \in \langle g \rangle$, find $x$ such that $g^x=y$.
+\item \textbf{Brute force}: $\mathcal{O}(q)$, $q = \mathsf{ord}(g)$ is the order of $\langle g\rangle$.
+\item \textbf{Baby-step/giant-step} method [Shanks]: $\mathcal{O}(\sqrt{q}\cdot \mathsf{polylog}(q))$.
+\item \textbf{Pohlig-Hellman} algorithm: when $q$ has small factors.
+\item \textbf{Index calculus} method: $\mathcal{O}(\exp{(\sqrt{n\cdot \log n})})$.
+\item The best-known algorithm is the \textbf{general number field sieve} with time $\mathcal{O}(\exp(n^{1/3}\cdot(\log n)^{2/3}))$.
+\item Elliptic curve groups vs. $\mathbb{Z}_p^*$: more efficient for the honest parties, but that are equally hard for an adversary to break.\\ (Both 1024-bit $\mathbb{Z}_p^*$ and 132-bit elliptic curve need $2^{66}$ steps.)
+\end{itemize}
+\end{frame}
 \begin{frame}\frametitle{Using Prime-Order Groups}
 \begin{theorem}
  If $\mathbb{G}$ is of prime order, then $\mathbb{G}$ is cyclic. All $g \in \mathbb{G}$ except the identity are generators.
 \end{theorem}
+It is proved from Lagrange's theorem.	\newline \\
+
+Why using prime-order groups?
 \begin{itemize}
 \item The discrete logarithm problem is hardest in such groups.
 \item Finding a generator in such groups is trivial.
@@ -69,29 +96,7 @@ $g := x^2 \bmod p$\;
 \Return $p,q,g$
 \end{algorithm}
 \end{frame}
-\begin{frame}\frametitle{Discrete Logarithm}
-If $\mathbb{G}$ is a cyclic group of order $q$, then $\exists$ a generator $g \in \mathbb{G}$ such that $\{ g^0,g^1,\dotsc,g^{q-1}\} = \mathbb{G}$.
-\begin{itemize}
-\item $\forall h \in \mathbb{G}$, $\exists$ a unique $x \in \mathbb{Z}_q$ such that $g^x = h$.
-\item $x= \log_gh$ is the \textbf{\textbf{discrete logarithm} of $h$ with respect to $g$}.
-\item If $g^{x'}=h$, then $\log_gh = [x' \bmod q]$.
-\item $\log_g1=0$ and $\log_g(h_1\cdot h_2) = [(\log_gh_1+\log_gh_2) \bmod q]$.
-\end{itemize}
-\begin{exampleblock}{}
-Show an instance of DL problem in $\mathbb{Z}_{7}^{*}$
-\end{exampleblock}
-\end{frame}
-\begin{frame}\frametitle{Overview of Discrete Logarithm Algorithms}
-\begin{itemize}
-\item Given a generator $g \in \mathbb{G}$ and $y \in \langle g \rangle$, find $x$ such that $g^x=y$.
-\item \textbf{Brute force}: $\mathcal{O}(q)$, $q = \mathsf{ord}(g)$ is the order of $\langle g\rangle$.
-\item \textbf{Baby-step/giant-step} method [Shanks]: $\mathcal{O}(\sqrt{q}\cdot \mathsf{polylog}(q))$.
-\item \textbf{Pohlig-Hellman} algorithm: when $q$ has small factors.
-\item \textbf{Index calculus} method: $\mathcal{O}(\exp{(\sqrt{n\cdot \log n})})$.
-\item The best-known algorithm is the \textbf{general number field sieve} with time $\mathcal{O}(\exp(n^{1/3}\cdot(\log n)^{2/3}))$.
-\item Elliptic curve groups vs. $\mathbb{Z}_p^*$: more efficient for the honest parties, but that are equally hard for an adversary to break.\\ (Both 1024-bit $\mathbb{Z}_p^*$ and 132-bit elliptic curve need $2^{66}$ steps.)
-\end{itemize}
-\end{frame}
+
 \begin{comment}
 \begin{frame}\frametitle{The Baby-Step/Giant-Step Algorithm}
 \begin{figure}
@@ -332,13 +337,14 @@ Return $[(x_1-x'_1)\cdot (x'_2-x_2)^{-1} \bmod q]$.
 \section{The Elgamal Encryption Scheme}
 \begin{frame}\frametitle{Lemma on Perfectly-secret Private-key Encryption}
 \begin{lemma}\label{lem:ps}
-$\mathbb{G}$ is a finite group and $m\in \mathbb{G}$ is an arbitrary element. Then choosing random $g \gets \mathbb{G}$ and setting $g' := m\cdot g$ gives the same distribution for $g'$ as choosing random $g' \gets \mathbb{G}$. I.e, $\forall \hat{g} \in \mathbb{G}$:
-\[ \Pr[m\cdot g = \hat{g}] = 1/\abs{\mathbb{G}}. \]
+$\mathbb{G}$ is a finite group and $m\in \mathbb{G}$ is an arbitrary element. Then choosing random $k \gets \mathbb{G}$ and setting $c := k\cdot m$ gives the same distribution for $c$ as choosing random $c \gets \mathbb{G}$. I.e, $\forall g \in \mathbb{G}$:
+\[ \Pr[k\cdot m = g] = 1/\abs{\mathbb{G}}. \]
+where the probability is taken over uniform choice of $k \in \mathbb{G}.$
 \end{lemma}
 \begin{proof}
-Let $\hat{g} \in \mathbb{G}$ be arbitrary, then
-\[\Pr[m\cdot g = \hat{g}] = \Pr[g = m^{-1}\cdot \hat{g}]. \]
-Since $g$ is chosen \emph{u.a.r}, the probability that $g$ is equal to the fixed element $m^{-1}\cdot \hat{g}$ is exactly $1/\abs{\mathbb{G}}$.
+Let $g \in \mathbb{G}$ be arbitrary, then
+\[\Pr[k\cdot m = g] = \Pr[k = g\cdot m^{-1}]. \]
+Since $k$ is chosen \emph{u.a.r}, the probability that $k$ is equal to the fixed element $g\cdot m^{-1}$ is exactly $1/\abs{\mathbb{G}}$.
 \end{proof}
 \end{frame}
 \begin{frame}\frametitle{The Elgamal Encryption Scheme}
