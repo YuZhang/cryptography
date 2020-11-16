@@ -38,7 +38,7 @@
 \item \textbf{Basic correctness requirement}: $\mathsf{Vrfy}_{pk}(m,\mathsf{Sign}_{sk}(m)) = 1$.
 \end{itemize}
 \end{frame}
-\begin{frame}\frametitle{Defining of Signature Security}
+\begin{frame}\frametitle{Defining Signature Security}
 The signature experiment $\mathsf{Sigforge}_{\mathcal{A},\Pi }(n)$:
 \begin{enumerate}
 \item $(pk,sk) \gets \mathsf{Gen}(1^n)$.
@@ -98,7 +98,7 @@ $\Pi = (\mathsf{Gen}_S, \mathsf{Sign}, \mathsf{Vrfy})$, $\Pi_H = (\mathsf{Gen}_H
 If $\Pi$ is existentially unforgeable under an adaptive CMA and $\Pi_H$ is collision resistant, then Construction is existentially unforgeable under an adaptive CMA.
 \end{theorem}
 \end{frame}
-%\begin{comment}
+\begin{comment}
 \begin{frame}\frametitle{Proof of Security of ``Hash-and-Sign'' Paradigm}
 \textbf{Idea}: a forgery must involve either finding a collision in $H$ or forging a signature with respect to $\Pi$.
 \begin{proof}
@@ -130,7 +130,7 @@ Reduce $\mathcal{A}$ for $\Pi$ to $\mathcal{A}'$.
 \end{figure}
 $\Pr[\mathsf{SF} \land \overline{\mathsf{coll}}] = \Pr[\mathsf{Sigforge}_{\mathcal{A},\Pi}(n)=1]$.
 \end{frame}
-%\end{comment}
+\end{comment}
 
 \section{Digital Signature from the Discrete-Log Problem}
 
@@ -158,27 +158,6 @@ An identification scheme $\Pi = (\mathsf{Gen}, \mathcal{P}_1, \mathcal{P}_2, \ma
 \end{definition}
 \end{frame}
 
-\begin{frame}\frametitle{The Fiat-Shamir Transform}
-The Fiat-Shamir transform  constructs a (non-interactive) signature scheme by letting the signer run the protocol by itself.
-\begin{construction}
-Let $\Pi = (\mathsf{Gen}_{\mathsf{id}}, \mathcal{P}_1, \mathcal{P}_2, \mathcal{V})$ be an identification scheme.
-\begin{itemize}
-\item $\mathsf{Gen}$: $(pk, sk) \gets \mathsf{Gen}_{\mathsf{id}}$. A function $H : \{0,1\}^* \to \Omega_{pk}$ (a set of challenges).
-\item $\mathsf{Sign}$: On input $sk$ and $m \in \{0,1\}^*$, do
-\begin{enumerate}
-\item Compute $(I, \mathsf{st}) \gets \mathcal{P}_1(sk)$
-\item Compute $r := H(I, m)$
-\item Compute $s := \mathcal{P}_2(sk, \mathsf{st}, r)$
-\end{enumerate}
-Outpus the signature $r, s$.
-\item $\mathsf{Vrfy}$: $I := \mathcal{V}(pk, r, s)$. Output $1 \iff H(I, m) \overset{?}{=} r.$
-\end{itemize}
-\end{construction}
-\begin{theorem}
-If $\Pi$ is a secure identification scheme and $H$ is a random oracle, then the Fiat-Shamir transform results a secure signature scheme.
-\end{theorem}
-\end{frame}
-
 \begin{frame}\frametitle{The Schnorr Identification Scheme}
 \begin{figure}
 \begin{center}
@@ -201,6 +180,27 @@ Reduce $\mathcal{A}'$ inverting $y$ to $\mathcal{A}$ attacking the Schnorr  sche
 \item If $g^{s_1} \cdot h^{-r_1} = I$ and $g^{s_2} \cdot h^{-r_2} = I$ and $r_1 \neq r_2$ then output $x = [ (s_1 - s_2)\cdot (r_1 - r_2)^{-1} \mod q]$. Else, output nothing.
 \end{enumerate}
 \end{proof}
+\end{frame}
+
+\begin{frame}\frametitle{The Fiat-Shamir Transform}
+The Fiat-Shamir transform  constructs a (non-interactive) signature scheme by letting the signer run the protocol by itself.
+\begin{construction}
+Let $\Pi = (\mathsf{Gen}_{\mathsf{id}}, \mathcal{P}_1, \mathcal{P}_2, \mathcal{V})$ be an identification scheme.
+\begin{itemize}
+\item $\mathsf{Gen}$: $(pk, sk) \gets \mathsf{Gen}_{\mathsf{id}}$. A function $H : \{0,1\}^* \to \Omega_{pk}$ (a set of challenges).
+\item $\mathsf{Sign}$: On input $sk$ and $m \in \{0,1\}^*$, do
+\begin{enumerate}
+\item Compute $(I, \mathsf{st}) \gets \mathcal{P}_1(sk)$
+\item Compute $r := H(I, m)$
+\item Compute $s := \mathcal{P}_2(sk, \mathsf{st}, r)$
+\end{enumerate}
+Outpus the signature $r, s$.
+\item $\mathsf{Vrfy}$: $I := \mathcal{V}(pk, r, s)$. Output $1 \iff H(I, m) \overset{?}{=} r.$
+\end{itemize}
+\end{construction}
+\begin{theorem}
+If $\Pi$ is a secure identification scheme and $H$ is a random oracle, then the Fiat-Shamir transform results a secure signature scheme.
+\end{theorem}
 \end{frame}
 
 \begin{frame}\frametitle{The Schnorr Signature Scheme}
