@@ -172,7 +172,7 @@ If the discrete-log problem is hard, then the Schnorr identification scheme is s
 \begin{frame}\frametitle{Proof of the Schnorr Identification Scheme}
 \textbf{Idea}: If the attacker can let $g^s \cdot y^{-r} = I$, then the attacker can compute $x$.
 \begin{proof}
-Reduce $\mathcal{A}'$ inverting $y$ to $\mathcal{A}$ attacking the Schnorr  scheme:
+Reduce $\mathcal{A}'$ inverting $y$ to $\mathcal{A}$ attacking the Schnorr scheme:
 \begin{enumerate}
 \item $\mathcal{A}'$ as a verifier, answering all queries, runs $\mathcal{A}$ as a prover.
 \item When $\mathcal{A}$ outputs $I$, $\mathcal{A}'$ choose $r_1 \in \mathbb{Z}_q$ and give it to $\mathcal{A}$, who responds with $s_1$.
@@ -220,33 +220,42 @@ Outpus the signature $(r, s)$.
 \end{frame}
 
 \begin{frame}\frametitle{DSS/DSA}
-DSS (Digital Signature Standard) uses Digital Signature Algorithm (DSA, a variant of ElGamal signature scheme). [FIPS 186]
+NIST published DSS (Digital Signature Standard) which uses Digital Signature Algorithm (DSA, a variant of ElGamal signature scheme), Elliptic Curve Digital Signature Algorithm (ECDSA), and RSA Signature Algorithm.
 \begin{construction}
-$\mathcal{G}$ outputs $(p,q,g)$: (1) $p$ and $q$ are primes with $\|q\| =n$;\\
-(2) $q|(p-1)$ but $q^2 \nmid (p-1)$;\\
-(3) $g$ is a generator of the subgroup of $\mathbb{Z}^*_p$ of order $q$.
 \begin{itemize}
-\item $\mathsf{Gen}$: $(p,q,g) \gets \mathcal{G}$. hash function $H : \{0,1\}^* \to \mathbb{Z}_q$. \\
-$x \gets \mathbb{Z}_q$ and $y:= [g^x \bmod p]$.\\
-$pk = \langle H,p,q,g,y\rangle$. $sk=\langle H,p,q,g,x\rangle$.
-\item $\mathsf{Sign}$: $k\gets \mathbb{Z}^*_q$ and $r:= [[g^k \bmod p] \bmod q]$, $s:= [(H(m)+xr)\cdot k^{-1} \bmod q]$. Output $(r,s)$.
-\item $\mathsf{Vrfy}$: $u_1 := [H(m)\cdot s^{-1} \bmod q]$, $u_2 := [r\cdot s^{-1} \bmod q]$. Output $1 \iff r \overset{?}{=} [[g^{u_1}y^{u_2} \bmod p]\bmod q].$
+\item $\mathsf{Gen}$: $(\mathbb{G},q,g) \gets \mathcal{G}$. Two hash functions $H, F : \{0,1\}^* \to \mathbb{Z}_q$. \\
+$x \gets \mathbb{Z}_q$ and $y:= g^x $.\\
+$pk = \langle \mathbb{G},q,g,y,H,F\rangle$. $sk=\langle \mathbb{G},q,g,x,H,F\rangle$.
+\item $\mathsf{Sign}$: $k\gets \mathbb{Z}^*_q$ and $r:= F(g^k) $, $s:= (H(m)+xr)\cdot k^{-1}$. Output $(r,s)$.
+\item $\mathsf{Vrfy}$: Output $1 \iff r \overset{?}{=} F(g^{H(m)\cdot s^{-1}}y^{r\cdot s^{-1}}).$
 \end{itemize}
 \end{construction}
+\alert{Q: Is the verification correct?}
 \end{frame}
-
-\begin{frame}\frametitle{Correctness and Security of DSS/DSA}
+\begin{comment}
 \[r = [[g^k \bmod p] \bmod q]\; \text{and}\; s= [(\hat{m}+xr)\cdot k^{-1} \bmod q],\; \hat{m}=H(m). \]
 \begin{align*}g^{\hat{m}s^{-1}}y^{rs^{-1}} &= g^{\hat{m}\cdot (\hat{m}+xr)^{-1}k}g^{xr\cdot (\hat{m}+xr)^{-1}k} \pmod p \\
 	&= g^{(\hat{m}+xr)\cdot (\hat{m}+xr)^{-1}k} \pmod p \\  
 	&= g^k \pmod p.
 	\end{align*}
 \[ [[g^k \bmod p] \bmod q] = r.\]
-Security of DSS relies on the hardness of discrete log problem.\\
-The entropy, secrecy and uniqueness of $k$ is critical.
+\end{comment}
+
+
+\begin{frame}\frametitle{Security of DSS/DSA}
 \begin{alertblock}{Insecurity}
-No proof of security for DSS based on discrete log assumption.
+Security of DSS relies on the hardness of discrete log problem. But NO proof of security for DSS based on discrete log assumption.
 \end{alertblock}
+
+\begin{exampleblock}{The entropy, secrecy and uniqueness of $k$ is critical.}
+\begin{itemize}
+\item Case I: If $k$ is predictable, then $x$ leaks, since $s:= [(H(m)+xr)\cdot k^{-1} \bmod q]$, and only $x$ is known;
+\item Case II: If the same $k$ is ever used to generate two different signatures under the same $x$, then both $k$ and $x$ leaks.\\
+\alert{Q: how?} \\
+
+This attack has been used to learn the private key of the Sony PlayStation (PS3) in 2010.
+\end{itemize}
+\end{exampleblock}
 \end{frame}
 
 \section{One-Time Signature Scheme}
@@ -264,7 +273,7 @@ A signature scheme $\Pi$ is \textbf{existentially unforgeable under a single-mes
 \]
 \end{definition}
 \end{frame}
-\begin{frame}\frametitle{Lamport's OTS}
+\begin{frame}\frametitle{Lamport's OTS (1979)}
 \textbf{Idea}: OTS from OWF; one mapping per bit.
 \begin{construction}
 $f$ is a one-way function.
@@ -341,7 +350,7 @@ The signature is $(pk_{i+1},\sigma_i,\{m_j,pk_{j+1},\sigma_j\}^{i-1}_{j=1})$.\\
 \textbf{Weakness}: stateful, not efficient, revealing all previous messages.
 \end{frame}
 \begin{frame}\frametitle{``Tree-Based'' Signatures}
-\textbf{Idea}: generate a chain of keys for each message and sign the key chain.
+\textbf{Idea}: generate a chain of keys for each message and sign the chain.
 \begin{figure}
 \begin{center}
 \input{tikz/tree-sig}
@@ -412,6 +421,7 @@ If OWF exists, then $\exists$ (stateless) secure signature scheme.
 \end{center}
 \end{figure}
 \[\text{\bf Certificates}\;\; \mathsf{cert}_{C\to B} \overset{\text{def}}{=} \mathsf{Sign}_{sk_C}(\text{`Bob's key is } pk_B\text{'}).\]
+\alert{How Alice learn CA's key? How CA learn Bob's key?}
 \end{frame}
 \begin{frame}\frametitle{Public-Key Infrastructure (PKI)}
 \begin{itemize}
