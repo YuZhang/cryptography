@@ -457,6 +457,18 @@ If OWF exists, then $\exists$ (stateless) secure signature scheme.
 \textbf{Cumulated Revocation}: CA generates \emph{certificate revocation list} (CRL) containing the serial numbers of all revoked certificates, signs CRL with the current date. 
 \end{itemize}
 \end{frame}
+\begin{frame}\frametitle{Signcryption}
+\begin{exampleblock}{Signcryption: which scheme is secure?}
+In a group, each has two pairs of keys: $(ek, dk)$ for enc, and $(vk, sk)$ for sig. And all public keys are distributed to everyone. How a sender $S$ and a receiver $R$ should do to secure privacy and authenticity?
+\begin{itemize}
+\item Enc-then-Auth I: send $\left< S, c \leftarrow \mathsf{Enc}_{ek_R}(m), \mathsf{Sign}_{sk_S}(c) \right>$
+\item Auth-then-Enc I: $\sigma \leftarrow \mathsf{Sign}_{sk_S}(m)$, send $\left< S, \mathsf{Enc}_{ek_R}(m\| \sigma) \right>$
+\item Auth-then-Enc II: $\sigma \leftarrow \mathsf{Sign}_{sk_S}(m \| R)$, send $\left< S, \mathsf{Enc}_{ek_R}(S\| m \| \sigma) \right>$
+\item Any other method?
+\end{itemize}
+\end{exampleblock}
+\end{frame}
+
 \begin{frame}\frametitle{Summary}
 \begin{itemize}
 \item Textbook RSA, Hashed RSA, Hash-and-Sign
