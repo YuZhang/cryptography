@@ -80,7 +80,30 @@ Also called \textbf{bucket-brigade attack}: A form of active eavesdropping in wh
 \end{center}
 \end{figure}
 \end{frame}
-\section{Blind/Group Signature}
+\section{Pairing and Identity-Based Encryption}
+\begin{frame}\frametitle{Bilinear Maps}
+\begin{itemize}
+\item Two cyclic groups: $G_1$ with $+$ and generator $P$, $G_2$ with $\times$.
+\item \textbf{Bilinear map} $e: G_1 \times G_1 \to G_2$ with $e(aP, bP)=e(P,P)^{ab}$. 
+\item \textbf{Theorem}: When $e$ is efficient, the Decisional Diffie-Helman is easy in $G_1$, as $e(aP, bP) = e(P, P)^{ab} = e(P, abP)$.
+\item The Weil and Tate pairings are bilinear maps. $G_1$ is an elliptic-curve group and $G_2$ is a finite field.
+\item Recall Jounx's one-round, 3-party key agreement protocol, where
+Alice computes the key $e(bP, cP)^a = e(P, P)^{abc}$.
+\item \textbf{Bilinear Diffie-Helman (BDH) Assumption}: computing $e(P, P)^{abc}$ is hard given $\left<P, aP, bP, cP \right>$.
+\item \textbf{Theorem}: Given BDH assumption, Jounx's is secure.
+\end{itemize}
+\end{frame}
+\begin{frame}\frametitle{Identity-Based Encryption}
+\begin{itemize}
+\item \textbf{IBE}: Anyone can directly use receiver's ID ($A$) as the pubic key with help of a TTP, aka KGC (Key Generation Center). The receiver obtains its private key from KGC.
+\item \textbf{KGC} generates a global public key $pk = sP$ and $sk = s$.
+\item \textbf{Enc}: $\mathsf{Enc}(sP, A, m) = \left< rP, m\oplus H_2(e(H_1(A), sP)^r)\right>$, where $r$ is a random string, $H_1$ and $H_2$ are random oracles.
+\item \textbf{Dec}: The receiver obtains its private key $d_{A} = sH_1(A)$ from KGC. 
+ $\mathsf{Dec}(d_{A}, u, v) = v \oplus H_2(e(d_A, u)).$ \\
+ $e(d_A, u) = e(sH_1(A), rP) = e(H_1(A), P)^{sr} = e(H_1(A), sP)^r$.
+\end{itemize}
+\end{frame}
+\section{Blind/Group/Ring Signatures}
 \begin{frame}\frametitle{Blind Signature}
 \textbf{Blind signature} is a form of digital signature in which the message is blinded before it is signed.\\
 Alice asks for Signer to sign $m$ blindly and then sends to Bob
@@ -108,16 +131,16 @@ Alice asks for Signer to sign $m$ blindly and then sends to Bob
 \item \textbf{Verify}: try all of public keys
 \end{itemize}
 \end{frame}
-\begin{comment}
+%\begin{comment}
 \begin{frame}\frametitle{Ring Signature}
 \textbf{Ring Signature}: Group signature without group manager, and:
 \begin{itemize}
 \item cannot revoke the anonymity of an individual signature
 \item any group of users can be a group without additional setup
 \end{itemize}
-\textbf{A ring signature by Boneh et al. 2003}:\\
-$q-$order cyclic groups: $G_1$ with $+$ and generator $P$, $G_2$ with $\times$, bilinear map $e: G_1 \times G_1 \to G_2$ such that $e(aP, bP)=e(P,P)^{ab}$, 
-hash function $H: \{0,1\}^* \to G_1$.
+\textbf{A ring signature based on bilinear map by Boneh et al. 2003}:\\
+%$q-$order cyclic groups: $G_1$ with $+$ and generator $P$, $G_2$ with $\times$, bilinear map $e: G_1 \times G_1 \to G_2$ such that $e(aP, bP)=e(P,P)^{ab}$, 
+%hash function $H: \{0,1\}^* \to G_1$.
 \begin{itemize}
 \item \textbf{KeyGen}: for member $U_i$: $sk=x_i \gets Z_q, pk = Y_i = x_iP$.
 \item \textbf{Sign}: message $m$ with $(\sigma_i), i=1,\cdots, n$ by $U_k$:
@@ -126,7 +149,7 @@ hash function $H: \{0,1\}^* \to G_1$.
 \[ e(H(m),P) = \Pi_ie(Y_i, \sigma_i) \]
 \end{itemize}
 \end{frame}
-\end{comment}
+%\end{comment}
 \section{Secret Sharing/Threshold Crytpography}
 \begin{frame}\frametitle{Secret Sharing}
 \textbf{Purpose}: distribute a secret amongst a group of $n$ participants, each of whom is allocated a share of the secret. The secret can be reconstructed only when a sufficient number of shares $t$ are combined together. It is called $(t, n)$-\textbf{threshold scheme}.
@@ -195,7 +218,7 @@ Alice {\color{red} \LARGE \Ladiesroom} proves to Bob {\color{blue} \LARGE \Gents
 \end{figure}
 \end{frame}
 \begin{frame}\frametitle{Schnorr Protocol}
-\textbf{Schnorr protocol}: Alice proves to Bob the knowledge of $x=\log_gy$ in the discrete log problem
+We have learned a ZKP as an identification scheme. Recall \textbf{Schnorr protocol}: Alice proves to Bob the knowledge of $x=\log_gy$ in the discrete log problem.
 \begin{figure}
 \begin{center}
 \input{tikz/schnorr}
@@ -232,7 +255,7 @@ If $y \neq \pm x$, then Bob can factorize $N$ with $\gcd(y-x,N)$ and find $d$. S
 \end{center}
 \end{figure}
 \end{frame}
-\section{Secure Multi-Party Computation}
+\section{Secure Multi-Party Computation and Homomorphic Enc.}
 \begin{frame}\frametitle{Secure Multi-Party Computation}
 \textbf{Secure multi-party computation (MPC)}: enable parties to jointly compute a function over their inputs, while at the same time keeping these inputs private\\
 \textbf{Dining Cryptographers Problem}: how to perform a secure MPC of the boolean-OR function
@@ -253,6 +276,17 @@ If $y \neq \pm x$, then Bob can factorize $N$ with $\gcd(y-x,N)$ and find $d$. S
 \end{itemize}
 \end{column}
 \end{columns}
+\end{frame}
+\begin{frame}\frametitle{Homomorphic Encryption}
+\begin{itemize}
+\item \textbf{Homomorphic Encryption} with $\circ$: $\mathsf{Dec}_{sk}(c_1\circ c_2)=m_1\circ m_2$.
+\item Elgamal encryption is homomorphic with $\times$: $\left<g^{y_1},h^{y_1}\cdot m_1\right>\cdot \left<g^{y_2},h^{y_2}\cdot m_2\right> = \left<g^{y_1+y_2},h^{y_1+y_2}\cdot m_1m_2\right>$
+\item Paillier scheme is homomorphic with $+$: $\mathsf{Enc}_N(m_1) \cdot \mathsf{Enc}_N(m_2) = \mathsf{Enc}_N([m_1+m_2 \bmod N])$.
+\item \textbf{Application}: voting without learning any individual votes.
+\[c_i := [(1+N)^{v_i}\cdot r^N \bmod N^2], v_i \in \{0,1\}\]
+\[c^* := [\Pi_{i} c_i \bmod N^2], v^* = \Sigma_{i} v_i \]
+\item First \textbf{Fully} homomorphic with $\times$ and $+$ by Craig Gentry in 2009.
+\end{itemize}
 \end{frame}
 \section{Quantum Cryptography}
 \begin{frame}\frametitle{Why Quantum Cryptography?}
@@ -299,17 +333,7 @@ Shared secret key & \verb#0 1  0 1# \\ \hline
 \end{frame}
 
 \begin{frame}\frametitle{Summary}
-\begin{itemize}
-\item SSL/TLS handshaking
-\item Shamir three-pass protocol
-\item interlock protocol, man-in-the-middle attack
-\item blind/group/ring signature
-\item secret sharing, threshold cryptography
-\item commitment scheme
-\item zero knowledge proofs, Schnorr protocol
-\item Rabin's/1-out-of-2 oblivious transfer
-\item multi-party computation, dining cryptographers problem
-\item quantum cryptography, BB84
-\end{itemize}
+One of Clarke’s three laws: \it{Any sufficiently advanced technology is indistinguishable from magic.}
+
 \end{frame}
 \end{document}
