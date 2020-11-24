@@ -232,6 +232,7 @@ $pk = \langle \mathbb{G},q,g,y,H,F\rangle$. $sk=\langle \mathbb{G},q,g,x,H,F\ran
 \end{construction}
 \alert{Q: Is the verification correct?}
 \end{frame}
+
 \begin{comment}
 \[r = [[g^k \bmod p] \bmod q]\; \text{and}\; s= [(\hat{m}+xr)\cdot k^{-1} \bmod q],\; \hat{m}=H(m). \]
 \begin{align*}g^{\hat{m}s^{-1}}y^{rs^{-1}} &= g^{\hat{m}\cdot (\hat{m}+xr)^{-1}k}g^{xr\cdot (\hat{m}+xr)^{-1}k} \pmod p \\
@@ -249,8 +250,8 @@ Security of DSS relies on the hardness of discrete log problem. But NO proof of 
 
 \begin{exampleblock}{The entropy, secrecy and uniqueness of $k$ is critical.}
 \begin{itemize}
-\item Case I: If $k$ is predictable, then $x$ leaks, since $s:= [(H(m)+xr)\cdot k^{-1} \bmod q]$, and only $x$ is known;
-\item Case II: If the same $k$ is ever used to generate two different signatures under the same $x$, then both $k$ and $x$ leaks.\\
+\item Case I: If $k$ is predictable, then $x$ leaks, since $s:= [(H(m)+xr)\cdot k^{-1} \bmod q]$, and only $x$ is unknown;
+\item Case II: If the same $k$ is ever used to generate two different signatures under the same $x$, then both $k$ and $x$ leaks under two signatures.\\
 \alert{Q: how?} \\
 
 This attack has been used to learn the private key of the Sony PlayStation (PS3) in 2010.
@@ -459,11 +460,11 @@ If OWF exists, then $\exists$ (stateless) secure signature scheme.
 \end{frame}
 \begin{frame}\frametitle{Signcryption}
 \begin{exampleblock}{Signcryption: which scheme is secure?}
-In a group, each has two pairs of keys: $(ek, dk)$ for enc, and $(vk, sk)$ for sig. And all public keys are distributed to everyone. How a sender $S$ and a receiver $R$ should do to secure privacy and authenticity?
+In a group, each has two pairs of keys: $(ek, dk)$ for enc, and $(vk, sk)$ for sig. And all public keys are distributed to everyone. How a sender $S$ and a receiver $R$ should do to secure both privacy (no other learns $m$ except $S$ and $R$) and authenticity ($R$ is sure about the message is sent from $S$)?
 \begin{itemize}
-\item Enc-then-Auth I: send $\left< S, c \leftarrow \mathsf{Enc}_{ek_R}(m), \mathsf{Sign}_{sk_S}(c) \right>$
-\item Auth-then-Enc I: $\sigma \leftarrow \mathsf{Sign}_{sk_S}(m)$, send $\left< S, \mathsf{Enc}_{ek_R}(m\| \sigma) \right>$
-\item Auth-then-Enc II: $\sigma \leftarrow \mathsf{Sign}_{sk_S}(m \| R)$, send $\left< S, \mathsf{Enc}_{ek_R}(S\| m \| \sigma) \right>$
+\item Enc-then-Auth (1): send $\left< S, c \leftarrow \mathsf{Enc}_{ek_R}(m), \mathsf{Sign}_{sk_S}(c) \right>$
+\item Auth-then-Enc (1): $\sigma \leftarrow \mathsf{Sign}_{sk_S}(m)$, send $\left< S, \mathsf{Enc}_{ek_R}(m\| \sigma) \right>$
+\item Auth-then-Enc (2): $\sigma \leftarrow \mathsf{Sign}_{sk_S}(m \| R)$, send $\left< S, \mathsf{Enc}_{ek_R}(S\| m \| \sigma) \right>$
 \item Any other method?
 \end{itemize}
 \end{exampleblock}
@@ -474,7 +475,7 @@ In a group, each has two pairs of keys: $(ek, dk)$ for enc, and $(vk, sk)$ for s
 \item Textbook RSA, Hashed RSA, Hash-and-Sign
 \item Identification, Fiat-Shamir Transform, Schnorr Signature, DSS/DSA
 \item Lamport's OTS, Stateful/Chain-based/Tree-based/Stateless Signature
-\item Certificates, PKI, CA, Web-of-trust, Invalidation
+\item Certificates, PKI, CA, Web-of-trust, Revocation, Signcryption
 \end{itemize}
 \end{frame}
 \end{document}
