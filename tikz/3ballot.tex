@@ -1,0 +1,15 @@
+\begin{tikzpicture}[scale=0.7, every node/.style={scale=0.7}]
+\foreach \n in {0, 1} {
+\foreach \x in {1, 2, 3} {
+\node (f\n\x) at ($\x*(2cm,0) + \n*(7cm,0)$) [minimum width=2cm, minimum height=2.5cm, align=left, draw] {Alice\\ Bob\\ Charlie\\[2ex] ID\pgfmathparse{random(1000,9000)}\pgfmathresult};
+	\foreach \y in {1, 2, 3} {
+	\filldraw [draw=black,fill=white] ($\x*(2cm,0) + (0.7cm,1.4cm) - \y*(0,0.5cm) + \n*(7cm,0)$) circle (4pt);
+	}
+} }
+\filldraw [black] ($3*(2cm,0) + (0.7cm,1.4cm) - 1*(0,0.5cm) + 1*(7cm,0)$) circle (4pt);
+\filldraw [black] ($1*(2cm,0) + (0.7cm,1.4cm) - 2*(0,0.5cm) + 1*(7cm,0)$) circle (4pt);
+\filldraw [black] ($2*(2cm,0) + (0.7cm,1.4cm) - 2*(0,0.5cm) + 1*(7cm,0)$) circle (4pt);
+\filldraw [black] ($2*(2cm,0) + (0.7cm,1.4cm) - 3*(0,0.5cm) + 1*(7cm,0)$) circle (4pt);
+\node [below of=f02, node distance=1.6cm] {Empty ballots};
+\node [below of=f12, node distance=1.6cm] {Vote for Bob};
+\end{tikzpicture}

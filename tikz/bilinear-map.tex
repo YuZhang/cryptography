@@ -1,0 +1,44 @@
+\begin{tikzpicture}
+\node (g1) at (-0.5,0.17) [ellipse,minimum width=4cm,minimum height=1.5cm,draw] {};
+\node (g1n) [left of=g1, node distance=2.5cm] {$G_1$};
+%\node (p) at (-2,0) [circle, minimum size=0.1cm] {\tiny $P$};
+\fill (-2,0) circle (2pt) node (p) [above] {$P$};
+\fill (-1,0) circle (2pt) node (abp) [above] {$abP$};
+
+%\node (ap) at (-1,0) [circle,minimum size=0.1cm] {\tiny $aP$};
+\fill (0,0) circle (2pt) node (ap) [above] {$aP$};
+
+%\node (bp) at (0,0) [circle, minimum size=0.1cm] {\tiny $bP$};
+\fill (1,0) circle (2pt) node (bp) [above] {$bP$};
+
+%\node (abp) at (1,0) [circle, minimum size=0.1cm] {\tiny $abP$};
+
+\node (g2) at (-0.5,-2) [ellipse,minimum width=4cm,minimum height=1cm,draw] {};
+\node (g2n) [left of=g2, node distance=2.5cm] {$G_2$};
+
+\fill (-0.5,-1.8) circle (2pt) node (gab) [below] {$e(P,P)^{ab}$};
+
+\filldraw [blue!40] (-1.7,-1.1) rectangle (0.7,-0.7);
+\node at (-0.5, -0.9) {mapping $e$};
+
+\node (e1) at (-1.5,-0.9) {};
+\draw[-latex,blue] (p) -- (e1);
+\draw[-latex,blue] (abp) -- (e1);
+\draw[-latex,blue] (e1) -- (gab);
+
+\node (e2) at (0.5,-0.9) {};
+\draw[-latex,red] (ap) -- (e2);
+\draw[-latex,red] (bp) -- (e2);
+\draw[-latex,red] (e2) -- (gab);
+
+%\node (fx) [circle, draw, right of=x, minimum size=1.5cm, node distance=4cm] {$f(x)$};
+%\node (hc) at ($(x)+(2cm,-1cm)$) [circle, draw] {$\mathsf{hc}(x)$};
+%\node (tp) [draw, right of=x, node distance=2cm] {$\mathsf{tp}$};
+%\node (ez) [above of=tp, node distance=0.5cm, blue] {easy};
+
+%\draw[-latex,blue] (x) to [bend left=30,-latex,above] node {easy} (fx);
+%\draw[-latex,red] (fx) to [bend left=30,-latex,right] node {hard} (hc);
+%\draw[-latex,blue] (x) to [bend right=30,-latex,left] node {easy} (hc);
+%\draw[-latex,blue] (fx) -- (tp)  -- (x);
+%\draw[-latex,red] (fx) to [bend right=-120,-latex,below] node {hard} (x);
+\end{tikzpicture}

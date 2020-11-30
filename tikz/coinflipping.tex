@@ -3,10 +3,10 @@
 \node (B) [right of = A, node distance = 4cm] {\Left\Bart};
 \node (0a1) [below of=A, node distance=1cm] {$b \gets \{H,T\}$};
 \node (0b1) [below of=B, node distance=1cm] {};
-\node (0a) [below of=0a1, node distance=0.5cm] {a random $r$};
-\node (0b) [below of=0b1, node distance=0.5cm] {};
-\node (1a) [below of=0a, node distance=0.5cm] {$m = b\| r$};
-\node (1b) [below of=0b, node distance=0.5cm] {};
+%\node (0a) [below of=0a1, node distance=0.5cm] {a random $r$};
+%\node (0b) [below of=0b1, node distance=0.5cm] {};
+\node (1a) [below of=0a1, node distance=0.5cm] {$m = b\| r$, $r$ is random};
+\node (1b) [below of=0b1, node distance=0.5cm] {};
 %\draw[-latex] (1a) -- (1b) node [midway,above] {};
 \node (2a) [below of=1a, node distance=0.5cm] {$h = \mathsf{Hash}(m)$};
 \node (2b) [below of=1b, node distance=0.5cm] {};
@@ -15,9 +15,9 @@
 \node (3b) [below of=2b, node distance=0.5cm] {$b' \in \{H,T\}$};
 \draw[-latex] (3b) -- (3a) node [midway,above] {};
 \node (4a) [below of=3a, node distance=0.5cm] {$m$};
-\node (4b) [below of=3b, node distance=0.5cm] {};
+\node (4b) [below of=3b, node distance=0.5cm] {$h \overset{?}{=} \mathsf{Hash}(m)$};
 \draw[-latex] (4a) -- (4b) node [midway,above] {};
 \node (5a) [below of=4a, node distance=0.5cm] {};
-\node (5b) [below of=4b, node distance=0.5cm] {$h \overset{?}{=} \mathsf{Hash}(m)$};
-\node (6b) [below of=5b, node distance=0.5cm] {Win if $b=b'$};
+\node (5b) [below of=4b, node distance=0.5cm] {};
+\node (6b) [below of=4b, node distance=0.5cm] {Win if $b=b'$};
 \end{tikzpicture}

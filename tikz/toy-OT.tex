@@ -1,0 +1,34 @@
+\begin{tikzpicture}[scale=0.8, every node/.style={scale=0.8}]
+\foreach \y in {1, 2, 3, 4} {
+\node (r\y) at ($ (0.8cm,0) - \y*(0,1.6cm)$) [fill=blue!10] {\y};
+\foreach \x in {1, 2, 3, 4} {
+\node (f\y\x) at ($\x*(1.8cm,0) - \y*(0,1.6cm)$) [minimum size=1.2cm,draw] {\$\x M};
+\draw ($\x*(1.8cm,0) - \y*(0,1.6cm) + (-0.6cm, 0.6cm)$) -- +(0.3cm,0.2cm) -- +(1.5cm,0.2cm) -- +(1.2cm,0cm);
+\draw ($\x*(1.8cm,0) - \y*(0,1.6cm) + (0.9cm, 0.8cm)$) -- +(0cm,-1.2cm) -- +(-0.3cm,-1.4cm);
+\draw [blue] ($\x*(1.8cm,0) - \y*(0,1.6cm) + (-0.1cm, 0.7cm)$) -- +(0.4cm,0cm);
+\filldraw [blue] ($\x*(1.8cm,0) - \y*(0,1.6cm) + (0.45cm, 0.1cm)$) circle (0.05cm) -- +(0cm,-0.3cm);
+
+%\node (m\y\x) [above of=f\y\x, node distance=2cm] {$m_\x$};
+%\node (c\y\x) [below of=f\y\x, node distance=2cm] {$c_\x$};
+%\draw[-latex] (m\x) -- (f\x);
+%\draw[-latex] (f\x) -- (c\x);
+} }
+
+\foreach \y in {2, 3, 4} {
+\foreach \x in {1, 3, 4} {
+\filldraw [red] ($\x*(1.8cm,0) - \y*(0,1.6cm) + (0.4cm, -0.2cm)$) rectangle +(0.1cm, .5cm]);
+} }
+
+\foreach \x in {1, 2, 4} {
+\node (yn\x) at ($\x*(1.8cm,0) - 3*(0,1.6cm) + (0.1cm,0.6cm)$) [fill=blue!20,rotate=45,draw] {\footnotesize NO};
+}
+
+\node (yn3) at ($3*(1.8cm,0) - 3*(0,1.6cm) + (0.1cm,0.6cm)$) [fill=blue!20,rotate=45,draw] {\footnotesize YES};
+
+%\foreach \x in {1, 3, 4} {
+%\node (yn\x) at ($\x*(1.8cm,0) - 3*(0,1.6cm) + (0.1cm,0.6cm)$) [fill=blue!20, minimal size=1.2cm, draw] {};
+%}
+
+\node (yn3) at ($2*(1.8cm,0) - 4*(0,1.6cm) + (0.1cm,0.6cm)$) [fill=blue!20,rotate=45,draw] {\footnotesize NO};
+
+\end{tikzpicture}
