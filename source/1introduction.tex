@@ -1,0 +1,362 @@
+\input{source/header/main.tex}
+
+\title{Introduction}
+
+\begin{document}
+\maketitle
+\begin{frame}
+\frametitle{Outline}
+\tableofcontents
+\end{frame}
+\section{Cryptography and Modern Cryptography}
+\begin{frame}\frametitle{What is Cryptography?}
+\begin{itemize}
+\item \textbf{Cryptography}: from Greek \emph{krypt\'os}, ``hidden, secret''; and \emph{gr\'{a}phin}, ``writing''
+\item \textbf{Cryptography}: the art of writing or solving codes.\\ (Concise oxford dictionary 2006)
+\item \textbf{Codes}: a system of prearranged signals, especially used to ensure secrecy in transmitting messages. \\ (\emph{code word} in cryptography)
+\item \textbf{1980s}: from Classic to Modern; from Military to Everyone
+\item \textbf{Modern cryptography}: the scientific study of mathematical techniques for securing digital information, systems, and distributed computations against adversarial attacks
+\end{itemize}
+\end{frame}
+\section{The Setting of Private-Key Encryption}
+\begin{frame}\frametitle{Private-Key Encryption}
+\begin{itemize}
+\item \textbf{Goal}: to construct \textbf{ciphers} (encryption schemes) for providing secret communication between two parties sharing \textbf{private-key} (the symmetric-key) in advance
+\item \textbf{Implicit assumption}: there is some way of initially sharing a key in a secret manner
+\item \textbf{Disk encryption}: the same user at different points in time
+\end{itemize}
+\end{frame}
+\begin{frame}\frametitle{The Syntax of Encryption}
+\begin{figure}
+\begin{center}
+\input{tikz/private-key}
+\end{center}
+\end{figure}
+\begin{itemize}
+\item key $k \in \mathcal{K}$, plaintext (or message) $m \in \mathcal{M}$, ciphertext $c \in \mathcal{C}$
+\item \textbf{Key-generation} algorithm~$k \gets \mathsf{Gen}$
+\item \textbf{Encryption} algorithm~$c:= \mathsf{Enc}_k(m)$
+\item \textbf{Decryption} algorithm~$m:= \mathsf{Dec}_k(c)$
+\item \textbf{Encryption scheme}: $\Pi = (\mathsf{Gen}, \mathsf{Enc}, \mathsf{Dec})$
+\item \textbf{Basic correctness requirement}: $\mathsf{Dec}_k(\mathsf{Enc}_k(m)) = m$
+\end{itemize}
+\end{frame}
+\begin{frame}\frametitle{Securing Key vs Obscuring Algorithm}
+\begin{itemize}
+\item Easier to maintain secrecy of a short key
+\item In case the key is exposed, easier for the honest parties to change the key
+\item In case many pairs of people, easier to use the same algorithm, but different keys
+\end{itemize}
+\begin{alertblock}{Kerckhoffs's principle}
+\begin{quote}
+The cipher method must not be required to be secret, and it must be able to fall into the hands of the enemy without inconvenience.
+\end{quote}	
+\end{alertblock}
+\end{frame}
+\begin{frame}\frametitle{Why ``Open Cryptographic Design''}
+\begin{itemize}
+\item Published designs undergo public scrutiny are to be stronger
+\item Better for security flaws to be revealed by ``ethical hackers''
+\item Reverse engineering of the code (or leakage by industrial espionage) poses a serious threat to security
+\item Enable the establishment of standards.
+\end{itemize}
+\end{frame}
+\begin{frame}\frametitle{Attack Scenarios}	
+\begin{itemize}
+\item \textbf{Ciphertext-only}: the adversary just observes ciphertext
+\item \textbf{Known-plaintext}: the adversary learns pairs of plaintexts/ciphertexts under the same key
+\item \textbf{Chosen-plaintext}: the adversary has the ability to obtain the encryption of plaintexts of its choice
+\item \textbf{Chosen-ciphertext}: the adversary has the ability to obtain the decryption of \textbf{other} ciphertexts of its choice
+\item \textbf{Passive attack}: COA KPA
+\begin{itemize}
+\item because not all ciphertext are confidential
+\end{itemize}
+\item \textbf{Active attack}: CPA CCA
+\begin{itemize}
+\item when to encrypt/decrypt whatever an adversary wishes?
+\end{itemize}
+\end{itemize}	
+\end{frame}
+\section{Historical Ciphers and Their Cryptanalysis}
+\begin{comment}
+	\begin{frame}\frametitle{Why We Learn Broken Ciphers?}
+	\begin{itemize}
+	\item To understand the weaknesses of an ``ad-hoc'' approach
+	\item To learn that ``simple'' approaches are unlikely to succeed
+	\item To feel that ``we are smart enough to do some crypt-analyzing''
+	\end{itemize}
+	\end{frame}
+\end{comment}
+
+\begin{frame}[fragile]\frametitle{Caesar's Cipher}
+\begin{quote}
+If he had anything confidential to say, he wrote it in cipher, that is, by so changing the order of the letters of the alphabet, that not a word could be made out. If anyone wishes to \alert{decipher} these, and get at their meaning, he must \alert{substitute the fourth letter of the alphabet, namely D, for A}, and so with the others
+
+\rightline{--Suetonius,``Life of Julius Caesar''}
+\end{quote}
+\begin{itemize}
+	\item $\mathsf{Enc}(m)=m+3\mod 26$ \footnote{In fact the quote indicates that decryption involved rotating letters of the alphabet forward 3 positions, $\mathsf{Dec}(c)=c+3\mod 26$}
+	\item \textbf{Weakness}: ? %\alert{What is the key?}
+\end{itemize}
+\begin{exampleblock}{Example}
+\verb|begintheattacknow|
+%\verb|EHJLQWKHDWWDFNQRZ|
+\end{exampleblock}
+\end{frame}
+\begin{frame}[fragile]\frametitle{Shift Cipher}
+\begin{itemize}
+\item $\mathsf{Enc}_k(m)=m+k\mod 26$
+\item $\mathsf{Dec}_k(c)=c-k\mod 26$
+\item \textbf{Weakness}: ? %Fragile under \textbf{Brute-force attack} (exhaustive search)
+\end{itemize}
+\begin{exampleblock}{Example: Decipher the string}	
+\verb|EHJLQWKHDWWDFNQRZ|
+\end{exampleblock}
+\begin{alertblock}{Sufficient Key Space Principle}
+Any secure encryption scheme must have a key space that is not vulnerable to exhaustive search.\footnote{If the plaintext space is larger than the key space.}
+\end{alertblock}
+\end{frame}
+\begin{frame}\frametitle{Index of Coincidence (IC) Method (to find $k$)}
+\textbf{Index of Coincidence (IC)}: the probability that two randomly selected letters (pick-then-return) will be identical.
+
+Let $p_i$ denote the probability of $i$th letter in English text.
+\[I \overset{\text{def}}{=}\sum_{i=0}^{25} p_i^2 \]
+\begin{exampleblock}{Example}
+What's the IC of `apple'?
+\end{exampleblock}
+
+For a long English text, the IC is $\approx 0.065$.
+For $j = 0, 1, \dotsc , 25$, $q_j$ is the probability of $j$th letter in the ciphertext.
+\[I_j \overset{\text{def}}{=}\sum_{i=0}^{25} p_i \cdot q_{i+j}\]
+\alert{Q: For shift cipher, if $j = k$, then $I_j \approx$ ?}
+\end{frame}
+
+\begin{frame}[fragile]\frametitle{Mono-Alphabetic Substitution}
+\begin{itemize}
+\item \textbf{Idea}: To map each character to a different one in an arbitrary manner
+\item \textbf{Strength}: Key space is large $\approx 2^{88}$. \alert{Q: how to count?}
+\item \textbf{Weakness}: ? %The mapping of each letter is fixed
+\end{itemize}
+\begin{exampleblock}{Example}
+\verb|abcdefghijklmnopqrstuvwxyz|\\
+\verb|XEUADNBKVMROCQFSYHWGLZIJPT|
+
+Plaintext: \verb|tellhimaboutme|\\
+Ciphertext: \verb|??????????????|
+\end{exampleblock}
+\end{frame}
+\begin{frame}[fragile]\frametitle{Attack with Statistical Patterns}
+\begin{enumerate}
+\item Tabulate the frequency of letters in the ciphertext
+\item Compare it to those in English text
+\item Guess the most frequent letter corresponds to \verb|e|, and so on
+\item Choose the plaintext that does ``make sense'' (Not trivial)
+\end{enumerate}
+\begin{table}
+\begin{center}
+\caption{Average letter frequencies for English-language text}
+\begin{tabular}{|cc|cc|cc|cc|cc|} \hline
+e & 12.7\% & t & 9.1\% & a & 8.2\% & o & 7.5\% & i & 7.0\%\\
+n & 6.7\% & \_ & 6.4\% & s & 6.3\% & h & 6.1\% & r & 6.0\%\\
+d & 4.3\% & l & 4.0\% & c & 2.8\% & u & 2.8\% & m & 2.4\%\\
+w & 2.4\% & f & 2.2\% & g & 2.0\% & y & 2.0\% & p & 1.9\%\\
+b & 1.5\% & v & 1.0\% & k & 0.8\% & j & 0.2\% & x & 0.2\%\\
+q & 0.1\% & z & 0.1\% & & & & & &\\ \hline
+\end{tabular}
+\end{center}
+\end{table}
+\end{frame}
+\begin{frame}[fragile]\frametitle{Example of Frequency Analysis (Ciphertext)}
+\begin{verbatim}
+LIVITCSWPIYVEWHEVSRIQMXLEYVEOIEWHRXEXIPFEMVEWHKVS
+TYLXZIXLIKIIXPIJVSZEYPERRGERIMWQLMGLMXQERIWGPSRIH
+MXQEREKIETXMJTPRGEVEKEITREWHEXXLEXXMZITWAWSQWXSWE
+XTVEPMRXRSJGSTVRIEYVIEXCVMUIMWERGMIWXMJMGCSMWXSJO
+MIQXLIVIQIVIXQSVSTWHKPEGARCSXRWIEVSWIIBXVIZMXFSJX
+LIKEGAEWHEPSWYSWIWIEVXLISXLIVXLIRGEPIRQIVIIBGIIHM
+WYPFLEVHEWHYPSRRFQMXLEPPXLIECCIEVEWGISJKTVWMRLIHY
+SPHXLIQIMYLXSJXLIMWRIGXQEROIVFVIZEVAEKPIEWHXEAMWY
+EPPXLMWYRMWXSGSWRMHIVEXMSWMGSTPHLEVHPFKPEZINTCMXI
+VJSVLMRSCMWMSWVIRCIGXMWYMX
+\end{verbatim}
+\end{frame}
+\begin{frame}[fragile]\frametitle{Example of Frequency Analysis (Analysis)}
+Count and Guess, Trial and Error.
+\begin{table}
+\begin{center}
+\caption{Analysis Steps}
+\begin{tabular}{|r|l|} \hline
+Ciphertext & Plaintext \\ \hline
+\alert{I}   & \alert{e} \\
+\alert{XLI} & \alert{the} \\
+\alert{E} & \alert{a} \\
+\alert{R}tate & \alert{s}tate \\
+atthatt\alert{MZ}e & atthatt\alert{im}e \\
+he\alert{V}e & he\alert{r}e \\
+remar\alert{A} & remar\alert{k} \\ \hline
+\end{tabular}
+\end{center}
+\end{table}
+\end{frame}
+\begin{frame}[fragile]\frametitle{Example of Frequency Analysis (Plaintext)}
+\begin{quote}
+Hereupon Legrand arose, with a grave and stately air, and brought me the beetle
+from a glass case in which it was enclosed. It was a beautiful scarabaeus, and, at
+that time, unknown to naturalists -- of course a great prize in a scientific point
+of view. There were two round black spots near one extremity of the back, and a
+long one near the other. The scales were exceedingly hard and glossy, with all the
+appearance of burnished gold. The weight of the insect was very remarkable, and,
+taking all things into consideration, I could hardly blame Jupiter for his opinion
+respecting it.
+
+\rightline{--Edgar Allan Poe's ``The Gold-Bug''}
+\end{quote}
+\end{frame}
+
+\begin{frame}[fragile]\frametitle{Vigen\`{e}re (poly-alphabetic shift) Cipher}
+\begin{itemize}
+\item \textbf{Idea}: To ``smooth out'' the distribution in the ciphertext by mapping different instances of the same letter in the plaintext to different ones in the ciphertext
+\item \textbf{Encryption}: $c_i=m_i+k_{[i\bmod t]}$, $t$ is the length (period) of $k$
+\item \textbf{Cryptanalysis}: Need find $t$; if $t$ is known, need know whether the decryption ``makes sense'', but brute force ($26^t$) is infeasible for $t > 15$
+\end{itemize}
+\begin{exampleblock}{Example (Key is `cafe')}
+\begin{description}[Ciphertext]
+\item[Plaintext]  \verb|tellhimaboutme| \\
+\item[Key]        \verb|cafecafecafeca| \\
+\item[Ciphertext] \verb|??????????????| %\verb|WFRQKJSFEPAYPF|
+\end{description}
+\end{exampleblock}
+\end{frame}
+\begin{frame}[fragile]\frametitle{Kasiski's Method (to find $t$)}
+\begin{itemize}
+\item To identify repeated patterns of length 2 or 3
+\item The distance between such appearances is a multiple of $t$
+\item $t$ is the greatest common divisor of all the distances
+\end{itemize}
+\begin{exampleblock}{Example (Key is `beads')}
+\begin{semiverbatim}
+themanandthewomanretrievedtheletterfromthepostoffice
+beadsbeadsbeadsbeadsbeadsbeansdeadsbeadsbeadsbeadbea
+VMFQTPFOH\alert{MJJ}XSFCSSIMTNFZXFYISEIYUIKHWPQ\alert{MJJ}QSLVTGJKGF
+\end{semiverbatim}
+\end{exampleblock}
+\end{frame}
+\begin{frame}\frametitle{Index of Coincidence (IC) Method (to find $t$)}
+For $\tau = 1, 2, \dotsc$, $q_i$ is the probability of $i$th letter in $c_1, c_{1+\tau}, c_{1+2\tau}, \dotsc$, IC is
+\[I_\tau \overset{\text{def}}{=}\sum_{i=0}^{25} q_i^2\]
+\alert{If $\tau = t$, then $I_\tau \approx ?$} ; otherwise $q_i \approx \frac{1}{26}$ and
+\[I_\tau \approx \sum_{i=0}^{25} \left(\frac{1}{26}\right)^2 \approx 0.038\]
+Then reuse IC method to find $k_i$.
+\begin{alertblock}{Arbitrary Adversary Principle}
+Security must be guaranteed for any adversary within the class of adversaries having the specified power
+\end{alertblock}
+\end{frame}
+\begin{frame}\frametitle{Cryptanalytic Attacks (homework assignment)}
+\begin{itemize}
+\item Under COA, the requirement for ciphertext related to the size of the key space.  Vig\`{e}nere > mono-alphabetic sub. > shift
+\item Under KPA, trivially broken.
+\end{itemize}
+\begin{alertblock}{Lessons learned}
+\begin{itemize}
+\item Sufficient key space principle
+\item Designing secure cipher is a hard task
+\item Complexity does not imply security (then what does?)
+\item Arbitrary adversary principle
+\end{itemize}
+\end{alertblock}
+\end{frame}
+\section{The Basic Principles of Modern Cryptography}
+\begin{frame}\frametitle{Three Main Principles of Modern Cryptography}
+\begin{enumerate}
+\item The formulation of a rigorous \textbf{definition} of security / threat model
+\item When the security of a cipher relies on an unproven \textbf{assumption}, this assumption must be precisely stated and be as minimal as possible
+\item Cipher should be accompanied by a rigorous \textbf{proof} of security with the above definition and the above assumption
+\end{enumerate}
+\end{frame}
+\begin{frame}\frametitle{Why Principle 1 -- Formulation of Exact Definitions}
+\begin{exampleblock}{Q: how would you formalize the security for private-key encryption?}
+\begin{enumerate}
+\item \emph{No adversary can find the secret key when given a ciphertext.}\\
+$\mathsf{Enc}_k(m)=m$
+\item \emph{No adversary can find the plaintext that corresponds to the ciphertext.}\\
+$\mathsf{Enc}_k(m)=m_{0}\| \mathsf{AES}_k(m)$
+\item \emph{No adversary can determine any character of the plaintext that corresponds to the ciphertext.}\\
+$m=1000$, someone can learn $ 800 < m < 1200$
+\item \emph{No adversary can derive any meaningful information about the plaintext from the ciphertext.}\\
+Could you define so-called `meaningful'?
+\end{enumerate}
+\emph{\alert{Definitions of security should suffice for all potential applications.}}
+\end{exampleblock}
+\end{frame}
+\begin{frame}\frametitle{Why Principle 1 -- How to define}
+%\begin{exampleblock}{General Form}
+%A cryptographic scheme for a given \textbf{task} is secure if no adversary of a specified \textbf{power} can achieve a specified \textbf{break}
+%\end{exampleblock}
+
+How To Define Security -- Lesson From Alan Turing
+\begin{itemize}
+\item What's computation?\footnote{Q: Any ``mathematical proof that there exist well-defined problems that computers cannot solve''? A: Halting Problem in computability theory}
+\begin{enumerate}
+\item A direct appeal to \textbf{intuition}
+\item A \textbf{proof of the equivalence} of two definitions\\ (The new one has a greater intuitive appeal)
+\item Giving \textbf{examples} solved using a definition
+\end{enumerate}
+\item Additional method for security: \textbf{Test of time}
+\end{itemize}
+\end{frame}	
+\begin{frame}\frametitle{Principle 2 -- Reliance on Precise Assumptions}
+Most cryptographic constructions \textbf{cannot be proven secure unconditionally}
+\begin{itemize}
+	\item \textbf{Why?} 
+	\begin{enumerate}
+		\item Validation of the assumption
+		\item Comparison of schemes
+		\item Facilitation of proofs of security
+	\end{enumerate}
+	\textbf{The construction is secure if the assumption is true.}
+	\item \textbf{How?} 
+	\begin{enumerate}
+		\item old, so well tested
+		\item simple and lower-level, so easy to study, refute \& correct
+	\end{enumerate}
+\end{itemize}
+\end{frame}
+\begin{frame}\frametitle{Principle 3 -- Rigorous Proofs of Security}
+\begin{itemize}
+\item \textbf{Why?} Proofs are more desirable in computer security than in other fields.
+\item \textbf{The reductionist approach}: 
+\begin{theorem}	Given that Assumption X is true, Construction Y is secure according to the given definition.
+\end{theorem}
+\begin{proof} Reduce the problem given by X to the problem of breaking Y.
+\end{proof}
+\item \textbf{Ad-hoc approaches}: for those who need a ``quick and dirty'' solution, or who are just simply unaware.
+\end{itemize}
+\end{frame}
+\begin{frame}\frametitle{Summary}
+\begin{itemize}
+\item Cryptography secures information, transactions and computations
+\item Kerckhoffs's principle \& Open cryptographic design
+\item Caesar's, shift, Mono-Alphabetic sub., Vigen\`{e}re
+\item Brute force, letter frequency, Kasiski's, IC
+\item Sufficient key space principle
+\item Arbitrary adversary principle
+\item Rigorously proven security
+\end{itemize}
+\end{frame}
+\begin{frame}\frametitle{What is cryptography? [xkcd:504]}
+\begin{figure}
+\begin{center}
+\includegraphics[width=100mm]{pic/legal} 
+\end{center}
+\end{figure}
+\end{frame}
+\begin{frame}\frametitle{Alice, Bob  [xkcd:1323]}
+Changing the names would be easier, but if you're not comfortable lying, try only making friends with people named Alice, Bob, Carol, etc.
+\begin{figure}
+\begin{center}
+\includegraphics[width=45mm]{pic/alice-bob} 
+\end{center}
+\end{figure}
+\end{frame}
+\end{document}
+

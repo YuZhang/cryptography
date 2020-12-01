@@ -1,0 +1,457 @@
+\input{source/header/main.tex}
+
+\title{Diffie-Hellman Problem and Elgamal Encryption Scheme}
+
+\begin{document}
+\maketitle
+\begin{frame}
+\frametitle{Outline}
+\tableofcontents
+\end{frame}
+\section{Cyclic Groups and Discrete Logrithms}
+\begin{frame}\frametitle{Cyclic Groups and Generators}
+$\mathbb{G}$ is finite and $g \in \mathbb{G}$, 
+$ \langle g \rangle \overset{\text{def}}{=} \{ g^0,g^1,\dotsc,\} = \{ g^0,g^1,\dotsc, g^{i-1}\}. $
+\begin{itemize}
+\item The \textbf{order} of $g$ is the smallest positive integer $i$ with $g^i=1$.
+\item $\mathbb{G}$ is a \textbf{cyclic group} if $\exists\;g$ has order $m = \abs{\mathbb{G}}$. $\langle g \rangle = \mathbb{G}$, $g$ is a \textbf{generator} of $\mathbb{G}$.
+\begin{exampleblock}{}
+\begin{itemize}
+\item Is $\mathbb{Z}_6^*$, $\mathbb{Z}_7^*$, or $\mathbb{Z}_8^*$ with `$\cdot$' cyclic? %{1, 5}
+\end{itemize}
+\end{exampleblock}
+\item \textbf{Lagrange's theorem}: $\langle g \rangle$ is a subgroup of $\mathbb{G}$, and $\abs{\langle g \rangle} \mid \abs{\mathbb{G}}$.
+\item For proof, see https://brilliant.org/wiki/lagranges-theorem/.
+%\item If $p$ is prime, then $\mathbb{Z}^*_p$ is cyclic.
+\end{itemize}
+\end{frame}
+%\begin{frame}\frametitle{Examples of Cyclic Groups}
+%
+%\begin{exampleblock}{}
+%$\mathbb{G}$ is a cyclic group of order $n$, and $g$ is a generator of $\mathbb{G}$. Then the mapping $f : \mathbb{Z}_n \to \mathbb{G}$ given by $f(a) = g^a$ is an isomorphism. For $a,a' \in \mathbb{Z}_n$,
+%\[ f(a+a') = g^{[a+a' \bmod n]} = g^{a+a'} = g^a\cdot g^{a'} = f(a)\cdot f(a').\]
+%\end{exampleblock}
+%\begin{alertblock}{}
+%All cyclic groups of the same order are ``the same'' in an algebraic sense, but this is not true in a computational sense.
+%\end{alertblock}
+%\end{frame}
+\begin{frame}\frametitle{Discrete Logarithm}
+If $\mathbb{G}$ is a cyclic group of order $q$, then $\exists$ a generator $g \in \mathbb{G}$ such that $\{ g^0,g^1,\dotsc,g^{q-1}\} = \mathbb{G}$.
+\begin{itemize}
+\item $\forall h \in \mathbb{G}$, $\exists$ a unique $x \in \mathbb{Z}_q$ such that $g^x = h$.
+\item $x= \log_gh$ is the \textbf{\textbf{discrete logarithm} of $h$ with respect to $g$}.
+\item If $g^{x'}=h$, then $\log_gh = [x' \bmod q]$.
+\item $\log_g1=0$ and $\log_g(h_1\cdot h_2) = [(\log_gh_1+\log_gh_2) \bmod q]$.
+\end{itemize}
+\begin{exampleblock}{}
+Show an instance of DL problem in $\mathbb{Z}_{7}^{*}$
+\end{exampleblock}
+\end{frame}
+\begin{frame}\frametitle{Overview of Discrete Logarithm Algorithms}
+\begin{itemize}
+\item Given a generator $g \in \mathbb{G}$ and $y \in \langle g \rangle$, find $x$ such that $g^x=y$.
+\item \textbf{Brute force}: $\mathcal{O}(q)$, $q = \mathsf{ord}(g)$ is the order of $\langle g\rangle$.
+\item \textbf{Baby-step/giant-step} method [Shanks]: $\mathcal{O}(\sqrt{q}\cdot \mathsf{polylog}(q))$.
+\item \textbf{Pohlig-Hellman} algorithm: when $q$ has small factors.
+\item \textbf{Index calculus} method: $\mathcal{O}(\exp{(\sqrt{n\cdot \log n})})$.
+\item The best-known algorithm is the \textbf{general number field sieve} with time $\mathcal{O}(\exp(n^{1/3}\cdot(\log n)^{2/3}))$.
+\item Elliptic curve groups vs. $\mathbb{Z}_p^*$: more efficient for the honest parties, but that are equally hard for an adversary to break.\\ (Both 1024-bit $\mathbb{Z}_p^*$ and 132-bit elliptic curve need $2^{66}$ steps.)
+\end{itemize}
+\end{frame}
+\begin{frame}\frametitle{Using Prime-Order Groups}
+\begin{theorem}
+ If $\mathbb{G}$ is of prime order, then $\mathbb{G}$ is cyclic. All $g \in \mathbb{G}$ except the identity are generators.
+\end{theorem}
+It is proved from Lagrange's theorem.	\newline \\
+
+Why using prime-order groups?
+\begin{itemize}
+\item The discrete logarithm problem is hardest in such groups.
+\item Finding a generator in such groups is trivial.
+\item Any non-zero exponent will be invertible modulo the order.
+\item A necessary condition for the DDH problem to be hard is that $\mathsf{DH}_g(h_1,h_2)$ by itself should be indistinguishable from a random group element. This is (almost) true for such groups.
+%\item However, $\mathbb{Z}^*_p$ does not have prime order.
+\end{itemize}
+\end{frame}
+\begin{frame}\frametitle{Generating Prime-Order (Sub)Groups in $\mathbb{Z}^*_p$}
+\begin{itemize}
+\item $y \in \mathbb{Z}^*_p$ is a \textbf{quadratic residue modulo} $p$ if $\exists x \in \mathbb{Z}^*_p$ such that $x^2 \equiv y \pmod p$. \alert{(Q: show QRs in $\mathbb{Z}_{7}^{*}$)} %1, 4, 2, 2, 4, 1
+\item The set of QR is a subgroup with order $(p-1)/2$ ($x^2 \equiv (p-x)^2 \pmod p$).
+\item $p$ is a \textbf{strong prime} if $p=2q+1$ with $q$ prime.
+\end{itemize}
+\begin{algorithm}[H]
+\SetKwInOut{Input}{input}
+\SetKwInOut{Output}{output}
+\SetKw{KwG}{generate}
+\SetKw{KwC}{choose}
+\DontPrintSemicolon
+\caption{A group generation algorithm $\mathcal{G}$}
+\Input{Security parameter $1^n$}
+\Output{Cyclic group $\mathbb{G}$, its order $q$, and  a generator $g$}
+\BlankLine
+\KwG a random $(n+1)$-bit strong prime $p$\;
+$q := (p-1)/2$\;
+\KwC an arbitrary $x \in \mathbb{Z}^*_p$ with $x \neq \pm 1 \bmod p$\;
+$g := x^2 \bmod p$\;
+\Return $p,q,g$
+\end{algorithm}
+\end{frame}
+
+\begin{comment}
+\begin{frame}\frametitle{The Baby-Step/Giant-Step Algorithm}
+\begin{figure}
+\begin{center}
+\input{tikz/baby-giant}
+\end{center}
+\end{figure}
+\begin{algorithm}[H]
+\SetKwInOut{Input}{input}
+\SetKwInOut{Output}{output}
+\SetKw{KwC}{compute}
+\SetKw{KwS}{sort}
+\DontPrintSemicolon
+\caption{The baby-step/giant-step algorithm}
+\Input{$g \in \mathbb{G}$ and $y \in \langle g \rangle$; $q=\mathsf{ord}(g)$ ($t := \lfloor \sqrt{q}\rfloor$)}
+\Output{$\log_g y$}
+\BlankLine
+
+\lFor{$i = 0$ \KwTo $\lfloor q/t \rfloor$}{\KwC $g_i := g^{i\cdot t}$ \tcc*[f]{giant steps}}\; 
+\KwS the pairs $(i,g_i)$ by $g_i$\;
+\For{$i = 0$ \KwTo $t$}{
+\KwC $y_i := y\cdot g^i$ \tcc*[f]{baby steps}\;
+\lIf{$y_i = g_k$ for some $k$}{\Return $[kt-i \bmod q]$}\;
+}
+\end{algorithm}
+The time complexity is $\mathcal{O}(\sqrt{q}\cdot \mathsf{polylog}(q))$.
+\end{frame}
+\begin{frame}\frametitle{Example of Baby-Step/Giant-Step Algorithm}
+\begin{exampleblock}{In $\mathbb{Z}^*_{29}$, $q=28$, $g=2$, $y=17$.}
+$t=5$, compute the giant steps:
+\[2^0=1,\; 2^5=?,\; 2^{10}=?,\; 2^{15}=?,\; 2^{20}=?,\; 2^{25}=? \]
+compute the baby steps:
+\[17\cdot 2^0=17,\; 17\cdot 2^1=?,\; 17\cdot 2^2=?,\]
+\[ 17\cdot 2^3=?,\; 17\cdot 2^4=?,\; 17\cdot 2^5=?\]
+$2^{x} = 17\cdot 2^y$. So $\log_2 17=x-y=21$
+\end{exampleblock}
+\end{frame}
+\end{comment}
+\begin{frame}\frametitle{The Discrete Logarithm Assumption}
+The discrete logarithm experiment $\mathsf{DLog}_{\mathcal{A},\mathcal{G}}(n)$:
+\begin{enumerate}
+\item Run a group-generating algorithm $\mathcal{G}(1^n)$ to obtain $(\mathbb{G},q,g)$, where $\mathbb{G}$ is a cyclic group of order $q$ (with $\|q\|=n$), and $g$ is a generator of $\mathbb{G}$.
+\item Choose $h \gets \mathbb{G}$. ($x' \gets \mathbb{Z}_q$ and $h := g^{x'}$)
+\item $\mathcal{A}$ is given $\mathbb{G}, q, g, h$, and outputs $x \in \mathbb{Z}_q$.
+\item $\mathsf{DLog}_{\mathcal{A},\mathcal{G}}(n) = 1$ if $g^x = h$, and 0 otherwise. 
+\end{enumerate}
+\begin{definition}
+\textbf{The discrete logarithm problem is hard relative to} $\mathcal{G}$ if $\forall$ \textsc{ppt} algorithm $\mathcal{A}$, $\exists$ $\mathsf{negl}$ such that
+\[ \Pr[\mathsf{DLog}_{\mathcal{A},\mathcal{G}}(n)=1] \le \mathsf{negl}(n).\]
+\end{definition}
+\end{frame}
+\begin{comment}
+\begin{frame}\frametitle{The Pohlig-Hellman Algorithm}
+\textbf{Idea}: when $q$ is known and has small factors, reduces the discrete logarithm instance to multiple instances in groups of smaller order.
+\newline
+
+According to CRT: If $q=\prod^k_{i=1}q_i$ and $\forall i\neq j, \gcd(q_i,q_j)=1$, then
+\[ \mathbb{Z}_q \simeq \mathbb{Z}_{q_1} \times \cdots \times \mathbb{Z}_{q_k}\; \text{and}\; \mathbb{Z}^*_q \simeq \mathbb{Z}^*_{q_1} \times \cdots \times \mathbb{Z}^*_{q_k} \]
+\[(g_i)^x\overset{\text{def}}{=} \left( g^{q/q_i} \right)^x = (g^x)^{q/q_i} = y^{q/q_i}\; \text{for}\; i=1,\dotsc,k.\]
+We have $k$ instances in $k$ smaller groups, $\mathsf{ord}(g_i) = q_i.\;$ \footnote{If $p \mid q$, then $\mathsf{ord}(g^p)=q/p$.}\\
+Use any other algorithm to solve $\log_{g_i}  (y^{q/q_i})$.\\
+Answers are $\{x_i\}^k_{i=1}$ for which $g_i^{x_i} \equiv y^{q/q_i} \equiv g_i^x$. \\
+$\forall i,\;x \equiv x_i \pmod{q_i}$. $x \bmod q$ is uniquely determined (CRT). \\
+The time complexity is $\mathcal{O}(\max_i\{\sqrt{q_i}\}\cdot \mathsf{polylog}(q))$.
+\end{frame}
+\begin{frame}\frametitle{Example of Pohlig-Hellman Algorithm}
+\begin{exampleblock}{In $\mathbb{Z}^*_{31}$, $q=30=5\cdot 3 \cdot 2$, $g=3$, $y=26=g^x$.}
+\begin{alignat*}{3}
+(g^{30/5})^x & = y^{30/5} & \implies (3^{6})^x\;\, & = 26^{6} & \implies 16^x & \equiv 1 \\
+(g^{30/3})^x & = y^{30/3} & \implies (3^{10})^x & = 26^{10} & \implies 25^x & \equiv 5 \\
+(g^{30/2})^x & = y^{30/2} & \implies (3^{15})^x & = 26^{15} & \implies 30^x & \equiv 30 
+\end{alignat*}
+\[ x \equiv 0 \pmod 5,\; x \equiv 2 \pmod 3, x \equiv 1 \pmod 2, \]
+so $x \equiv 5 \pmod{30}$.
+\end{exampleblock}
+\end{frame}
+\begin{frame}\frametitle{The Index Calculus Method}
+\textbf{Idea}: find a relatively small factor base and build a system of $\ell$ linear equations related to $g$; find a linear equation related to $y$; solve $\ell+1$ linear equations to give $\log_g y$.
+\begin{enumerate}
+\item for $\mathbb{Z}^*_p$, choose a base $B = \{p_1,\dotsc,p_k\}$ of prime numbers. 
+\item find $\ell \ge k$ distinct $x_1,\dotsc,x_\ell$ for which $[g^{x_i} \bmod p]$ decompose into the elements of $B$: $g^{x_i} \equiv \prod^k_{j=1} p_j^{e_j} \pmod p$.
+\item $\ell$ equations: $x_i = \sum^k_{j=1}e_{i,j}\cdot \log_g(p_{j}) \pmod{p-1}$.
+\item find $x^*$ for which $[g^{x^*}\cdot y \bmod p]$ can be factored.
+\item new equation: $x^* + \log_gy = \sum^k_{j=1}e^*_{j}\cdot \log_g(p_j) \pmod{p-1}$.
+\item Use linear algebra to solve equations and give $\log_gy$.  
+\end{enumerate}
+The time complexity is identical to that of the quadratic sieve.
+\end{frame}
+\begin{frame}\frametitle{Example of Index Calculus Method}
+\begin{exampleblock}{$p=101$, $g=3$ and $y=87$. $B=\{2,5,13\}$.}
+$3^{10} \equiv 65 \pmod {101}$ and $65 = 5\cdot 13$. Similarly, $3^{12} \equiv 80  = 2^4 \cdot 5 \pmod {101}$ and $3^{14} \equiv 13 \pmod {101}$. The linear equations:
+\begin{align*}
+x_1 = 10 &\equiv \log_3 5 + \log_3 13 \pmod{100}\\
+x_2 = 12 &\equiv 4\cdot \log_3 2 + \log_3 5 \pmod{100}\\
+x_3 = 14 &\equiv \log_3 13 \pmod{100}.
+\end{align*}
+We also have $x^*=5$, $3^5\cdot 87 \equiv 32 \equiv 2^5 \pmod{101}$, or
+\[5+\log_3 87 \equiv 5\cdot \log_3 2 \pmod{100}.\]
+Adding the 2nd and 3rd equations and subtracting the 1st, we derive $4\cdot \log_3 2 \equiv 16 \pmod{100}$. So $\log_3 2$ is 4, 29, 54, or 79. Trying all shows that $\log_3 2 = 29$. The last equation gives $\log_3 87 = 40$.
+\end{exampleblock}
+\end{frame}
+\end{comment}
+\section{Diffie-Hellman Assumptions and Applications}
+\begin{frame}\frametitle{Diffie-Hellman Assumptions}
+\begin{itemize}
+\item \textbf{Computational Diffie-Hellman (CDH)} problem:
+\[ \mathsf{DH}_g(h_1,h_2) \overset{\text{def}}{=} g^{\log_gh_1\cdot \log_gh_2}\]
+\item \textbf{Decisional Diffie-Hellman (DDH)} problem:	\\
+Distinguish $\mathsf{DH}_g(h_1,h_2)$ from a random group element $h'$.
+\end{itemize}
+\begin{definition}
+DDH problem is hard relative to $\mathcal{G}$ if $\forall$ \textsc{ppt} $\mathcal{A}$, $\exists$ $\mathsf{negl}$ such that
+\[  \abs{\Pr[\mathcal{A}(\mathbb{G},q,g,g^x,g^y,g^z)=1] - \Pr[\mathcal{A}(\mathbb{G},q,g,g^x,g^y,g^{xy})=1]}\]
+\[ \le \mathsf{negl}(n). \]
+\end{definition}
+\begin{alertblock}{Intractability of DL, CDH and DDH}
+DDH is easier than CDH and DL.
+\end{alertblock}
+\end{frame}
+\begin{frame}\frametitle{Secure Key-Exchange Experiment}
+The key-exchange experiment $\mathsf{KE}^{\mathsf{eav}}_{\mathcal{A},\Pi}(n)$:
+\begin{enumerate}
+\item Two parties holding $1^n$ execute protocol $\Pi$. $\Pi$ results in a \textbf{transcript} $\mathsf{trans}$ containing all the messages sent by the parties, and a \textbf{key} $k$ that is output by each of the parties.
+\item A random bit $b \gets \{0,1\}$ is chosen. If $b=0$ then choose $\hat{k} \gets \{0,1\}^n$ \emph{u.a.r}, and if $b=1$ then set $\hat{k} :=k$.
+\item $\mathcal{A}$ is given $\mathsf{trans}$ and $\hat{k}$, and outputs a bit $b'$.
+\item $\mathsf{KE}^{\mathsf{eav}}_{\mathcal{A},\Pi}(n)=1$ if $b'=b$, and 0 otherwise. 
+\end{enumerate}
+\begin{definition}
+A key-exchange protocol $\Pi$ is secure in the presence of an eavesdropper if $\forall$ \textsc{ppt} $\mathcal{A}$, $\exists$ $\mathsf{negl}$ such that
+\[ \Pr[\mathsf{KE}^{\mathsf{eav}}_{\mathcal{A},\Pi}(n) = 1] < \frac{1}{2} + \mathsf{negl}(n). \]
+\end{definition}
+\end{frame}
+\begin{frame}\frametitle{Diffie-Hellman Key-Exchange Protocol}
+\begin{columns}[]
+\begin{column}{5cm}
+\begin{figure}
+\begin{center}
+\input{tikz/DHkey}
+\end{center}
+\end{figure}
+\end{column}
+\begin{column}{6cm}
+\alert{Q: $k_A = k_B = k = ?$}
+\newline
+	
+$\widehat{\mathsf{KE}}^{\mathsf{eav}}_{\mathcal{A},\Pi}$ denote an experiment where if $b=0$ the adversary is given $\hat{k} \gets \mathbb{G}$.
+\begin{theorem}
+If DDH problem is hard relative to $\mathcal{G}$, then DH key-exchange protocol $\Pi$ is secure in the presence of an eavesdropper (with respect to the modified experiment $\widehat{\mathsf{KE}}^{\mathsf{eav}}_{\mathcal{A},\Pi}$). 
+\end{theorem}
+\end{column}
+\end{columns}
+\begin{alertblock}{Security}
+Insecurity against active adversaries (Man-In-The-Middle).
+\end{alertblock}
+\end{frame}
+\begin{frame}\frametitle{Proof of Security in DH Key-Exchange Protocol}
+\begin{proof}
+\begin{align*}
+\Pr & \left[ \widehat{\mathsf{KE}}^{\mathsf{eav}}_{\mathcal{A},\Pi} =1\right] \\	
+&= \frac{1}{2}\cdot \Pr\left[ \widehat{\mathsf{KE}}^{\mathsf{eav}}_{\mathcal{A},\Pi} =1 | b=1\right] + \frac{1}{2}\cdot \Pr\left[ \widehat{\mathsf{KE}}^{\mathsf{eav}}_{\mathcal{A},\Pi} =1 | b=0\right]
+\end{align*}
+If $b=1$, then give true key; otherwise give random $g^z$.
+\begin{align*}
+&= \frac{1}{2}\cdot \Pr\left[ \mathcal{A}(g^x,g^y,g^{xy})=1 \right] + \frac{1}{2}\cdot \Pr\left[ \mathcal{A}(g^x,g^y,g^z)=0 \right]\\
+&= \frac{1}{2}\cdot \Pr\left[ \mathcal{A}(g^x,g^y,g^{xy})=1 \right] + \frac{1}{2}\cdot (1-\Pr\left[ \mathcal{A}(g^x,g^y,g^z)=1 \right])\\
+&= \frac{1}{2} + \frac{1}{2}\cdot \left( \Pr\left[ \mathcal{A}(g^x,g^y,g^{xy})=1 \right] - \Pr\left[ \mathcal{A}(g^x,g^y,g^z)=1 \right] \right)\\
+&\le \frac{1}{2} + \frac{1}{2}\cdot \mathsf{negl}(n) %\left| \Pr\left[ \mathcal{A}(g^x,g^y,g^{xy})=1 \right] - \Pr\left[ \mathcal{A}(g^x,g^y,g^z)=1 \right] \right|
+\end{align*}
+\end{proof}
+\end{frame}
+\begin{frame}\frametitle{Example of DHKE}
+\begin{exampleblock}{$\mathbb{G} = \mathbb{Z}^*_{11}$}
+The order $q = ?$\\ %5
+The set of quadratic residues ?\\ %1, 4, 9, 5, 3, 3, 5, 9, 4, 1
+Is $g = 3$ a generator? \\ %3 : 1, 3, 9, 5, 4, 1
+If $x = 3$ and $y = 4$, what's the message from Bob to Alice?\\ %3^{4} = 4
+How does Alice compute the key?\\ % 4^{3} = 9
+How does Bob compute the key? % 5^{4} = 9 
+\end{exampleblock}
+\end{frame}
+\begin{frame}\frametitle{Triparties Key Exchange}
+\begin{columns}[]
+\begin{column}{5cm}
+\begin{center}
+DH-based KE in 2 rounds:
+\begin{figure}
+\input{tikz/3parties-DHKE}
+\end{figure}
+Key$=g^{abc}$.
+\end{center}
+\end{column}
+\begin{column}{6cm}
+\begin{center}
+Joux's KE in 1 round:
+\begin{figure}
+\input{tikz/3parties-JOUX}
+\end{figure}
+Key$=e(P,P)^{abc}$ in bilinear map.
+\end{center}
+\end{column}
+\end{columns}
+\begin{block}{Open Problem}
+How to exchange keys between 4 parties in one round?
+\end{block}
+\end{frame}
+\begin{comment}
+\begin{frame}\frametitle{Constructing Collision-Resistant Hash Functions}
+\begin{construction}
+Define a fixed-length hash function $(\mathsf{Gen}, H)$:
+\begin{itemize}
+\item $\mathsf{Gen}$: on input $1^n$, run $\mathcal{G}(1^n)$ to obtain $(\mathbb{G},q,g)$ and then select $h \gets \mathbb{G}$. Output $s := \langle \mathbb{G}, q,g,h\rangle$ as the key.
+\item $H$: given a key $s = \langle \mathbb{G}, q,g,h\rangle$ and input $(x_1,x_2) \in \mathbb{Z}_q \times \mathbb{Z}_q$, output $H^s(x_1,x_2) := g^{x_1}h^{x_2}$.
+\end{itemize}
+\end{construction}
+\begin{theorem}
+If the discrete logarithm problem is hard relative to $\mathcal{G}$, then Construction is a fixed-length CRHF.
+\end{theorem}
+\end{frame}
+\begin{frame}\frametitle{Proof of Security of Construction}
+\begin{proof}
+$\mathcal{A}'$ uses $\mathcal{A}$ to solve the discrete logarithm problem:
+\begin{enumerate}
+\item $\mathcal{A}'$ is given input $s=\langle \mathbb{G},q,g,h\rangle$.
+\item Run $\mathcal{A}(s)$ and obtain output $x, x'$.
+\item If $x \neq x' \land H^s(x) = H^s(x')$ then:
+\begin{itemize}
+\item If $h=1$ return 0;
+\item Otherwise, parse $x$ as $(x_1,x_2)$ and $x'$ as $(x_1',x_2')$. \\
+Return $[(x_1-x'_1)\cdot (x'_2-x_2)^{-1} \bmod q]$.
+\end{itemize}
+\end{enumerate}
+\[  H^s(x_1,x_2) = H^s(x_1',x_2') \implies g^{x_1}h^{x_2} = g^{x_1'}h^{x_2'} \]
+\[ \implies g^{x_1-x_1'} = h^{x_2'-x_2} \]
+\[ \implies \log_gh = [(x_1-x'_1)\cdot (x'_2-x_2)^{-1} \bmod q]. \]
+\end{proof}
+\end{frame}
+\end{comment}
+\section{The Elgamal Encryption Scheme}
+\begin{frame}\frametitle{Lemma on Perfectly-secret Private-key Encryption}
+\begin{lemma}\label{lem:ps}
+$\mathbb{G}$ is a finite group and $m\in \mathbb{G}$ is an arbitrary element. Then choosing random $k \gets \mathbb{G}$ and setting $c := k\cdot m$ gives the same distribution for $c$ as choosing random $c \gets \mathbb{G}$. I.e, $\forall g \in \mathbb{G}$:
+\[ \Pr[k\cdot m = g] = 1/\abs{\mathbb{G}}. \]
+where the probability is taken over uniform choice of $k \in \mathbb{G}.$
+\end{lemma}
+\begin{proof}
+Let $g \in \mathbb{G}$ be arbitrary, then
+\[\Pr[k\cdot m = g] = \Pr[k = g\cdot m^{-1}]. \]
+Since $k$ is chosen \emph{u.a.r}, the probability that $k$ is equal to the fixed element $g\cdot m^{-1}$ is exactly $1/\abs{\mathbb{G}}$.
+\end{proof}
+\end{frame}
+\begin{frame}\frametitle{The Elgamal Encryption Scheme}
+An algorithm $\mathcal{G}$, on input $1^n$, outputs a description of a cyclic group $\mathbb{G}$, its order $q$ (with $\|q\| = n$), and a generator $g$.
+\begin{columns}[]
+\begin{column}{5cm}
+\begin{figure}
+\begin{center}
+\input{tikz/elgamal-con.tex}
+\end{center}
+\end{figure}
+\end{column}
+\begin{column}{6cm}
+\begin{construction}
+\begin{itemize}
+\item $\mathsf{Gen}$: run $\mathcal{G}(1^n)$ to obtain $(\mathbb{G},q,g)$. A random $x \gets \mathbb{Z}_q$ and $h := g^x$.  $pk = \langle \mathbb{G},q,g,h \rangle$ and $sk = \langle \mathbb{G},q,g,x \rangle$
+\item $\mathsf{Enc}$: a random $y \gets \mathbb{Z}_q$ and output $\langle c_1, c_2 \rangle = \langle g^y, h^y\cdot m\rangle$
+\item $\mathsf{Dec}$: $m:=c_2/c_1^x$
+\end{itemize}
+\end{construction}
+\end{column}
+\end{columns}
+\begin{theorem}
+If the DDH problem is hard relative to $\mathcal{G}$, then the Elgamal encryption scheme is CPA-secure.
+\end{theorem}
+\end{frame}
+\begin{frame}\frametitle{Example of Elgamal Encryption}
+\textbf{Encoding binary strings}:
+\begin{itemize}
+\item the subgroup of quadratic residues modulo a strong prime $p = (2q+1)$.
+\item a string $\hat{m} \in \{0,1\}^{n-1}$, $n = \|q\|$.
+\item map $\hat{m}$ to the plaintext $m = [(\hat{m}+1)^2 \bmod p]$.
+\item The mapping is one-to-one and efficiently invertible.
+\end{itemize}
+\begin{exampleblock}{$q=83$, $p=2q+1=167$, $g=2^2=4 \pmod{167}$, $\hat{m}=011101$}
+The receiver chooses secrete key $37 \in \mathbb{Z}_{83}$.\\
+The public key is $pk=\langle 167,83,4,[4^{37} \bmod 167]=76\rangle$.\\
+$\hat{m}=011101=29$, $m = [(29+1)^2 \bmod 167] = 65$.\\
+Choose $y=71$, the ciphertext is $\langle [4^{71} \bmod 167], [76^{71}\cdot 65 \bmod 167]\rangle = \langle 132,44\rangle$.
+\newline
+
+Decryption: $m= [44\cdot (132^{37})^{-1}] \equiv [44\cdot 66] \equiv 65 \pmod{167}$.\\
+65 has the two square roots 30 and 137, and $30 < q$, so $\hat{m}=29$.
+\end{exampleblock}
+\end{frame}
+%\begin{comment}
+\begin{frame}{Proof of Security of Elgamal Encryption Scheme}
+\begin{proof}
+\textbf{Idea}: Prove that $\Pi$ is secure in the presence of an eavesdropper by reducing an algorithm $D$ for DDH problem to the eavesdropper $\mathcal{A}$.
+\newline
+
+Modify $\Pi$ to $\tilde{\Pi}$: the encryption is done by choosing random $y \gets \mathbb{Z}_q$ and $z \gets \mathbb{Z}_q$ and outputting the ciphertext:
+\[ \langle g^y, g^z\cdot m\rangle.\]
+\begin{itemize}
+\item $\tilde{\Pi}$ is not an encryption scheme.
+\item $g^y$ is independent of $m$.
+\item $g^z\cdot m$ is a random element independent of $m$ (Lemma \ref{lem:ps}).
+\end{itemize}
+\[ \Pr\left[\mathsf{PubK}^{\mathsf{eav}}_{\mathcal{A},\tilde{\Pi}}(n)=1\right] = \frac{1}{2}.\]
+\end{proof}
+\end{frame}
+\begin{frame}\frametitle{Proof (Cont.)}
+$D$ receives $(\mathbb{G},q,g,g^x,g^y,g_3)$ where $g_3$ equals either $g^{xy}$ or $g^z$, for random $x, y, z$:
+\begin{figure}
+\begin{center}
+\input{tikz/ElGamal}
+\end{center}
+\end{figure}
+\end{frame}
+\begin{frame}\frametitle{Proof (Cont.)}
+\textbf{Case I}: $g_3 = g^z$, ciphertext is $\langle g^y, g^z\cdot m_b\rangle$.\\
+\[ \Pr[D(g^x,g^y,g^z)=1] = \Pr\left[\mathsf{PubK}^{\mathsf{eav}}_{\mathcal{A},\tilde{\Pi}}(n)=1\right] = \frac{1}{2}.\]
+\textbf{Case II}: $g_3 = g^{xy}$, ciphertext is $\langle g^y, g^{xy}\cdot m_b\rangle$.\\
+\[ \Pr[D(g^x,g^y,g^{xy})=1] = \Pr\left[\mathsf{PubK}^{\mathsf{eav}}_{\mathcal{A},\Pi}(n)=1\right] = \varepsilon(n).\]
+Since the DDH problem is hard,
+\[  \mathsf{negl}(n) \ge \abs{\Pr[D(g^x,g^y,g^z)=1] - \Pr[D(g^x,g^y,g^{xy})=1]}\]
+\[ =\abs{\frac{1}{2}-\varepsilon(n)}. \]
+\end{frame}
+%\end{comment}
+\begin{frame}\frametitle{CCA in Elgamal Encryption}
+\begin{exampleblock}{Constructing the ciphertext of the message $m\cdot m'$.}
+Given $pk=\langle g, h\rangle$, $c = \langle c_1, c_2\rangle$, $c_1=g^y$, $c_2=h^y\cdot m$, \\ \textbf{Method I}: compute
+$c_2' := c_2\cdot m'$, and $c' = \langle c_1, c_2'\rangle$.
+\[\frac{c_2'}{c_1^x} = ? \]%\frac{h^y\cdot m\cdot m'}{g^{xy}} = \frac{g^{xy}\cdot m\cdot m'}{g^{xy}} = m\cdot m'.\]
+\textbf{Method II}: compute $c_1'' := c_1\cdot g^{y''}$, and $c_2'' := c_2\cdot h^{y''}\cdot m'$.
+\[c_1''=g^y\cdot g^{y''} = g^{y+y''}\;\text{and}\; c_2''= ? \] %h^ym\cdot h^{y''}m'=h^{y+y''}mm'\]
+so $c''=\langle c_1'',c_2''\rangle$ is an encryption of $m\cdot m'$.
+\end{exampleblock}
+\end{frame}
+\begin{frame}\frametitle{Elgamal Implementation Issues}
+\begin{itemize}
+\item \textbf{Sharing public parameters}: $\mathcal{G}$ generates parameters $\mathbb{G},q,g$.
+\begin{itemize}
+\item generated ``once-and-for-all''.
+\item used by multiple receivers.
+\item each receiver must choose their own secrete values $x$ and publish their own public key containing $h=g^x$.
+\end{itemize}
+\end{itemize}
+\begin{alertblock}{Parameter sharing}
+In the case of Elgamal, the public parameters can be shared. In the case of RSA, can parameters be shared?
+\end{alertblock}
+\end{frame}
+\begin{frame}\frametitle{Summary}
+\begin{itemize}
+\item cyclic group, discrete log., baby-step/giant-step
+\item CDH, DDH, DHKE protocol
+\item Elgamal encryption, sharing public parameters
+\end{itemize}
+\end{frame}
+\end{document}

@@ -1,4 +1,4 @@
-echo '\input{frame.tex}'
+echo '\input{gallery/frame.tex}'
 echo '\begin{document}'
 for a in `ls -1 tikz/*.tex`
 do a=`echo $a | sed 's/^.*\/\(.*\).tex/\1/'`

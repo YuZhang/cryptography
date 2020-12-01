@@ -1,0 +1,536 @@
+\input{source/header/main.tex}
+
+\title{More on Public-Key Cryptography}
+
+\begin{document}
+\maketitle
+\begin{frame}
+\frametitle{Outline}
+\tableofcontents
+\end{frame}
+
+\section{Primes and Factoring}
+\begin{frame}\frametitle{Integer Factorization/Factoring}
+\begin{quote}
+``The problem of distinguishing prime numbers from composite numbers and of resolving the later into their prime factors is known to be one of the most important and useful in arithmetic.'' -- Gauss (1805)
+\end{quote}
+
+The ``hardest'' numbers to factor seem to be those having only large prime factors.
+\begin{itemize}
+\item The best-known algorithm is the \textbf{general number field sieve} [Pollard] with time $\mathcal{O}(\exp(n^{1/3}\cdot(\log n)^{2/3}))$.
+\item RSA Factoring Challenge: RSA-768 (232 digits)
+\begin{itemize}
+\item Two years on hundreds of machines (2.2GHz/2GB, 1500 years)
+\item Factoring a 1024-bit integer: about 1000 times harder.
+\end{itemize}
+\end{itemize}
+\end{frame}
+\begin{frame}\frametitle{Generating Random Primes}
+\begin{algorithm}[H]
+\SetKwInOut{Input}{input}
+\SetKwInOut{Output}{output}
+\SetKw{KwB}{break}
+\SetKw{KwH}{halt}
+\DontPrintSemicolon
+\caption{Generating a random prime}
+\Input{Length $n$; parameter $t$}
+\Output{A random $n$-bit prime}
+\BlankLine
+\For{$i = 1$ \KwTo $t$}{
+  $p' \gets \{0,1\}^{n-1}$\;
+  $p := 1\| p'$\;
+  \lIf{$p$ is prime}{\Return $p$}\;
+}
+\Return fail
+\end{algorithm}
+To show its efficiency, we need understand two issues:
+\begin{itemize}
+\item the probability that a randomly-selected $n$-bit integer is prime.
+\item how to efficiently test whether a given integer $p$ is prime.
+\end{itemize}
+\end{frame}
+\begin{frame}\frametitle{The Distribution of Prime}
+\begin{theorem}[Prime number theorem]
+$\exists$ a constant $c$ such that, $\forall n>1$, a randomly selected $n$-bit number is prime with probability at least $c/n$.
+\end{theorem}
+The probability that a prime is \emph{not} chosen in $t = n^2/c$ iterations is
+\[ \left( 1-\frac{c}{n} \right)^t = \left( \left( 1-\frac{c}{n} \right)^{n/c} \right)^n \le \left( e^{-1} \right)^n = e^{-n}.
+\]
+The algorithm will fail with a negligible probability.
+\end{frame}
+\begin{frame}\frametitle{Testing Primality}
+\begin{itemize}
+\item \textbf{Trial division}: Divide $N$ by $a=2,3,\dotsc,\sqrt{N}.$
+\item \textbf{Probabilistic algorithm for approximately computing}:
+\begin{itemize}
+\item Atlantic City algorithm with two-sided error. 
+\item Monte Carlo algorithm with one-sided error.
+\item Las Vegas algorithm with zero-sided error.
+\end{itemize}
+\item \textbf{Fermat primality test}: $a^{N-1} \equiv 1 \pmod N$.
+\item $a$ is a \textbf{witness} that $N$ is composite if $a^{N-1} \not \equiv 1 \pmod N$.
+\item $a$ is a \textbf{liar} if $N$ is composite and $a^{N-1} \equiv 1 \pmod N$.
+\item \textbf{Carmichael numbers}: composite numbers without witnesses.
+\end{itemize}
+\begin{theorem}
+If $\exists$ a witness, then at least half the elements of $\mathbb{Z}_N^*$ are witnesses.
+\end{theorem}
+\end{frame}
+\begin{frame}\frametitle{The Miller-Rabin Primality Test}
+$N-1=2^ru$, $u$ is odd. $a \in \mathbb{Z}^*_N$ is a \textbf{strong witness} if
+\begin{enumerate}
+\item $a^u \neq \pm 1$, and
+\item $a^{2^iu} \neq -1$ for $i\in\{1,\dotsc,r-1\}$.
+\end{enumerate}
+\begin{lemma}
+$x \in \mathbb{Z}^*$ is a \textbf{square root of 1 modulo} $N$ if $x^2 \equiv 1 \pmod N$. If $N$ is an odd prime then the only $x$ are $[\pm 1 \bmod N]$.
+\end{lemma}
+\begin{theorem}
+$N$ is an odd, composite number that is not a prime power. Then at least half the elements of $\mathbb{Z}^*_N$ are strong witnesses.
+\end{theorem}
+\begin{theorem}
+If $N$ is prime, then the Miller-Rabin test always outputs ``prime''. If $N$ is composite, then the algorithm outputs ``prime'' with probability at most $2^{-t}\;$\footnote{Actually, it is at most $4^{-t}$.}.
+\end{theorem}
+\end{frame}
+\begin{frame}\frametitle{Describing The Algorithm}
+\begin{algorithm}[H]
+\SetKwInOut{Input}{input}
+\SetKwInOut{Output}{output}
+\SetKw{KwC}{compute}
+\SetKw{KwL}{LOOP}
+\DontPrintSemicolon
+\caption{The Miller-Rabin primality test}
+\Input{Integer $N>2$ and parameter $t$}
+\Output{A decision as to wether $N$ is prime or composite}
+\BlankLine
+
+\lIf{$N$ is a perfect power}{\Return ``composite''}
+\KwC $r\ge 1$ and $u$ odd such that $N-1 = 2^ru$\;
+\KwL: \For{$s = 1$ \KwTo $t$}{
+  $a \gets \{2,\dotsc,N-2\}$\;
+  $x = a^u \bmod N$\;
+  \lIf{$x = \pm 1$}{do next \KwL}
+  \For{$i = 1$ \KwTo $r$} {
+    $x = x^2 \bmod N$\;
+    \lIf{$x = -1 $}{do next \KwL}
+%    \lIf{$x = 1 $}{\Return ``composite''}\;
+  }
+  \Return ``composite''\;
+}
+\Return ``prime''
+\end{algorithm}
+\end{frame}
+\begin{frame}\frametitle{Examples of Primality Tests}
+\begin{exampleblock}{Liars in Fermat primality test}
+$2^{340} \equiv 1 \pmod {341}$,  but $341 = 11\cdot 31$.\\  
+$5^{560} \equiv 1 \pmod {561}$,  but $561 = 3\cdot 11\cdot 17$.\\
+Carmichael numbers $< 10000$: \\  
+561,  1105,  1729,  2465,  2821,  6601,  8911.
+\end{exampleblock}
+\begin{exampleblock}{Examples of Miller-Rabin test}
+Carmichael number $1729=7\cdot 13\cdot 19$. \\$1729-1 = 1728 = 2^6\cdot 27$. So $r = 6, u = 27$. $a=671$.
+\begin{align*}
+671^{27} &\equiv 1084 \pmod {1729} \\
+671^{27\cdot 2} &\equiv 1065 \pmod {1729}\\
+671^{27\cdot 2^2} &\equiv 1 \pmod {1729}\\
+\end{align*}
+
+\end{exampleblock}
+\end{frame}
+\begin{frame}\frametitle{Algorithms for Factoring}
+\begin{itemize}
+\item \textbf{Factoring} $N=pq$. $p,q$ are of the same length $n$.
+\item \textbf{Trial division}: $\mathcal{O}(\sqrt{N}\cdot \mathsf{polylog}(N))$.
+\item \textbf{Pollard's $p-1$} method: effective when $p-1$ has ``small'' prime factors.
+\item \textbf{Pollard's rho} method: $\mathcal{O}(N^{1/4}\cdot \mathsf{polylog}(N))$.
+\item \textbf{Quadratic sieve} algorithm [Carl Pomerance]: sub-exponential time $\mathcal{O}(\exp(\sqrt{n\cdot \log n}))$.
+\item The best-known algorithm is the \textbf{general number field sieve} [Pollard] with time $\mathcal{O}(\exp(n^{1/3}\cdot(\log n)^{2/3}))$.
+\end{itemize}
+\end{frame}
+\begin{frame}\frametitle{Pollard's $p-1$ Method}
+\textbf{Idea}: Fermat's little theorem: $y = x^{(p-1)\cdot k} \equiv 1 \pmod p$. Then $(y-1) \equiv 0 \pmod p$ and $p \mid (y-1)$. So $p = \gcd(y-1,N)$. To make the exponent a large multiple of $(p-1)$:
+\[ M = lcm(\{ i | i \le B \}) = \prod_{\text{prime}\;i \le B}i^{\lfloor \log_iB \rfloor}.\]
+If $p-1$ has only ``small'' factors, then the bound $B$ will be small.
+\begin{algorithm}[H]
+\SetKwInOut{Input}{input}
+\SetKwInOut{Output}{output}
+\SetKw{KwC}{compute}
+\SetKw{KwL}{LOOP}
+\DontPrintSemicolon
+\caption{Pollard's $p-1$ algorithm for factoring}
+\Input{Integer $N$}
+\Output{A non-trivial factor of $N$}
+\BlankLine
+
+$x \gets \mathbb{Z}^*_N$\;
+$y := [x^M \bmod N]$\;
+$p := \gcd(y-1,N)$\;
+\lIf{$p \notin \{1,N\}$}{\Return $p$}
+\end{algorithm}
+\end{frame}
+\begin{frame}\frametitle{Pollard's Rho ($\rho$) Method}
+\textbf{Idea}: Using the improved birthday attack\footnote{Floyd's cycle-finding algorithm (the ``tortoise and the hare'' algorithm).} to find $x,x'$ such that $x \neq x' \land x \equiv x' \pmod p$. Then $p \mid (x-x')$, $p = \gcd(x-x',N)$.
+$F(x) = x^2+b$, where $b \not \equiv 0,-2 \pmod N$.
+\begin{algorithm}[H]
+\SetKwInOut{Input}{input}
+\SetKwInOut{Output}{output}
+\SetKw{KwC}{compute}
+\SetKw{KwL}{LOOP}
+\DontPrintSemicolon
+\caption{Pollard's rho algorithm for factoring}
+\Input{Integer $N$}
+\Output{A non-trivial factor of $N$}
+\BlankLine
+
+$x_0 \gets \mathbb{Z}^*_N$\;
+\For{$i=1$ \KwTo $2^{n/2}$}{
+$x_i := [F(x_{i-1}) \bmod N]$\;
+$x_{2i} := [F(F(x_{2i-2})) \bmod N]$\;
+$p := \gcd(x_{2i}-x_i,N)$\;
+\lIf{$p \notin \{1,N\}$}{\Return $p$}
+}
+\end{algorithm}
+\end{frame}
+\begin{frame}\frametitle{Proof of Pollard's $\rho$ Method}
+\begin{lemma}
+Let $x_1,\dotsc$ be a sequence with $x_m \equiv F(x_{m-1}) \pmod N$. $F$ satisfies that $x \equiv x' \pmod N \implies F(x) \equiv F(x') \pmod N$. If $x_I \equiv x_J\pmod p$ with $I < J$, then $\exists$ $i < J$ such that $x_{i} \equiv x_{2i} \pmod p$.
+\end{lemma}
+\begin{figure}
+\begin{center}
+\input{tikz/birthdayattack}
+\end{center}
+\end{figure}
+\begin{proof}
+See the proof of improved birthday attack.
+\end{proof}
+According to the lemma of birthday problem, given a sequence of length $O(N^{1/4})$, find such pair with probability $1/4$.
+\end{frame}
+\begin{frame}\frametitle{Example of Pollard's $p-1$ and $\rho$ methods}
+\begin{exampleblock}{Factorizing $N=5917$ with Pollard's $p-1$ method}
+Choose $B=5$, $M=lcm(1,2,3,4,5)=60$.\\
+For $x=2$, $y \equiv x^M \equiv 2^{60} \equiv 3417 \pmod{5917}$.\\
+$p = gcd(y-1,N) = \gcd(3416,5917) = 61$.
+\end{exampleblock}
+\begin{exampleblock}{Factorizing $N=8051$ with Pollard's $\rho$ method}
+$f(x) = x^2+1$, $x_0=2$.\\
+\begin{center}
+\begin{tabular}{|c|c|c|c|} \hline
+$i$  & $x_i$ & $x_{2i}$ & $\gcd(x_{2i}-x_i,N)$ \\ \hline
+1 & 5 & 26 & 1 \\
+2 & 26 & 7474 & 1 \\
+3 & 677 & 871 & 97 \\ \hline
+\end{tabular}	
+\end{center}
+\end{exampleblock}
+\end{frame}
+\begin{frame}\frametitle{The Quadratic Sieve Algorithm}
+\textbf{Idea}: Find $x,y$ with $x^2 \equiv y^2 \pmod N$ and $x \not \equiv \pm y \pmod N$. $x^2-y^2 \equiv 0 \pmod N\implies (x+y)(x-y) \equiv 0 \pmod N$.\\
+$\gcd(x+y,N)$ and $\gcd(x-y,N)$ will give $p$.\\
+\textbf{Finding congruence of squares}: \\
+%Find $x_i^2 \equiv y_i \pmod N$ for $i=1,2,\dotsc,r$ and $y_1y_2\cdots y_r = c^2$. \\
+%$(x_1x_2\cdots x_r)^2 \equiv y_1y_2\cdots y_r = c^2 \pmod N$.\\
+\begin{enumerate}
+\item Choose a factor base $B = \{p_1,\dotsc,p_k\}$ of prime numbers. 
+\item Use `\textbf{sieve theory}' to find $\ell = k+1$ distinct $x_1,\dotsc,x_\ell$ for which $[x_i^2 \bmod N]$ decompose into the elements of $B$: $x_i^2 \equiv \prod^k_{j=1} p_j^{e_j} \pmod N$.
+\item Write $x_i^2$ as an exponent vector $\langle e_{i,1},\dotsc,e_{i,k}\rangle \pmod 2$.
+\item Find the addition of vectors = the zero vector $\pmod 2$.\\
+$X=\{x_{\ell_1},\dotsc,x_{\ell_n}\}$. $\forall i$, $E_i = \sum_{j=1}^ne_{\ell_j,i} \equiv 0 \pmod 2$.
+\item Find a pair: $x = \prod_{i=1}^nx_{\ell_i} \not \equiv y=\prod_{i=1}^kp_i^{E_i/2} \pmod N$.  
+\end{enumerate}
+\end{frame}
+\begin{frame}\frametitle{Example of Quadratic Sieve Algorithm}
+\begin{exampleblock}{Factorizing $N=377753$ with quadratic sieve algorithm}
+$B = \{2,13,17,23,29\}$.
+\begin{align*}
+620^2 &\equiv 17^2\cdot 23 \pmod N\\
+621^2 &\equiv 2^4\cdot 17\cdot 29 \pmod N\\
+645^2 &\equiv 2^7\cdot 13\cdot 23 \pmod N\\
+655^2 &\equiv 2^3\cdot 13\cdot 17\cdot 29 \pmod N
+\end{align*}
+\[ [620\cdot 621\cdot 645\cdot 655 \bmod N]^2 \equiv [2^7\cdot 13\cdot 17^2\cdot 23\cdot 29\bmod N]^2 \]
+\[ \implies 127194^2 \equiv 45335^2 \pmod N,\]
+Computing $\gcd(127194-45335,377753)=751$.
+\end{exampleblock}
+\end{frame}
+\section{Discrete Logarithm Algorithms}
+\begin{frame}\frametitle{Overview of Discrete Logarithm Algorithms}
+\begin{itemize}
+\item Given a generator $g \in \mathbb{G}$ and $y \in \langle g \rangle$, find $x$ such that $g^x=y$.
+\item \textbf{Brute force}: $\mathcal{O}(q)$, $q = \mathsf{ord}(g)$ is the order of $\langle g\rangle$.
+\item \textbf{Baby-step/giant-step} method [Shanks]: $\mathcal{O}(\sqrt{q}\cdot \mathsf{polylog}(q))$.
+\item \textbf{Pohlig-Hellman} algorithm: when $q$ has small factors.
+\item \textbf{Index calculus} method: $\mathcal{O}(\exp{(\sqrt{n\cdot \log n})})$.
+\item The best-known algorithm is the \textbf{general number field sieve} with time $\mathcal{O}(\exp(n^{1/3}\cdot(\log n)^{2/3}))$.
+\item Elliptic curve groups vs. $\mathbb{Z}_p^*$: more efficient for the honest parties, but that are equally hard for an adversary to break.\\ (Both 1024-bit $\mathbb{Z}_p^*$ and 132-bit elliptic curve need $2^{66}$ steps.)
+\end{itemize}
+\end{frame}
+\begin{frame}\frametitle{The Baby-Step/Giant-Step Algorithm}
+\begin{figure}
+\begin{center}
+\input{tikz/baby-giant}
+\end{center}
+\end{figure}
+\begin{algorithm}[H]
+\SetKwInOut{Input}{input}
+\SetKwInOut{Output}{output}
+\SetKw{KwC}{compute}
+\SetKw{KwS}{sort}
+\DontPrintSemicolon
+\caption{The baby-step/giant-step algorithm}
+\Input{$g \in \mathbb{G}$ and $y \in \langle g \rangle$; $q=\mathsf{ord}(g)$ ($t := \lfloor \sqrt{q}\rfloor$)}
+\Output{$\log_g y$}
+\BlankLine
+
+\lFor{$i = 0$ \KwTo $\lfloor q/t \rfloor$}{\KwC $g_i := g^{i\cdot t}$ \tcc*[f]{giant steps}}
+\KwS the pairs $(i,g_i)$ by $g_i$\;
+\For{$i = 0$ \KwTo $t$}{
+\KwC $y_i := y\cdot g^i$ \tcc*[f]{baby steps}\;
+\lIf{$y_i = g_k$ for some $k$}{\Return $[kt-i \bmod q]$}
+}
+\end{algorithm}
+The time complexity is $\mathcal{O}(\sqrt{q}\cdot \mathsf{polylog}(q))$.
+\end{frame}
+\begin{frame}\frametitle{Example of Baby-Step/Giant-Step Algorithm}
+\begin{exampleblock}{In $\mathbb{Z}^*_{29}$, $q=28$, $g=2$, $y=17$.}
+$t=5$, compute the giant steps:
+\[2^0=1,\; 2^5=3,\; 2^{10}=9,\; 2^{15}=27,\; 2^{20}=23,\; 2^{25}=11. \]
+compute the baby steps:
+\[17\cdot 2^0=17,\; 17\cdot 2^1=5,\; 17\cdot 2^2=10,\]
+\[ 17\cdot 2^3=20,\; 17\cdot 2^4=11,\; 17\cdot 2^5=22.\]
+$2^{25}=11=17\cdot 2^4$. So $\log_2 17=25-4=21$.
+\end{exampleblock}
+
+\end{frame}
+\begin{frame}\frametitle{The Pohlig-Hellman Algorithm}
+\textbf{Idea}: when $q$ is known and has small factors, reduces the discrete logarithm instance to multiple instances in groups of smaller order.
+\newline
+
+According to CRT: If $q=\prod^k_{i=1}q_i$ and $\forall i\neq j, \gcd(q_i,q_j)=1$, then
+\[ \mathbb{Z}_q \simeq \mathbb{Z}_{q_1} \times \cdots \times \mathbb{Z}_{q_k}\; \text{and}\; \mathbb{Z}^*_q \simeq \mathbb{Z}^*_{q_1} \times \cdots \times \mathbb{Z}^*_{q_k} \]
+\[(g_i)^x\overset{\text{def}}{=} \left( g^{q/q_i} \right)^x = (g^x)^{q/q_i} = y^{q/q_i}\; \text{for}\; i=1,\dotsc,k.\]
+We have $k$ instances in $k$ smaller groups, $\mathsf{ord}(g_i) = q_i.\;$ \footnote{If $p \mid q$, then $\mathsf{ord}(g^p)=q/p$.}\\
+Use any other algorithm to solve $\log_{g_i}  (y^{q/q_i})$.\\
+Answers are $\{x_i\}^k_{i=1}$ for which $g_i^{x_i} \equiv y^{q/q_i} \equiv g_i^x$. \\
+$\forall i,\;x \equiv x_i \pmod{q_i}$. $x \bmod q$ is uniquely determined (CRT). \\
+The time complexity is $\mathcal{O}(\max_i\{\sqrt{q_i}\}\cdot \mathsf{polylog}(q))$.
+\end{frame}
+\begin{frame}\frametitle{Example of Pohlig-Hellman Algorithm}
+\begin{exampleblock}{In $\mathbb{Z}^*_{31}$, $q=30=5\cdot 3 \cdot 2$, $g=3$, $y=26=g^x$.}
+\begin{alignat*}{3}
+(g^{30/5})^x & = y^{30/5} & \implies (3^{6})^x\;\, & = 26^{6} & \implies 16^x & \equiv 1 \\
+(g^{30/3})^x & = y^{30/3} & \implies (3^{10})^x & = 26^{10} & \implies 25^x & \equiv 5 \\
+(g^{30/2})^x & = y^{30/2} & \implies (3^{15})^x & = 26^{15} & \implies 30^x & \equiv 30 
+\end{alignat*}
+\[ x \equiv 0 \pmod 5,\; x \equiv 2 \pmod 3, x \equiv 1 \pmod 2, \]
+so $x \equiv 5 \pmod{30}$.
+\end{exampleblock}
+\end{frame}
+\begin{frame}\frametitle{The Index Calculus Method}
+\textbf{Idea}: find a relatively small factor base and build a system of $\ell$ linear equations related to $g$; find a linear equation related to $y$; solve $\ell+1$ linear equations to give $\log_g y$.
+\begin{enumerate}
+\item for $\mathbb{Z}^*_p$, choose a base $B = \{p_1,\dotsc,p_k\}$ of prime numbers. 
+\item find $\ell \ge k$ distinct $x_1,\dotsc,x_\ell$ for which $[g^{x_i} \bmod p]$ decompose into the elements of $B$: $g^{x_i} \equiv \prod^k_{j=1} p_j^{e_j} \pmod p$.
+\item $\ell$ equations: $x_i = \sum^k_{j=1}e_{i,j}\cdot \log_g(p_{j}) \pmod{p-1}$.
+\item find $x^*$ for which $[g^{x^*}\cdot y \bmod p]$ can be factored.
+\item new equation: $x^* + \log_gy = \sum^k_{j=1}e^*_{j}\cdot \log_g(p_j) \pmod{p-1}$.
+\item Use linear algebra to solve equations and give $\log_gy$.  
+\end{enumerate}
+The time complexity is identical to that of the quadratic sieve.
+\end{frame}
+\begin{frame}\frametitle{Example of Index Calculus Method}
+\begin{exampleblock}{$p=101$, $g=3$ and $y=87$. $B=\{2,5,13\}$.}
+$3^{10} \equiv 65 \pmod {101}$ and $65 = 5\cdot 13$. Similarly, $3^{12} \equiv 80  = 2^4 \cdot 5 \pmod {101}$ and $3^{14} \equiv 13 \pmod {101}$. The linear equations:
+\begin{align*}
+x_1 = 10 &\equiv \log_3 5 + \log_3 13 \pmod{100}\\
+x_2 = 12 &\equiv 4\cdot \log_3 2 + \log_3 5 \pmod{100}\\
+x_3 = 14 &\equiv \log_3 13 \pmod{100}.
+\end{align*}
+We also have $x^*=5$, $3^5\cdot 87 \equiv 32 \equiv 2^5 \pmod{101}$, or
+\[5+\log_3 87 \equiv 5\cdot \log_3 2 \pmod{100}.\]
+Adding the 2nd and 3rd equations and subtracting the 1st, we derive $4\cdot \log_3 2 \equiv 16 \pmod{100}$. So $\log_3 2$ is 4, 29, 54, or 79. Trying all shows that $\log_3 2 = 29$. The last equation gives $\log_3 87 = 40$.
+\end{exampleblock}
+\end{frame}
+\section{More Public-key Schemes}
+\begin{frame}\frametitle{Additional Public-key Schemes}
+\begin{itemize}
+\item \textbf{Goldwasser-Micali} based on deciding quadratic residuosity problem. (first scheme proven to be CPA-secure)
+\item \textbf{Rabin}: based on the computing square root problem. (security equivalent to the hardness of factoring)
+\item \textbf{Paillier}: based on the decisional composite residuosity problem. (efficient and homomorphic)
+\item \textbf{Elliptic curve}: forms a cyclic group with DH problem (efficient).
+\end{itemize}
+\end{frame}
+\begin{frame}\frametitle{Quadratic Residues Modulo a Prime}
+\begin{itemize}
+\item $y \in \mathbb{G}$ is a \textbf{quadratic residue (qr)} if $\exists x \in \mathbb{G}$ with $x^2 = y$. Otherwise, $y$ is a \textbf{quadratic non-residue (qnr)}.
+\item In an abelian group, the set of qr forms a subgroup.
+\item In $\mathbb{Z}_p^*$, $p> 2$ is prime, every qr has two square roots.
+\item The set of qr/qnr is $\mathcal{QR}_p$/$\mathcal{QNR}_p$,
+$\abs{\mathcal{QR}_p}= \abs{\mathcal{QNR}_p} = \frac{p-1}{2}$.
+\item $\mathcal{J}_p(x)$ is \textbf{Jacobi symbol} of $x$ modulo $p$:
+
+\[
+  \mathcal{J}_p(x) \overset{\mathsf{def}}{=} \left\{ 
+  \begin{array}{l l}
+    +1 & \quad \text{if $x$ is a qr}\\
+    -1 & \quad \text{if $x$ is not a qr}\\
+  \end{array} \right .
+\]
+\item $\mathcal{J}_p(x) = x ^{\frac{p-1}{2}} \bmod p$.
+\item $\mathcal{J}_p(xy) = \mathcal{J}_p(x)\cdot \mathcal{J}_p(y)$.
+\end{itemize}
+\end{frame}
+\begin{frame}\frametitle{Quadratic Residues Modulo a Composite}
+\begin{itemize}
+\item $N = pq$, $p,q$ distinct primes, in Chinese Remainder Theorem: 
+$x \in \mathbb{Z}_N^*$ with $ x \leftrightarrow (x_p,x_q) = ([x \bmod p], [x \bmod q])$.
+\item $x$ is a qr mod $N$ $\iff$ $x_p$/$x_q$ are qr mod $p$/$q$.
+\item $x$ is a qr mod $N$ $\iff \mathcal{J}_p(x) = \mathcal{J}_q(x) = +1$.
+\item Qr $x$ has 4 roots: $(\pm x_p, \pm x_q)$, so $\frac{\abs{\mathcal{QR}_N}}{\abs{Z_N^*}} = \frac{\abs{\mathcal{QR}_p}\abs{\mathcal{QR}_q}}{\abs{Z_N^*}}=\frac{1}{4}$.
+\item $\mathcal{J}_N(x) \overset{\mathsf{def}}{=} \mathcal{J}_p(x) \cdot \mathcal{J}_q(x)$. $\mathcal{J}_N(xy) = \mathcal{J}_N(x)\cdot \mathcal{J}_N(y)$.
+\item $\mathcal{QNR}_N^{+1}(x) \overset{\mathsf{def}}{=} \{ x | x \text{ is qnr, but } \mathcal{J}_N(x) = +1\}$.
+%\item $[xy \bmod N] \in \mathcal{QR}_N \text{ if } x,y \in \mathcal{QR}_N \text { or } \mathcal{QNR}_N^{+1}$.
+%\item $[xy \bmod N] \in \mathcal{QNR}_N^{+1} \text{ if } x \in \mathcal{QR}_N \text{ and } y \in \mathcal{QNR}_N^{+1}$.
+\end{itemize}
+\begin{figure}
+\begin{center}
+\input{tikz/qr-qnr.tex}
+\end{center}
+\end{figure}
+\end{frame}
+\begin{frame}\frametitle{Goldwasser-Micali Scheme}
+\begin{itemize}
+\item \textbf{Deciding quadratic residuosity (DQR)} of $x$, where $x$ is randomly chosen from $\mathcal{J}_N^{+1}$ ($\mathcal{QR}_N$ and $\mathcal{QNR}_N^{+1}$).
+\item For DQR, no solution is better than factoring $N$.
+\end{itemize}
+\begin{construction}
+\begin{itemize}
+\item $\mathsf{Gen}$: $(N,p,q)$, $z \gets \mathcal{QNR}_N^{+1}$. $pk = \left<N,z\right>$ and $sk=\left<p,q\right>$.
+\item $\mathsf{Enc}$: $m\in \{0,1\}$, $x\gets \mathbb{Z}_N^*$, output $c := [z^m\cdot x^2 \bmod N]$.
+\item $\mathsf{Dec}$: If $c$ is a qr, output $0$; otherwise $1$.
+\end{itemize}
+\end{construction}
+Goldwasser-Micali scheme is CPA-secure if DQR problem is hard.
+\end{frame}
+\begin{frame}\frametitle{Computing Square Roots mod a Prime}
+\begin{algorithm}[H]
+\SetKwInOut{Input}{input}
+\SetKwInOut{Output}{output}
+\SetKw{KwC}{compute}
+\SetKw{KwS}{sort}
+\SetKw{KwCA}{case}
+\DontPrintSemicolon
+\caption{computing square root of a prime}
+\Input{Prime $p$; quadratic residue $a \in \mathbb{Z}^*_p$}
+\Output{A square root of $a$}
+\BlankLine
+
+\KwCA $p=3 \bmod 4$:
+\Return $[a^{\frac{p+1}{4}} \bmod p]$\;
+\KwCA $p=1 \bmod 4$:
+let $b$ be a qnr modulo $p$\;
+\KwC $l$ and $m$ odd with $2^\ell\cdot m = \frac{p-1}{2}$\;
+$r := 2^\ell$, $r' := 0$\;
+\For{$i = \ell$ \KwTo $1$}{ $r := r/2$, $r' := r'/2$\tcc*[f]{maintain $a^r\cdot b^{r'}=1 \bmod p$}\;
+\lIf{$a^r\cdot b^{r'} = -1 \bmod p$}{$r' := r' + 2^\ell \cdot m$}
+}
+\tcc{now $r=m$, $r'$ is even, and $a^r\cdot b^{r'}=1 \bmod p$}
+\Return $\left[ a^{\frac{r+1}{2}}\cdot b^{\frac{r'}{2}} \bmod p\right]$\;
+\end{algorithm}
+\end{frame}
+\begin{frame}\frametitle{Rabin Scheme}
+\begin{itemize}
+\item \textbf{Computing square roots (CSR)} of qr mod $N$ is \textbf{proven to be hard} if factoring $N$ is hard.
+\item $N=pq$ is a \textbf{Blum integer} if $p \ne q$ and $p \equiv q \equiv 3 \bmod 4$.
+\item $\mathcal{QR}$ for Blum integer can form TDP.
+\end{itemize}
+\begin{construction}
+\begin{itemize}
+\item $\mathsf{Gen}$: Blum integer $N=pq$, $pk = N$ and $sk=\left<p,q\right>$.
+\item $\mathsf{Enc}$: $m\in \{0,1\}$, $x\gets \mathcal{QR}_N$, output $c := \left< [x^2 \bmod N],\mathsf{lsb}(x)\oplus m\right>$.
+\item $\mathsf{Dec}$: Input $\left<c,c'\right>$. $x=c^{1/2}$, output $\mathsf{lsb}(x)\oplus c'$.
+\end{itemize}
+\end{construction}
+Rabin scheme is CPA-secure if factoring problem is hard.
+\end{frame}
+\begin{frame}\frametitle{Paillier Scheme}
+\begin{itemize}
+\item $\mathbb{Z}_N\times \mathbb{Z}_N^* \simeq \mathbb{Z}_{N^2}^*$ with $f(a,b)=[(1+N)^a\cdot b^N \bmod N^2]$.
+\item $\mathsf{Res}(N^2)$ is the set of $N$th residue mod $N^2$: $\{(0,b) | b \in \mathbb{Z}_N^*\}$.
+\item \textbf{Decisional composite residuosity (DCR)} problem is to distinguish a random element of $\mathbb{Z}_{N^2}^*$ from one of $\mathsf{Res}(N^2)$. 
+\end{itemize}
+\begin{construction}
+\begin{itemize}
+\item $\mathsf{Gen}$: $(N,p,q)$, $pk = N$ and $sk=\left<N,\phi(N)\right>$.
+\item $\mathsf{Enc}$: $m\in \mathbb{Z}_N$, $r\gets \mathbb{Z}_N^*$, output $c := [(1+N)^m\cdot r^N \bmod N^2]$.
+\item $\mathsf{Dec}$: output $\left[ \frac{[c^{\phi(N)} \bmod N^2]-1}{N}\cdot \phi(N)^{-1} \bmod N\right]$.
+\end{itemize}
+\end{construction}
+$c^{\phi(N)} \bmod N^2 \leftrightarrow (m,r)^{\phi(N)} = (m\cdot {\phi(N)}, r^{\phi(N)}).$ \\
+Paillier scheme is CPA-secure if DCR problem is hard.
+\end{frame}
+\begin{frame}\frametitle{Homomorphic Encryption}
+\begin{itemize}
+\item \textbf{Homomorphic Encryption} with $\circ$: $\mathsf{Dec}_{sk}(c_1\circ c_2)=m_1\circ m_2$.
+\item Elgamal encryption is homomorphic with $\times$: $\left<g^{y_1},h^{y_1}\cdot m_1\right>\cdot \left<g^{y_2},h^{y_2}\cdot m_2\right> = \left<g^{y_1+y_2},h^{y_1+y_2}\cdot m_1m_2\right>$
+\item Paillier scheme is homomorphic with $+$: $\mathsf{Enc}_N(m_1) \cdot \mathsf{Enc}_N(m_2) = \mathsf{Enc}_N([m_1+m_2 \bmod N])$.
+\item \textbf{Application}: voting without learning any individual votes.
+\[c_i := [(1+N)^{v_i}\cdot r^N \bmod N^2], v_i \in \{0,1\}\]
+\[c^* := [\Pi_{i} c_i \bmod N^2], v^* = \Sigma_{i} v_i \]
+\item First \textbf{Fully} homomorphic with $\times$ and $+$ by Craig Gentry in 2009.
+\end{itemize}
+\end{frame}
+\begin{frame}\frametitle{Elliptic Curve Groups}
+\textbf{Elliptic curve group}: points with ``addition'' operation.\\
+Any \textbf{elliptic curve} is a plane algebraic curve:
+\[ y^2 \equiv x^3 + Ax + B \pmod p\]
+where $A,B \in \mathbb{Z}_p$ are constants with $4A^3 + 27B^2\not \equiv 0 \pmod p$.
+$\hat{E}(\mathbb{Z}_p)$ is the set of pairs $(x,y) \in \mathbb{Z}_p \times \mathbb{Z}_p$:
+\[ \hat{E}(\mathbb{Z}_p) \overset{\text{def}}{=} \{(x,y) \mid x,y\in \mathbb{Z}_p \land y^2 \equiv x^3 + Ax + B \pmod p \}\]
+$E(\mathbb{Z}_p) \overset{\text{def}}{=} \hat{E}(\mathbb{Z}_p)\cup \{\mathcal{O}\}$, $\mathcal{O}$ is identity, ``\textbf{point at infinity}''.
+\end{frame}
+\begin{frame}\frametitle{``Addition'' on Points of Elliptic Curves}
+\begin{columns}
+\begin{column}{5cm}
+\begin{figure}
+\begin{center}
+%\input{tikz/ellipticcurve}
+\includegraphics[width=50mm]{pic/ecc.pdf} 
+\end{center}
+\end{figure}
+\end{column}
+\begin{column}{5cm}
+Every line intersects the curve in 3 points:
+\begin{itemize}
+\item count twice if tangent.
+\item count $\mathcal{O}$ at the vertical infinity of $y$-axis.
+\end{itemize}
+``\textbf{Addition}'' on points:
+\begin{itemize}
+\item $P+\mathcal{O} = \mathcal{O} + P = P$.
+\item If $P_1, P_2, P_3$ are co-linear, then $P_1 + P_2 + P_3 = \mathcal{O}$.
+\end{itemize}
+$-P=(x,-y)$\\
+$P_1 + P_2 = -P_3$\\
+$2P_4=-P_3$\\
+$dP = P + (d-1)P$
+\end{column}
+\end{columns}
+\[sk = (P,d); pk = (P,Q=dP)\]
+\end{frame}
+\begin{frame}\frametitle{Key Size Comparison}
+\begin{center}
+\textbf{Key lengths} (in bits) with comparable security
+\newline
+
+\begin{tabular}{|c|c|c|} \hline
+Symmetric & RSA/DH & ECC \\ \hline	
+56 & 512 & 112 \\
+80 & 1024 & 160 \\
+112 & 2048 & 224 \\
+128 & 3072 & 256 \\
+192 & 7680 & 384 \\
+256 & 15360 & 521 \\ \hline	
+\end{tabular}	
+\end{center}
+\end{frame}
+\end{document}

@@ -2,6 +2,6 @@
 \node (x) [circle, minimum size=1.5cm, draw] {$x$};
 \node (fx) [circle, draw, right of=x, minimum size=1.5cm, node distance=4cm] {$f(x)$};
 
-\draw[-latex] (x) to [bend left=30,-latex,above] node {easy} (fx);
-\draw[-latex,dotted] (fx) to [bend left=30,-latex,below] node {hard} (x);
+\draw[-latex,blue] (x) to [bend left=30,-latex,above] node {easy} (fx);
+\draw[-latex,red] (fx) to [bend left=30,-latex,below] node {hard} (x);
 \end{tikzpicture}

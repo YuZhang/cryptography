@@ -1,0 +1,248 @@
+\input{source/header/main.tex}
+
+\title{Closing Remarks}
+\begin{document}
+	\maketitle	
+\begin{comment}
+\begin{frame}\frametitle{Introduction}
+\begin{itemize}
+\item Modern cryptography secures information, transactions and computations.
+\item Kerckhoffs's principle \& Open cryptographic design.
+\item Caesar's, shift, Mono-Alphabetic sub., Vigen\`{e}re.
+\item Brute force, letter frequency, Kasiski's, IC.
+\item Sufficient key space principle.
+		\item Arbitrary adversary principle.
+		\item Rigorously proven security.
+	\end{itemize}
+\end{frame}
+\begin{frame}\frametitle{Perfect Secrets}
+\begin{itemize}
+\item Perfect secrecy $=$ Perfect indistinguishability $=$ Adversarial indistinguishability.
+\item Perfect secrecy is attainable. The One-Time Pad (Vernam's cipher).
+\item Shannon's theorem.
+\end{itemize}
+\end{frame}
+\begin{frame}\frametitle{Computational Security vs. Info.-theoretical Security}
+\begin{center}
+\begin{tabular}{|c|c|c|} \hline
+                      & \textbf{Computational} & \textbf{Info.-theoretical} \\ \hline
+\textbf{Adversary}    & \textsc{ppt} & no limited \\ 
+                      & eavesdropping & eavesdropping\\ \hline 
+\textbf{Definition}   & indistinguishable & indistinguishable \\ 
+                      & $\frac{1}{2} + \mathsf{negl}$ & $\frac{1}{2}$ \\ \hline
+\textbf{Assumption}   & pseudorandom & random   \\ \hline
+\textbf{Key}	      & short random str. & long random str.\\ \hline
+\textbf{Construction} & XOR pad & XOR pad \\ \hline 
+\textbf{Prove}        & reduction & -     \\ \hline
+\end{tabular}	
+\end{center}
+\end{frame}
+\begin{frame}\frametitle{Private-Key Encryption}
+\begin{itemize}
+\item Asymptotic approach, proof of reduction, indistinguishable.
+\item PRG, PRF, PRP, stream cipher, block cipher.
+\item Security/construction against eavesdropping/CPA.
+\item EBC, CBC, OFB, CTR.
+\end{itemize}
+\end{frame}
+\begin{frame}\frametitle{Block Cipher}
+\begin{itemize}
+\item Block cipher is PRP.
+\item confusion \& diffusion, SPN, Feistel network, avalanche effect.
+\item DES, 3DES, AES.
+\item reduced round, meet-in-the-middle, differential and linear cryptanalysis. 
+\end{itemize}
+\end{frame}
+\begin{frame}\frametitle{MAC}
+\begin{itemize}
+\item adaptive CMA, replay attack, birthday attack.
+\item existential unforgeability, collision resistance.
+\item CBC-MAC, CRHF, Merkle-Damg\r{a}rd transform, NMAC, HMAC. 
+\end{itemize}
+\end{frame}
+\begin{frame}\frametitle{CCA, AE}
+\begin{itemize}
+\item CCA-secure, AE, det. enc., det. CPA-secure, DAE.
+\item Enc-then-auth, KDF, SIV, wide block cipher, tweakable encryption.
+\item SIV-CTR, PBKDF, salt, enc. w/o expansion, CTS.
+\end{itemize}
+\end{frame}
+\begin{frame}\frametitle{OWF}
+\begin{itemize}
+\item OWF implies secure private-key encryption scheme and MAC.
+\item Secure private-key encryption scheme/MAC implies OWF.
+\end{itemize}
+\end{frame}
+\begin{frame}\frametitle{Number Theory, RSA}
+\begin{itemize}
+\item Primes, modular arithmetic.
+\item Miller-Rabin primality testing.
+\item Factoring, Pollard's $p-1$ and $\rho$ methods.
+\item $e^{\mathsf{th}}$-root modulo $N$, RSA.
+\end{itemize}
+\end{frame}
+\begin{frame}\frametitle{Public-key Encryption, RSA}
+\begin{itemize}
+\item eavesdropper=CPA, CCA/CCA2 in public-key encryptions.
+\item hybrid argument, multiple encryptions.
+\item hybrid encryption, ``textbook RSA'', padded RSA, PKCS.
+\item small $e$, common modulus attacks, CCA, faults attack.
+\end{itemize}
+\end{frame}
+\begin{frame}\frametitle{DL, CDH/DDH}
+\begin{itemize}
+\item cyclic group, discrete log., baby-step/giant-step
+\item CDH, DDH, DHKE protocol.
+\item Elgamal encryption, sharing public parameters.
+\end{itemize}
+\end{frame}
+\begin{frame}\frametitle{TPD, ROM, and More}
+\begin{itemize}
+\item public key encryption from tpd
+\item random oracle model vs. standard model
+\item CPA/CCA in ROM, RSA-FDH
+\item Coldwasser-Micali, Rabin, Paillier (homomorphic with $+$), elliptic curve.
+\end{itemize}
+\end{frame}
+\begin{frame}\frametitle{Digital Signature}
+\begin{itemize}
+\item Textbook RSA, Hashed RSA, Hash-and-Sign, DSS.
+\item Lamport's OTS/Stateful/Chain-based/Tree-based/Stateless.
+\item Certificates, PKI, CA, Web-of-trust, Invalidation.
+\end{itemize}
+\end{frame}
+\begin{frame}\frametitle{Cryptographic Protocols}
+\begin{itemize}
+\item Man-in-the-middle attack, interlock protocol.
+\item Shamir three pass protocol.
+\item Blind signature.
+\item Secret sharing.
+\item Commitment scheme, coin flipping.
+\item Interactive proof, Schnorr protocol, Zero knowledge proofs
+\item Oblivious transfer, Rabin's, 1-out-of-2.
+\item Multi-party computation, dining cryptographers problem.
+\item Quantum cryptography, BB84.
+\end{itemize}
+\end{frame}
+\end{comment}
+
+\begin{frame}\frametitle{Syllabus [in Chinese]}
+\begin{figure}
+\begin{center}
+\includegraphics[width=100mm]{pic/syllabus} 
+\end{center}
+\end{figure}
+\end{frame}
+\begin{frame}\frametitle{One more thing, we will read comics  [xkcd:177]}
+\begin{figure}
+\begin{center}
+\includegraphics[width=100mm]{pic/term} 
+\end{center}
+\end{figure}
+\end{frame}
+\begin{frame}\frametitle{Provable Security}
+\begin{itemize}
+\item A proof of security never proves security in an absolute sense, it relates security to an unproven assumption that some computational problem is hard.
+\item The quality of a security reduction should not be ignored -- it matters how tight it is, and how strong the underlying assumption is.
+\item A security reduction only proves something in a particular model specifying what the adversary has access to and can do.
+\end{itemize}
+\end{frame}
+\begin{frame}\frametitle{Crypto Pitfalls}
+Crypto deceptively simple
+\begin{itemize}
+\item Why does it so often fail?
+\end{itemize}
+Important to distinguish various issues:
+\begin{enumerate}
+\item Bad cryptography/implementations/design, etc.
+\item Good cryptography can be `circumvented' by adversaries operating `outside the model'
+\item Even the best cryptography only shifts the weakest point of failure to elsewhere in your system
+\item Systems are complex: key management; social engineering; insider attacks
+\end{enumerate}
+Avoid the first; be aware of 2-4.
+\end{frame}
+\begin{frame}\frametitle{Bad Implementation Example: Heartbleed}
+  \begin{minipage}[t]{0.49\linewidth} 
+    \centering 
+    \includegraphics[width=50mm]{pic/heartbleed1} 
+  \end{minipage}% 
+  \begin{minipage}[t]{0.49\linewidth} 
+    \centering 
+    \includegraphics[width=50mm]{pic/heartbleed2} 
+  \end{minipage}
+\end{frame}
+\begin{frame}\frametitle{Crypto is difficult to get right}
+\begin{itemize}
+\item Must be implemented correctly
+\item Must be integrated from the beginning, not added on ``after the fact''
+\item Need expertise; ``a little knowledge can be a dangerous thing''
+\item Can't be secured by Q/A, only (at best) through penetration testing and dedicated review of the code by security experts
+\end{itemize}
+\end{frame}
+\begin{frame}\frametitle{General Recommendation}
+\begin{itemize}
+\item Use only standardized algorithms and protocols
+\item No security through obscurity!
+\item Use primitives for their intended purpose
+\item Don't implement your own crypto
+\item If your system cannot use ``off-the-shelf'' crypto components, re-think your system
+\item If you really need something new, have it designed and/or evaluated by an expert
+\item Don't use the same key for multiple purposes
+\item Use good random-number generation
+\end{itemize}
+\end{frame}
+\begin{frame}\frametitle{Crypto Libraries}
+\begin{itemize}
+\item Use existing, high-level crypto libraries: 
+cryptlib, NaCl, Google's Keyczar, Mozilla's NSS, OpenSSL 
+\item Avoid low-level libraries (like JCE, crypto++, GnuPG, OpenPGP) - too much possibility of mis-use
+\item Avoid writing your own low-level crypto
+\end{itemize}
+\end{frame}
+\begin{frame}\frametitle{Beware of Snake Oil}
+\textbf{Snake Oil}: bogus commercial cryptographic products.
+\begin{itemize}
+\item \textbf{Secret system}: security through obscurity
+\item \textbf{Technobabble}: since cryptography is complicated
+\item \textbf{Unbreakable}: a sure sign of snake oil
+\item \textbf{One-time pads}: a flawed implementation
+\item \textbf{Unsubstantiated ``bit'' claims}: key lengths are not directly comparable
+\end{itemize}
+\end{frame}
+\begin{frame}\frametitle{What cryptography can and can't do}
+``No one can guarantee 100\% security. But we can work toward 100\% risk acceptance. $\dots$ Strong cryptography can withstand targeted attacks up to a point--the point at which it becomes easier to get the information some other way. $\dots$ The good news about cryptography is that we already have the algorithms and protocols we need to secure our systems. The bad news is that that was the easy part; implementing the protocols successfully requires considerable expertise. $\dots$  
+Security is different from any other design requirement, because functionality does not equal quality.''
+\newline
+
+-- By Bruce Schneier 1997
+\end{frame}
+\begin{frame}\frametitle{Rubber-hose Cryptanalysis}
+\begin{figure}
+\begin{center}
+\includegraphics[width=100mm]{pic/rubberhose} 
+\end{center}
+\end{figure}
+\end{frame}
+\begin{frame}\frametitle{A Good Wish}
+``No one shall be subjected to arbitrary interference with his privacy, family, home or correspondence, nor to attacks upon his honour and reputation. Everyone has the right to the protection of the law against such interference or attacks.''
+\newline
+
+-- Article 12 Universal Declaration of Human Rights
+\end{frame}
+\begin{frame}\frametitle{Grades}
+\begin{itemize}
+\item Composition:
+\begin{itemize}
+\item[Homework:] 4 $\times$ 5 = 20\% (Homework 1$\sim$5)
+\item[Final Exam:] 80\%
+\item[Extra:]  5\% for outstanding homework (Homework 1$\sim$6)
+\end{itemize}
+\item How to score high:
+\begin{itemize}
+\item Read the textbook IMC
+\item Do homework by yourself
+\item \alert{No Plagiarism! Otherwise, -10 point penalty each time.} 
+\end{itemize}
+\end{itemize}
+\end{frame}
+\end{document}
