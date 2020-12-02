@@ -10,14 +10,17 @@ PDFS := $(SRCS:source/%.tex=pdf/%.pdf)
 
 all: ${PDFS}
 
-%: %.tex
+pdf/%.pdf : source/%.tex
 	${BUILD}
 
 .PHONY: all clean 
 
-gallery.pdf: gallery/gallery.tex
+#gallery.pdf: gallery/gallery.tex
 	# sh gallery/gen-gallery.sh > gallery/gallery.tex;
-	${TEX} -output-directory gallery gallery/gallery.tex
+#	${TEX} -output-directory gallery gallery/gallery.tex
 
 clean:
-	/bin/rm -rf *.log *.nav *.out *.snm *.synctex.gz *.toc *.aux tikz/*.log
+	/bin/rm -rf *.log *.nav *.out *.snm *.synctex.gz *.toc *.aux tikz/*.log *.vrb
+	cd source && /bin/rm -rf *.log *.nav *.out *.snm *.synctex.gz *.toc *.aux *.vrb
+	cd pdf && /bin/rm -rf *.log *.nav *.out *.snm *.synctex.gz *.toc *.aux *.vrb
+	cd homework && /bin/rm -rf *.log *.nav *.out *.snm *.synctex.gz *.toc *.aux *.vrb

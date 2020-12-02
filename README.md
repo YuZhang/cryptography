@@ -6,7 +6,7 @@ Yu Zhang, Harbin Insitute of Technology, 2011, 2012, 2014, 2015, 2016, 2017, 201
 
 
 
-- New ! 增加了中文课程讲义，在[lecturenotes-Chinese](lecturenotes-Chinese/)目录下
+- New ! 增加了中文课程讲义，在[notes-Chinese](notes-Chinese/)目录下
 
 ## Requirement for compiling slides
 
