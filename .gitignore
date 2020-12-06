@@ -8,3 +8,7 @@
 *.vrb
 *.gz
 *.DS_Store
+.vscode/*
+*.fls
+*.fdb_latexmk
+*tikz-test.pdf

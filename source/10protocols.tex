@@ -283,6 +283,7 @@ Q2: Is it possible to achieve info.-theoretically binding and info.-theoreticall
 \end{frame}
 \section{Zero Knowledge Proofs}
 \begin{frame}\frametitle{Zero-Knowledge Proof}
+O. Goldreich, S. Micali, A. Wigderson, ``How to Play ANY Mental Game,'' ACM Conference on Theory of Computing, 1987
 \begin{itemize}
 \item \textbf{Interactive proof system} is an abstract machine that models computation as the exchange of messages between two parties: verifier and prover
 \item \textbf{Proof of knowledge}: an interactive proof in which \textbf{prover} succeeds convincing \textbf{verifier} that it knows something
@@ -303,6 +304,16 @@ Alice {\color{red} \LARGE \Ladiesroom} proves to Bob {\color{blue} \LARGE \Gents
 \end{center}
 \end{figure}
 \alert{Q: If Alice does not know the secret word, what kind of magic could she master to cheat Bob?}
+\end{frame}
+\begin{frame}\frametitle{ZKP on Hanmilton Cycle}
+ZKP for a solution of Hanmilton Cycle (NPC). [Blum (1986)] \\
+\textbf{Prover} relabels the graph (1) randomly, encrypts the randomly relabeld graph (2) with $N + N*(N-1)/2$ boxes (3), and sends them to verifier. \\
+\textbf{Verifier} asks only one question: either (a) show the relabelled graph is valid by openning all boxes (3); or (b) show one Hanmilton cycle by openning the boxes on the cycle (4).
+\begin{figure}
+\begin{center}
+\input{tikz/zkp-hanmilton}
+\end{center}
+\end{figure}
 \end{frame}
 \begin{frame}\frametitle{ZKP and Commitment}
 The simulation paradigm: by seeing Y , a party learns no more than X if Y can be efficiently generated given only X.\\
