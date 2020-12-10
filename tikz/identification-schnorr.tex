@@ -1,6 +1,6 @@
 \begin{tikzpicture}[font=\footnotesize]
-\node (A) at (0,0) {\Lisa};
-\node (B) [right of = A, node distance = 3cm] {\Left\Bart};
+\node (A) at (0,0) [minimum size=1cm] {}; \Alice{0}{0}{0.4};
+\node (B) [right of = A, node distance = 4cm, minimum size=1cm] {}; \Bob{4cm}{0}{0.4};
 \node (p) [below of =A, node distance = 1cm] {Prover ($x$)};
 \node (v) [below of =B, node distance = 1cm] {Verifier ($\mathbb{G}, q, g, y$)};
 \node (g) [below of =p, node distance = 1cm] {$k \gets \mathbb{Z}_q$; $I := g^k$};

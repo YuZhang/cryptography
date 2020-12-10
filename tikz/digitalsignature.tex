@@ -1,6 +1,6 @@
 \begin{tikzpicture}[rc/.style={rounded corners=1ex, minimum width=1cm, minimum height=0.7cm}]
-\node (sender) {\Lisa};
-\node (bart) [below of = sender] {Alice};
+\node (sender) [minimum size=1cm] {}; \Alice{0}{0}{0.4};
+\node (bart) [below of = sender, node distance = 0.7cm] {Alice};
 \node (enc) [draw, right of = sender, rc, dotted, node distance = 2cm] {$\mathsf{Enc}$};
 \node (mac) [draw, below of = enc, rc, node distance = 1.5cm] {$\mathsf{Sign}$};
 \node (k1) [above of = enc, node distance = 1cm] {$sk$};
@@ -12,8 +12,8 @@
 \node (dec) [draw, right of = c, dotted,  rc,node distance = 2cm] {$\mathsf{Dec}$};
 \node (ver) [draw, below of = dec, rc, node distance = 1.5cm] {$\mathsf{Vrfy}$};
 \node (k2) [above of = dec, node distance = 1cm] {$pk$};
-\node (receiver) [right of = dec, node distance = 2cm] {\Left\Bart};
-\node (lisa) [below of = receiver] {Bob};
+\node (receiver) [right of = dec, node distance = 2cm, minimum size=1cm] {}; \Bob{8cm}{0}{0.4};
+\node (lisa) [below of = receiver, node distance = 0.7cm] {Bob};
 \draw[ dotted, -latex] (sender) -- (enc) node [midway, above] {$m$};
 \draw[ dotted] (enc) -- (c); \draw[ dotted, -latex] (c) -- (dec);
 \draw (mac) -- (t); \draw[-latex] (t) -- (ver);

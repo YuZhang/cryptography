@@ -4,14 +4,13 @@
 
 Yu Zhang, Harbin Insitute of Technology, 2011, 2012, 2014, 2015, 2016, 2017, 2018, 2019, 2020
 
-
-
 - New ! 增加了中文课程讲义，在[notes-Chinese](notes-Chinese/)目录下
+- New ! Alice, Bob, Evil and Charlie have new avatars
 
 ## Requirement for compiling slides
 
 * Developed with [MacTeX](https://www.tug.org/mactex/)
-* [Simpsons font](misc/simpsons.zip/): [Installation](http://tex.stackexchange.com/questions/28567/how-to-install-and-use-simpsons-font)
+* run `make` to compile slides, which will be in [/pdf](/pdf)
 
 ## References
 * Textbook: [Introduction to Modern Cryptography](http://www.cs.umd.edu/~jkatz/imc.html) by Jonathan Katz and Yehuda Lindell

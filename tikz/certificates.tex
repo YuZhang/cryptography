@@ -1,8 +1,10 @@
 \begin{tikzpicture}[font=\footnotesize]
-\node (A) at (0,0) [label=below:Alice] {\Lisa};
-\node (B) [right of = A, node distance = 4cm,label=below:Bob] {\Left\Bart};
-\node (KDC) at (2,4) [rounded corners=1ex,minimum width=2cm,label distance=-2cm,label=right:Charlie] {\Homer};
-\node at (4,3.5) {Certificate Authority (CA)};  
+\node (A) at (0,0) [minimum size=1.4cm] {}; \Alice{0}{0}{0.4}; \node at (0,-0.7) {Alice};
+\node (B) [right of = A, node distance = 4cm, minimum size=1cm] {}; \Bob{4cm}{0}{0.4}; \node at (4cm,-0.7) {Bob};
+%\node (KDC) at (2,4) [rounded corners=1ex,minimum width=2cm,label distance=-2cm,label=right:Charlie] {\Homer};
+\node (KDC) at (2,4) [rounded corners=1ex,minimum size=1cm,label distance=-1cm,label=right:CA] {};
+\Charlie{2}{4}{0.4};
+%\node at (4,3.5) {CA};  
 \draw[-latex] (B) -- (A) node [midway,above] {$pk_B, \mathsf{cert}_{C\to B}$};
 \draw[-latex,dotted] (A.90) -- (KDC.240) node [sloped,midway,above] {Alice trusts Charlie} node [sloped,midway,below] {and knows $pk_C$.};
 \draw[-latex] (KDC.320) to [bend left=40] node [sloped,midway,above] {$\mathsf{cert}_{C\to B}$} (B.70);

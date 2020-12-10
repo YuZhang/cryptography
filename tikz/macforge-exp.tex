@@ -1,6 +1,8 @@
 \begin{tikzpicture}
-\node (A) at (0,0) {\Homer};
-\node (B) [right of = A, node distance = 4cm] {\Left\Burns};
+%\node (A) at (0,0) {\Homer};
+%\node (B) [right of = A, node distance = 4cm] {\Left\Burns};
+\node (A) at (0,0) [minimum size=1cm] {}; \Charlie{0}{0}{0.4};
+\node (B) [right of = A, node distance = 4cm, minimum size=1cm] {}; \Evil{4cm}{0}{0.4};
 \node (enc) [draw, rounded corners=1ex, right of=B, node distance = 2cm] {$\mathsf{Mac}_k(\cdot)$};
 \draw[-latex] (B) to [bend left=15,-latex,above] (enc);
 \draw[-latex] (enc) to [bend left=15,-latex,below] (B);

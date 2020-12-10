@@ -1,8 +1,8 @@
 \begin{tikzpicture}[font=\footnotesize]
-\node (A) at (0,0) {\Lisa};
-\node (B) [right of = A, node distance = 4cm] {\Left\Bart};
-\node (1a) [below of=A, node distance=1cm] {$p,e_A,d_A$};
-\node (1b) [below of=B, node distance=1cm] {$p,e_B,d_B$};
+\node (A) at (0,0) [minimum size=1cm] {}; \Alice{0}{0}{0.4};
+\node (B) [right of = A, node distance = 4cm, minimum size=1cm] {}; \Bob{4cm}{0}{0.4};
+\node (1a) [below of=A, node distance=0.7cm] {$p,e_A,d_A$};
+\node (1b) [below of=B, node distance=0.7cm] {$p,e_B,d_B$};
 %\draw[-latex] (1a) -- (1b) node [midway,above] {};
 \node (2a) [below of=1a, node distance=0.5cm] {$c = [m^{e_A} \bmod p]$};
 \node (2b) [below of=1b, node distance=0.5cm] {};

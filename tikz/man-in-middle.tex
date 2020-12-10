@@ -1,7 +1,7 @@
 \begin{tikzpicture}[font=\footnotesize]
-\node (A) at (0,0) {\Lisa};
-\node (E) [right of = A, node distance = 3.5cm] {\Burns};
-\node (B) [right of = E, node distance = 3.5cm] {\Left\Bart};
+\node (A) at (0,0) [minimum size=1cm] {}; \Alice{0}{0}{0.4};
+\node (B) [right of = A, node distance = 7cm, minimum size=1cm] {}; \Bob{7cm}{0}{0.4};
+\node (E) [right of = A, node distance = 3.5cm] {}; \Evil{3.5cm}{0}{0.4};
 \node (1a) [below of=A, node distance=1cm] {$pk_A$};
 \node (1e) [below of=E, node distance=1cm] {$pk_E$};
 \node (1b) [below of=B, node distance=1cm] {};

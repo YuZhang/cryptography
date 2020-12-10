@@ -1,6 +1,6 @@
 \begin{tikzpicture}[font=\footnotesize]
-\node (A) at (0,0) {\Lisa};
-\node (B) [right of = A, node distance = 4cm] {\Left\Bart};
+\node (A) at (0,0) [minimum size=1cm] {}; \Alice{0}{0}{0.4};
+\node (B) [right of = A, node distance = 4cm, minimum size=1cm] {}; \Bob{4cm}{0}{0.4};
 \node (0a1) [below of=A, node distance=1cm] {RSA: $N,e$};
 \node (0b1) [below of=B, node distance=1cm] {};
 \draw[-latex] (0a1) -- (0b1) node [midway,above] {};

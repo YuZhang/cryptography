@@ -1,8 +1,8 @@
 \begin{tikzpicture}
-\node [label=below:Client, label=above:$pk$] (sender) {\Lisa};
+\node (sender) [minimum size=1cm,label=below:Client, label=above:$pk$] {}; \Alice{0}{0}{0.4};
 \node (c) at ($(sender)+(4cm,0.5cm)$) {$[c' = (2^{r})^{e}\cdot c]$};
 \node (c1) [below of = c, node distance = 1cm] {[Yes/No: $MSB(m') = $`1']};
-\node (receiver) at ($(sender)+(8cm,0)$) [label=below:Server, label=above:$sk$] {\Left\Bart};
+\node (receiver) at ($(sender)+(8cm,0)$) [minimum size=1cm,label=below:Server, label=above:$sk$] {}; \Bob{8cm}{0}{0.4};
 \draw[-latex] (sender.east |- c) -- (c) -- (receiver.west |- c);
 \draw[-latex] (receiver.west |- c1) -- (c1) -- (sender.east |- c1);
 \end{tikzpicture}

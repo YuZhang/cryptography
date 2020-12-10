@@ -1,14 +1,13 @@
 \begin{tikzpicture}[font=\footnotesize]
-\node (A) at (0,0) {\Lisa};
-\node (B) [right of = A, node distance = 4cm] {\Left\Bart};
-\node (0a1) [below of=A, node distance=1cm] {Prover knows $sk$};
-\node (0b1) [below of=B, node distance=1cm] {a random $m$};
+\node (A) at (0,0) [minimum size=1cm] {}; \Alice{0}{0}{0.4};
+\node (B) [right of = A, node distance = 4cm, minimum size=1cm] {}; \Bob{4cm}{0}{0.4};
+\node (0a1) [below of=A, node distance=0.7cm] {Prover knows $sk$};
+\node (0b1) [below of=B, node distance=0.7cm] {a random $m$};
 \node (0a) [below of=0a1, node distance=0.5cm] {$m' = \mathsf{Dec}_{sk}(c)$};
 \node (0b) [below of=0b1, node distance=0.5cm] {$c \gets \mathsf{Enc}_{pk}(m)$};
 \draw[-latex] (0b) -- (0a) node [midway,above] {$c$};
 \node (1a) [below of=0a, node distance=0.5cm] {};
 \node (1b) [below of=0b, node distance=0.5cm] {};
-%\draw[-latex] (1a) -- (1b) node [midway,above] {};
 \node (2a) [below of=0a, node distance=1cm] {$h = \mathsf{commit}(m')$};
 \node (2b) [below of=0b, node distance=1cm] {};
 \draw[-latex] (2a) -- (2b) node [midway,above] {$h$};

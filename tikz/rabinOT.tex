@@ -1,8 +1,8 @@
 \begin{tikzpicture}[font=\footnotesize]
-\node (A) at (0,0) {\Lisa};
-\node (B) [right of = A, node distance = 4cm] {\Left\Bart};
-\node (0a) [below of=A, node distance=1cm] {$N, e, m^e \bmod N$};
-\node (0b) [below of=B, node distance=1cm] {};
+\node (A) at (0,0) [minimum size=1cm] {}; \Alice{0}{0}{0.4};
+\node (B) [right of = A, node distance = 4cm, minimum size=1cm] {}; \Bob{4cm}{0}{0.4};
+\node (0a) [below of=A, node distance=0.7cm] {$N, e, m^e \bmod N$};
+\node (0b) [below of=B, node distance=0.7cm] {};
 \draw[-latex] (0a) -- (0b) node [midway,above] {};
 \node (1a) [below of=0a, node distance=0.5cm] {};
 \node (1b) [below of=0b, node distance=0.5cm] {a random $x$};
