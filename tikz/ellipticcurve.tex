@@ -1,21 +1,79 @@
-\begin{tikzpicture}[scale=1.2]
-%\draw [help lines] (-2,-2) grid [step=0.1] (2,2);
-%\draw [help lines,black] (-2,-2) grid [step=0.5] (2,2);
-\draw[dotted,gray,name path=curve3] (1.43,-2) -- (1.43,2);
-\draw[-latex,gray] (-2,0) -- (2,0);
-\draw[-latex,gray] (0,-2) -- (0,2);
-\draw[blue,name path=curve1] plot[smooth] file {tikz/outfile};
-\draw[red,name path=curve2] (-2,-1) -- (2,2);
+\begin{tikzpicture}[scale=0.7]
 
-\fill [name intersections={of=curve1 and curve2, by={a,b,c}}]
-(a) circle (2pt) node [above left] {$P_3$}
-(b) circle (2pt) node [above] {$P_2$}
-(c) circle (2pt) node [left] {$P_1$};
-\fill [name intersections={of=curve1 and curve3, by={a,d}}]
-(d) circle (2pt) node [left] {$-P_3$};
-%\fill [name intersections={of=curve1 and curve4, by={a,b}}]
-%(b) circle (2pt) node [left] {$P_4$};
-\node (eq) at (-1,-1.7) {\small $y^2=x^3-x+1$};
-\draw[green] (-2,0.94) node [black,above] {$P_4$} -- (a);
-\draw[fill] (-0.7,1.18) circle (1.5pt);
+\newcommand*{\ShowIntersection}{
+\fill 
+    [name intersections={of=ec1 and l1, name=i, total=\t}] 
+    [red, opacity=1, every node/.style={above left, black, opacity=1}] 
+    \foreach \s in {1,...,\t}{(i-\s) circle (2pt)
+        node [above left] {\s}};
+}
+
+    \begin{axis}[
+            xmin=-4,
+            xmax=4,
+            ymin=-4,
+            ymax=4,
+            %grid=both,
+            %grid style={line width=.1pt, draw=gray!10},
+            %major grid style={line width=.2pt,draw=gray!50},
+            %xlabel={$x$},
+            %ylabel={$y$},
+            %scale only axis,
+            xtick=\empty, ytick=\empty,
+            axis lines=middle,
+            domain=-2.279018:2.6,      
+            samples=101,
+            smooth,   
+            clip=false,
+            % use same unit vectors on the axis
+            %axis equal image=true,
+        ]
+    \addplot[name path global=ec1, blue] {sqrt(x^3-3*x+5)};
+    \addplot[name path global=ec2, blue] {-sqrt(x^3-3*x+5)};
+    \addplot[name path global=l1, domain=-3:3, red] {0.8*x+1.3};
+    \addplot[name path global=v1, orange] coordinates {(2.23,-3.8) (2.23,3.8)};
+    %\addplot[name path global=t1, brown] coordinates {(-1,2.7) (2.23,3.1)};
+    \addplot[name path global=t2, purple,domain=-3:3] {0.1238*x+2.824};
+    \addplot[mark=*] coordinates {(2.23,-3.1)} node [below left] {$-P_3$}; 
+    \addplot[mark=*] coordinates {(-1.05,2.65)} node [above left] {$P_4$}; 
+    %\ShowIntersection;
+
+\fill 
+    [name intersections={of=ec1 and l1, by={p2, p3}}] 
+    [black, opacity=1]
+    (p2) circle (2pt) node [above] {$P_2$}
+    (p3) circle (2pt) node [above left] {$P_3$};
+
+\fill 
+    [name intersections={of=ec2 and l1, by={p1}}] 
+    [opacity=1] 
+    (p1) circle (2pt) node [left] {$P_1$};
+
+    %\coordinate[label={10:$P$}] (P) at (axis cs:-1,2.64);
+\end{axis}
+
+    %\draw[red,name path=curve2] (-2,-1) -- (2,2);
+
+%    \fill [name intersections={of=ec1 and curve2, by={a,b}}]
+%     (a) circle (2pt) node [above left] {$P_3$}
+%     (b) circle (2pt) node [above] {$P_2$}
+     %(c) circle (2pt) node [left] {$P_1$};
+
+% \draw[dotted,gray,name path=curve3] (1.43,-2) -- (1.43,2);
+% \draw[-latex,gray] (-2,0) -- (2,0);
+% \draw[-latex,gray] (0,-2) -- (0,2);
+% %\draw[blue,name path=curve1] plot[smooth] file {tikz/outfile};
+% \draw[red,name path=curve2] (-2,-1) -- (2,2);
+
+% \fill [name intersections={of=curve1 and curve2, by={a,b,c}}]
+% (a) circle (2pt) node [above left] {$P_3$}
+% (b) circle (2pt) node [above] {$P_2$}
+% (c) circle (2pt) node [left] {$P_1$};
+% \fill [name intersections={of=curve1 and curve3, by={a,d}}]
+% (d) circle (2pt) node [left] {$-P_3$};
+% %\fill [name intersections={of=curve1 and curve4, by={a,b}}]
+% %(b) circle (2pt) node [left] {$P_4$};
+% \node (eq) at (-1,-1.7) {\small $y^2=x^3-x+1$};
+% \draw[green] (-2,0.94) node [black,above] {$P_4$} -- (a);
+% \draw[fill] (-0.7,1.18) circle (1.5pt);
 \end{tikzpicture}
