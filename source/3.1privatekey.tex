@@ -92,7 +92,7 @@ $n=50$   & 3 months with probability $1/1000$. \\
 $n=500$  & more than 200 years with probability $2^{-500}$. \\
 \end{tabular}\\
 
-\alert{Q: What if under Moore's Law?} 
+\alert{Q: Under Moore's Law, who has more advantages? Adversary or Alice?} 
 \end{exampleblock}
 \end{frame}
 
@@ -240,23 +240,35 @@ where $r$ is chosen \emph{u.a.r} from $\{0,1\}^{\ell(n)}$, the \textbf{seed} $s$
 \item \textbf{Existence}: Under the weak assumption that \emph{one-way functions} exists, or $\mathcal{P} \ne \mathcal{NP}$
 \end{itemize}
 \end{frame}
-
-\begin{frame}\frametitle{Problems on PRG}
-\begin{exampleblock}{Is $G$ PRG?}
-\begin{itemize}
-\item $G: s \to \{0,1\}^n$ is such that for all $s$: $XOR(G(s)) = 1$
-\item glibc random(): $r[i] = (r[i-3] + r[i-31])\%2^{32}$
-\end{itemize}
+\begin{frame}[fragile]\frametitle{Real world cases}
+\begin{exampleblock}{glibc random()}
+$r[i] = (r[i-3] + r[i-31])\%2^{32}$
 \end{exampleblock}
+\begin{exampleblock}{Netscape (by reverse-engineering)}
+\begin{verbatim}
+global variable seed; 
+RNG_CreateContext();
+    (seconds, microseconds) = time of day;
+    pid = process ID; ppid = parent process ID;
+    a = mklcpr(microseconds);
+    b = mklcpr(pid + seconds + (ppid << 12));
+    seed = MD5(a, b);
+mklcpr(x)
+    return ((0xDEECE66D * x + 0x2BBB62DC) >> 1);
+\end{verbatim}
+\end{exampleblock}
+\end{frame}
+\begin{frame}\frametitle{Problems on PRG}
 \begin{exampleblock}{$F$ is PRG. Is $G$ PRG?}
 \begin{itemize}
-\item $G(s)=F(s)\oplus 1^{n}$
+\item $G(s)$ is such that $XOR(G(s)) = 1$
 \item $G(s)=F(0)$
 \item $G(s)=F(s)\| 0$
 \item $G(s)=F(s\oplus 1^{\abs{s}})$
 \item $G(s)=F(s)\| F(s)$
 \item $G(s\| s')=F(s)\| F(s')$
-\item $G: s \gets \{0,1\}^{20}, G(s) = F(s)$ (see next slide)
+\item $G(s)=F(s\|0)$
+\item $G: s \gets \{0,1\}^{20}, G(s) = F(s)$
 \end{itemize}
 \end{exampleblock}
 \end{frame}
@@ -268,31 +280,15 @@ where $r$ is chosen \emph{u.a.r} from $\{0,1\}^{\ell(n)}$, the \textbf{seed} $s$
 \item \textbf{Sufficient seed space}: $s$ must be long enough against brute force attack.
 \end{itemize}
 \end{frame}
-\section{Constructing Secure Encryption Schemes}
-\begin{frame}\frametitle{A Secure Fixed-Length Encryption Scheme}
-\begin{columns}[t]
-\begin{column}{4cm}
+\begin{frame}\frametitle{Bad randomness [xkcd:424]}
+In 2008, the Debian project announced that a vulnerability in the OpenSSL package. The bug was caused by the removal of the line of code from md\_rand.c. (CVE-2008-0166)
 \begin{figure}
 \begin{center}
-\input{tikz/encryptionwithpg}
+\includegraphics[width=60mm]{pic/holes} 
 \end{center}
 \end{figure}
-\end{column}
-\begin{column}{6cm}
-\begin{construction}\label{con:fl}
-\begin{itemize}
-\item $|G(k)| = \ell(|k|)$, $m \in \{0,1\}^{\ell(n)}$.
-\item $\mathsf{Gen}$: $k \in \{0,1\}^n$.
-\item $\mathsf{Enc}$: $c := G(k)\oplus m$.
-\item $\mathsf{Dec}$: $m := G(k)\oplus c$.
-\end{itemize}
-\end{construction}
-\begin{theorem}\label{the:flt}
-This fixed-length encryption scheme has indistinguishable encryptions in the presence of an eavesdropper.
-\end{theorem}
-\end{column}
-\end{columns}
 \end{frame}
+\section{Proof By Reduction}
 \begin{frame}\frametitle{Reduction (Complexity)}
 A \textbf{reduction} is a transformation of one problem $A$ into another problem $B$.
 \newline
@@ -319,6 +315,47 @@ Solving $A$ \textbf{cannot be harder} than solving $B$.
 \item \textbf{Reduction}: Reduce $\mathcal{A}'$ to $\mathcal{A}$. $\mathcal{A'}$ solves $\mathsf{x}$ efficiently with probability $1/p(n)$, running $\mathcal{A}$ as a sub-routine. 
 \item \textbf{Contradiction}: If $\varepsilon(n)$ is non-negligible, then $\mathcal{A'}$ solves $\mathsf{X}$ efficiently with non-negligible probability $\varepsilon(n)/p(n)$.
 \end{itemize}
+\end{frame}
+\begin{frame}\frametitle{Proof of PRG}
+\begin{exampleblock}{If $F(s)$ is PRG, so is $G(s)=F(s)\oplus 1^{\abs{n}}$ ?}
+\begin{itemize}
+\item Problem A (Assumption): to distinguish $F(s)$ from $r$
+\item Problem B (Break the scheme): to distinguish $G(s)$ from $r$
+\end{itemize}
+\textbf{Idea}: Reduce A to B. As $F(s)$ is distinguishable, so is $G(s)$.
+\begin{figure}
+\begin{center}
+\input{tikz/reduction-prg}
+\end{center}
+\end{figure}
+$\Pr[D'(F)=1]=\Pr[D(G)=1]$,$\Pr[D'(r)=1]=\Pr[D(r)=1]$ \\
+$\mathsf{Adv}(D'(F)) = \mathsf{Adv}(D(G)) \le \mathsf{negl}(n) $
+\end{exampleblock}
+\end{frame}
+\section{Constructing Secure Encryption Schemes}
+\begin{frame}\frametitle{A Secure Fixed-Length Encryption Scheme}
+\begin{columns}[t]
+\begin{column}{4cm}
+\begin{figure}
+\begin{center}
+\input{tikz/encryptionwithpg}
+\end{center}
+\end{figure}
+\end{column}
+\begin{column}{6cm}
+\begin{construction}\label{con:fl}
+\begin{itemize}
+\item $|G(k)| = \ell(|k|)$, $m \in \{0,1\}^{\ell(n)}$.
+\item $\mathsf{Gen}$: $k \in \{0,1\}^n$.
+\item $\mathsf{Enc}$: $c := G(k)\oplus m$.
+\item $\mathsf{Dec}$: $m := G(k)\oplus c$.
+\end{itemize}
+\end{construction}
+\begin{theorem}\label{the:flt}
+This fixed-length encryption scheme has indistinguishable encryptions in the presence of an eavesdropper.
+\end{theorem}
+\end{column}
+\end{columns}
 \end{frame}
 \begin{frame}\frametitle{Proof of Indistinguishable Encryptions}
 \textbf{Idea}: Use $\mathcal{A}$ to construct $D$ for $G$, so that $D$ distinguishes $G$ when $\mathcal{A}$ breaks $\tilde{\Pi}$. Since $D$ cannot distinguish $G$, so that $\mathcal{A}$ cannot break $\tilde{\Pi}$.
