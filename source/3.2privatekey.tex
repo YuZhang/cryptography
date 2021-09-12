@@ -8,43 +8,11 @@
 \frametitle{Outline}
 \tableofcontents
 \end{frame}
-\section{Stream Ciphers and Multiple Encryption}
-\begin{frame}\frametitle{Security for Multiple Encryptions}
-The multiple-message eavesdropping experiment $\mathsf{PrivK}^{\mathsf{mult}}_{\mathcal{A},\Pi}(n)$:
-\begin{enumerate}
-	\item $\mathcal{A}$ is given input $1^n$, outputs $\vec{M}_0=(m_0^1,\dots,m_0^t)$, $\vec{M}_1=(m_1^1,\dots,m_1^t)$ with $\forall i, |m_0^i| = |m_1^i|$.
-	\item $k \gets \mathsf{Gen}(1^n)$, a random bit $b \gets \{0,1\}$ is chosen. Then $c^i \gets \mathsf{Enc}_k(m_b^i)$ and $\vec{C}=(c^1,\dots,c^t)$ is given to $\mathcal{A}$.
-	\item $\mathcal{A}$ outputs $b'$. If $b' = b$, $\mathsf{PrivK}^{\mathsf{mult}}_{\mathcal{A},\Pi}=1$, otherwise 0.
-\end{enumerate}
-\begin{figure}
-\begin{center}
-\input{tikz/multiple-enc-exp.tex}
-\end{center}
-\end{figure}
-\end{frame}
-\begin{frame}\frametitle{Definition of Multi-Encryption Security}
-\begin{definition}\label{def:sme}
-$\Pi$ has \textbf{indistinguishable multiple encryptions in the presence of an eavesdropper} if $\forall$ \textsc{ppt} $\mathcal{A}$, $\exists$ $\mathsf{negl}$ such that
-\[ \Pr\left[\mathsf{PrivK}^{\mathsf{mult}}_{\mathcal{A},\Pi}(n)=1\right] \le \frac{1}{2} + \mathsf{negl}(n).
-\]
-\end{definition}
-\begin{alertblock}{Question:}
-Does any cipher we have learned so far have indistinguishable multiple encryptions in the presence of an eavesdropper?
-\end{alertblock}
-\end{frame}
-\begin{frame}\frametitle{Attack On Deterministic Multiple Encryptions}
-\begin{alertblock}{Question:}
-Generally, if $\Pi$'s encryption function is \textbf{deterministic}, i.e., a plaintext will be always encrypted into the same ciphertext with the same key, is $\Pi$ multiple-encryption-secure?
-\end{alertblock}
-
-\begin{exampleblock}{Attack:}
-For the deterministic encryption, the adversary may generate $m_0^1 = m_0^2$ and $m_1^1 \neq m_1^2$, and then outputs $b'=0$ if $c^1 = c^2$, otherwise $b'=1$.
-\end{exampleblock}
-\end{frame}
+\section{Stream Ciphers And Chosen-Plaintext Attacks}
 \begin{frame}\frametitle{Stream Ciphers}
 \begin{itemize}
-\item \textbf{Stream cipher}: Encrypting by XORing with pseudorandom stream
-\item \textbf{State of the art}: No standardized and popular one\footnote{eStream project worked on it. Salsa20/12 is a promising candidate.}\\ Security is questionable, e.g., RC4 in WEP protocol in 802.11, Linear Feedback Shift Registers (LFSRs)
+\item \textbf{Stream cipher}: Enc. by XORing with pseudorandom stream
+\item \textbf{State of the art}: No standardized and popular one\footnote{eStream project worked on it. Salsa20/12 is a promising candidate.}\\ Security is questionable, e.g., RC4 in WEP protocol in 802.11, Linear Feedback Shift Registers (LFSRs) used in A5/1 for GSM.
 \end{itemize}
 \begin{figure}
 \begin{center}
@@ -73,6 +41,37 @@ Unsynchronized mode: $\mathsf{Enc}(m_i) := \left< IV_i, G(IV_i\|k) \oplus m_i\ri
 \item On some WiFi cards, $IV$ resets to $0$ after power cycle
 \item $IV_i = IV_{i-1} + 1$. For RC4, recover $k$ after 40,000 frames
 \end{itemize}
+\end{exampleblock}
+\end{frame}
+\begin{frame}\frametitle{Security for Multiple Encryptions}
+The multiple-message eavesdropping experiment $\mathsf{PrivK}^{\mathsf{mult}}_{\mathcal{A},\Pi}(n)$:
+\begin{enumerate}
+	\item $\mathcal{A}$ is given input $1^n$, outputs $\vec{M}_0=(m_0^1,\dots,m_0^t)$, $\vec{M}_1=(m_1^1,\dots,m_1^t)$ with $\forall i, |m_0^i| = |m_1^i|$.
+	\item $k \gets \mathsf{Gen}(1^n)$, a random bit $b \gets \{0,1\}$ is chosen. Then $c^i \gets \mathsf{Enc}_k(m_b^i)$ and $\vec{C}=(c^1,\dots,c^t)$ is given to $\mathcal{A}$.
+	\item $\mathcal{A}$ outputs $b'$. If $b' = b$, $\mathsf{PrivK}^{\mathsf{mult}}_{\mathcal{A},\Pi}=1$, otherwise 0.
+\end{enumerate}
+\begin{figure}
+\begin{center}
+\input{tikz/multiple-enc-exp.tex}
+\end{center}
+\end{figure}
+\end{frame}
+\begin{frame}\frametitle{Definition of Multi-Encryption Security}
+\begin{definition}\label{def:sme}
+$\Pi$ has \textbf{indistinguishable multiple encryptions in the presence of an eavesdropper} if $\forall$ \textsc{ppt} $\mathcal{A}$, $\exists$ $\mathsf{negl}$ such that
+\[ \Pr\left[\mathsf{PrivK}^{\mathsf{mult}}_{\mathcal{A},\Pi}(n)=1\right] \le \frac{1}{2} + \mathsf{negl}(n).
+\]
+\end{definition}
+\begin{alertblock}{Question:}
+Does any cipher we have learned so far have indistinguishable multiple encryptions in the presence of an eavesdropper?
+\end{alertblock}
+\end{frame}
+\begin{frame}\frametitle{Attack On Deterministic Multiple Encryptions}
+\begin{alertblock}{Question:}
+Generally, if $\Pi$'s encryption function is \textbf{deterministic}, i.e., a plaintext will be always encrypted into the same ciphertext with the same key, is $\Pi$ multiple-encryption-secure?
+\end{alertblock}
+\begin{exampleblock}{Attack:}
+For the deterministic encryption, the adversary may generate $m_0^1 = m_0^2$ and $m_1^1 \neq m_1^2$, and then outputs $b'=0$ if $c^1 = c^2$, otherwise $b'=1$.
 \end{exampleblock}
 \end{frame}
 \begin{frame}\frametitle{Chosen-Plaintext Attacks (CPA)}
@@ -155,7 +154,7 @@ where $f$ is chosen \emph{u.a.r} from $\mathsf{Func}_n$.
 \begin{frame}\frametitle{Questions}
 \begin{alertblock}{Q: Without knowing the key and the oracle access, could anyone learn something about the output from the input with a non-negligible probability?} 
 \end{alertblock}
-\begin{exampleblock}{Let $F: \{0,1\}^{n} \times \{0,1\}^{n} \to \{0,1\}^{n}$ be a secure PRF. Is $G$ a secure PRF?}
+\begin{exampleblock}{Let $F: \{0,1\}^{n} \times \{0,1\}^{n} \to \{0,1\}^{n}$ be a PRF. Is $G$ a PRF?}
 \begin{itemize}
 \item $G((k_{1},k_{2}), x) = F(k_{1},x) \| F(k_{2},x)$
 \item $G(k,x) = F(k, x\oplus 1^{n})$
