@@ -15,9 +15,9 @@ pdf/%.pdf : source/%.tex
 
 .PHONY: all clean 
 
-#gallery.pdf: gallery/gallery.tex
-	# sh gallery/gen-gallery.sh > gallery/gallery.tex;
-#	${TEX} -output-directory gallery gallery/gallery.tex
+gallery.pdf: #misc/gallery/gallery.tex
+	sh misc/gallery/gen-gallery.sh > misc/gallery/gallery.tex;
+	${TEX} -output-directory misc/gallery misc/gallery/gallery.tex
 
 clean:
 	/bin/rm -rf *.log *.nav *.out *.snm *.synctex.gz *.toc *.aux tikz/*.log *.vrb
