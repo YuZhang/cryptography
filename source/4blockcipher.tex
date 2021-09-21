@@ -27,6 +27,14 @@ $n$ is key length, $\ell$ is block length.
 \end{itemize}
 \end{itemize}
 \end{frame}
+\begin{frame}\frametitle{Comics On Blockcipher [xkcd:153]}
+My cryptosystem is like any Feistel cipher, except in the S-Boxes we simply take the bitstring down, flip it, and reverse it.
+\begin{figure}
+\begin{center}
+\includegraphics[width=70mm]{pic/sbox-talk} 
+\end{center}
+\end{figure}
+\end{frame}
 \begin{frame}\frametitle{The Confusion-Diffusion Paradigm}
 	\begin{itemize}
 	\item \textbf{Goal}: Construct \emph{concise} random-looking permutations.
@@ -73,7 +81,7 @@ Let $F$ be a keyed function defined by a SPN in which the $S$-boxes are all one-
 \item Search in $k$-bit space; a guess passes test with pr. $2^{-t}$.
 \item Use $p$ PT/CT pairs to determine the key with exp. $2^{k-(p)t}$.
 \end{enumerate}
-\begin{exampleblock}{KPA against 1-Round SPN with $16$-bit key}
+\begin{exampleblock}{KPA against 1-round w/o final key-mixing w/ $16$-bit key}
 \begin{description}
 \item[Relationship] PT $\oplus$ Key $\oplus$ Input-of-$S$-boxes $=$ 0.
 \item[Test] on $t=16$ bits: Input-of-$S$-boxes $=$ PT $\oplus$ Key.
@@ -83,7 +91,7 @@ Let $F$ be a keyed function defined by a SPN in which the $S$-boxes are all one-
 \end{exampleblock}
 \end{frame}
 \begin{frame}\frametitle{Attacks on Reduced-Round SPNs (Homework)}
-Attack on a 2-round SPN: 64-bit block, 128-bit key (2 $\times$ 64-bit sub-keys), 16 $\times$ 4-bit $S$-boxes, and mixing with XOR.
+Attack on a 1-round SPN: 64-bit block, 128-bit key (2 $\times$ 64-bit sub-keys), 16 $\times$ 4-bit $S$-boxes.
 \begin{figure}
 \begin{center}
 \input{tikz/attack-spn.tex}
@@ -379,12 +387,11 @@ $s \gets m\oplus k_{0}$\;
 \For{$r=1$ \KwTo 10}{
 $s \gets SubBytes(s)$\;
 $s \gets ShiftRows(s)$\;
-\lIf{$r \le 9 $}{$s \gets MixColumns(s)$}\;
-$s \gets s\oplus k_{R}$\;
-}
+\lIf{$r \le 9 $}{$s \gets MixColumns(s)$}
+$s \gets s\oplus k_{R}$\;}
 \Return $c \gets s$\;
 \end{algorithm}
-\emph{See an animation of Rijndael!}.
+See \href{https://formaestudio.com/rijndaelinspector/archivos/Rijndael_Animation_v4_eng-html5.html}{\beamergotobutton{an animation of Rijndael}}!
 \end{frame}
 %\begin{comment}
 \section{Differential and Linear Cryptanalysis -- A Brief Look}
@@ -488,20 +495,12 @@ If no pad needed, add a dummy block
 \end{center}
 \end{exampleblock}
 \end{frame}
-\begin{frame}\frametitle{Comics on S-box [xkcd:153]}
-If you got a big keyspace, let me search it.
-\begin{figure}
-\begin{center}
-\includegraphics[width=70mm]{pic/sbox-talk} 
-\end{center}
-\end{figure}
-\end{frame}
 \begin{frame}\frametitle{Summary}
 \begin{itemize}
-\item Block cipher is PRP.
-\item confusion \& diffusion, SPN, Feistel network, avalanche effect.
-\item DES, 3DES, AES.
-\item reduced round, meet-in-the-middle, differential and linear cryptanalysis. 
+\item Goal: Block cipher is PRP
+\item Constructions: confusion \& diffusion, SPN, Feistel network, avalanche effect.
+\item Standards: DES, 3DES, AES
+\item Cryptanalysis: reduced round, meet-in-the-middle, differential and linear cryptanalysis. 
 \end{itemize}
 \end{frame}
 \end{document}
