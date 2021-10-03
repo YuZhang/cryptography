@@ -206,7 +206,7 @@ Assume that $\exists$ OWP. Then $\exists$ PRG, PRF, strong PRP, and CCA-secure p
 If $\exists$ a private-key encryption scheme that has indistinguishable encryptions in the presence of an eavesdropper, then $\exists$ an OWF.
 \end{proposition}
 \begin{proof}
-$f(k,m,r) \overset{\text{def}}{=} (\mathsf{Enc}_k(m,r),m)$.
+$f(k,m,r) \overset{\text{def}}{=} (\mathsf{Enc}_k(m,r),m)$, where $\abs{k}=n, \abs{m}=2n, \abs{r}=\ell(n)$. See the textbook for details.
 \end{proof}
 \end{frame}
 \begin{frame}\frametitle{Summary}
