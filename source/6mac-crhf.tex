@@ -673,7 +673,20 @@ A MAC $\Pi$ is \textbf{one-time $\varepsilon$-secure} if $\forall$ \textsc{ppt} 
 \]
 \end{definition}
 \end{frame}
-
+\begin{frame}\frametitle{Understanding Information-Theoretic MACs}
+An adversary will forge the tag in the following steps.
+\begin{enumerate}
+\item Obtain a tag $t'$ from a MAC query for a fixed message $m'$
+\item Obtain $\mathcal{K}(t') \overset{\mathsf{def}}{=} \{ k | \mathsf{Vrfy}_k(m', t') = 1\}$ by using his unlimited computing power
+\item Output $(m, t)$ using a key $k^*$ from $\mathcal{K}(t')$
+\end{enumerate}
+So $\mathcal{K}(t')$ must be large enough.
+\begin{figure}
+\begin{center}
+\input{tikz/suf-mac}
+\end{center}
+\end{figure}
+\end{frame}
 \begin{frame}\frametitle{Construction of Information-Theoretic MACs}
 \begin{definition}
 A function $h$: $\mathcal{K} \times \mathcal{M} \to \mathcal{T}$ is a \textbf{Strongly Universal Function (SUF)} if for all distinct $m, m' \in \mathcal{M}$ and all $t, t' \in \mathcal{T}$, it holds that:

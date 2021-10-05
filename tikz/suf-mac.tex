@@ -1,0 +1,60 @@
+\begin{tikzpicture}[uk/.style={inner sep=1pt, minimum width=18pt, circle, fill=red!40},kk/.style={inner sep=1pt, minimum width=18pt, fill=blue!40, circle},
+tk/.style={inner sep=1pt, minimum width=18pt, draw, fill=yellow!30, circle}]
+\node (X) at (-3cm,0) [ellipse,minimum width=1.5cm,minimum height=4cm,draw] {}; 
+\node (x) [above of=X,node distance=2.3cm] {$M$}; 
+\node (Y) [right of=X,ellipse,minimum width=1.5cm,minimum height=4cm,node distance=6cm,draw] {};
+\node (y) [above of=Y,node distance=2.3cm] {$T$};
+
+\node (K) at (0,0) [minimum width=2.5cm,minimum height=4cm,draw] {};
+\node (TK) at (0,0.3cm) [ellipse,minimum width=1.5cm,minimum height=3cm,draw,fill=yellow!10] {};
+\node at (0,0.9cm) {$\mathcal{K}(t')$};
+
+\node (k) [above of=K,node distance=2.3cm] {$K$};
+
+
+\node (x1) at ($(X)+(0,1cm)$) [uk] {$m'$};
+\node (y1) at ($(Y)+(0,1cm)$) [uk] {$t'$};
+\node (k) at ($(K)+(0,0)$) [tk] {$k$};
+\node (fk) at ($(K)+(0,-0.7cm)$) [tk] {$k^*$};
+
+\draw[-latex, red] (x1) -- (k);
+\draw[-latex, red] (k) -- (y1);
+\draw[-latex, red, ultra thick] (x1) -- (TK.140);
+\draw[-latex, red, ultra thick] (TK.40) -- (y1);
+
+\node (x2) at ($(X)+(0,-1cm)$) [kk] {$m$};
+\node (y2) at ($(Y)+(0,-1cm)$) [kk] {$t$};
+%\node (k) at ($(K)+(0,-1cm)$) [kk] {$k$};
+\draw[-latex, blue] (x2) -- (fk);
+\draw[-latex, blue] (fk) -- (y2);
+
+
+
+%\foreach \i in {1, 2, 3} {
+%\node (X\i) at (\i*4cm,0) [ellipse,minimum width=1cm,minimum height=2cm,draw] {}; 
+%\node (x) [above of=X\i,node distance=1.2cm] {$X$}; 
+%\node (Y\i) [right of=X\i,ellipse,minimum width=1cm,minimum height=2cm,node distance=1.5cm,draw] {};
+%\node (y) [above of=Y\i,node distance=1.2cm] {$Y$}; 
+%}
+%\node (cr) at ($(X1)+(0.75cm,-1.5cm)$) [] {\footnotesize Collision};
+%\node (cr) at ($(X1)+(0.75cm,-1.8cm)$) [] {\footnotesize Resistance};
+%\node (x1) at ($(X1)+(0,0.3cm)$) [uk] {\tiny ?};
+%\node (x2) at ($(X1)+(0,-0.3cm)$) [uk] {\tiny ?};
+%\node (y1) at ($(Y1)$) [uk] {\tiny ?};
+%\draw[-latex] (x1) -- (y1);
+%\draw[-latex] (x2) -- (y1);
+%\node (2pr) at ($(X2)+(0.75cm,-1.5cm)$) [] {\footnotesize 2nd Pre-image};
+%\node (2pr) at ($(X2)+(0.75cm,-1.8cm)$) [] {\footnotesize Resistance};
+%\node (x1) at ($(X2)+(0,0.3cm)$) [kk] {\tiny x};
+%\node (x2) at ($(X2)+(0,-0.3cm)$) [uk] {\tiny ?};
+%\node (y1) at ($(Y2)$) [kk] {\tiny y};
+%\draw[-latex] (x1) -- (y1);
+%\draw[-latex] (x2) -- (y1);
+%\node (pr) at ($(X3)+(0.75cm,-1.5cm)$) [] {\footnotesize Pre-image};
+%\node (pr) at ($(X3)+(0.75cm,-1.8cm)$) [] {\footnotesize Resistance};
+%%\node (x1) at ($(X3)+(0,0.3cm)$) [kk] {\tiny x};
+%\node (x2) at ($(X3)+(0,-0.3cm)$) [uk] {\tiny ?};
+%\node (y1) at ($(Y3)$) [kk] {\tiny y};
+%%\draw[-latex] (x1) -- (y1);
+%\draw[-latex] (x2) -- (y1);
+\end{tikzpicture}
