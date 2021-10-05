@@ -1,4 +1,4 @@
-\begin{tikzpicture}
+\begin{tikzpicture}[rr/.style={blue, very thick}, ll/.style={red, very thick}]
 \foreach \z in {1, 2,...,4} {
 \node (f\z) at ($\z*(0,-1.5cm)$) [minimum width=1cm,rounded corners=1ex,draw] {$F_{k_\z}$};
 \node (xor\z) [left of = f\z, circle, node distance = 2cm, draw] {};
@@ -10,12 +10,14 @@
 \draw[-latex] (f\z.east) -| +(1.5cm,-0.5cm) -- ($(xor\z) - (0,1cm)$) -- ($(xor\z.north) - (0,1.5cm)$);
 \draw[-] (xor\z.south) -- ($(xor\z)+(0,-0.5cm)$) -- ($(f\z.east) + (1.5cm,-1cm)$) -- +(0,-0.5cm);
 }
+\draw[-latex, rr] ($(f1.east)+(1.5cm,0)$) -- +(0,-0.5cm) -- ($(xor1) - (0,1cm)$) -- ($(xor1.north) - (0,1.5cm)$);
+
 \node (p0) [above of = f1, minimum width=5cm,minimum height=0.5cm,node distance=1cm,draw] {}; 
-\node (l0) [above of = xor1,node distance=1cm] {$L_0$};
-\node (r0) [right of = l0, node distance = 4cm] {$R_0$};
 \draw[-] (p0.north) -- (p0.south);
-\draw[-latex] (l0 |- p0.south) -- (xor1.north);
-\draw[-] ($(f1.east)+(1.5cm,0)$) -- +(0,0.75cm);
+\node (l0) [above of = xor1,node distance=1cm, ll] {$L_0$};
+\node (r0) [right of = l0, node distance = 4cm, rr] {$R_0$};
+\draw[-latex, ll] (l0 |- p0.south) -- ($(xor1) - (0,0.5cm)$) -- ($(f1.east) + (1.5cm,-1cm)$) -- +(0,-1cm) -- ($(xor2) - (0,1cm)$) -- (xor3.north);
+\draw[-,rr] ($(f1.east)+(1.5cm,0)$) -- +(0,0.75cm);
 \node (p4) [below of = f4, minimum width=5cm,minimum height=0.5cm,node distance=1.75cm,draw] {}; 
 \node (l4) [below of = xor4,node distance=1.75cm] {$L_4$};
 \node (r4) [right of = l4, node distance = 4cm] {$R_4$};

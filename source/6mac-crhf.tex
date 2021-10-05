@@ -63,19 +63,34 @@ The message authentication experiment $\mathsf{Macforge}_{\mathcal{A},\Pi }(n)$:
 \end{figure}
 \begin{definition}
 A MAC $\Pi$ is \textbf{existentially unforgeable under an adaptive CMA} if $\forall$ \textsc{ppt} $\mathcal{A}$, $\exists$ $\mathsf{negl}$ such that:
-\[ \Pr [\mathsf{Macforge}_{\mathcal{A},\Pi }(n)=1] \le \mathsf{negl}(n).
-\]
+$ \Pr [\mathsf{Macforge}_{\mathcal{A},\Pi }(n)=1] \le \mathsf{negl}(n). $
 \end{definition}
+\end{frame}
+\begin{frame}\frametitle{Real World Case}
+\begin{exampleblock}{The 802.11b Insecure MAC\footnote{from 
+BonehShoup v0.5 p.234}}
+Consider a variant of WiFi encryption in 802.11b WEP (Wired Equivalent Privacy). Let $F$ be a PRF with a 32-bit length output. Let CRC32 be an error-detecting code outputting a 32-bit string. Define the following MAC scheme:
+\[ S(k, m) := ( r \gets \{ 0,1 \}^n, t \gets F(k, r) \oplus \mathsf{CRC32}(m) )
+\]
+\[ V(k, m, (r, t)) := 1 \quad \mathsf{if} \quad t = F(k, r) \oplus \mathsf{CRC32}(m) 
+\]
+\begin{itemize}
+\item Different messages may have the same CRC32 output.
+\item Attacker can learn $F(k, r)$ from a valid tag, and then output $(m', (r, F(k, r) \oplus \mathsf{CRC32}(m')))$.
+\end{itemize}
+\end{exampleblock}
 \end{frame}
 \begin{frame}\frametitle{Questions}
 \begin{exampleblock}{Suppose $\left<S, V\right>$ are CMA-secure,  are $\left<S', V'\right>$ secure?}
 \begin{itemize}
 %\item Suppose an attacker can find $m_{0} \neq m_{1}$ s.t. $t_{0} = t_{1}$ for $\frac{1}{8}$.
 %\item Suppose tag is always $32$ bits long.
+\item $S'_{k}(m) = (S_{k}(m),m)$, 
+$V'_{k}(m,(t_{1},t_{2})) = V_{k}(m,t_{1}) \land t_{2} = m$
 \item $S'_{k_{1},k_{2}}(m) = (S_{k1}(m),S_{k_{2}}(m))$\\
 $V'_{k_{1},k_{2}}(m,(t_{1},t_{2})) = V_{k1}(m,t_{1}) \land V_{k_{2}}(m,t_{2})$
 \item $S'_{k}(m) = (S_{k}(m),S_{k}(m))$\\
-$ V'_{k}(m,(t_{1},t_{2})) = \left\{ 
+$ V'_{k}(m,(t_{1},t_{2})) = \left\{
   \begin{array}{l l}
     V_{k}(m,t_{1}) & \quad \text{if $t_{1}=t_{2}$}\\
     0 & \quad \text{otherwise}\\
@@ -90,8 +105,6 @@ $ V'_{k}(m,t) = \left\{
   \end{array} \right. $
 \item $S'_{k}(m) = S_{k}(m)\ \text{without the LSB}$ \\
 $V'_{k}(m,t) = V_{k}(m,t\| 0)\ \lor \ V_{k}(m,t\| 1)$
-\item $S'_{k}(m) = (S_{k}(m),m)$, 
-$V'_{k}(m,(t_{1},t_{2})) = V_{k}(m,t_{1}) \land t_{2} = m$
 \end{itemize}
 \end{exampleblock}
 \end{frame}
@@ -102,8 +115,8 @@ $V'_{k}(m,(t_{1},t_{2})) = V_{k}(m,t_{1}) \land t_{2} = m$
 \item \textbf{Timed one-time passwords}: $p=\mathsf{Mac}_k(T)$, where $k$ is the key shared between the user and the service provider, $T$ is the current date $+$ time (usually rounded to the nearest 30 seconds.) The attacker who learns the current $p$ can not gain access to your account in the future.
 \end{itemize}
 \end{frame}
-\section{Constructing Secure Message Authentication Codes}
-\begin{frame}\frametitle{Constructing Secure MACs}
+\section{Constructing Secure MAC}
+\begin{frame}\frametitle{Constructing Secure MAC}
 \begin{columns}[c]
 \column{.4\textwidth}
 \begin{figure}
@@ -168,7 +181,7 @@ According to the definition of PRF,
 %\end{itemize}
 \end{frame}
 \begin{comment}
-\begin{frame}\frametitle{Constructing Secure Variable-Length MACs}
+\begin{frame}\frametitle{Constructing Secure Variable-Length MAC}
 \begin{construction}
 \begin{itemize}
 \item $\Pi' = (\mathsf{Gen}', \mathsf{Mac}', \mathsf{Vrfy}')$ be a fixed-length MAC.
@@ -184,7 +197,7 @@ Output $1 \iff \mathsf{Vrfy}_k'(r\| \ell\| i\| m_i, t_i)=1$ for $1\le i \le d$.
 If $\Pi'$ is a secure fixed-length MAC, Construction is a secure MAC.
 \end{theorem}
 \end{frame}
-\begin{frame}\frametitle{Proof of Secure Variable-Length MACs}
+\begin{frame}\frametitle{Proof of Secure Variable-Length MAC}
 \textbf{Intuition}: The extra information prevents all possible attacks.
 \begin{proof}
 \begin{description}
@@ -206,7 +219,7 @@ To prove the below statements:
 \end{enumerate}
 \end{proof}
 \end{frame}
-\begin{frame}\frametitle{Proof of Secure Variable-Length MACs (Cont.)}
+\begin{frame}\frametitle{Proof of Secure Variable-Length MAC (Cont.)}
 \begin{proof}
 \begin{enumerate}
 \item $r \gets \{0,1\}^{\frac{n}{4}}$. By ``brithday bound'', $\Pr[\mathsf{Repeat}] \le q(n)^2/2^{\frac{n}{4}}$.
@@ -364,6 +377,7 @@ $\Pi$ ($\mathsf{Gen}$, $H^s$) is \textbf{collision resistant} if $\forall$ \text
 \item $H'(m) = H(m) \oplus H(m)$
 \item $H'(m) = H(m[0,\dots,\abs{m}-2])$
 \item $H'(m) = H(m\| 0)$
+\item $H'(m) = H(m)[0,\dots,\abs{m}-1]$ % truncating is dangerous; two messages have different hash values which have only one difference in the last bit.
 \end{itemize}
 \end{exampleblock}
 \end{frame}
@@ -552,13 +566,31 @@ $\boxplus$ denotes addition modulo $2^{32}$.
 \item Finding a collision in 160-bit SHA-1 requires time $2^{51}$
 \end{itemize}
 \end{frame}
-\section{HMAC}
-%\begin{frame}\frametitle{Nested MAC (NMAC)}
-%\begin{figure}
-%\begin{center}
-%\input{tikz/NMAC}
-%\end{center}
-%\end{figure}
+\section{Hash-based MAC}
+\begin{frame}\frametitle{Hash-and-MAC}
+\begin{construction}
+$(\widetilde{\mathsf{Gen}}, H)$ is a CRHF. $(\mathsf{Gen}, \mathsf{Mac}, \mathsf{Vrfy})$ is a fixed-length MAC.
+\begin{itemize}
+\item $\mathsf{Gen'}(1^n)$: $(k, s)$. $s \gets \widetilde{\mathsf{Gen}}, k \gets \mathsf{Gen}$.
+\item $\mathsf{Mac'}_{s,k}(m)$: $t := \mathsf{Mac}_k(H^s(m))$.
+\item $\mathsf{Vrfy'}_{s,k}(m,t)$: $1 \iff \mathsf{Vrfy}_{k}(H^s(m),t) = 1$.
+\end{itemize}
+\end{construction}
+\begin{theorem}
+The construction is a secure MAC for arbitrary-length messages.
+\end{theorem}
+Idea of proof: if the adversary has forged a tag on the ``new message'' $m^*$, then
+\begin{itemize}
+\item Case 1: If there is a queried messages $m$ such that $H^s(m) = H^s(m^*)$, then there is a collision in $H^s$.
+\item Case 2: If there is no queried messages $m$ such that $H^s(m) = H^s(m^*)$, then the adversary has forged a valid tag on the ``new message'' $H^s(m^*)$ for MAC.
+\end{itemize}
+\end{frame}
+\begin{frame}\frametitle{Nested MAC (NMAC)}
+\begin{figure}
+\begin{center}
+\input{tikz/NMAC}
+\end{center}
+\end{figure}
 %\begin{construction}
 %$(\widetilde{\mathsf{Gen}}, h)$ is a fixed-length CRHF. $(\widetilde{\mathsf{Gen}}, H)$ is Merkle-Damg\r{a}rd transform. NMAC:
 %\begin{itemize}
@@ -568,20 +600,16 @@ $\boxplus$ denotes addition modulo $2^{32}$.
 %\item $\mathsf{Vrfy}_{s,k_1,k_2}(m,t)$: $1 \iff t \overset{?}{=} \mathsf{Mac}_{s,k_1,k_2}(m)$.
 %\end{itemize}
 %\end{construction}
-%\end{frame}
-%\begin{frame}\frametitle{Security of NMAC}
 %\begin{theorem}
 %If $(\widetilde{\mathsf{Gen}}, h)$ is CRHF and yields a secure MAC, then NMAC is secure. (existentially unforgeable under an adaptive CMA for arbitrary-length messages)
 %\end{theorem}
-%\begin{itemize}
-%\item $k_2$ is not needed once $(\widetilde{\mathsf{Gen}}, h)$ is CRHF.
-%\begin{itemize}
-%\item \textbf{Weak collision resistance}: It is hard to find $(x, x'), x' \ne x$ such that $H^s_{k_2}(x) = H^s_{k_2}(x')$.
+\begin{itemize}
+\item NMAC is a MAC using CRHF (MD transform) without using PRF.
+\item $k_2$ is not needed once $h$ is CRHF, while it is needed if $h$ is \textbf{weak collision resistance}: It is hard to find $(x, x'), x' \ne x$ such that $H^s_{k_2}(x) = H^s_{k_2}(x')$ \textbf{without knowing} $k_2$.
 %\item $H_s^{k_2}(x)$ is hidden by $h_s^{k_1}(H_s^{k_2}(x))$.
-%\item \textbf{Disadvantage}: $IV$ of $H$ must be modified.
-%\end{itemize}
-%\end{itemize}
-%\end{frame}
+\item \textbf{Disadvantage}: $IV$ of $H$ must be modified.
+\end{itemize}
+\end{frame}
 \begin{frame}\frametitle{Hash-based MAC (HMAC)}
 \begin{figure}
 \begin{center}
@@ -590,8 +618,7 @@ $\boxplus$ denotes addition modulo $2^{32}$.
 \end{figure}
 \begin{construction}
 $(\widetilde{\mathsf{Gen}}, h)$ is a fixed-length CRHF. $(\widetilde{\mathsf{Gen}}, H)$ is the Merkle-Damg\r{a}rd transform.
-$IV$, $\mathsf{opad}$ (0x36), $\mathsf{ipad}$ (0x5C) are fixed constants of length $n$.
-HMAC:
+$IV$, $\mathsf{opad}$ (0x36), $\mathsf{ipad}$ (0x5C) are constants.
 \begin{itemize}
 \item $\mathsf{Gen}(1^n)$: Output $(s, k)$. $s \gets \widetilde{\mathsf{Gen}}, k \gets \{0,1\}^n$ \emph{u.a.r}
 \item $\mathsf{Mac}_{s,k}(m)$: $t := H_{IV}^s\Big((k \oplus \mathsf{opad}) \| H_{IV}^s\big((k \oplus \mathsf{ipad}) \| m\big)\Big)$
@@ -599,31 +626,34 @@ HMAC:
 \end{itemize}
 \end{construction}
 \end{frame}
-\begin{frame}\frametitle{Security of HMAC}
-\begin{theorem} \[ G(k) \overset{\text{def}}{=} h^s(IV\| (k\oplus \mathsf{opad})) \| 
-h^s(IV\| (k\oplus \mathsf{ipad})) = k_1\| k_2
-\]
-$(\widetilde{\mathsf{Gen}}, h)$ is CRHF. If $G$ is a PRG, then HMAC is secure.
-\end{theorem}
-Before HMAC's $H^s(k \| H^s(k \| x))$, a common mistake was to use:
+\begin{frame}\frametitle{(In)Security of (Before-)HMAC \footnote{from BonehShoup v0.5 p.303}}
+%\begin{theorem} \[ G(k) \overset{\text{def}}{=} h^s(IV\| (k\oplus \mathsf{opad})) \| 
+%h^s(IV\| (k\oplus \mathsf{ipad})) = k_1\| k_2
+%\]
+%$(\widetilde{\mathsf{Gen}}, h)$ is CRHF. If $G$ is a PRG, then HMAC is secure.
+%\end{theorem}
+We investigate HMAC's security by showing the insecurity of some before-HMAC designs.
 \begin{itemize}
-\item $H^s(k\| x)$: Vulnerable to length extension attack. Given $H^s(k\| x)$ and the length of $x$, get the valid tag $H^s(k\| x \| x')$ for a new message $x \| x'$.
-\item $H^s(x\| k)$: A collision in the weak hash function has a collision in the MAC. 
-\item $H^s(k\| x\| k)$: Some known vulnerabilities with this approach, even when two different keys are used.
+\item \textbf{Prepend the key} $H^s(k\| x)$: Vulnerable to length extension attack. Given $H^s(k\| x)$ and the length of $x$, get the valid tag $H^s(k\| x \| x')$ for a new message $x \| x'$.
+\item \textbf{Append the key} $H^s(x\| k)$: A collision in the \textbf{weak} CRHF has a collision in the MAC. Recall that there is an appended key for \textbf{weak} CRHF in NMAC.
+\item \textbf{Envelope} $H^s(k\| x\| k)$: Some known vulnerabilities with this approach, even when two different keys are used. This needs reasonable pseudorandomness assumptions on $h$.
+\item \textbf{Two-key nest} $H^s(k \| H^s(k \| x))$: NMAC with 2 keys, HMAC with 1 key
 \end{itemize}
 \end{frame}
-\begin{frame}\frametitle{Security of HMAC (Cont.)}
+\begin{frame}\frametitle{Remarks on HMAC}
 \begin{itemize}
-\item HMAC is an industry standard (RFC2104)
+\item HMAC is based on NMAC which was first published in a paper ``Keying Hash Functions for Message Authentication'' by Mihir Bellare, Ran Canetti, and Hugo Krawczyk in 1996.
+\item HMAC became an industry standard (RFC2104) in 1997
 \item HMAC is faster than CBC-MAC
-\item \alert{Verification timing attacks:} \\
+\end{itemize}
+\begin{exampleblock}{Verification timing attacks}
 Keyczar crypto library (Python): \\
 def Verify(key, msg, sig\underline{\ }bytes): \\
 $\qquad$ return HMAC(key, msg) == sig\underline{\ }bytes \\
-The problem:  implemented as a byte-by-byte comparison
-\item In Xbox 360, a difference of 2.2 milliseconds between rejection times of i vs. i + 1 bytes.
-\item \alert{\emph{Don't implement it yourself}}
-\end{itemize}
+The problem:  implemented as a byte-by-byte comparison \\
+In Xbox 360, a difference of 2.2 milliseconds between rejection times of i vs. i + 1 bytes. \\
+\alert{\emph{Don't implement it yourself}}
+\end{exampleblock}
 \end{frame}
 \section{Information-Theoretic MACs}
 
