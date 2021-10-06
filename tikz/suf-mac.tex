@@ -1,15 +1,15 @@
 \begin{tikzpicture}[uk/.style={inner sep=1pt, minimum width=18pt, circle, fill=red!40},kk/.style={inner sep=1pt, minimum width=18pt, fill=blue!40, circle},
 tk/.style={inner sep=1pt, minimum width=18pt, draw, fill=yellow!30, circle}]
 \node (X) at (-3cm,0) [ellipse,minimum width=1.5cm,minimum height=4cm,draw] {}; 
-\node (x) [above of=X,node distance=2.3cm] {$M$}; 
+\node (x) [above of=X,node distance=2.3cm] {$\mathcal{M}$}; 
 \node (Y) [right of=X,ellipse,minimum width=1.5cm,minimum height=4cm,node distance=6cm,draw] {};
-\node (y) [above of=Y,node distance=2.3cm] {$T$};
+\node (y) [above of=Y,node distance=2.3cm] {$\mathcal{T}$};
 
-\node (K) at (0,0) [minimum width=2.5cm,minimum height=4cm,draw] {};
+\node (K) at (0,0) [minimum width=2.5cm,minimum height=4cm,draw,ellipse] {};
 \node (TK) at (0,0.3cm) [ellipse,minimum width=1.5cm,minimum height=3cm,draw,fill=yellow!10] {};
 \node at (0,0.9cm) {$\mathcal{K}(t')$};
 
-\node (k) [above of=K,node distance=2.3cm] {$K$};
+\node (k) [above of=K,node distance=2.3cm] {$\mathcal{K}$};
 
 
 \node (x1) at ($(X)+(0,1cm)$) [uk] {$m'$};

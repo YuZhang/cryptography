@@ -689,7 +689,7 @@ So $\mathcal{K}(t')$ must be large enough.
 \end{frame}
 \begin{frame}\frametitle{Construction of Information-Theoretic MACs}
 \begin{definition}
-A function $h$: $\mathcal{K} \times \mathcal{M} \to \mathcal{T}$ is a \textbf{Strongly Universal Function (SUF)} if for all distinct $m, m' \in \mathcal{M}$ and all $t, t' \in \mathcal{T}$, it holds that:
+A function $h$: $\mathcal{K} \times \mathcal{M} \to \mathcal{T}$ is a \textbf{Strongly Universal (or pairwise-independent) Function (SUF)} if for all distinct $m, m' \in \mathcal{M}$ and all $t, t' \in \mathcal{T}$, it holds that:
 \[ \Pr [h_k(m) = t  \land h_k(m') = t'] = 1 / \abs{\mathcal{T}}^2.
 \]
 where the probability is taken over uniform choice of $k \in \mathcal{K}$.
@@ -732,23 +732,23 @@ We assume that $\mathcal{A}$ is deterministic without loss of generality. The ad
 \end{proof}
 \end{frame}
 \begin{frame}\frametitle{Limitations on Information-Theoretic MACs}
-Any $\ell$-time $2^{-n}$-secure MAC requires keys of length at least $(\ell +1) \cdot n$. 
+\textbf{Limitations}: Any $\ell$-time $2^{-n}$-secure MAC requires keys of length at least $(\ell +1) \cdot n$. 
 \begin{theorem}
 Let $\Pi$ be a 1-time $2^{-n}$-secure MAC where all keys are the same length. Then the keys must have length at least $2n$.
 \end{theorem}
 \begin{proof}
-Let $\mathcal{K}(t) \overset{\mathsf{def}}{=} \{ k | \mathsf{Vrfy}_k(m, t) = 1\}$. For any $t$, $\abs{\mathcal{K}(t)} \leq 2^{-n} \cdot \abs{\mathcal{K}}$. Otherwise, $(m, t)$ would be a valid forgery with probability at least $\abs{\mathcal{K}(t)}/\abs{\mathcal{K}}> 2^{-n}$. The probability that $\mathcal{A}$ outputs a valid forgery is at least
-\[ \sum_{t} \Pr [\mathsf{Mac}_k(m) = t] \cdot \frac{1}{\abs{\mathcal{K}(t)}} \geq \sum_{t} \Pr [\mathsf{Mac}_k(m) = t] \cdot \frac{2^n}{\abs{\mathcal{K}}} = \frac{2^n}{\abs{\mathcal{K}}} 
+Let $\mathcal{K}(t') \overset{\mathsf{def}}{=} \{ k | \mathsf{Vrfy}_k(m', t') = 1\}$. For any $t$, $\abs{\mathcal{K}(t')} \leq 2^{-n} \cdot \abs{\mathcal{K}}$. Otherwise, $(m', t')$ would be a valid forgery with probability at least $\abs{\mathcal{K}(t)}/\abs{\mathcal{K}}> 2^{-n}$. The probability that $\mathcal{A}$ outputs a valid forgery is at least
+\[ \sum_{t'} \Pr [\mathsf{Mac}_k(m') = t'] \cdot \frac{1}{\abs{\mathcal{K}(t')}} \geq \sum_{t'} \Pr [\mathsf{Mac}_k(m') = t'] \cdot \frac{2^n}{\abs{\mathcal{K}}} = \frac{2^n}{\abs{\mathcal{K}}} 
 \]
 As the probability is at most $2^{-n}$, $\abs{\mathcal{K}} \geq 2^{2n}$. Since all keys have the same length, each key must have length at least $2n$.
 \end{proof} 
 \end{frame}
 \begin{frame}\frametitle{Summary}
-\begin{itemize}
-\item adaptive CMA, replay attack, birthday attack 
-\item existential unforgeability, collision resistance
-\item CBC-MAC, CRHF, Merkle-Damg\r{a}rd transform, NMAC, HMAC
-\item information-theoretic MAC
+\begin{itemize} 
+\item Authentication means existential unforgeability.
+\item Secure MAC is constructed by using PRF.
+\item Secure MAC is constructed by using keyed CRHF.
+\item Information-theoretic MAC security requires very, very long key.
 \end{itemize}
 \end{frame}
 \end{document}
