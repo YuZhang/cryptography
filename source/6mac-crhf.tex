@@ -404,20 +404,21 @@ $\Pi$ ($\mathsf{Gen}$, $H^s$) is \textbf{collision resistant} if $\forall$ \text
 %\end{frame}
 \begin{frame}\frametitle{The ``Birthday'' Problem}
 \begin{exampleblock}{The ``Birthday'' Problem}
-\textbf{Q}: ``\emph{What size group of people do we need to take such that with probability $1/2$ some pair of people in the group share a birthday?}''
-
+\textbf{Q}: ``\emph{What size group of people do we need to take such that with probability $1/2$ some pair of people share a birthday?}''
 \textbf{A}: 23.
 \end{exampleblock}
 \begin{lemma}
-Choose $q$ elements $y_1,\dotsc , y_q$ \emph{u.a.r} from a set of size $N$, the probability that $\exists \; i \ne j$ with $y_i = y_j$ is $\mathsf{coll}(q,N)$, then 
-\[ \mathsf{coll}(q,N) \le \frac{q^2}{2N}.
-\]
-\[ \mathsf{coll}(q,N) \ge  \frac{q(q-1)}{4N}\quad \text{if}\; q \le \sqrt{2N}.
-\]
-\[ \mathsf{coll}(q,N) = \Theta(q^2/N)\quad \text{if}\; q < \sqrt{N}.
-\]
+Choose $q$ elements \emph{u.a.r} from a set of size $N$, the probability that $\exists \; i \ne j$ with $y_i = y_j$ is $\mathsf{coll}(q,N)$, then 
+$ \mathsf{coll}(q,N) \le \frac{q^2}{2N} $.
+%\[ \mathsf{coll}(q,N) \ge  \frac{q(q-1)}{4N}\quad \text{if}\; q \le \sqrt{2N}.
+%\]
+%\[ \mathsf{coll}(q,N) = \Theta(q^2/N)\quad \text{if}\; q < \sqrt{N}.
+%\]
 \end{lemma}
-The length of hash value should be long enough.
+\begin{exampleblock}{How many different meaningful sentences are below?}
+It is \textbf{hard/difficult/challenging/impossible} to \textbf{imagine/believe} that we will \textbf{find/locate/hire} another \textbf{employee/person} having similar \textbf{abilities/skills/character} as Alice. She has done a \textbf{great/super} job.
+\end{exampleblock}
+\alert{A principle: The length of hash value should be long enough.}
 \end{frame}
 %\begin{frame}\frametitle{A Generic ``Birthday'' Attack}
 %\begin{itemize}
@@ -473,11 +474,6 @@ Since $2i-i=i$ is a multiple of the period and $i \ge I$, $x_i = x_{2i}$.
 \end{proof}
 \end{frame}
 \end{comment}
-\begin{frame}\frametitle{Constructing ``Meaningful'' Collisions}
-\begin{exampleblock}{How many different meaningful sentences are in the below paragraph?}
-It is \textbf{hard/difficult/challenging/impossible} to \textbf{imagine/believe} that we will \textbf{find/locate/hire} another \textbf{employee/person} having similar \textbf{abilities/skills/character} as Alice. She has done a \textbf{great/super} job.
-\end{exampleblock}
-\end{frame}
 \begin{frame}\frametitle{The Merkle-Damg\r{a}rd Transform}
 \begin{figure}
 \begin{center}

@@ -16,18 +16,17 @@
    - 消息传递（**Message transmission** ）算法由 $\mathsf{Enc}_{k_1}(\cdot)$ 和 $\mathsf{Mac}_{k_2}(\cdot)$ 生成，输出 $c \gets \mathsf{EncMac'}_{k_1,k_2}(m)$.
    - 解密（**Decryption**）算法由 $\mathsf{Dec}_{k_1}(\cdot)$ 和 $\mathsf{Vrfy}_{k_2}(\cdot)$ 生成，输出 $m \gets \mathsf{Dec}'_{k_1,k_2}(c)$ 或 $\bot$.
    - 正确性需求: $\mathsf{Dec}'_{k_1,k_2}(\mathsf{EncMac}'_{k_1,k_2}(m)) = m$.
-   - 注：在解密算法中，当密文没有通过真实性验证时，输出空；这意味着未认证的密文无法解密。
+   - 注：在解密算法中，当密文没有通过真实性验证时，输出空（可以理解为“报错”）；这意味着未认证的密文无法解密。
 
 5. 定义安全消息传递
    - 先定义保护真实性的认证通信，然后定义同时保护机密性和真实性的认证加密。
    - 安全消息传递实验（**secure message transmission**） $\mathsf{Auth}_{\mathcal{A},\Pi'}(n)$:
-  1. $k = (k_1,k_2) \gets \mathsf{Gen}'(1^n)$.
-     2. $\mathcal{A}$ 输入 $1^n$ 和对 $\mathsf{EncMac'}_k$的预言机访问，并输出 $c \gets \mathsf{EncMac'}_{k}(m)$.
-     3. $m := \mathsf{Dec}'_k(c)$. $\mathsf{Auth}_{\mathcal{A},\Pi'}(n) = 1 \iff m \ne \bot \land\; m \notin \mathcal{Q}$.
+     - $k = (k_1,k_2) \gets \mathsf{Gen}'(1^n)$.
+     - $\mathcal{A}$ 输入 $1^n$ 和对 $\mathsf{EncMac'}_k$的预言机访问，并输出 $c \gets \mathsf{EncMac'}_{k}(m)$.
+     - $m := \mathsf{Dec}'_k(c)$. $\mathsf{Auth}_{\mathcal{A},\Pi'}(n) = 1 \iff m \ne \bot \land\; m \notin \mathcal{Q}$.
    - 定义：$\Pi'$ 实现认证通信（ **authenticated communication**），如果 $\forall$ ppt $\mathcal{A}$, $\exists\; \mathsf{negl}$ 使得，$ \Pr[\mathsf{Auth}_{\mathcal{A},\Pi'}(n) = 1] \le \mathsf{negl}(n). $
    - 定义：$\Pi'$ 是安全的认证加密（**secure Authenticated Encryption (A.E.)**）， 如果其既是CCA安全的也是实现了认证通信。
    - 问题：CCA安全意味着A.E.吗？（作业）
-
 6. 关于认证加密的例题
    - 如果认为是安全的，那么利用反证法证明；
    - 如果认为是不安全的，那么或者可以伪造消息，或者破解明文；

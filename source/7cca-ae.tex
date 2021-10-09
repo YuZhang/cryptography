@@ -86,9 +86,9 @@ $ D'_{k}(c, h) = \left\{
 \end{center}
 \end{figure}
 \begin{itemize}
-\item \textbf{Encrypt-and-authenticate} (e.g., SSH):\[ c \gets \mathsf{Enc}_{k_1}(m),\; t \gets \mathsf{Mac}_{k_2}(m).\]
-\item \textbf{Authenticate-then-encrypt} (e.g, SSL):\[ t \gets \mathsf{Mac}_{k_2}(m),\; c \gets \mathsf{Enc}_{k_1}(m\| t).\]
-\item \textbf{Encrypt-then-authenticate} (e.g, IPsec):\[ c \gets \mathsf{Enc}_{k_1}(m),\; t \gets \mathsf{Mac}_{k_2}(c). \]
+\item \textbf{Encrypt-and-MAC} (e.g., SSH (1995)):\[ c \gets \mathsf{Enc}_{k_1}(m),\; t \gets \mathsf{Mac}_{k_2}(m).\]
+\item \textbf{MAC-then-encrypt} (e.g, TLS 1.0 (1996), 802.11i WiFi (WPA2) (2004)):\[ t \gets \mathsf{Mac}_{k_2}(m),\; c \gets \mathsf{Enc}_{k_1}(m\| t).\]
+\item \textbf{Encrypt-then-MAC} (e.g, IPsec (1995), TLS  $\ge$1.2 (2008)):\[ c \gets \mathsf{Enc}_{k_1}(m),\; t \gets \mathsf{Mac}_{k_2}(c). \]
 \end{itemize}
 \end{frame}
 \begin{frame}\frametitle{Analyzing Security of Combinations}
@@ -200,7 +200,7 @@ Authenticate-then-encrypt approach is secure if $\Pi_E$ is rand-CTR mode or rand
 \section{Deterministic Encryptions}
 \begin{frame}\frametitle{Deterministic CPA Security}
 \begin{itemize}
-\item \textbf{Application}: encrypted database index, disk encryption
+\item \textbf{Applications}: encrypted database index, disk encryption
 \item \textbf{Deterministic encryption}: the same message is encrypted to the same ciphertext under the same key. \\ \alert{Q: would it be  CPA-secure?}
 \item \textbf{Deterministic CPA Security}: CPA-secure if \emph{never encrypt same message twice} using same key. The pair $\left<k,m\right>$ is unique.
 \item \textbf{Deterministic Authenticated Encryption (DAE)}
@@ -293,9 +293,9 @@ $c = \left<SIV,\mathsf{Enc}_{k_2}(SIV,m) \right>$.
 \end{frame}
 \begin{frame}\frametitle{Summary}
 \begin{itemize}
-\item CCA-secure, Authenticated Encryption, Enc-then-Auth(/MAC).
-\item SIV, Wide Block Cipher, Tweakable Encryption, CTS.
-\item PBKDF, salt.
+\item CCA-secure + Authentication = Authenticated Encryption = Enc-then-Auth(/MAC).
+\item Deterministic Encryption: SIV, Wide Block Cipher, Tweakable Encryption.
+\item KDF by PRF, hash, salt and context.
 \end{itemize}
 \end{frame}
 %\end{comment}
