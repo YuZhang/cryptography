@@ -676,7 +676,8 @@ An adversary will forge the tag in the following steps.
 \item Obtain $\mathcal{K}(t') \overset{\mathsf{def}}{=} \{ k | \mathsf{Vrfy}_k(m', t') = 1\}$ by using his unlimited computing power
 \item Output $(m, t)$ using a key $k^*$ from $\mathcal{K}(t')$
 \end{enumerate}
-So $\mathcal{K}(t')$ must be large enough.
+\alert{\textbf{Question: What if $\mathcal{K}(t')$ is too large or too small?}}
+% large: m, t is more likely to be valid; small: k^* is more likely to be guessed.
 \begin{figure}
 \begin{center}
 \input{tikz/suf-mac}
@@ -717,7 +718,7 @@ $a \cdot m + b  = t \mod p$  and  $a \cdot m' + b = t' \mod p$. We have $a = [(t
 If $h$ is an SUF, Construction is a $1/\abs{\mathcal{T}}-$secure MAC.
 \end{theorem}
 \begin{proof}
-We assume that $\mathcal{A}$ is deterministic without loss of generality. The adversary receives tag $t’$ for the message $m’$, where $m’$ is fixed.
+Assume that $\mathcal{A}$ is deterministic and receives tag $t’$ for the message $m’$, where $m’$ is fixed. The pair $(m,t)$ that $\mathcal{A}$ outputs is a deterministic function of $(m', t')$.
 \[
 \begin{split}
 \Pr [\mathsf{Macforge}_{\mathcal{A},\Pi}^{1-\mathsf{time}} = 1] &=  \sum_{t' \in \mathcal{T}} \Pr [\mathsf{Macforge}_{\mathcal{A},\Pi}^{1-\mathsf{time}} = 1 \land h_k(m')=t'] \\
@@ -733,7 +734,7 @@ We assume that $\mathcal{A}$ is deterministic without loss of generality. The ad
 Let $\Pi$ be a 1-time $2^{-n}$-secure MAC where all keys are the same length. Then the keys must have length at least $2n$.
 \end{theorem}
 \begin{proof}
-Let $\mathcal{K}(t') \overset{\mathsf{def}}{=} \{ k | \mathsf{Vrfy}_k(m', t') = 1\}$. For any $t$, $\abs{\mathcal{K}(t')} \leq 2^{-n} \cdot \abs{\mathcal{K}}$. Otherwise, $(m', t')$ would be a valid forgery with probability at least $\abs{\mathcal{K}(t)}/\abs{\mathcal{K}}> 2^{-n}$. The probability that $\mathcal{A}$ outputs a valid forgery is at least
+Let $\mathcal{K}(t') \overset{\mathsf{def}}{=} \{ k | \mathsf{Vrfy}_k(m', t') = 1\}$. For any $t$, $\abs{\mathcal{K}(t')} \leq 2^{-n} \cdot \abs{\mathcal{K}}$. Otherwise, $(m', t')$ would be a valid forgery with probability at least $\abs{\mathcal{K}(t)}/\abs{\mathcal{K}}> 2^{-n}$. The probability that $\mathcal{A}$ outputs a valid forgery by guessing $k$ from $\abs{\mathcal{K}(t')}$ is at least
 \[ \sum_{t'} \Pr [\mathsf{Mac}_k(m') = t'] \cdot \frac{1}{\abs{\mathcal{K}(t')}} \geq \sum_{t'} \Pr [\mathsf{Mac}_k(m') = t'] \cdot \frac{2^n}{\abs{\mathcal{K}}} = \frac{2^n}{\abs{\mathcal{K}}} 
 \]
 As the probability is at most $2^{-n}$, $\abs{\mathcal{K}} \geq 2^{2n}$. Since all keys have the same length, each key must have length at least $2n$.
