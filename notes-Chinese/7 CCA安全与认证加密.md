@@ -39,14 +39,19 @@
 
 8. 分析组合的安全性
    - 采用全或无（All-or-nothing）分析，即一种组合方案要么在全部情况下都是安全的，要么只要存在一个不安全的反例就被认为是不安全的；
-   - 加密并认证: $\mathsf{Mac}'_k(m) = (m, \mathsf{Mac}_k(m))$. *注：认证可能泄漏消息。*
-   - 先认证后加密: *注：加密不能阻止对密文篡改。*
-     1. $\mathsf{Trans}: 0 \to 00; 1 \to 10/01$; $\mathsf{Enc}'$ 采用CTR模式; $c = \mathsf{Enc}'(\mathsf{Trans}(m\| \mathsf{Mac}(m)))$.
-     2. 将 $c$ 的前两个比特翻转并且验证密文是否有效。$10/01 \to 01/10 \to 1$, $00 \to 11 \to \bot$.
-     3. 如果有效，消息的第一比特是1，否则是0； 
-     4. 对于任何MAC，这都不是CCA安全的；
+   - 加密并认证: $\mathsf{Mac}'_k(m) = (m, \mathsf{Mac}_k(m))$. 
+     - 这表明，认证可能泄漏消息。
+   - 先认证后加密: 
+     - 一个例子：
+       - $\mathsf{Trans}: 0 \to 00; 1 \to 10/01$; 
+       - $\mathsf{Enc}'$ 采用CTR模式; $c = \mathsf{Enc}'(\mathsf{Trans}(m\| \mathsf{Mac}(m)))$.
+       - 将 $c$ 的前两个比特翻转并且验证密文是否有效。$10/01 \to 01/10 \to 1$, $00 \to 11 \to \bot$.
+         - 明文为1时，不改变明文；明文为0时，解密无效
+       - 如果可以有效解密，则意味着消息的第一比特是1，否则是0； 
+       - 对于任何MAC，这都不是CCA安全的；
+     - 这个例子表明，缺乏完整性保护时，敌手可解密，而密文是否有效也价值1个比特的信息。
    - 先加密后认证: 解密: 如果 $\mathsf{Vrfy}(\cdot) = 1$， 那么 $\mathsf{Dec}(\cdot)$； 否则，输出 $\bot$。下面来证明。
-
+   
 9. 构造AE/CCA安全的加密方案
 
    - 思想：令解密预言机没用。AE/CCA =CPA-then-MAC。
@@ -108,16 +113,17 @@
     - 不同安全目标应该采用不同的密钥；否则，可能泄漏消息，例如 $\mathsf{Mac}_k(c)=\mathsf{Dec}_k(c)$。
     - 实现可能摧毁理论上的安全性：
        - Padding Oracle 攻击（TLS 1.0）: 解密返回两种类型错误: padding error，MAC error；敌手通过猜测来获得最后一字节，如果没有padding错误；参考之前在CCA部分学习的Padding Oracle攻击；
-       - 攻击非原子解密（SSH Binary Packet Protocol）：解密时，分三步 (1)解密消息长度； (2)读取长度所的包数； (3) 检查MAC；敌手针对这种非原子解密过程，实施攻击分三步 (1)发送密文 $c$；(2)发送 $l$ 个包直到“MAC error”发生；(3)获得密文对应的明文 $l = \mathsf{Dec}(c)$。
+       - 攻击非原子解密（SSH Binary Packet Protocol）：解密时，分三步 (1)解密消息长度； (2)读取长度所表明的包数； (3) 检查MAC；敌手针对这种非原子解密过程，实施攻击分三步 (1)发送密文 $c$；(2)发送 $l$ 个包直到“MAC error”发生；(3)获得密文对应的明文 $l = \mathsf{Dec}(c)$。
 
 15. 确定性CPA安全（**Deterministic CPA Security**）
 
-    - 应用：在加密数据库索引后，检索时需要加密明文来检索密文；在磁盘加密中，密文大小需要与明文一样大。
-    - 确定性加密（Deterministic encryption）：相同的消息在相同密钥下被加密为相同的密文。问题：这样能实现CPA安全吗？
+    - 应用：在加密数据库索引后，检索时需要加密明文来检索密文；在磁盘加密中，密文大小需要与明文一样大。但之前学习的CPA安全加密都是非确定性的，而且密文比明文长。
+    - 确定性加密（Deterministic encryption）：相同的消息在相同密钥下被加密为相同的密文。
+      - 问题：这样能实现CPA安全吗？答案是不可能，因为CPA安全意味着非确定性加密，密文长于明文。于是，我们需要新的安全定义。
     - 确定性CPA安全（Deterministic CPA Security）: 如果从来不用相同的密钥加密同一个消息两次，实现CPA安全，即密钥和消息对$\left<k,m\right>$ 是唯一的。*注：消息是可重复的，密钥也可重复，但同一密钥不能重复加密同一消息*
     - 确定性认证加密（Deterministic Authenticated Encryption，DAE）：与上面的概念类似。
     - 常见错误：在 CBC/CTR 模式中采用固定的$IV$。
-    - 敌手能够查询 $(m_{q1}, m_{q2})$ 并且得到 $(c_{q1}, c_{q2})$；然后输出明文：$ IV\oplus c_{q1} \oplus m_{q2}$ 并且期待密文： $c_{q2}$。*注：第一个PRF的输入就是$ IV\oplus IV\oplus c_{q1} \oplus m_{q2} = c_{q1} \oplus m_{q2}$ *
+    - 敌手能够查询 $(m_{q1}, m_{q2})$ 并且得到 $(c_{q1}, c_{q2})$；然后输出明文：$ IV\oplus c_{q1} \oplus m_{q2}$ 并且期待密文： $c_{q2}$。注：第一个PRF的输入就是$ IV\oplus IV\oplus c_{q1} \oplus m_{q2} = c_{q1} \oplus m_{q2}$ 
 
 16. 合成初始向量法（**Synthetic** IV **(SIV)**）
 
