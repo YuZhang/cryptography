@@ -119,8 +119,8 @@ $\Pi$ is \textbf{CPA-secure} if $\forall$ \textsc{ppt} $\mathcal{A}$, $\exists$ 
 \end{definition}
 \end{frame}
 \begin{frame}\frametitle{Security Properties of Public-Key Encryption}
-\begin{exampleblock}{} Symmetric ciphers are possible to encrypt a 32-bit message and obtain a 32-bit ciphertext (e.g. with the one time pad). Can the same be done with a public-key system?
-\end{exampleblock}
+%\begin{exampleblock}{} Symmetric ciphers are possible to encrypt a 32-bit message and obtain a 32-bit ciphertext (e.g. with the one time pad). Can the same be done with a public-key system?
+%\end{exampleblock}
 \begin{theorem}
 \alert{Q: Would a deterministic public-key encryption scheme be secure in the presence of an eavesdropper?}
 \end{theorem}
@@ -339,15 +339,18 @@ Deterministic polynomial-time algorithm $\mathsf{hc}$ is a \textbf{hard-core pre
 \begin{itemize}
 %\item $f'(x) = f(x)\| 000$
 \item $f'(x) = f(x)\| \mathsf{td}$
+\item $f'(x) = f(x) \| I$
 \item $f'(x\|x') = f(x)\|\mathsf{Inv}_{\mathsf{td}}(f(x'))$
 \item $f'(x\|x') = f(x)\|f(x')$
-\item $f'(x) = f(x) \| I$
 \item $ f'(x) = \left\{
   \begin{array}{l l}
     f(x) & \quad \text{if $x[0,1,2,3] \neq 1010$}\\
     x & \quad \text{otherwise}\\
   \end{array} \right. $
 \end{itemize}
+\end{exampleblock}
+\begin{exampleblock}{Is the following public-key encryption scheme from any TDP is secure?}
+$\mathsf{Enc}_{I}(m) = f_I(m)$, $\mathsf{Dec}_{\mathsf{td}}(c) = f^{-1}_I(c)$.
 \end{exampleblock}
 \end{frame}
 \begin{frame}\frametitle{Public-key Encryption Schemes from TDPs}
@@ -361,9 +364,6 @@ Deterministic polynomial-time algorithm $\mathsf{hc}$ is a \textbf{hard-core pre
 \begin{theorem}
 If $\widehat{\Pi}=(\widehat{Gen},f)$ is TDP, and $\mathsf{hc}$ is HCP for $\widehat{\Pi}$, then Construction $\Pi$ is CPA-secure.
 \end{theorem}
-\begin{exampleblock}{Is the following scheme is secure?}
-$\mathsf{Enc}_{I}(m) = f_I(m)$, $\mathsf{Dec}_{\mathsf{td}}(c) = f^{-1}_I(c)$.
-\end{exampleblock}
 \end{frame}
 \begin{frame}\frametitle{Proof}
 \textbf{Idea}: $\mathsf{hc}_I(x)$ is pseudorandom. Reduce $\mathcal{A}_{\mathsf{hc}}$ for $\mathsf{hc}$ to $\mathcal{A}$ for $\Pi$.
