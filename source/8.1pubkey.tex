@@ -128,7 +128,7 @@ $\Pi$ is \textbf{CPA-secure} if $\forall$ \textsc{ppt} $\mathcal{A}$, $\exists$ 
 \alert{Q: If $\Pi$ is secure in the presence of an eavesdropper, is $\Pi$ also CPA-secure? and is it secure for multiple encryptions?}
 \end{proposition}
 \begin{proposition}
-\alert{Q: is perfectly-secret public-key encryption possible?}
+\alert{Q: Is perfectly-secret public-key encryption possible?}
 \end{proposition}
 \end{frame}
 
@@ -231,7 +231,21 @@ If $\Pi$ has indistinguishable encryptions in the presence of an eavesdropper, t
 \end{proposition}
 \end{frame}
 \end{comment}
-
+\begin{frame}\frametitle{Key Size Comparison}
+NIST recommends the \textbf{key lengths} (in bits) with comparable security. NIST deems a 112-bit effective key length acceptable for security until the year 2030, but recommends 128-bit or higher key lengths for applications where security is required beyond then.
+\newline
+\begin{center}
+\begin{tabular}{|c|c|c|} \hline
+AES & RSA ($N$)/DH ($p$) & ECC (order $q$) \\ \hline	
+56 & 512 & 112 \\
+80 & 1024 & 160 \\
+112 & 2048 & 224 \\
+128 & 3072 & 256 \\
+192 & 7680 & 384 \\
+256 & 15360 & 512 \\ \hline	
+\end{tabular}	
+\end{center}
+\end{frame}
 \begin{frame}\frametitle{Construction of Hybrid Encryption}
 To speed up the encryption, use private-key encryption $\Pi'$ (data-encapsulation mechanism, DEM) in tandem with public-key encryption $\Pi$ (key-encapsulation mechanism, KEM).
 \begin{columns}
@@ -261,7 +275,7 @@ $\Pi^{\mathsf{hy}} = (\mathsf{Gen}^{\mathsf{hy}}, \mathsf{Enc}^{\mathsf{hy}}, \m
 \end{construction}
 \end{column}
 \end{columns}
-\alert{Q: is hybrid encryption a public-key enc. or private-key enc. ?}
+\alert{Q: Is hybrid encryption a public-key enc. or a private-key enc. ?}
 \end{frame}
 \begin{frame}\frametitle{Security of Hybrid Encryption}
 \begin{theorem}
@@ -272,6 +286,14 @@ If $\Pi$ is a CPA-secure public-key encryption scheme and $\Pi'$ is a private-ke
 \input{tikz/hybrid-enc-proof}
 \end{center}
 \end{figure}
+\end{frame}
+\begin{frame}\frametitle{Applications of Hybrid Encryption\footnote{from BonehShuop v0.5}}
+\begin{exampleblock}{How do the following applications work by using hybrid encryption?}
+\begin{itemize}
+\item \textbf{Sharing encrypted files:} In modern file systems, a user (Alice) can store encrypted files to which other users (Bob, Charlie) have read access. 
+\item \textbf{Key escrow:} Consider a company that deploys an encrypted file system such as the one described above. The company runs a key escrow server which generates a public key pair. One day Alice is traveling, but her manager Bob needs to read one of her files to prepare for a meeting. 
+\end{itemize}
+\end{exampleblock}
 \end{frame}
 \section{Trapdoor Permutations}
 \begin{frame}\frametitle{Overview}
@@ -315,11 +337,11 @@ Deterministic polynomial-time algorithm $\mathsf{hc}$ is a \textbf{hard-core pre
 \begin{frame}\frametitle{Examples}
 \begin{exampleblock}{Let $f$ with $<I, \mathsf{td}>$ be a TDP. Which of the following $f'$ is also a TDP?}
 \begin{itemize}
-\item $f'(x) = f(x)\| 000$
+%\item $f'(x) = f(x)\| 000$
 \item $f'(x) = f(x)\| \mathsf{td}$
 \item $f'(x\|x') = f(x)\|\mathsf{Inv}_{\mathsf{td}}(f(x'))$
 \item $f'(x\|x') = f(x)\|f(x')$
-\item $f'(x) = f(x) \oplus I$
+\item $f'(x) = f(x) \| I$
 \item $ f'(x) = \left\{
   \begin{array}{l l}
     f(x) & \quad \text{if $x[0,1,2,3] \neq 1010$}\\
@@ -589,21 +611,4 @@ If $f$ is TDP, $G,H$ are ROs, Construction is CCA-secure.
 \end{tabular}	
 \end{center}
 \end{frame}
-
-\begin{frame}\frametitle{Key Size Comparison}
-NIST recommends the \textbf{key lengths} (in bits) with comparable security. NIST deems a 112-bit effective key length acceptable for security until the year 2030, but recommends 128-bit or higher key lengths for applications where security is required beyond then.
-\newline
-\begin{center}
-\begin{tabular}{|c|c|c|} \hline
-AES & RSA ($N$)/DH ($p$) & ECC (order $q$) \\ \hline	
-56 & 512 & 112 \\
-80 & 1024 & 160 \\
-112 & 2048 & 224 \\
-128 & 3072 & 256 \\
-192 & 7680 & 384 \\
-256 & 15360 & 512 \\ \hline	
-\end{tabular}	
-\end{center}
-\end{frame}
-
 \end{document}
