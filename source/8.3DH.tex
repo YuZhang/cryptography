@@ -1,6 +1,6 @@
 \input{source/header/main.tex}
 
-\title{Diffie-Hellman Problem and Elgamal Encryption Scheme}
+\title{Diffie-Hellman Problem and Cryptography}
 
 \begin{document}
 \maketitle
@@ -20,8 +20,6 @@ $ \langle g \rangle \overset{\text{def}}{=} \{ g^0,g^1,\dotsc,\} = \{ g^0,g^1,\d
 \item Is $\mathbb{Z}_6^*$, $\mathbb{Z}_7^*$, or $\mathbb{Z}_8^*$ with `$\cdot$' cyclic? %{1, 5}
 \end{itemize}
 \end{exampleblock}
-\item \textbf{Lagrange's theorem}: $\langle g \rangle$ is a subgroup of $\mathbb{G}$, and $\abs{\langle g \rangle} \mid \abs{\mathbb{G}}$.
-\item For proof, see https://brilliant.org/wiki/lagranges-theorem/.
 %\item If $p$ is prime, then $\mathbb{Z}^*_p$ is cyclic.
 \end{itemize}
 \end{frame}
@@ -55,14 +53,14 @@ Show an instance of DL problem in $\mathbb{Z}_{7}^{*}$
 \item \textbf{Pohlig-Hellman} algorithm: when $q$ has small factors.
 \item \textbf{Index calculus} method: $\mathcal{O}(\exp{(\sqrt{n\cdot \log n})})$.
 \item The best-known algorithm is the \textbf{general number field sieve} with time $\mathcal{O}(\exp(n^{1/3}\cdot(\log n)^{2/3}))$.
-\item Elliptic curve groups vs. $\mathbb{Z}_p^*$: more efficient for the honest parties, but that are equally hard for an adversary to break.\\ (Both 1024-bit $\mathbb{Z}_p^*$ and 132-bit elliptic curve need $2^{66}$ steps.)
 \end{itemize}
 \end{frame}
 \begin{frame}\frametitle{Using Prime-Order Groups}
 \begin{theorem}
  If $\mathbb{G}$ is of prime order, then $\mathbb{G}$ is cyclic. All $g \in \mathbb{G}$ except the identity are generators.
 \end{theorem}
-It is proved from Lagrange's theorem.	\newline \\
+It is proved from \textbf{Lagrange's theorem}: $\langle g \rangle$ is a subgroup of $\mathbb{G}$, and $\abs{\langle g \rangle} \mid \abs{\mathbb{G}}$.
+See https://brilliant.org/wiki/lagranges-theorem/. 
 
 Why using prime-order groups?
 \begin{itemize}
@@ -334,7 +332,7 @@ Return $[(x_1-x'_1)\cdot (x'_2-x_2)^{-1} \bmod q]$.
 \end{proof}
 \end{frame}
 \end{comment}
-\section{The Elgamal Encryption Scheme}
+\section{The ElGamal Encryption Scheme}
 \begin{frame}\frametitle{Lemma on Perfectly-secret Private-key Encryption}
 \begin{lemma}\label{lem:ps}
 $\mathbb{G}$ is a finite group and $m\in \mathbb{G}$ is an arbitrary element. Then choosing random $k \gets \mathbb{G}$ and setting $c := k\cdot m$ gives the same distribution for $c$ as choosing random $c \gets \mathbb{G}$. I.e, $\forall g \in \mathbb{G}$:
@@ -347,7 +345,7 @@ Let $g \in \mathbb{G}$ be arbitrary, then
 Since $k$ is chosen \emph{u.a.r}, the probability that $k$ is equal to the fixed element $g\cdot m^{-1}$ is exactly $1/\abs{\mathbb{G}}$.
 \end{proof}
 \end{frame}
-\begin{frame}\frametitle{The Elgamal Encryption Scheme}
+\begin{frame}\frametitle{The ElGamal Encryption Scheme}
 An algorithm $\mathcal{G}$, on input $1^n$, outputs a description of a cyclic group $\mathbb{G}$, its order $q$ (with $\|q\| = n$), and a generator $g$.
 \begin{columns}[]
 \begin{column}{5cm}
@@ -368,10 +366,10 @@ An algorithm $\mathcal{G}$, on input $1^n$, outputs a description of a cyclic gr
 \end{column}
 \end{columns}
 \begin{theorem}
-If the DDH problem is hard relative to $\mathcal{G}$, then the Elgamal encryption scheme is CPA-secure.
+If the DDH problem is hard relative to $\mathcal{G}$, then the ElGamal encryption scheme is CPA-secure.
 \end{theorem}
 \end{frame}
-\begin{frame}\frametitle{Example of Elgamal Encryption}
+\begin{frame}\frametitle{Example of ElGamal Encryption}
 \textbf{Encoding binary strings}:
 \begin{itemize}
 \item the subgroup of quadratic residues modulo a strong prime $p = (2q+1)$.
@@ -391,7 +389,7 @@ Decryption: $m= [44\cdot (132^{37})^{-1}] \equiv [44\cdot 66] \equiv 65 \pmod{16
 \end{exampleblock}
 \end{frame}
 %\begin{comment}
-\begin{frame}{Proof of Security of Elgamal Encryption Scheme}
+\begin{frame}{Proof of Security of ElGamal Encryption Scheme}
 \begin{proof}
 \textbf{Idea}: Prove that $\Pi$ is secure in the presence of an eavesdropper by reducing an algorithm $D$ for DDH problem to the eavesdropper $\mathcal{A}$.
 \newline
@@ -424,7 +422,7 @@ Since the DDH problem is hard,
 \[ =\abs{\frac{1}{2}-\varepsilon(n)}. \]
 \end{frame}
 %\end{comment}
-\begin{frame}\frametitle{CCA in Elgamal Encryption}
+\begin{frame}\frametitle{CCA in ElGamal Encryption}
 \begin{exampleblock}{Constructing the ciphertext of the message $m\cdot m'$.}
 Given $pk=\langle g, h\rangle$, $c = \langle c_1, c_2\rangle$, $c_1=g^y$, $c_2=h^y\cdot m$, \\ \textbf{Method I}: compute
 $c_2' := c_2\cdot m'$, and $c' = \langle c_1, c_2'\rangle$.
@@ -434,7 +432,7 @@ $c_2' := c_2\cdot m'$, and $c' = \langle c_1, c_2'\rangle$.
 so $c''=\langle c_1'',c_2''\rangle$ is an encryption of $m\cdot m'$.
 \end{exampleblock}
 \end{frame}
-\begin{frame}\frametitle{Elgamal Implementation Issues}
+\begin{frame}\frametitle{ElGamal Implementation Issues}
 \begin{itemize}
 \item \textbf{Sharing public parameters}: $\mathcal{G}$ generates parameters $\mathbb{G},q,g$.
 \begin{itemize}
@@ -444,14 +442,89 @@ so $c''=\langle c_1'',c_2''\rangle$ is an encryption of $m\cdot m'$.
 \end{itemize}
 \end{itemize}
 \begin{alertblock}{Parameter sharing}
-In the case of Elgamal, the public parameters can be shared. In the case of RSA, can parameters be shared?
+In the case of ElGamal, the public parameters can be shared. In the case of RSA, can parameters be shared?
 \end{alertblock}
+\end{frame}
+\section{Elliptic Curve Cryptography}
+\begin{frame}\frametitle{Elliptic Curve Cryptography}
+\begin{itemize}
+\item Discrete Logrithm Problem is constructed geometrically in Elliptic Curve Group.
+\item ECC was suggested independently by Neal Koblitz and Victor S. Miller in 1985.
+\item Analogy to DL, DHKE, ElGamal encryption and DSA: ECDL, ECDHKE, ElGamal ECC, ECDSA
+\item \textbf{Efficiency}: ECG vs. $\mathbb{Z}_p^*$: more efficient (faster) for the honest parties, but that are equally hard for an adversary to break.
+Both 1024-bit $\mathbb{Z}_p^*$ and 132-bit ECG need $2^{66}$ steps.
+\end{itemize}
+\end{frame}
+\begin{frame}\frametitle{Elliptic Curve Groups}
+    \begin{itemize}
+    \item \textbf{Elliptic curve group}: points with ``addition'' operation on a plane algebraic curve in a finite field:
+    \[ y^2 \equiv x^3 + Ax + B \pmod p\]
+    where $A,B \in \mathbb{Z}_p$ are constants with $4A^3 + 27B^2\not \equiv 0 \pmod p$.
+    \item $\hat{E}(\mathbb{Z}_p)$ is the set of pairs $(x,y) \in \mathbb{Z}_p \times \mathbb{Z}_p$:
+    \[ \hat{E}(\mathbb{Z}_p) \overset{\text{def}}{=} \{(x,y) \mid x,y\in \mathbb{Z}_p \land y^2 \equiv x^3 + Ax + B \pmod p \}\]
+    \item $E(\mathbb{Z}_p) \overset{\text{def}}{=} \hat{E}(\mathbb{Z}_p)\cup \{\mathcal{O}\}$, $\mathcal{O}$ is identity, ``\textbf{point at infinity}''.
+    \end{itemize}
+\end{frame}
+\begin{frame}\frametitle{``Addition'' on Points of Elliptic Curves}
+\begin{columns}
+\begin{column}{5cm}
+\begin{figure}
+\begin{center}
+\input{tikz/ellipticcurve}
+%\includegraphics[width=50mm]{pic/ecc.pdf} 
+\end{center}
+\end{figure}
+\end{column}
+\begin{column}{5cm}
+Every line intersects the curve in 3 points:
+\begin{itemize}
+\item count twice if tangent.
+\item count $\mathcal{O}$ at the vertical infinity of $y$-axis.
+\end{itemize}
+``\textbf{Addition}'' on points:
+\begin{itemize}
+\item $P+\mathcal{O} = \mathcal{O} + P = P$.
+\item If $P_1, P_2, P_3$ are co-linear, then $P_1 + P_2 + P_3 = \mathcal{O}$.
+\end{itemize}
+\end{column}
+\end{columns}
+Some equations: \newline
+$-P=(x,-y)$, $P_1 + P_2 = -P_3$, $2P_4=-P_3$, $dP = P + (d-1)P$
+\[\text{Key generation:} sk = (P,d); pk = (P,Q=dP)\]
+\end{frame}
+\begin{frame}\frametitle{A Toy Example of ECDHKE}
+\begin{exampleblock}{What is the key?\footnote{The example is generated from https://graui.de/code/elliptic2/}}
+In ECDHKE protocol, Alice sends $aP$, Bob sends $bP$, and the key is $(a\cdot b)P$. Alice generates $P=(3,4), a=5$ and receive $(7,6)$.
+\end{exampleblock}
+\begin{figure}
+\begin{center}
+\input{tikz/ecdhke}
+\end{center}
+\end{figure}
+\end{frame}
+\begin{frame}[fragile]\frametitle{Elliptic Curve Cryptosystems in Practices}
+TLS 1.3 (RFC8446) standardizes mandatory-to-implement ECC.
+\begin{exampleblock}{P256 or secp256r1 for DSA and DHKE}
+\begin{itemize}
+\item $p := 2^{256}- 2^{224}+2^{192}+2^{96}-1$
+\item $y^2 = x^3 - 3x +b$, $b := $ \verb|5ac635d8 aa3a93e7 b3ebbd55| \verb|769886bc 651d06b0 cc53b0f6 3bce3c3e 27d2604b|
+\item It is not clear how $b$ is designed. NOT \textbf{twist secure} as the DLP in its twist is not hard.
+NSA implemented a backdoor into the P256 curve based Dual\_EC\_DRBG algorithm.
+\end{itemize}
+\end{exampleblock}
+\begin{exampleblock}{Curve25519 for DHKE}
+    \begin{itemize}
+    \item $p := 2^{255} - 19$
+    \item $y^2 = x^3 + 486662\cdot x^2 +x$  (Montgomery curve)
+    \item The curve is generated by a point $P = (9, y)$
+    \item It is twist secure and more understandable than P256.
+    \end{itemize}
+    \end{exampleblock}
 \end{frame}
 \begin{frame}\frametitle{Summary}
 \begin{itemize}
-\item cyclic group, discrete log., baby-step/giant-step
-\item CDH, DDH, DHKE protocol
-\item Elgamal encryption, sharing public parameters
+\item DHKE protocol, ElGamal encryption from CDH, DDH from Discrete Logrithm Problem in prime-order cyclic groups.
+\item Elliptic curve cryptography is more efficient and widely used.
 \end{itemize}
 \end{frame}
 \end{document}

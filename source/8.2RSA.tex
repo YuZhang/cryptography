@@ -511,9 +511,21 @@ if the first 16 bits of message is not ``02'' which is standing for ``PKCK \#1''
 \textbf{HTTPS Defense} [RFC 5246]: if not ``02'', set the message as a random string.
 \end{frame}
 \end{comment}
-
-\begin{frame}\frametitle{PKCS \#1 v2.1 (RSAES-OAEP)}
-\textbf{Optimal Asymmetric Encryption Padding} (OAEP): encode $m$ of length $n/2$ as $s\| t$ of length $2n$. $G, H$ are \textbf{Random Oracles}.
+\begin{frame}\frametitle{Implementation Attacks on PKCS\#1 v1.5}
+  \begin{exampleblock}{CCA on PKCS\#1 v1.5 in HTTPS [Bleichenbacher 1998]}
+  The message is padded in a format "$(00\|02\|r\|0\|m)$", where "02" means version $1$.
+  Here we simplfy $00\|02$ as the $MSB$ of plaintext.
+  \begin{figure}
+  \begin{center}
+  \input{tikz/CCA-PKCS.tex}
+  \end{center}
+  \end{figure}
+  \end{exampleblock}
+  \textbf{Defense}: treating incorrectly formatted message blocks in a manner ("return a random string as the message") indistinguishable from correctly formatted blocks. See [RFC 5246]
+\end{frame}
+\begin{frame}\frametitle{PKCS \#1 v2.1 (RSAES-OAEP) [RFC 3447]}
+\textbf{Optimal Asymmetric Encryption Padding}\footnote{``optimal'' because the ciphertext is a single element}
+ (OAEP)
 %\[ \hat{m}_1 := G(r)\oplus (m\| \{0\}^{n/2}), \hat{m} := \hat{m}_1 \| (r \oplus H(\hat{m}_1)).\]
 \begin{figure}
 \begin{center}
@@ -521,25 +533,11 @@ if the first 16 bits of message is not ``02'' which is standing for ``PKCK \#1''
 \end{center}
 \end{figure}
 \alert{Q: How to decipher?}\\
-RSA-OAEP is CCA-secure in Random Oracle model. \footnote{It may not be secure when RO is instantiated.} [RFC 3447] \\
-CPA: To learn $r$, attacker has to learn $s$ from $(s\| t)^e$\\
-CCA: Effective decryption query is disabled by checking "00...0" in the plaintext before the response\\
+RSA-OAEP is CCA-secure in ROM. $G, H$ are ROes.\footnote{It may not be secure when RO is instantiated.}  \\
+\textbf{CPA}: To learn $r$, attacker has to learn $s$ from $c= (s\| t)^e$\\
+\textbf{CCA}: Decryption is disabled by checking "00...0" in the plaintext\\
+\textbf{Limition}: $F$-OAEP may not be CCA-secure for other TDP $F$.
 \end{frame}
-
-\begin{comment}
-\begin{frame}\frametitle{PKCK \#1 v2.1 (RSAES-OAEP) (Cont.)}
-RSA-OAEP is CCA-secure in Random Oracle model. \footnote{It may not be secure when RO is instantiated.} [RFC 3447]
-\begin{figure}
-\begin{center}
-\input{tikz/OAEP}
-\end{center}
-\end{figure}
-CPA: To learn $r$, attacker has to learn $\hat{m}_1$ from $(\hat{m}_1\|\hat{m})^e$\\
-
-CCA: Effective decryption query is disabled by checking "00...0" in the plaintext before the response\\
-
-\end{frame}
-\end{comment}
 \begin{frame}\frametitle{OAEP Improvements}
 \begin{columns}
 \begin{column}{5cm}
@@ -551,26 +549,15 @@ CCA: Effective decryption query is disabled by checking "00...0" in the plaintex
 \end{figure}
 \end{column}
 \begin{column}{5cm}
-\textbf{OAEP+}: $\forall $ trap-door permutation F, F-OAEP+ is CCA-secure.\newline
+$W, G, H$ are Random Oracles. \newline
 
-\textbf{SAEP+}: RSA (e=3) is a trap-door permutation, RSA-SAEP+ is CCA-secure.\newline
+\textbf{OAEP+}: $\forall $ TDP $F$, $F$-OAEP+ is CCA-secure. Check $W(m,r)$ instead of "00...0" \newline
 
-$W, G, H$ are Random Oracles.
+\textbf{SAEP+}: RSA-SAEP+ is CCA-secure with a simpler padding and a longer $r$.
 \end{column}
 \end{columns}
 \end{frame}
 \begin{frame}\frametitle{Implementation Attacks on RSA}
-\begin{exampleblock}{Simplified CCA on PKCS1 v1.5 in HTTPS [Bleichenbacher]}
-Server tells if the MSB of plaintext (Version Number) = `1' for a given ciphertext. Attacker sends $c' = (2^{r})^{e}\cdot c$. If receiving $Yes$, then \alert{$(r+1)$-th $MSB(m)$ = ?}
-\begin{figure}
-\begin{center}
-\input{tikz/CCA-PKCS.tex}
-\end{center}
-\end{figure}
-\end{exampleblock}
-\textbf{Defense}: treating incorrectly formatted message blocks in a manner indistinguishable from correctly formatted blocks. See [RFC 5246]
-\end{frame}
-\begin{frame}\frametitle{Implementation Attacks on RSA (Cont.) }
 \textbf{Timing attack}: [Kocher et al. 1997] 
 The time it takes to compute $c^d$ can expose $d$. (require a high-resolution clock)\\
 \textbf{Power attack}: [Kocher et al. 1999]
@@ -598,9 +585,6 @@ So $(m')^e \equiv c \pmod p$, $(m')^e \not \equiv c \pmod q$.\\
 \textbf{Defense}: check output. (but 10\% slowdown)
 \end{frame}
 \begin{frame}\frametitle{Summary}
-\begin{itemize}
-\item RSA, ``textbook RSA'', padded RSA, PKCS
-\item small $e$, common modulus attacks, CCA, implementation/faults attack
-\end{itemize}
+RSA problem is a TPD, but ``Textbook RSA'' encryption is not secure. RSA-OAEP is CCA-secure in ROM.
 \end{frame}
 \end{document}
