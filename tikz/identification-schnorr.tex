@@ -1,13 +1,42 @@
 \begin{tikzpicture}[font=\footnotesize]
 \node (A) at (0,0) [minimum size=1cm] {}; \Alice{0}{0}{0.4};
 \node (B) [right of = A, node distance = 4cm, minimum size=1cm] {}; \Bob{4cm}{0}{0.4};
-\node (p) [below of =A, node distance = 1cm] {Prover ($x$)};
-\node (v) [below of =B, node distance = 1cm] {Verifier ($\mathbb{G}, q, g, y$)};
-\node (g) [below of =p, node distance = 1cm] {$k \gets \mathbb{Z}_q$; $I := g^k$};
+\node (p) [below of =A, node distance = 0.6cm] {Prover ($x$)};
+\node (v) [below of =B, node distance = 0.6cm] {Verifier ($\mathbb{G}, q, g, y$)};
+\node (g) [below of =p, node distance = 0.6cm] {$k \gets \mathbb{Z}_q$; $I := g^k$};
 \draw[-latex] ($(g)+(1.2,0)$) -- +(1.5cm,0) node [midway,above] {$I$};
-\node (y) [below of=v, node distance=2cm] {$r \gets \mathbb{Z}_q$};
-\draw[-latex] ($(y)-(0.8,0)$) -- +(-1.5cm,0) node [midway,above] {$r$};
-\node (s) [below of= g, node distance = 2cm] {$s := [ rx +k \mod q ]$};
+\node (y) [below of=v, node distance=1.2cm] {$r \gets \mathbb{Z}_q$};
+\draw[-latex] ($(y)-(0.8,0)$) -- +(-2cm,0) node [midway,above] {$r$};
+\node (s) [below of= g, node distance = 1.2cm] {$s := [ rx +k \mod q ]$};
 \draw[-latex] ($(s)+(1.5,0)$) -- +(1.5cm,0) node [midway,above] {$s$};
-\node (h2) [below of=y, node distance=1.5cm] {$g^s \cdot y^{-r} \overset{?}{=} I$};
+\node (h2) [below of=y, node distance=1cm] {$g^s \cdot y^{-r} \overset{?}{=} I$};
+
+
+
+    \node (x1) at (-4.5,-1.5) [rounded corners=1ex,minimum size=0.7cm, draw] {$g^x$};
+    \node (k1) [right of=x1, node distance=1cm, minimum size=0.7cm, rounded corners=1ex, draw] {$g^k$};
+%    \node (s1) [right of=s, node distance=1cm, minimum size=0.7cm, rounded corners=1ex, draw] {$g^s$};
+    
+    \node (x) [above of=x1, node distance=1cm] {$x$};
+    \node (k) [above of=k1, node distance=1cm] {$k$};
+    \node (y1) [below of=x1, node distance=1cm] {$y$};
+    \node (I) [below of=k1, node distance=1cm] {$I$};
+    \node (plus) [right of=k, node distance=1cm] {$+$};
+    \node (mult) [above of=plus, node distance=0.6cm] {$*$};
+    \node (r) [right of=mult, node distance=1cm] {$r$};
+    \node (s1) [below of=plus, node distance=2cm] {$s$};
+
+
+    \draw[-latex] (x.south) -- (x1.north);
+    \draw[-latex] (k.south) -- (k1.north);
+    \draw[-latex] (x.north) |- (mult);
+    \draw[-latex] (k) -- (plus);
+    \draw[-latex] (plus) -- (s1);
+    \draw[-latex] (r) -- (mult);
+    \draw[-latex] (mult) -- (plus);
+    \draw[-latex] (x1) -- (y1);
+    \draw[-latex] (k1) -- (I);
+    %\draw[-latex] (s1) -- +(0,-1) node {$g^s$};
+
+
 \end{tikzpicture}

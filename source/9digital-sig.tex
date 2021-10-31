@@ -12,7 +12,7 @@
 \begin{frame}{Digital Signatures -- An Overview}
 \begin{itemize}
 \item \textbf{Digital signature scheme} is a mathematical scheme for demonstrating the authenticity/integrity of a digital message
-\item allow a \textbf{signer} $S$ to ``\textbf{sign}'' a message with its own $sk$, anyone who knows $S$'s $pk$ can \textbf{verify} the authenticity/integrity
+\item Allow a \textbf{signer} $S$ to ``\textbf{sign}'' a message with its own $sk$, anyone who knows $S$'s $pk$ can \textbf{verify} the authenticity/integrity
 \item (Comparing to MAC) digital signature is:
 \begin{itemize}
 \item publicly verifiable
@@ -22,7 +22,7 @@
 \end{itemize}
 \item \alert{Q: What are the differences between digital signatures and handwritten signatures?}
 \item Digital signature is NOT the ``inverse'' of public-key encryption
-\item Signatures are used to convey trust from a public key to the data which is signed
+\item Signatures are used to convey \emph{trust} from a public key to the data which is signed
 \end{itemize}
 \end{frame}
 \begin{frame}\frametitle{The Syntax of Digital Signature Scheme}
@@ -64,32 +64,39 @@ A signature scheme $\Pi$ is \textbf{existentially unforgeable under an adaptive 
 \end{itemize}
 \end{construction}
 \begin{itemize}
-\item \textbf{A no-message attack}:
+\item \textbf{No-message attack}:
 choose an arbitrary $\sigma \in \mathbb{Z}^*_N$ and compute $m := [\sigma^e \bmod N]$. Output the forgery $(m,\sigma)$.
 \begin{exampleblock}{$pk = \left<15, 3\right>,\ \sigma = 2,\ m = ?\ m^{d} = ?$}
 \end{exampleblock}
-\item \textbf{Forging a signature on an arbitrary message}:\\
+\item \textbf{Arbitrary message attack}:
 To forge a signature on $m$, choose a random $m_1$, set $m_2 := [m/m_1 \bmod N]$,  obtain signatures $\sigma_1, \sigma_2$ on $m_1, m_2$. \\
 \alert{Q: $\sigma := [\underline{\qquad} \bmod N]$ is a valid signature on $m$.}
 \end{itemize}
 %\[\sigma^e \equiv (\sigma_1\cdot \sigma_2)^e \equiv (m^d_1\cdot m^d_2)^e \equiv m_1^{ed}\cdot m_2^{ed} \equiv m_1m_2 \equiv m \pmod N.\]
 \end{frame}
-\begin{frame}\frametitle{Hashed RSA}
+\begin{frame}\frametitle{Hashed RSA Signatures}
+\textbf{Idea}: Use hash function to break the strong algebraic relationship between the message and the signature. \\
+\textbf{RSA-FDH Signature Scheme}: Random Oracle as a \textbf{Full Domain Hash (FDH)} whose image size $=$ the RSA modulus $N-1$.
 \begin{itemize}
 \item $\mathsf{Gen}$: a hash function $H : \{0,1\}^* \to \mathbb{Z}_N^*$ is part of public key.
 \item $\mathsf{Sign}$: $\sigma := [H(m)^d \bmod N]$.
 \item $\mathsf{Vrfy}$: $\sigma^e \overset{?}{=} H(m) \bmod N$.
+\item \textbf{No-message attack}: Cannot invert $H(m) := \sigma^e \bmod N$
+\item \textbf{Arbitrary message attack}: $H(m/m_1)$ has no relationship with $H(m)$ and $H(m_1)$
 \end{itemize}
-If $H$ is not efficiently invertible, then the no-message attack and forging a signature on an arbitrary message is difficult.
 \begin{alertblock}{Insecurity}
 There is NO known function $H$ for which hashed RSA signatures are secure.
 \end{alertblock}
-\textbf{RSA-FDH Signature Scheme}: Random Oracle as a \textbf{Full Domain Hash (FDH)} whose image size $=$ the RSA modulus $N-1$.
 \end{frame}
+
+\begin{comment}
 \begin{frame}\frametitle{The ``Hash-and-Sign'' Paradigm}
 \begin{construction}
 $\Pi = (\mathsf{Gen}_S, \mathsf{Sign}, \mathsf{Vrfy})$, $\Pi_H = (\mathsf{Gen}_H, H)$. A signature scheme $\Pi'$:
 \begin{itemize}
+% \item $\mathsf{Gen}'$: on input $1^n$ run $\mathsf{Gen}_S(1^n)$ to obtain $(pk,sk)$, and run $\mathsf{Gen}_H(1^n)$ to obtain $s$. The public key is $pk'=\langle pk,s\rangle$ and the private key is $sk' = \langle sk,s\rangle$.
+% \item $\mathsf{Sign}'$: on input $sk'$ and $m \in \{0,1\}^*$, $\sigma \gets \mathsf{Sign}_{sk}(H^s(m))$.
+% \item $\mathsf{Vrfy}'$: on input $pk'$, $m \in \{0,1\}^*$ and $\sigma$, output 1 $\iff$ $\mathsf{Vrfy}_{pk}(H^s(m),\sigma)=1$.
 \item $\mathsf{Gen}'$: on input $1^n$ run $\mathsf{Gen}_S(1^n)$ to obtain $(pk,sk)$, and run $\mathsf{Gen}_H(1^n)$ to obtain $s$. The public key is $pk'=\langle pk,s\rangle$ and the private key is $sk' = \langle sk,s\rangle$.
 \item $\mathsf{Sign}'$: on input $sk'$ and $m \in \{0,1\}^*$, $\sigma \gets \mathsf{Sign}_{sk}(H^s(m))$.
 \item $\mathsf{Vrfy}'$: on input $pk'$, $m \in \{0,1\}^*$ and $\sigma$, output 1 $\iff$ $\mathsf{Vrfy}_{pk}(H^s(m),\sigma)=1$.
@@ -99,7 +106,6 @@ $\Pi = (\mathsf{Gen}_S, \mathsf{Sign}, \mathsf{Vrfy})$, $\Pi_H = (\mathsf{Gen}_H
 If $\Pi$ is existentially unforgeable under an adaptive CMA and $\Pi_H$ is collision resistant, then Construction is existentially unforgeable under an adaptive CMA.
 \end{theorem}
 \end{frame}
-\begin{comment}
 \begin{frame}\frametitle{Proof of Security of ``Hash-and-Sign'' Paradigm}
 \textbf{Idea}: a forgery must involve either finding a collision in $H$ or forging a signature with respect to $\Pi$.
 \begin{proof}
@@ -133,91 +139,117 @@ $\Pr[\mathsf{SF} \land \overline{\mathsf{coll}}] = \Pr[\mathsf{Sigforge}_{\mathc
 \end{frame}
 \end{comment}
 
-\section{Digital Signature from the Discrete-Log Problem}
+\section{Digital Signature from The Discrete-Log Problem}
 
-\begin{frame}\frametitle{Identification Schemes}
-An identification scheme $\Pi = (\mathsf{Gen}, \mathcal{P}_1, \mathcal{P}_2, \mathcal{V})$ is a 3-round protocol between the prover and the verifier. The attacker can do eavesdropping and has an access to an oracle $\mathsf{Trans}_{sk}$ to learn $(I, r, s)$ by executing the protocol as a verifier.
-\begin{figure}
-\begin{center}
-\input{tikz/identification}
-\end{center}
-\end{figure}
+\begin{frame}\frametitle{Overview of Schnorr Signature}
+\begin{itemize}
+	\item \textbf{Schnorr signature} (1988) is a typical instance showing the relationships among signature, identification and zero-knowledge proof.
+	\item \textbf{Construction}: non-interactive protocol of Schnorr identification protocol, which an interactive zero-knowledge proof protocol for DLP solution.
+	\item \textbf{Security:} proved by applying the Fiat–Shamir transformation to Schnorr identification protocol in ROM and under the assumption of DLP hardness.
+	\item \textbf{Applications:} multisignature, threshold signature and blind signature, which are heavily used in cryptocurrency.
+\end{itemize}	
+
 \end{frame}
+% \begin{frame}\frametitle{Identification Schemes}
+% \textbf{Identification scheme ($\Sigma$-protocol)} $\Pi = (\mathsf{Gen}, \mathcal{P}_1, \mathcal{P}_2, \mathcal{V})$: 3-round protocol between the prover and the verifier.
+% The attacker can do eavesdropping and has an access to an oracle $\mathsf{Trans}_{sk}$ to learn $(I, r, s)$ by executing the protocol as a verifier.
+% \begin{figure}
+% \begin{center}
+% \input{tikz/identification}
+% \end{center}
+% \end{figure}
+% \end{frame}
 
-\begin{frame}\frametitle{Identification Schemes: Definition}
-The identification experiment $\mathsf{Ident}_{\mathcal{A},\Pi }(n)$:
-\begin{enumerate}
-\item $(pk,sk) \gets \mathsf{Gen}(1^n)$.
-\item $\mathcal{A}$ is given input $1^n$ and oracle access to $\mathsf{Trans}_{sk}(\cdot)$, and outputs a message $I$.
-\item A uniform challenge $r$ is chosen and given to $\mathcal{A}$, and $\mathcal{A}$ outpus $s$. ($\mathcal{A}$ may continue to query the oracle.)
-\item $\mathsf{Ident}_{\mathcal{A},\Pi }(n) = 1 \iff \mathcal{V}(pk, r, s) \overset{?}{=} I$. 
-\end{enumerate}
-\begin{definition}
-An identification scheme $\Pi = (\mathsf{Gen}, \mathcal{P}_1, \mathcal{P}_2, \mathcal{V})$ is \textbf{secure} if $\forall$ \textsc{ppt} $\mathcal{A}$, $\exists$ $\mathsf{negl}$ such that:
-\[ \Pr [\mathsf{Ident}_{\mathcal{A},\Pi }(n) = 1] \le \mathsf{negl}(n).
-\]
-\end{definition}
-\end{frame}
+% \begin{frame}\frametitle{Identification Schemes: Definition}
+% The identification experiment $\mathsf{Ident}_{\mathcal{A},\Pi }(n)$:
+% \begin{enumerate}
+% \item $(pk,sk) \gets \mathsf{Gen}(1^n)$.
+% \item $\mathcal{A}$ is given input $1^n$ and oracle access to $\mathsf{Trans}_{sk}(\cdot)$, and outputs a message $I$.
+% \item A uniform challenge $r$ is chosen and given to $\mathcal{A}$, and $\mathcal{A}$ outpus $s$. ($\mathcal{A}$ may continue to query the oracle.)
+% \item $\mathsf{Ident}_{\mathcal{A},\Pi }(n) = 1 \iff \mathcal{V}(pk, r, s) \overset{?}{=} I$. 
+% \end{enumerate}
+% \begin{definition}
+% An identification scheme $\Pi = (\mathsf{Gen}, \mathcal{P}_1, \mathcal{P}_2, \mathcal{V})$ is \textbf{secure} if $\forall$ \textsc{ppt} $\mathcal{A}$, $\exists$ $\mathsf{negl}$ such that:
+% \[ \Pr [\mathsf{Ident}_{\mathcal{A},\Pi }(n) = 1] \le \mathsf{negl}(n).
+% \]
+% \end{definition}
+% \end{frame}
 
-\begin{frame}\frametitle{The Schnorr Identification Scheme}
+\begin{frame}\frametitle{Schnorr Identification Scheme}
+The prover \textbf{publicly} proves that she is the one who knows 
+the solution $x$ of a DLP $y$ in a 3-round $\Sigma$-protocol. 
 \begin{figure}
 \begin{center}
 \input{tikz/identification-schnorr}
 \end{center}
-\end{figure}
-\begin{theorem}
-If the discrete-log problem is hard, then the Schnorr identification scheme is secure.
-\end{theorem}
+\end{figure} 
+\begin{exampleblock}{Why not a simpler identification protocol?}
+First, the verifier generates $r$ and sends $g^r$; then the prover replies with $s = g^{rx}$; last, the verifier checks $y^r \overset{?}{=} s$.
+\end{exampleblock}
 \end{frame}
 
-\begin{frame}\frametitle{Proof of the Schnorr Identification Scheme}
+\begin{frame}\frametitle{Proof of Schnorr Identification Scheme}
+	\begin{theorem}
+		If the discrete-log problem is hard, then the Schnorr identification scheme is secure.
+	\end{theorem}
 \textbf{Idea}: If the attacker can let $g^s \cdot y^{-r} = I$, then the attacker can compute $x$.
 \begin{proof}
 Reduce $\mathcal{A}'$ inverting $y$ to $\mathcal{A}$ attacking the Schnorr scheme:
 \begin{enumerate}
 \item $\mathcal{A}'$ as a verifier, answering all queries, runs $\mathcal{A}$ as a prover.
-\item When $\mathcal{A}$ outputs $I$, $\mathcal{A}'$ choose $r_1 \in \mathbb{Z}_q$ and give it to $\mathcal{A}$, who responds with $s_1$.
-\item Run $\mathcal{A}$ a second time, send $r_2 \in \mathbb{Z}_q$ to  $\mathcal{A}$ who responds with $s_2$. 
+\item When $\mathcal{A}$ outputs $I$, $\mathcal{A}'$ chooses $r_1 \in \mathbb{Z}_q$ and send to $\mathcal{A}$, who responds with $s_1$.
+\item $\mathcal{A}'$ runs $\mathcal{A}$ 2nd time with the same $I$, sends $r_2 \in \mathbb{Z}_q$ to  $\mathcal{A}$ who responds with $s_2$. 
 \item If $g^{s_1} \cdot h^{-r_1} = I$ and $g^{s_2} \cdot h^{-r_2} = I$ and $r_1 \neq r_2$ then output $x = [ (s_1 - s_2)\cdot (r_1 - r_2)^{-1} \mod q]$. Else, output nothing.
 \end{enumerate}
 \end{proof}
 \end{frame}
 
-\begin{frame}\frametitle{The Fiat-Shamir Transform}
-The Fiat-Shamir transform  constructs a (non-interactive) signature scheme by letting the signer run the protocol by itself.
-\begin{construction}
-Let $\Pi = (\mathsf{Gen}_{\mathsf{id}}, \mathcal{P}_1, \mathcal{P}_2, \mathcal{V})$ be an identification scheme.
-\begin{itemize}
-\item $\mathsf{Gen}$: $(pk, sk) \gets \mathsf{Gen}_{\mathsf{id}}$. A function $H : \{0,1\}^* \to \Omega_{pk}$ (a set of challenges).
-\item $\mathsf{Sign}$: On input $sk$ and $m \in \{0,1\}^*$, do
-\begin{enumerate}
-\item Compute $(I, \mathsf{st}) \gets \mathcal{P}_1(sk)$
-\item Compute $r := H(I, m)$
-\item Compute $s := \mathcal{P}_2(sk, \mathsf{st}, r)$
-\end{enumerate}
-Outpus the signature $r, s$.
-\item $\mathsf{Vrfy}$: $I := \mathcal{V}(pk, r, s)$. Output $1 \iff H(I, m) \overset{?}{=} r.$
-\end{itemize}
-\end{construction}
-\begin{theorem}
-If $\Pi$ is a secure identification scheme and $H$ is a random oracle, then the Fiat-Shamir transform results a secure signature scheme.
-\end{theorem}
-\end{frame}
+% \begin{frame}\frametitle{The Fiat-Shamir Transform}
+% The Fiat-Shamir transform  constructs a (non-interactive) signature scheme by letting the signer run the protocol by itself.
+% \begin{construction}
+% Let $\Pi = (\mathsf{Gen}_{\mathsf{id}}, \mathcal{P}_1, \mathcal{P}_2, \mathcal{V})$ be an identification scheme.
+% \begin{itemize}
+% \item $\mathsf{Gen}$: $(pk, sk) \gets \mathsf{Gen}_{\mathsf{id}}$. A function $H : \{0,1\}^* \to \Omega_{pk}$ (a set of challenges).
+% \item $\mathsf{Sign}$: On input $sk$ and $m \in \{0,1\}^*$, do
+% \begin{enumerate}
+% \item Compute $(I, \mathsf{st}) \gets \mathcal{P}_1(sk)$
+% \item Compute $r := H(I, m)$
+% \item Compute $s := \mathcal{P}_2(sk, \mathsf{st}, r)$
+% \end{enumerate}
+% Outpus the signature $r, s$.
+% \item $\mathsf{Vrfy}$: $I := \mathcal{V}(pk, r, s)$. Output $1 \iff H(I, m) \overset{?}{=} r.$
+% \end{itemize}
+% \end{construction}
+% \begin{theorem}
+% If $\Pi$ is a secure identification scheme and $H$ is a random oracle, then the Fiat-Shamir transform results a secure signature scheme.
+% \end{theorem}
+% \end{frame}
 
-\begin{frame}\frametitle{The Schnorr Signature Scheme}
-\begin{construction}
-\begin{itemize}
-\item $\mathsf{Gen}$: $(\mathcal{G}, q, g) \gets \mathcal{G}(1^n)$. Choose $x \in \mathbb{Z}_q$ and set $y := g^x$. The private key is $x$ and the public key is $(\mathcal{G}, q, g, y)$. A function $H : \{0,1\}^* \to \mathbb{Z}_q$.
-\item $\mathsf{Sign}$: On input $x$ and $m \in \{0,1\}^*$, do
-\begin{enumerate}
-\item Compute $I := g^k$, where a uniform $k \in \mathbb{Z}_q$
-\item Compute $r := H(I, m)$
-\item Compute $s := [ rx + k \mod q]$
-\end{enumerate}
-Outpus the signature $(r, s)$.
-\item $\mathsf{Vrfy}$: Compute $I := g^s \cdot y^{-r}$ and output $1 \iff H(I, m) \overset{?}{=} r.$
-\end{itemize}
-\end{construction}
+\begin{frame}\frametitle{Schnorr Signature Scheme by Fiat-Shamir Transform}
+\textbf{Fiat-Shamir transform}: signature scheme constructed by letting the signer run the protocol by itself in ROM.
+
+\begin{figure}
+	\begin{center}
+	\input{tikz/schnorr-signature}
+	\end{center}
+	\end{figure}
+
+%$\mathsf{Sign}$: Compute $I := g^k$, $r := H(I, m)$, $s := [ rx + k \mod q]$ and output $(r, s)$;
+%$\mathsf{Vrfy}$: Compute $I$ and output $1 \iff H(I, m) \overset{?}{=} r$.
+
+% \begin{construction}
+% \begin{itemize}
+% \item $\mathsf{Gen}$: $(\mathcal{G}, q, g) \gets \mathcal{G}(1^n)$. Choose $x \in \mathbb{Z}_q$ and set $y := g^x$. The private key is $x$ and the public key is $(\mathcal{G}, q, g, y)$. An RO function $H : \{0,1\}^* \to \mathbb{Z}_q$.
+% \item $\mathsf{Sign}$: On input $x$ and $m \in \{0,1\}^*$, do
+% \begin{enumerate}
+% \item Compute $I := g^k$, where a uniform $k \in \mathbb{Z}_q$
+% \item Compute $r := H(I, m)$
+% \item Compute $s := [ rx + k \mod q]$
+% \end{enumerate}
+% Outpus the signature $(r, s)$.
+% \item $\mathsf{Vrfy}$: Compute $I := g^s \cdot y^{-r}$ and output $1 \iff H(I, m) \overset{?}{=} r.$
+% \end{itemize}
+% \end{construction}
 \end{frame}
 
 \begin{frame}\frametitle{DSS/DSA}
@@ -234,15 +266,13 @@ $pk = \langle \mathbb{G},q,g,y,H,F\rangle$. $sk=\langle \mathbb{G},q,g,x,H,F\ran
 \alert{Q: Is the verification correct?}
 \end{frame}
 
-\begin{comment}
-\[r = [[g^k \bmod p] \bmod q]\; \text{and}\; s= [(\hat{m}+xr)\cdot k^{-1} \bmod q],\; \hat{m}=H(m). \]
-\begin{align*}g^{\hat{m}s^{-1}}y^{rs^{-1}} &= g^{\hat{m}\cdot (\hat{m}+xr)^{-1}k}g^{xr\cdot (\hat{m}+xr)^{-1}k} \pmod p \\
-	&= g^{(\hat{m}+xr)\cdot (\hat{m}+xr)^{-1}k} \pmod p \\  
-	&= g^k \pmod p.
-	\end{align*}
-\[ [[g^k \bmod p] \bmod q] = r.\]
-\end{comment}
 
+% \[r = [[g^k \bmod p] \bmod q]\; \text{and}\; s= [(\hat{m}+xr)\cdot k^{-1} \bmod q],\; \hat{m}=H(m). \]
+% \begin{align*}g^{\hat{m}s^{-1}}y^{rs^{-1}} &= g^{\hat{m}\cdot (\hat{m}+xr)^{-1}k}g^{xr\cdot (\hat{m}+xr)^{-1}k} \pmod p \\
+% 	&= g^{(\hat{m}+xr)\cdot (\hat{m}+xr)^{-1}k} \pmod p \\  
+% 	&= g^k \pmod p.
+% 	\end{align*}
+% \[ [[g^k \bmod p] \bmod q] = r.\]
 
 \begin{frame}\frametitle{Security of DSS/DSA}
 \begin{alertblock}{Insecurity}
@@ -260,8 +290,8 @@ This attack has been used to learn the private key of the Sony PlayStation (PS3)
 \end{exampleblock}
 \end{frame}
 
-\section{One-Time Signature Scheme}
-\begin{frame}\frametitle{One-Time Signature (OTS)}
+\section{One-Time Signature and Signature from Hash}
+\begin{frame}\frametitle{One-Time Signature}
 \textbf{One-Time Signature (OTS)}: Under a weaker attack scenario, sign only one message with one secret.\\
 The OTS experiment $\mathsf{Sigforge}_{\mathcal{A},\Pi }^{\text{1-time}}(n)$:
 \begin{enumerate}
@@ -466,7 +496,7 @@ If OWF exists, then $\exists$ (stateless) secure signature scheme.
 \item Does the validity of a signature with Bob's public key imply that Bob produced the signature with his private key?
 \item No. For example, the signature $\sigma$ of $m$ is generated by Alice with RSA. Bob's key pair is $(e=1, d=1)$ and $N = \sigma - m$.
 Then the signature is also verified with Bob's public key.\\
-$\sigma^e \mod N = \sigma \mod (\sigma - m) = m$.
+$\sigma^e \bmod N = \sigma \bmod (\sigma - m) = m$.
 \item This attack could be used to cheat [Let's Encrypt] in the ownership of domain name.
 \footnote{https://www.ietf.org/mail-archive/web/acme/current/msg00484.html}
 \item Defence: Check the public key before verification.
@@ -490,10 +520,9 @@ A sender $S$ and a receiver $R$ should do to secure both privacy
 \end{frame}
 \begin{frame}\frametitle{Summary}
 \begin{itemize}
-\item Textbook RSA, Hashed RSA, Hash-and-Sign
-\item Identification, Fiat-Shamir Transform, Schnorr Signature, DSS/DSA
-\item Lamport's OTS, Stateful/Chain-based/Tree-based/Stateless Signature
-\item Certificates, PKI, CA, Web-of-trust, Revocation, Signcryption
+\item Digital signature provides publicly verifiable authentication and integrity.
+\item Signagures is related to something only someone knows, which can be publicly verified.
+\item Signatures are used to convey \emph{trust} from a public key to the data which is signed.
 \end{itemize}
 \end{frame}
 \end{document}

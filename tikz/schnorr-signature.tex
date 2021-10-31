@@ -1,0 +1,57 @@
+\begin{tikzpicture}
+    \node (x1) [rounded corners=1ex,minimum size=0.7cm, draw] {$g^x$};
+    \node (k1) [right of=x1, node distance=1cm, minimum size=0.7cm, rounded corners=1ex, draw] {$g^k$};
+%    \node (s1) [right of=s, node distance=1cm, minimum size=0.7cm, rounded corners=1ex, draw] {$g^s$};
+    
+    \node (x) [above of=x1, node distance=1cm] {$x$};
+    \node (k) [above of=k1, node distance=1cm] {$k$};
+    \node (y) [below of=x1, node distance=1cm] {$y$};
+    \node (plus) [right of=k, node distance=1cm] {$+$};
+    \node (mult) [above of=plus, node distance=0.6cm] {$*$};
+    \node (H) [right of=k1, node distance=2cm, minimum size=0.7cm, rounded corners=1ex, draw] {$H$};
+    \node (s) [below of=plus, node distance=2cm, fill=green!20] {$s$};
+    \node (r) [right of=s, node distance=1cm, fill=green!20] {$r$};
+    \node (m) [right of=H, node distance=1cm] {$m$};
+    \node [fit=(s) (r), dashed, thin, draw] {};
+    \node (getI) [below of=k1, node distance=2cm, draw, blue] {$I := g^s\cdot y^{-r}$};
+    \node (getH) [below of=H, node distance=3cm, minimum size=0.7cm, rounded corners=1ex, draw, blue] {$H$};
+
+
+    \draw[-latex] (x.south) -- (x1.north);
+    \draw[-latex] (k.south) -- (k1.north);
+    \draw[-latex] (x.north) |- (mult);
+    \draw[-latex] (k) -- (plus);
+    \draw[-latex] (plus) -- (s);
+    \draw[-latex] (H) |- (mult);
+    \draw[-latex] (H) -- (r);
+    \draw[white, line width=4pt] (k1) -- (H);
+    \draw[-latex] (k1) -- (H);
+    \node (I) [right of=k1, node distance=0.65cm, fill=white] {$I$};
+
+    \draw[-latex] (mult) -- (plus);
+    \draw[-latex] (x1) -- (y);
+    %\draw[-latex] (k1) -- (I);
+    \draw[-latex] (m) -- (H);
+    \draw[-latex, blue] (y) -- (y |- getI.north);
+    \draw[-latex, blue] (s) -- (s |- getI.north);
+    \draw[-latex, blue] (r) |- (getI.east);
+    \draw[-latex, blue] (getI) |- (getH.west);
+    \draw[-latex, blue] (m) |- (getH.east);
+    \draw[-latex, blue] (getH.68) -- (r.300);
+
+    \node (sign) [left of=y, node distance=3cm, text width = 5cm] 
+    {
+        
+    
+    $\mathsf{Sign}$:  $k \gets \mathbb{Z}_q$, \\ compute $I := g^k$, \\ $r := H(I, m)$, \\
+    $s := [ rx + k \mod q]$ \\ and output $(r, s)$ \newline
+ 
+
+    $\mathsf{Vrfy}$: Compute $I$ and\\
+    output $1 \iff H(I, m) \overset{?}{=} r$.
+    };
+
+
+
+    %\draw[-latex] (s1) -- +(0,-1) node {$g^s$};
+\end{tikzpicture}
