@@ -2,13 +2,12 @@
 
 \title{A Quick Tour of \\ Cryptographic Protocols Zoo}
 
-\begin{document}
+\begin{document} 
 \maketitle
 \begin{frame}\frametitle{What's in the zoo?}
 \begin{figure}
 \begin{center}
-%\input{tikz/ellipticcurve}
-\includegraphics[width=105mm]{pic/zoo-cn.pdf} 
+\includegraphics[width=105mm]{pic/zoo-cn.pdf}
 \end{center}
 \end{figure}
 \end{frame}
@@ -24,17 +23,18 @@
 \item Protocols are to communications what algorithms are to computations
 \item Everyone must know it and agree to follow it
 \end{itemize}
-\item Unambiguous: each step must be well defined and there must be no chance of a misunderstanding
-\item Complete: there must be a specified action for every possible situation
-\item It should not be possible to do more or learn more than what is specified in the protocol
+\item \textbf{Unambiguous}: each step must be well defined and there must be no chance of a misunderstanding
+\item \textbf{Complete}: there must be a specified action for every possible situation
+\item \textbf{Cryptographic protocol}: Additionally, it should not be possible to do more or learn more than what is specified in the protocol
 \end{itemize}
 \end{frame}
 \begin{frame}\frametitle{Protocol Types}
 \begin{itemize}
 \item \textbf{Arbitrated protocols}: An arbitrator is a disinterested third party trusted to complete a protocol.
-\item \textbf{Adjudicated protocols}: An adjudicator is also a disinterested and trusted third party. Unlike an arbitrator, he is not directly involved in every protocol.
+\item \textbf{Adjudicated protocols}: An adjudicator is also a disinterested and trusted third party. Unlike an arbitrator, he is not directly involved in every protocol unless .
 \item \textbf{Self-enforcing protocols}: the best type of protocol. The protocol itself guarantees fairness.
 \end{itemize}
+\begin{exampleblock}{How to split a cake equally between two kids?}\end{exampleblock}
 \end{frame}
 \begin{frame}\frametitle{Attacks against Protocols}
 \begin{itemize}
@@ -46,17 +46,6 @@
 \item \textbf{Passive cheaters}: follow the protocol, but try to obtain more information than the protocol intends them to.
 \item \textbf{Active cheaters}: disrupt the protocol in progress in an attempt to cheat.
 \end{itemize}
-\end{frame}
-\section{SSL/TLS Handshaking}
-\begin{frame}\frametitle{Simplified SSL/TLS Handshaking}
-\textbf{Purpose}: generate 4 secret keys with authenticated server\\
-\textbf{Requirement}: the client has the public key of Trusted Third Party\\
-the server has the certificate of its own $pk$ issued by TTP
-\begin{figure}
-\begin{center}
-\input{tikz/ssl}
-\end{center}
-\end{figure}
 \end{frame}
 \section{Three-Pass Protocol and Interlock Protocol}
 \begin{frame}\frametitle{Three-Pass Protocol}
@@ -114,42 +103,6 @@ Alice computes the key $e(bP, cP)^a = e(P, P)^{abc}$.
 \item \textbf{Bilinear Diffie-Helman (BDH) Assumption}: computing $e(P, P)^{abc}$ is hard given $\left<P, aP, bP, cP \right>$.
 \item \textbf{Theorem}: Given BDH assumption, Jounx's is secure.
 \end{itemize}
-\end{frame}
-\begin{frame}\frametitle{Elliptic Curve Groups}
-\textbf{Elliptic curve group}: points with ``addition'' operation.\\
-Any \textbf{elliptic curve} is a plane algebraic curve:
-\[ y^2 \equiv x^3 + Ax + B \pmod p\]
-where $A,B \in \mathbb{Z}_p$ are constants with $4A^3 + 27B^2\not \equiv 0 \pmod p$.
-$\hat{E}(\mathbb{Z}_p)$ is the set of pairs $(x,y) \in \mathbb{Z}_p \times \mathbb{Z}_p$:
-\[ \hat{E}(\mathbb{Z}_p) \overset{\text{def}}{=} \{(x,y) \mid x,y\in \mathbb{Z}_p \land y^2 \equiv x^3 + Ax + B \pmod p \}\]
-$E(\mathbb{Z}_p) \overset{\text{def}}{=} \hat{E}(\mathbb{Z}_p)\cup \{\mathcal{O}\}$, $\mathcal{O}$ is identity, ``\textbf{point at infinity}''.
-\end{frame}
-\begin{frame}\frametitle{``Addition'' on Points of Elliptic Curves}
-\begin{columns}
-\begin{column}{5cm}
-\begin{figure}
-\begin{center}
-\input{tikz/ellipticcurve}
-%\includegraphics[width=50mm]{pic/ecc.pdf} 
-\end{center}
-\end{figure}
-\end{column}
-\begin{column}{5cm}
-Every line intersects the curve in 3 points:
-\begin{itemize}
-\item count twice if tangent.
-\item count $\mathcal{O}$ at the vertical infinity of $y$-axis.
-\end{itemize}
-``\textbf{Addition}'' on points:
-\begin{itemize}
-\item $P+\mathcal{O} = \mathcal{O} + P = P$.
-\item If $P_1, P_2, P_3$ are co-linear, then $P_1 + P_2 + P_3 = \mathcal{O}$.
-\end{itemize}
-\end{column}
-\end{columns}
-Some equations: \newline
-$-P=(x,-y)$, $P_1 + P_2 = -P_3$, $2P_4=-P_3$, $dP = P + (d-1)P$
-\[\text{Key generation:} sk = (P,d); pk = (P,Q=dP)\]
 \end{frame}
 \begin{frame}\frametitle{Identity-Based Encryption}
 \begin{itemize}
@@ -322,7 +275,7 @@ A simple example: without commitment, the verifier learns the message given a ci
 \begin{center}
 \input{tikz/zkp-commitment}
 \end{center}
-\end{figure}
+\end{figure} 
 \end{frame}
 \begin{frame}\frametitle{Schnorr Protocol}
 We have learned a ZKP as an identification scheme. Recall \textbf{Schnorr protocol}: Alice proves to Bob the knowledge of $x=\log_gy$ in the discrete log problem.

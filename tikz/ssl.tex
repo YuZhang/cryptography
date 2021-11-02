@@ -12,7 +12,7 @@
 \node (3a) [below of=2a, node distance=0.5cm] {};
 \node (3b) [below of=2b, node distance=0.5cm] {certificate of $pk$};
 \draw[-latex] (3b) -- (3a) node [midway,above] {};
-\node (4a) [below of=3a, node distance=0.5cm] {$E_{pk}$(premaster secret $s$)};
+\node (4a) [below of=3a, node distance=0.5cm] {Verify the certificate // $E_{pk}$(premaster secret $s$)};
 \node (4b) [below of=3b, node distance=0.5cm] {};
 \draw[-latex] (4a) -- (4b) node [midway,above] {};
 \node (5a) [below of=4a, node distance=0.5cm] {Hash of previous msgs};
@@ -23,12 +23,4 @@
 \draw[-latex] (6b) -- (6a) node [midway,above] {};
 \node (7a) [below of=6a, node distance=0.5cm] {session keys from $(a, b, s)$};
 \node (7b) [below of=6b, node distance=0.5cm] {session keys from $(a, b, s)$};
-%\draw[-latex] (7b) -- (7a) node [midway,above] {};
-%\node (8a) [below of=7a, node distance=0.5cm] {};
-%\node (8b) [below of=7b, node distance=0.5cm] {$c_{B2}$};
-%\draw[-latex] (8b) -- (8a) node [midway,above] {};
-%\node (9a) [below of=8a, node distance=0.5cm] {$c_B = (c_{B1}\| c_{B2})$};
-%\node (9b) [below of=8b, node distance=0.5cm] {$c_A = (c_{A1}\| c_{A2})$};
-%\node (10a) [below of=9a, node distance=0.5cm] {$m_B = \mathsf{Dec}_{pk_A}(c_B)$};
-%\node (10b) [below of=9b, node distance=0.5cm] {$m_A = \mathsf{Dec}_{pk_B}(c_A)$};
 \end{tikzpicture}

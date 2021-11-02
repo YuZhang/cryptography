@@ -1,0 +1,33 @@
+\begin{tikzpicture}[font=\footnotesize, scale=0.8, every node/.style={scale=0.8},
+    ln/.style={text width = 3.5cm, align=left, rounded corners=1ex, draw},
+    rn/.style={text width = 3.5cm, align=left, rounded corners=1ex, draw},
+    cn/.style={text width = 6cm, align=center, rounded corners=1ex, draw}]
+%\node (A) at (0,0) {\Lisa(Client)};
+%\node (B) [right of = A, node distance = 4cm] {\Left\Bart(Server)};
+\node (A) at (0,0) [minimum size=1cm] {}; \Alice{0}{0}{0.4}; \node at (1cm,0) {Client};
+\node (B) [right of = A, node distance = 6.5cm, minimum size=1cm] {}; \Bob{6cm}{0}{0.4}; \node at (7cm,0) {Server};
+\node (1a) [below of=A, node distance=1cm, ln] {gen random $r_c$ \& \\ client key $(sk_c, pk_c)$};
+\node (1b) [below of=B, node distance=1cm] {};
+\draw[-latex] (1a) -- +(4.6,0) node [midway,above] {Hello $r_c, pk_c$};
+\node (2a) [below of=1a, node distance=0.8cm] {};
+\node (2b) [below of=1b, node distance=0.8cm, rn] {gen random $r_s$ \& \\ server key $(sk_s, pk_s)$};
+\draw[-latex] (2b) -- +(-4.6,0) node [midway,above] {Hello $r_s, pk_s$};
+\node (3as) [below of=2a, node distance=1.2cm, ln] {gen shared keys $k^*$ w/ $sk_c, pk_s$, hash(trans)};
+\node (3bs) [below of=2b, node distance=1.2cm, rn] {gen shared keys $k^*$ w/ $sk_s, pk_c$, hash(trans)};
+%\draw[-latex] (3bs) -- (3as) node [midway,above] {};
+\node (3a) [below of=3as, node distance=1.2cm, ln] {verfiy certificate and signature};
+\node (3b) [below of=3bs, node distance=1.2cm, rn] { $\sigma$ = sign($S_{sk}$, trans) \\ $t_s$ = hmac($k^*_s$, trans)};
+\draw[-latex] (3b) -- +(-4.6,0) node [midway,above,text width = 3cm, align=center] {\{certificate of $S_{pk}$\} \\ cert verfiy \{ $\sigma$ \} \\ finished \{ $t_s$ \}};
+\node (4a) [below of=3a, node distance=2cm, ln] {$t_c$ = hmac($k^*_c$, trans)};
+\node (4b) [below of=3b, node distance=2cm] {};
+\draw[-latex] (4a) -- +(4.6,0) node [midway,above] {finished \{$t_c$\}};
+\node (5a) at (3.1,-5.2) [cn] {gen application keys w/ $k^*$, hash(trans)};
+% \node (5a) [below of=4a, node distance=1cm] {Hash of previous msgs};
+% \node (5b) [below of=4b, node distance=1cm] {};
+% \draw[-latex] (5a) -- (5b) node [midway,above] {};
+% \node (6a) [below of=5a, node distance=0.5cm] {};
+% \node (6b) [below of=5b, node distance=0.5cm] {Hash of previous msgs};
+% \draw[-latex] (6b) -- (6a) node [midway,above] {};
+% \node (7a) [below of=6a, node distance=0.5cm] {session keys from $(a, b, s)$};
+% \node (7b) [below of=6b, node distance=0.5cm] {session keys from $(a, b, s)$};
+\end{tikzpicture}

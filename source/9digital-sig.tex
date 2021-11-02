@@ -479,6 +479,16 @@ If OWF exists, then $\exists$ (stateless) secure signature scheme.
 \end{itemize}
 \end{itemize}
 \end{frame}
+\begin{frame}\frametitle{TLS 1.3 Handshaking\footnote{https://tls13.ulfheim.net}}
+\textbf{Purpose}: client generates secret keys with authenticated server\\
+\textbf{Requirements}: the client has the public key of CA,
+the server has the certificate of its own $S_{pk}$ issued by CA
+\begin{figure}
+\begin{center}
+\input{tikz/tls13hs}
+\end{center}
+\end{figure}
+\end{frame}
 \begin{frame}\frametitle{Invalidating Certificates}
 \begin{itemize}
 \item \textbf{Expiration}: include an \emph{expiry date} in the certificate.
