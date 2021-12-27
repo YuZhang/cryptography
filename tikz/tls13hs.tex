@@ -19,7 +19,7 @@
 \node (3b) [below of=3bs, node distance=1.2cm, rn] { $\sigma$ = sign($S_{sk}$, trans) \\ $t_s$ = hmac($k^*_s$, trans)};
 \draw[-latex] (3b) -- +(-4.6,0) node [midway,above,text width = 3cm, align=center] {\{certificate of $S_{pk}$\} \\ cert verfiy \{ $\sigma$ \} \\ finished \{ $t_s$ \}};
 \node (4a) [below of=3a, node distance=2cm, ln] {$t_c$ = hmac($k^*_c$, trans)};
-\node (4b) [below of=3b, node distance=2cm] {};
+\node (4b) [below of=3b, node distance=2cm, fill=yellow!30] {\{*\} means encryp w/ $k^*$};
 \draw[-latex] (4a) -- +(4.6,0) node [midway,above] {finished \{$t_c$\}};
 \node (5a) at (3.1,-5.2) [cn] {gen application keys w/ $k^*$, hash(trans)};
 % \node (5a) [below of=4a, node distance=1cm] {Hash of previous msgs};

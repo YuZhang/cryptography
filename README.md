@@ -11,6 +11,7 @@ Yu Zhang, Harbin Insitute of Technology, 2011, 2012, 2014, 2015, 2016, 2017, 201
 
 * Developed with [MacTeX](https://www.tug.org/mactex/)
 * run `make` to compile slides, which will be in [/pdf](/pdf)
+* run `make gallery.pdf` to generate [the gallery of tikz diagrams](/misc/gallery/gallery.pdf)
 
 ## References
 * Textbook: [Introduction to Modern Cryptography](http://www.cs.umd.edu/~jkatz/imc.html) by Jonathan Katz and Yehuda Lindell
