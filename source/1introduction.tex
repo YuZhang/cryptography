@@ -67,6 +67,11 @@ Changing the names would be easier, but if you're not comfortable lying, try onl
 The cipher method must not be required to be secret, and it must be able to fall into the hands of the enemy without inconvenience.
 \end{quote}	
 \end{alertblock}
+\begin{alertblock}{Shannon's maxim}
+	\begin{quote}
+		The enemy knows the system.
+	\end{quote}	
+\end{alertblock}
 \end{frame}
 \begin{frame}\frametitle{Why ``Open Cryptographic Design''}
 \begin{itemize}
@@ -135,6 +140,8 @@ Any secure encryption scheme must have a key space that is not vulnerable to exh
 \end{alertblock}
 \end{frame}
 \begin{frame}\frametitle{Index of Coincidence (IC) Method (to find $k$)}
+\textbf{How to automatically determine that the deciphered text makes sense?}
+
 \textbf{Index of Coincidence (IC)}: the probability that two randomly selected letters (pick-then-return) will be identical.
 
 Let $p_i$ denote the probability of $i$th letter in English text.
