@@ -32,8 +32,8 @@ Limit the power of adversary (against brute force with pr. 1 in time linear in $
 \end{center}
 \end{figure}
 \end{frame}
-\begin{frame}\frametitle{Concrete Approach}
-A scheme is $(t,\varepsilon)$-\textbf{secure} if every adversary running for time at most $t$ succeeds in breaking the scheme with probability at most $\varepsilon$.
+\begin{frame}\frametitle{Concrete Approach and Asymptotics}
+\textbf{Concrete Approach}: A scheme is $(t,\varepsilon)$-\textbf{secure} if every adversary running for time at most $t$ succeeds in breaking the scheme with probability at most $\varepsilon$.
 \begin{exampleblock}{Example}
 \textbf{Optimal security}: when the key has length $n$, an adversary running in time $t$ can succeed with probability at most $t/2^n$.
 \begin{tabular}{ll}
@@ -42,9 +42,11 @@ $n=128$   & $2^{170}$ atoms in the planet. \\
 $\varepsilon=2^{-48}$  & once every 100 years with probability $2^{-30}/\text{sec}$. \\
 \end{tabular}
 \end{exampleblock}
-\begin{itemize}
-\item But one may ask: What type of computing power? What is the success probability of running for 10 years? Does the key length matter? 
-\end{itemize}
+%\begin{itemize}
+%\item But one may ask: What is the success probability of running for 10 years? Does the key length matter?  
+%\end{itemize}
+\textbf{Asymptotics}: A method of describing limiting behavior. Given the input size of a problem, $n$, the time complexity is $f(n)$. \\
+For example, the time complexity of quick sort for $n$ numbers is $O(n\cdot \log n)$.
 \end{frame}
 \begin{frame}\frametitle{$\mathcal{P} = \mathcal{NP}$ ?}
 \begin{figure}
@@ -247,6 +249,8 @@ where $r$ is chosen \emph{u.a.r} from $\{0,1\}^{\ell(n)}$, the \textbf{seed} $s$
 $r[i] = (r[i-3] + r[i-31])\%2^{32}$
 \end{exampleblock}
 \begin{exampleblock}{Netscape (by reverse-engineering)}
+%mklcpr(x)
+%return ((0xDEECE66D * x + 0x2BBB62DC) >> 1);
 \begin{verbatim}
 global variable seed; 
 RNG_CreateContext();
@@ -255,9 +259,10 @@ RNG_CreateContext();
     a = mklcpr(microseconds);
     b = mklcpr(pid + seconds + (ppid << 12));
     seed = MD5(a, b);
-mklcpr(x)
-    return ((0xDEECE66D * x + 0x2BBB62DC) >> 1);
-\end{verbatim}
+RNG_GenerateRandomBytes()
+    x = MD5(seed);
+    seed = seed + 1;
+    return x;\end{verbatim}
 \end{exampleblock}
 \end{frame}
 \begin{frame}\frametitle{Problems On PRG}
