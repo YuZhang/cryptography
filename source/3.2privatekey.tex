@@ -85,15 +85,12 @@ $\Pi$ has \textbf{indistinguishable multiple encryptions in the presence of an e
 \[ \Pr\left[\mathsf{PrivK}^{\mathsf{mult}}_{\mathcal{A},\Pi}(n)=1\right] \le \frac{1}{2} + \mathsf{negl}(n).
 \]
 \end{definition}
-\begin{alertblock}{Question:}
+\begin{exampleblock}{Question:}
 Does any cipher we have learned so far have indistinguishable multiple encryptions in the presence of an eavesdropper?
-\end{alertblock}
+\end{exampleblock}
 \end{frame}
 \begin{frame}\frametitle{Attack On Deterministic Multiple Encryptions}
-\begin{alertblock}{Question:}
-Generally, if $\Pi$'s encryption function is \textbf{deterministic}, i.e., a plaintext will be always encrypted into the same ciphertext with the same key, is $\Pi$ multiple-encryption-secure?
-\end{alertblock}
-\begin{exampleblock}{Attack:}
+\begin{exampleblock}{Generally, if $\Pi$'s encryption function is \textbf{deterministic}, i.e., a plaintext will be always encrypted into the same ciphertext with the same key, is $\Pi$ multiple-encryption-secure?}
 For the deterministic encryption, the adversary may generate $m_0^1 = m_0^2$ and $m_1^1 \neq m_1^2$, and then outputs $b'=0$ if $c^1 = c^2$, otherwise $b'=1$.
 \end{exampleblock}
 \end{frame}
@@ -165,8 +162,6 @@ $\forall\;$ \textsc{ppt} distinguishers $D$,
 \]
 where $f$ is chosen \emph{u.a.r} from $\mathsf{Func}_n$.
 \end{definition}
-\begin{alertblock}{Q: Is the fixed-length OTP a PRF?}
-\end{alertblock}
 %\textbf{PRG vs. PRF}:
 %\begin{itemize}
 %\item Pseudorandomness over a set of strings vs. a set of functions.
@@ -175,8 +170,9 @@ where $f$ is chosen \emph{u.a.r} from $\mathsf{Func}_n$.
 %\textbf{Existence}: if PRG exists. In practice, block ciphers may be PRF.
 \end{frame}
 \begin{frame}\frametitle{Questions}
-\begin{alertblock}{Q: Without knowing the key and the oracle access, could anyone learn something about the output from the input with a non-negligible probability?} 
-\end{alertblock}
+\begin{exampleblock}{Q: Is the fixed-length OTP a PRF?}\end{exampleblock}
+\begin{exampleblock}{Q: Without knowing the key and the oracle access, could anyone learn something about the output from the input with a non-negligible probability?} 
+\end{exampleblock}
 \begin{exampleblock}{Let $F: \{0,1\}^{n} \times \{0,1\}^{n} \to \{0,1\}^{n}$ be a PRF. Is $G$ a PRF?}
 \begin{itemize}
 \item $G((k_{1},k_{2}), x) = F(k_{1},x) \| F(k_{2},x)$
@@ -256,7 +252,11 @@ $\varepsilon(n)$ is negligible.
 }
 \end{proof}
 \end{frame}
-\begin{frame}\frametitle{CPA-Security from PRF for Arbitrary-Length Messages}
+\begin{frame}\frametitle{Questions on CPA-security}
+\begin{exampleblock}{Q: Is this CPA-secure?}
+$\mathsf{Enc}_k(m) = PRG(k\|r) \oplus m $, $r$ is a fresh random string.
+\end{exampleblock}
+\begin{exampleblock}{CPA-Security from PRF for Arbitrary-Length Messages}
 \begin{itemize}
 \item For arbitrary-length messages, $m = m_1, \dots , m_{\ell}$
 \[ c := \left< r_1, F_k(r_1) \oplus m_1, r_2, F_k(r_2) \oplus m_2, \dots, r_\ell, F_k(r_\ell) \oplus m_\ell\right>
@@ -264,8 +264,9 @@ $\varepsilon(n)$ is negligible.
 \begin{corollary}
 If $F$ is a PRF, then $\Pi$ is CPA-secure for arbitrary-length messages.
 \end{corollary}
-\item \textbf{Efficiency}: $|c| = 2|m|$. 
+\item What is the shortcoming of this scheme? 
 \end{itemize}
+\end{exampleblock}
 \end{frame}
 \section{Modes of Operation}
 \begin{frame}\frametitle{Pseudorandom Permutations}
@@ -296,8 +297,8 @@ where $f$ is chosen \emph{u.a.r} from the set of permutations on $n$-bit strings
 \item Could you give a (or another) PRP over $X = \{ 0,1\}^{128}$?
 \end{enumerate}
 \end{exampleblock}
-\begin{proposition}{Switching Lemma}
-IF $F$ is a PRP and additionally $\ell_{in} (n) \ge n$, then $F$ is also a PRF.
+\begin{proposition}{Switching Lemma:}
+If $F$ is a PRP and additionally $\ell_{in} (n) \ge n$, then $F$ is also a PRF.
 \end{proposition}
 A random lookup table and a random permutation are indistinguishable. So PRP is also PRF.
 \end{frame}
@@ -307,6 +308,7 @@ A random lookup table and a random permutation are indistinguishable. So PRP is 
 \item A way of encrypting arbitrary-length messages using a PRP or PRF
 \item A way of constructing a PRG from a PRP or PRF
 \end{itemize}
+We will learn how to construct a PRF/PRP from a PRG later.
 \end{frame}
 \begin{frame}\frametitle{Electronic Code Book (ECB) Mode}
 \begin{figure}
