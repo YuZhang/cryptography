@@ -230,7 +230,7 @@ Reduce $D$ to $\mathcal{A}$:
 \begin{frame}\frametitle{Proof of CPA-Security from PRF (Cont.)}
 \begin{proof}
 Analyze $\Pr[\mathsf{Break}]$, $\mathsf{Break}$ means $\mathsf{PrivK}_{\mathcal{A},\tilde{\Pi}}^{\mathsf{cpa}}(n) = 1$:  \\
-$\mathcal{A}$ collects $\{ \left< r_i, f(r_i) \right> \}$, $i=1,\dots,q(n)$ with $q(n)$ queries; \\
+$\mathcal{A}$ makes $q(n)$ queries and collects $\{ \left< r_i, f(r_i) \right> \}$, as $c_i = \left< r_i, s_i \right>$, and $f(r_i) = s_i \oplus m_i$, for $i=1,\dots,q(n)$.\\
 The challenge $c=\left<r_c, f(r_c)\oplus m_b\right>$. \\
 \begin{itemize}
 \item $\mathsf{Repeat}$: $r_c \in \{ r_i \}$ with probability $\frac{q(n)}{2^n}$. $\mathcal{A}$ can know $m_b$.
