@@ -184,11 +184,10 @@ $G(k) = G_{0}(k)\| G_{1}(k)$
 \column{.5\textwidth}
 $F^{(r)}$ is an $r$-round Feistel network with the mangler function $F$.
 \begin{theorem}
-If $F$ is a length-preserving PRF, then $F^{(3)}$ is a PRP that maps $2n$-bit strings to $2n$-bit strings (and uses a key of length $3n$).
+If $F$ is a length-preserving PRF, then $F^{(3)}$ is a PRP, and $F^{(4)}$ is a strong PRP, 
+that maps $2n$-bit strings to $2n$-bit strings (and uses a key of length $3n$ and $4n$).
 \end{theorem}
-\begin{theorem}
-If $F$ is a length-preserving PRF, then $F^{(4)}$ is a strong PRP that maps $2n$-bit strings to $2n$-bit strings (and uses a key of length $4n$).
-\end{theorem}
+\alert{Show that 1- or 2-round Feistel network is not a PRF.}
 \end{columns}
 \end{frame}
 \begin{frame}\frametitle{Necessary Assumptions}

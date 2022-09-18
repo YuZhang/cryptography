@@ -395,11 +395,16 @@ See \href{https://formaestudio.com/rijndaelinspector/archivos/Rijndael_Animation
 \end{frame}
 \begin{frame}\frametitle{SM4}
 \begin{itemize}
-	\item ShangMi 4 (SM4): a block cipher ``Information security technology—SM4 block cipher algorthm'', used in the Chinese National Standard for Wireless LAN WAPI and also used with TLS
-	\item Mainly developed by Lv Shuwang
-	\item Declassified in 2006, published by State Cryptography Administration in 2012, and became a national standard (GB/T 32907-2016) in 2016
+	\item ShangMi 4 (SM4): a block cipher ``Information security technology—SM4 block cipher algorithm'', in the Chinese National Standard for Wireless LAN WAPI and used with TLS
+	\item Mainly developed by Lv Shuwang, declassified in 2006, published by State Cryptography Administration in 2012, and became a national standard (GB/T 32907-2016) in 2016
 	\item SM1 (in-chip) and SM7 (lightweight) are also block ciphers, but are not published.
 \end{itemize}
+\begin{figure}
+	\begin{center}
+		\fbox{\includegraphics[width=70mm]{pic/SM4_round} }
+	\end{center}
+	\end{figure}
+
 \end{frame}
 %\begin{comment}
 \section{Differential and Linear Cryptanalysis -- A Brief Look}
@@ -507,7 +512,7 @@ If no pad needed, add a dummy block
 \begin{itemize}
 \item Goal: Block cipher is PRP
 \item Constructions: confusion \& diffusion, SPN, Feistel network, avalanche effect.
-\item Standards: DES, 3DES, AES
+\item Standards: DES, 3DES, AES, SM4
 \item Cryptanalysis: reduced round, meet-in-the-middle, differential and linear cryptanalysis. 
 \end{itemize}
 \end{frame}
