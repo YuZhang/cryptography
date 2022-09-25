@@ -734,7 +734,7 @@ Assume that $\mathcal{A}$ is deterministic and receives tag $t’$ for the messa
 Let $\Pi$ be a 1-time $2^{-n}$-secure MAC where all keys are the same length. Then the keys must have length at least $2n$.
 \end{theorem}
 \begin{proof}
-Let $\mathcal{K}(t') \overset{\mathsf{def}}{=} \{ k | \mathsf{Vrfy}_k(m', t') = 1\}$. For any $t$, $\abs{\mathcal{K}(t')} \leq 2^{-n} \cdot \abs{\mathcal{K}}$. Otherwise, $(m', t')$ would be a valid forgery with probability at least $\abs{\mathcal{K}(t)}/\abs{\mathcal{K}}> 2^{-n}$. The probability that $\mathcal{A}$ outputs a valid forgery by guessing $k$ from $\abs{\mathcal{K}(t')}$ is at least
+Let $\mathcal{K}(t') \overset{\mathsf{def}}{=} \{ k | \mathsf{Vrfy}_k(m', t') = 1\}$. For any $t'$, $\abs{\mathcal{K}(t')} \leq 2^{-n} \cdot \abs{\mathcal{K}}$. Otherwise, $(m', t')$ would be a valid forgery with probability at least $\abs{\mathcal{K}(t')}/\abs{\mathcal{K}}> 2^{-n}$. The probability that $\mathcal{A}$ outputs a valid forgery by guessing $k$ from $\abs{\mathcal{K}(t')}$ is at least
 \[ \sum_{t'} \Pr [\mathsf{Mac}_k(m') = t'] \cdot \frac{1}{\abs{\mathcal{K}(t')}} \geq \sum_{t'} \Pr [\mathsf{Mac}_k(m') = t'] \cdot \frac{2^n}{\abs{\mathcal{K}}} = \frac{2^n}{\abs{\mathcal{K}}} 
 \]
 As the probability is at most $2^{-n}$, $\abs{\mathcal{K}} \geq 2^{2n}$. Since all keys have the same length, each key must have length at least $2n$.
