@@ -203,19 +203,30 @@ Authenticate-then-encrypt approach is secure if $\Pi_E$ is rand-CTR mode or rand
 \item \textbf{Applications}: encrypted database index, disk encryption
 \item \textbf{Deterministic encryption}: the same message is encrypted to the same ciphertext under the same key. \\ \alert{Q: would it be  CPA-secure?}
 \item \textbf{Deterministic CPA Security}: CPA-secure if \emph{never encrypt same message twice} using same key. The pair $\left<k,m\right>$ is unique.
-\item \textbf{Deterministic Authenticated Encryption (DAE)}
-\item \textbf{\alert{Common Mistake}}: CBC/CTR with \textbf{fixed} $IV$.
-\begin{columns}[]
-\column{.5\textwidth}
-\begin{figure}
-\begin{center}
-\input{tikz/CBC-small}
-\end{center}
-\end{figure}
-\column{.5\textwidth}
-Adversary can query $(m_{q1}, m_{q2})$ and get $(c_{q1}, c_{q2})$; then output PT: $ IV\oplus c_{q1} \oplus m_{q2}$ and expect CT: $c_{q2}$.
-\end{columns}
+\item If $F$ is a PRP, $F$ is a deterministic CPA-secure encryption scheme for fixed-length plaintexts.
+\item \textbf{Deterministic Authenticated Encryption (DAE)} means deterministic CCA and Authenticated Communication.
+%\begin{columns}[]
+%\column{.5\textwidth}
+%\begin{figure}
+% \begin{center}
+% \input{tikz/CBC-small}
+% \end{center}
+% \end{figure}
+% \column{.5\textwidth}
+% \textbf{\alert{Common Mistake}}: CBC/CTR with \textbf{fixed} $IV$.
+% Adversary can query $(m_{q1}, m_{q2})$ and get $(c_{q1}, c_{q2})$; then output PT: $ IV\oplus c_{q1} \oplus m_{q2}$ and expect CT: $c_{q2}$.
+% \end{columns}
 \end{itemize}
+\end{frame}
+\begin{frame}\frametitle{A Common Mistake}
+\begin{exampleblock}{Common Mistake: CBC/CTR with \textbf{fixed} $IV$.}
+Adversary can query $(m_{q1}, m_{q2})$ and get $(c_{q1}, c_{q2})$; then output PT: $ IV\oplus c_{q1} \oplus m_{q2}$ and expect CT: $c_{q2}$.
+\begin{figure}
+  \begin{center}
+  \input{tikz/CBC-small}
+  \end{center}
+  \end{figure}
+\end{exampleblock}
 \end{frame}
 \begin{frame}\frametitle{Synthetic $IV$ (SIV) for Det. Encryption}
 \begin{itemize}
@@ -234,7 +245,7 @@ $c = \left<SIV,\mathsf{Enc}_{k_2}(SIV,m) \right>$.
 \begin{frame}\frametitle{Wide Block PRP for Det. Encryption}
 \begin{itemize}
 \item \textbf{Wide block PRP}: PRP with longer block length (e.g. a sector on disk) from PRP with short block length (e.g. AES).
-\item \textbf{PRP-based DAE}: If $F$ is PRP, then $F$ is also det. CPA-secure. $\mathsf{Enc}_k(m\| 0^{\ell})$. In $\mathsf{Dec}$, if $\neq 0^{\ell}$, output $\perp$.
+\item \textbf{PRP-based DAE}: $\mathsf{Enc}_k(m\| 0^{\ell})$. In $\mathsf{Dec}$, if $\neq 0^{\ell}$, output $\perp$.
 \item \textbf{Narrow block} may leak info. as some blocks are the same.
 \item \textbf{Standards}: CBC-mask-CBC (CMC) and ECB-mask-ECB (EME) in IEEE P1619.2.
 \item \textbf{Cost}: 2x slower than SIV due to two-pass encryption.

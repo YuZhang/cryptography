@@ -377,7 +377,7 @@ $\Pi$ ($\mathsf{Gen}$, $H^s$) is \textbf{collision resistant} if $\forall$ \text
 \item $H'(m) = H(m) \oplus H(m)$
 \item $H'(m) = H(m[0,\dots,\abs{m}-2])$
 \item $H'(m) = H(m\| 0)$
-\item $H'(m) = H(m)[0,\dots,\abs{m}-1]$ % truncating is dangerous; two messages have different hash values which have only one difference in the last bit.
+\item $H'(m) = H(m)[0,\dots,\abs{H(m)}-1]$ % truncating is dangerous; two messages have different hash values which have only one difference in the last bit.
 \end{itemize}
 \end{exampleblock}
 \end{frame}
