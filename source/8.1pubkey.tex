@@ -291,7 +291,7 @@ If $\Pi$ is a CPA-secure public-key encryption scheme and $\Pi'$ is a private-ke
 \begin{exampleblock}{How do the following applications work by using hybrid encryption?}
 \begin{itemize}
 \item \textbf{Sharing encrypted files:} In modern file systems, a user (Alice) can store encrypted files to which other users (Bob, Charlie) have read access. 
-\item \textbf{Key escrow:} Consider a company that deploys an encrypted file system such as the one described above. The company runs a key escrow server which generates a public key pair. One day Alice is traveling, but her manager Bob needs to read one of her files to prepare for a meeting. 
+\item \textbf{Key escrow:} Consider a company that deploys an encrypted file system such as the one described above. The company runs a key escrow server which generates a public key pair. One day Alice is traveling and unreachable, but her manager Bob needs to read one of her files to prepare for a meeting. 
 \end{itemize}
 \end{exampleblock}
 \end{frame}
@@ -376,11 +376,11 @@ If $\widehat{\Pi}=(\widehat{Gen},f)$ is TDP, and $\mathsf{hc}$ is HCP for $\wide
 \[\frac{1}{2}\cdot (\Pr[b'=b|z=\mathsf{hc}_I(x)]+\Pr[b'\neq b|z\neq \mathsf{hc}_I(x)]).\]
 \end{frame}
 \begin{frame}\frametitle{Proof (Cont.)}
-\[\Pr[b'=b|z=\mathsf{hc}_I(x)] = \Pr[\mathsf{PubK}^{\mathsf{eav}}_{\mathcal{A},\Pi}(n)=1]=\varepsilon(n).\]
+\[\Pr[b'=b|z=\mathsf{hc}_I(x)] = \Pr[\mathsf{PubK}^{\mathsf{eav}}_{\mathcal{A},\Pi}(n)=1]=\frac{1}{2} + \varepsilon(n).\]
 If $z \neq \mathsf{hc}_I(x)$, $m' = m_b\oplus \overline{\mathsf{hc}}_I(x) = m_{\overline{b}}\oplus \mathsf{hc}_I(x)$,\\ which means $m_{\overline{b}}$ is encrypted.
-\[\Pr[b'=b|z\neq \mathsf{hc}_I(x)] = \Pr[\mathsf{PubK}^{\mathsf{eav}}_{\mathcal{A},\Pi}(n)=0]=1-\varepsilon(n).\]
-\[\Pr[b'\neq b|z\neq \mathsf{hc}_I(x)] =\varepsilon(n).\]
-\[\Pr[\mathcal{A}_{\mathsf{hc}}(I,f_I(x))=\mathsf{hc}_I(x)] = \frac{1}{2}\cdot (\varepsilon(n)+\varepsilon(n)) = \varepsilon(n).\]
+\[\Pr[b'=b|z\neq \mathsf{hc}_I(x)] = \Pr[\mathsf{PubK}^{\mathsf{eav}}_{\mathcal{A},\Pi}(n)=0]=\frac{1}{2} -\varepsilon(n).\]
+\[\Pr[b'\neq b|z\neq \mathsf{hc}_I(x)] =\frac{1}{2} + \varepsilon(n).\]
+\[\Pr[\mathcal{A}_{\mathsf{hc}}(I,f_I(x))=\mathsf{hc}_I(x)] = \frac{1}{2} + \varepsilon(n).\]
 \end{frame}
 %\begin{frame}\frametitle{Encrypting Longer Messages}
 %\begin{theorem}
