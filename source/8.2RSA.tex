@@ -34,7 +34,7 @@ Symmetric & RSA  \\ \hline
 \begin{itemize}
 \item $\mathsf{Gen}$: on input $1^n$ run $\mathsf{GenRSA}(1^n)$ to obtain $N,e,d$. $pk = \langle N,e \rangle$ and $sk = \langle N,d \rangle$.
 \item $\mathsf{Enc}$: on input $pk$ and $m \in \mathbb{Z}^*_N$, $c:= [m^e \bmod N]$.
-\item $\mathsf{Dec}$: on input $sk$ and $m \in \mathbb{Z}^*_N$, $m:= [c^d \bmod N]$.
+\item $\mathsf{Dec}$: on input $sk$ and $c \in \mathbb{Z}^*_N$, $m:= [c^d \bmod N]$.
 \end{itemize}
 \end{construction}
 \begin{alertblock}{Insecurity}
@@ -366,7 +366,7 @@ Reduce the RSA problem to the inverting problem.
 \begin{itemize}
 \item $\mathsf{Gen}$: on input $1^n$ run $\mathsf{GenRSA}(1^n)$ to obtain $N,e,d$. $pk = \langle N,e \rangle$ and $sk = \langle N,d \rangle$.
 \item $\mathsf{Enc}$: on input $pk$ and $m \in \mathbb{Z}^*_N$, $c:= [m^e \bmod N]$.
-\item $\mathsf{Dec}$: on input $sk$ and $m \in \mathbb{Z}^*_N$, $m:= [c^d \bmod N]$.
+\item $\mathsf{Dec}$: on input $sk$ and $c \in \mathbb{Z}^*_N$, $m:= [c^d \bmod N]$.
 \end{itemize}
 \end{construction}
 \begin{alertblock}{Insecurity}
@@ -390,7 +390,7 @@ Since the ``textbook RSA'' is deterministic, it is insecure with respect to any 
 \textbf{Small $e$ and small $m$ make modular arithmetic useless.}
 \begin{itemize}
 \item If $e=3$ and $m < N^{1/3}$, then $c = m^3$ and \alert{$m=$ \underline{$\quad $} ?} %c^{1/3}
-\item In the hybrid encryption, 1024-bit RSA with 128-bit DES.
+\item In the hybrid encryption, 1024-bit RSA with 128-bit AES.
 \end{itemize}
 \textbf{A general attack when small $e$ is used:}
 \begin{itemize}
@@ -513,7 +513,7 @@ if the first 16 bits of message is not ``02'' which is standing for ``PKCK \#1''
 \end{comment}
 \begin{frame}\frametitle{Implementation Attacks on PKCS\#1 v1.5}
   \begin{exampleblock}{CCA on PKCS\#1 v1.5 in HTTPS [Bleichenbacher 1998]}
-  The message is padded in a format "$(00\|02\|r\|0\|m)$", where "02" means version $1$.
+  The message is padded in a format "$(00\|02\|s\|0\|m)$", where "02" means version $1$.
   Here we simplfy $00\|02$ as the $MSB$ of plaintext.
   \begin{figure}
   \begin{center}
