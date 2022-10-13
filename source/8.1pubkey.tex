@@ -419,7 +419,7 @@ The CCA/CCA2 indistinguishability experiment $\mathsf{PubK}^{\mathsf{cca}}_{\mat
 \item $\mathcal{A}$ \textbf{is given input $pk$ and oracle access to $\mathsf{Dec}_{sk}(\cdot)$}, outputs $m_0, m_1$ of the same length. 
 \item $b \gets \{0,1\}$. $c \gets \mathsf{Enc}_{pk}(m_b)$ is given to $\mathcal{A}$.
 \item $\mathcal{A}$ \textbf{have access to $\mathsf{Dec}_{sk}(\cdot)$ except for $c$ in CCA2}\footnote{CCA is also called Lunchtime attacks; CCA2 is also called Adaptive CCA.} and outputs $b'$.
-\item If $b' = b$, $\mathcal{A}$ succeeded $\mathsf{PrivK}^{\mathsf{cca}}_{\mathcal{A},\Pi}=1$, otherwise 0.
+\item If $b' = b$, $\mathcal{A}$ succeeded $\mathsf{PubK}^{\mathsf{cca}}_{\mathcal{A},\Pi}=1$, otherwise 0.
 \end{enumerate}
 \begin{definition}
 $\Pi$ has \textbf{CCA/CCA2-secure} if $\forall$ \textsc{ppt} $\mathcal{A}$, $\exists$ $\mathsf{negl}$ such that
