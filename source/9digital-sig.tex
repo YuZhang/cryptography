@@ -183,16 +183,19 @@ the solution $x$ of a DLP $y$ in a 3-round $\Sigma$-protocol.
 \input{tikz/identification-schnorr}
 \end{center}
 \end{figure} 
-\begin{exampleblock}{Why not a simpler identification protocol?}
-First, the verifier generates $r$ and sends $g^r$; then the prover replies with $s = g^{rx}$; last, the verifier checks $y^r \overset{?}{=} s$.
+\begin{exampleblock}{$r$ must be unpredictable and be generated after receiving $I$}
+If a disguised attacker can predict $r$, he/she may generate $s$ first, compute $I = g^s \cdot y^{-r}$, and pass the identification. 
 \end{exampleblock}
+	% \begin{exampleblock}{Why not a simpler identification protocol?}
+% First, the verifier generates $r$ and sends $g^r$; then the prover replies with $s = g^{rx}$; last, the verifier checks $y^r \overset{?}{=} s$.
+% \end{exampleblock}
 \end{frame}
 
 \begin{frame}\frametitle{Proof of Schnorr Identification Scheme}
 	\begin{theorem}
 		If the discrete-log problem is hard, then the Schnorr identification scheme is secure.
 	\end{theorem}
-\textbf{Idea}: If the attacker can let $g^s \cdot y^{-r} = I$, then the attacker can compute $x$.
+\textbf{Idea}: If the attacker can let $g^s \cdot y^{-r} = I$, then the attacker can compute $x$ by ``rewinding'' the experiment with the same $I$.
 \begin{proof}
 Reduce $\mathcal{A}'$ inverting $y$ to $\mathcal{A}$ attacking the Schnorr scheme:
 \begin{enumerate}
