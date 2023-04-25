@@ -174,7 +174,7 @@ where $f$ is chosen \emph{u.a.r} from $\mathsf{Func}_n$.
 \begin{exampleblock}{Q: Without knowing the key and the oracle access, could anyone learn something about the output from the input with a non-negligible probability?} 
 \end{exampleblock}
 \begin{exampleblock}{Let $F: \{0,1\}^{n} \times \{0,1\}^{n} \to \{0,1\}^{n}$ be a PRF. Is $G$ a PRF?}
-\begin{itemize}
+\begin{enumerate}
 \item $G((k_{1},k_{2}), x) = F(k_{1},x) \| F(k_{2},x)$
 \item $G(k,x) = F(k, x\oplus 1^{n})$
 \item $ G(k,x) = \left\{ 
@@ -188,7 +188,7 @@ where $f$ is chosen \emph{u.a.r} from $\mathsf{Func}_n$.
     k & \quad \text{otherwise}\\
   \end{array} \right. $
 \item $G(k,x) = F(k,x)\bigoplus F(k, x\oplus 1^{n})$
-\end{itemize}
+\end{enumerate}
 \end{exampleblock}
 \end{frame}
 \begin{frame}\frametitle{CPA-Security from Pseudorandom Function}
@@ -253,8 +253,8 @@ $\varepsilon(n)$ is negligible.
 \end{proof}
 \end{frame}
 \begin{frame}\frametitle{Questions on CPA-security}
-\begin{exampleblock}{Q: Is this CPA-secure?}
-$\mathsf{Enc}_k(m) = PRG(k\|r) \oplus m $, $r$ is a fresh random string.
+\begin{exampleblock}{Q: $G$ is a PRG. Is this scheme CPA-secure?}
+$\mathsf{Enc}_k(m) = r, G(k\|r) \oplus m $, where $r$ is a fresh random string.
 \end{exampleblock}
 \begin{exampleblock}{CPA-Security from PRF for Arbitrary-Length Messages}
 \begin{itemize}
@@ -398,7 +398,7 @@ See proof of theorem \ref{thm:prf}.
 \end{proof}
 \end{frame}
 \begin{frame}[fragile]\frametitle{$IV$ Should Not Be Predictable}
-If $IV$ is predictable, then CBC/OFB/CTR mode is not CPA-secure.\\
+If $IV$ is predictable, then CBC mode is not CPA-secure.\\
 \alert{Q: Why? (homework)}
 \begin{exampleblock}{Bug in SSL/TLS 1.0}
 $IV$ for record $\#i$ is last CT block of record $\#(i-1)$.
@@ -485,24 +485,25 @@ Padding-oracle attacks are originally published in 2002. It can be used to autom
 \textbf{PKCS \#5 Padding}:  append $b$ bytes of $b$ to the message in order to make the total length a multiple of the block length (append a dummy block if needed). The decryption server will return a \textbf{Bad Padding Error} for incorrect padding.\\
 \textbf{Padding-Oracle Attacks}: 
 \begin{itemize}
-\item In a one-block CBC, by modifying the 1st byte of $IV$, attacker can learn whether $m$ is NULL. If yes, error will occur. 
+	\item modify the ciphertext (including $IV$) and send it to the server.
+	\item Triggering a \textbf{Bad Padding Error} means the modification is on the padding part. Otherwise, the modification is on the plaintext part.
+	\item By carefully manipulating the ciphertext to control the padding part, the attacker can learn the length and the content of the plaintext.
 \end{itemize}
-\begin{columns}[c]
-\column{.4\textwidth}
+\end{frame}
+\begin{frame}\frametitle{Padding-Oracle Attacks: Learning the length}
 \begin{figure}
 \begin{center}
 \input{tikz/padding-oracle-null}
 \end{center}
 \end{figure}
-\column{.7\textwidth}
 \begin{itemize}
+\item In a one-block CBC, by modifying the 1st byte of $IV$, attacker can learn whether $m$ is NULL. If yes, error will occur. 
 \item append $\{b\}^b$ as a dummy block if $m$ is NULL
 \item change the 1st byte of $IV$ from $x$ to $y$, get decrypted block $(x \oplus y \oplus b) \| \{b\}^{b-1}$, and trigger an error
 \item If no error, learn whether $m$ is 1 byte by modifying the 2nd byte of $IV$ and so on
 \end{itemize}
-\end{columns}
 \end{frame}
-\begin{frame}\frametitle{Padding-Oracle Attacks (Cont.)}
+\begin{frame}\frametitle{Padding-Oracle Attacks: Learning the content}
 \begin{figure}
 \begin{center}
 \input{tikz/padding-oracle-lastbyte}
