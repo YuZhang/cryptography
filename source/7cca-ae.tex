@@ -257,15 +257,19 @@ $c = \left<SIV,\mathsf{Enc}_{k_2}(SIV,m) \right>$.
 \item \textbf{Tweak}: like $IV$, different tweak for different block.
 \item \textbf{Trivial solution}: $k_t = F_k(t), t=1,\dots,\ell.$
 \item \textbf{Tweakable block ciphers}: many PRPs from one key $\mathcal{K} \times \mathcal{T} \times \mathcal{X} \to \mathcal{X}$, $\mathcal{T}$ is the set of tweaks.
+\end{itemize}
+\end{frame}
+\begin{frame}\frametitle{XTS}
+\begin{itemize}
 \item \textbf{XTS}: XEX(Xor-Encrypt-Xor)-based tweaked-codebook mode with ciphertext stealing. (XTS-AES, NIST SP 800-38E)
 \item \textbf{XEX}: To encrypt block $j$ in sector $I$, $c = F_k(m\oplus x)\oplus x$, where $x=F_k(I)\otimes 2^j$ in Galois field, $(I,j)$ is tweak.
 \item \textbf{Ciphertext stealing (CTS)}: no padding, \textbf{no expansion}.
+\end{itemize}
 \begin{figure}
 \begin{center}
 \input{tikz/cipher-stealing.tex}
 \end{center}
 \end{figure}
-\end{itemize}
 \end{frame}
 \section{Key Derivation Function}
 \begin{frame}\frametitle{Key Derivation Function (KDF)}

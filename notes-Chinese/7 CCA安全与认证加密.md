@@ -14,12 +14,13 @@
    - 定义：一个加密方案是CCA安全的，如果实验成功的概率与1/2之间的差异是可忽略的。
 
 4. 消息传递方案
+   - 我们先不直接处理CCA安全，而是研究一个比CCA更安全的通信场景，其中引入了之前学习的真实性要求；
    - CCA安全与消息的真实性有关，下面学习同时保护消息机密性和真实性的消息传递方案。
    - 密钥生成（**Key-generation**） 算法输出 $k \gets \mathsf{Gen'}(1^n)$. $k = (k_1,k_2)$. $k_1 \gets \mathsf{Gen}_E(1^n)$, $k_2 \gets \mathsf{Gen}_M(1^n)$.
    - 消息传递（**Message transmission** ）算法由 $\mathsf{Enc}_{k_1}(\cdot)$ 和 $\mathsf{Mac}_{k_2}(\cdot)$ 生成，输出 $c \gets \mathsf{EncMac'}_{k_1,k_2}(m)$.
    - 解密（**Decryption**）算法由 $\mathsf{Dec}_{k_1}(\cdot)$ 和 $\mathsf{Vrfy}_{k_2}(\cdot)$ 生成，输出 $m \gets \mathsf{Dec}'_{k_1,k_2}(c)$ 或 $\bot$.
    - 正确性需求: $\mathsf{Dec}'_{k_1,k_2}(\mathsf{EncMac}'_{k_1,k_2}(m)) = m$.
-   - 注：在消息传递方案中，消息先被加密并且被MAC。在解密算法中，当密文没有通过真实性验证时，输出空（可以理解为“报错”）；这意味着未认证的密文无法解密。
+   - 注：在消息传递方案中，消息被加密并且被MAC。在解密算法中，当密文没有通过真实性验证时，输出空（可以理解为“报错”）；这意味着未认证的密文无法解密。
 
 5. 定义安全消息传递
    - 先定义保护真实性的认证通信，然后定义同时保护机密性和真实性的认证加密。
@@ -159,11 +160,14 @@
     - Tweak是一个类似初始向量的值，在同一密钥下，不同的tweak构造不同的PRP。每一个块采用不同的tweak。
     - 可调块密码（Tweakable block ciphers）：用一个密钥生成许多PRP $\mathcal{K} \times \mathcal{T} \times \mathcal{X} \to \mathcal{X}$, $\mathcal{T}$ 是tweak集合。
     - 一种简单的解决方法：以一个Tweak $t$来生成密钥 $k_t = F_k(t), t=1,\dots,\ell$，但要加密两次效率不高，需要更有效的方法。
+
+20. XTS
+
     - XTS：XEX(Xor-Encrypt-Xor)-based tweaked-codebook mode with ciphertext stealing。 (XTS-AES, NIST SP 800-38E)
     - XEX: $c = F_k(m\oplus x)\oplus x$，其中在 Galois 域上 $x=F_k(I)\otimes 2^j$ ，在扇区 $I$中块 $j$ 对应的tweak是 $(I,j)$ 。
     - Ciphertext stealing (CTS)：无需填充（padding），没有扩展。
 
-20. 密钥派生函数（**Key Derivation Function (KDF)**）
+21. 密钥派生函数（**Key Derivation Function (KDF)**）
 
     - 密钥派生函数（Key Derivation Function，KDF）：从一个秘密的原密钥 $sk$ 产生许多密钥；
     - 对于均匀随机的 $sk$：$F$ 是 PRF, $ctx$ 是标识应用的唯一串，$\mathsf{KDF}(sk,ctx,l) = \left<F_{sk}(ctx\|0),F_{sk}(ctx\|1)\cdots,F_{sk}(ctx\|l)\right>.$
@@ -171,14 +175,14 @@
        - 提取（extract）： HKDF $k \gets \mathsf{HMAC}(salt,sk)$， $salt$（盐）是一个随机数。用盐来向密钥添加熵。
        - 扩展（expand）：与上面均匀随机情况一样。
 
-21. 基于口令的KDF（**Password-Based KDF, PBKDF**）
+22. 基于口令的KDF（**Password-Based KDF, PBKDF**）
 
     - 密钥延展（Key stretching）增加测试密钥的时间 (使用较慢的哈希函数)。
     - 密钥加强（Key strengthening）增加密钥的长度和随机性 (使用盐)。
     - PKCS\#5 (PBKDF1)：$H^{(c)}(pwd\|salt)$， 哈希函数迭代 $c$ 次。
     - 敌手攻击，或者尝试被加强的密钥 (更大的密钥空间)，或者尝试初始密钥 (每个密钥花费更长时间)。
 
-22. IV，Nonce，Counter，Tweak和Salt
+23. IV，Nonce，Counter，Tweak和Salt
 
     - IV：密码学原语的输入，提供随机性。
     - nonce：用来标记一次通信的只使用一次的一个数。
@@ -186,7 +190,7 @@
     - tweak：在一个密码中对每个块只用一次的输入。
     - salt：随机比特，用于创建一个函数的输入。
 
-23. 总结
+24. 总结
 
     - 略
 
