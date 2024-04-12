@@ -2,10 +2,12 @@
 
 [![made-with-latex](https://img.shields.io/badge/Made%20with-LaTeX-1f425f.svg)](https://www.latex-project.org/)  [![CC BY-SA 4.0][cc-by-sa-shield]][cc-by-sa]
 
-Yu Zhang, Harbin Insitute of Technology, 2011, 2012, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021
+Yu Zhang, Harbin Insitute of Technology, 2011, 2012, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024
 
-- New ! 2020.12 Alice, Bob, Evil and Charlie have new avatars
-- New ! 2020.09 增加了中文课程讲义，在[notes-Chinese](notes-Chinese/)目录下
+- New! 2024.04 增加了实验指导书，在[lab](lab/)目录下
+- New! 2024.04 增加了中文PPT，在[slides-Chinese](slides-Chinese/)目录下
+- New! 2020.12 Alice, Bob, Evil and Charlie have new avatars
+- New! 2020.09 增加了中文课程讲义，在[notes-Chinese](notes-Chinese/)目录下
 
 ## Requirement for compiling slides
 
