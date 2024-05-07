@@ -28,7 +28,7 @@
      - $k = (k_1,k_2) \gets \mathsf{Gen}'(1^n)$.
      - $\mathcal{A}$ 输入 $1^n$ 和对 $\mathsf{EncMac'}_k$的预言机访问，并输出 $c \gets \mathsf{EncMac'}_{k}(m)$.
      - $m := \mathsf{Dec}'_k(c)$. $\mathsf{Auth}_{\mathcal{A},\Pi'}(n) = 1 \iff m \ne \bot \land\; m \notin \mathcal{Q}$.
-   - 定义：$\Pi'$ 实现认证通信（ **authenticated communication**），如果 $\forall$ ppt $\mathcal{A}$, $\exists\; \mathsf{negl}$ 使得，$ \Pr[\mathsf{Auth}_{\mathcal{A},\Pi'}(n) = 1] \le \mathsf{negl}(n). $
+   - 定义：$\Pi'$ 实现认证通信（ **authenticated communication**），如果 $\forall$ ppt $\mathcal{A}$, $\exists\; \mathsf{negl}$ 使得，$\Pr[\mathsf{Auth}_{\mathcal{A},\Pi'}(n) = 1] \le \mathsf{negl}(n).$
    - 定义：$\Pi'$ 是安全的认证加密（**secure Authenticated Encryption (A.E.)**）， 如果其既是CCA安全的也是实现了认证通信。
    - 问题：CCA安全意味着A.E.吗？（作业）
 
@@ -38,9 +38,9 @@
 
 7. 加密和认证组合
    - 加密和认证如何组合来同时保护机密性和真实性？
-   - 加密并认证（**Encrypt-and-authenticate**） (例如, SSH)：$ c \gets \mathsf{Enc}_{k_1}(m),\; t \gets \mathsf{Mac}_{k_2}(m).$
-   - 先认证后加密（**Authenticate-then-encrypt**） (例如, SSL)：$ t \gets \mathsf{Mac}_{k_2}(m),\; c \gets \mathsf{Enc}_{k_1}(m\| t).$
-   - 先加密后认证（**Encrypt-then-authenticate**） (例如, IPsec)：$ c \gets \mathsf{Enc}_{k_1}(m),\; t \gets \mathsf{Mac}_{k_2}(c). $
+   - 加密并认证（**Encrypt-and-authenticate**） (例如, SSH)：$c \gets \mathsf{Enc}_{k_1}(m),\; t \gets \mathsf{Mac}_{k_2}(m).$
+   - 先认证后加密（**Authenticate-then-encrypt**） (例如, SSL)：$t \gets \mathsf{Mac}_{k_2}(m),\; c \gets \mathsf{Enc}_{k_1}(m\| t).$
+   - 先加密后认证（**Encrypt-then-authenticate**） (例如, IPsec)：$c \gets \mathsf{Enc}_{k_1}(m),\; t \gets \mathsf{Mac}_{k_2}(c).$
 
 8. 分析组合的安全性
    - 采用全或无（All-or-nothing）分析，即一种组合方案要么在全部情况下都是安全的，要么只要存在一个不安全的反例就被认为是不安全的；
@@ -72,7 +72,7 @@
 
     - 证明：$\mathsf{VQ}$ （有效查询）: $\mathcal{A}$ 向预言机$\mathsf{Dec}'$提交一个新查询并且 $\mathsf{Vrfy}=1$。*注：VQ表示敌手向预言机查询可经过验证并解密。*
 
-    - $ \Pr[\mathsf{PrivK}^{\mathsf{cca}}_{\mathcal{A},\Pi'}(n)=1] \le \Pr[\mathsf{VQ}] + \Pr[\mathsf{PrivK}^{\mathsf{cca}}_{\mathcal{A},\Pi'}(n)=1 \land \overline{\mathsf{VQ}}] $
+    - $\Pr[\mathsf{PrivK}^{\mathsf{cca}}_{\mathcal{A},\Pi'}(n)=1] \le \Pr[\mathsf{VQ}] + \Pr[\mathsf{PrivK}^{\mathsf{cca}}_{\mathcal{A},\Pi'}(n)=1 \land \overline{\mathsf{VQ}}]$
 
     - 我们需要证明以下：
 
@@ -87,7 +87,7 @@
     - 当$\mathcal{A}$以$m$查询加密预言机时， $\mathcal{A}_M$ 产生加密密钥并以加密预言机的角色先计算密文$c$，然后用密文查询MAC预言机并将$\left<c, t\right>$返回给$\mathcal{A}$；
     - 当$\mathcal{A}$以$\left<c, t\right>$查询解密预言机时，如果这是第 $i$ 个查询，那么$\mathcal{A}_M$ 输出$\left<c, t\right>$并停止；否则，如果这是曾经在加密预言机查询过的，$\mathcal{A}_M$ 返回明文，否则，返回$\bot$（因为只要$\mathsf{VQ}$未发生，就应该返回$\bot$）;
     - $\mathsf{Macforge}_{\mathcal{A}_M,\Pi_M }(n)=1$ 的条件是，只有当 $\mathsf{VQ}$ 发生并且 $\mathcal{A}_M$ 正确地猜测了 $i$ （概率为 $1/q(n)$）。
-    - $ \Pr [\mathsf{Macforge}_{\mathcal{A}_M,\Pi_M }(n)=1] \ge \Pr[\mathsf{VQ}]/q(n).$
+    - $\Pr [\mathsf{Macforge}_{\mathcal{A}_M,\Pi_M }(n)=1] \ge \Pr[\mathsf{VQ}]/q(n).$
 
 12. 证明在无法利用解密预言机时难以破解加密方案
 
@@ -99,7 +99,7 @@
 
     - $\Pr[\mathsf{PrivK}^{\mathsf{cpa}}_{\mathcal{A}_E,\Pi_E}(n)=1 \land \overline{\mathsf{VQ}}] = \Pr[\mathsf{PrivK}^{\mathsf{cca}}_{\mathcal{A},\Pi'}(n)=1 \land \overline{\mathsf{VQ}}]$；
 
-       $ \Pr [\mathsf{PrivK}^{\mathsf{cpa}}_{\mathcal{A}_E,\Pi_E }(n)=1] \ge \Pr[\mathsf{PrivK}^{\mathsf{cca}}_{\mathcal{A},\Pi'}(n)=1 \land \overline{\mathsf{VQ}}] $。
+       $\Pr [\mathsf{PrivK}^{\mathsf{cpa}}_{\mathcal{A}_E,\Pi_E }(n)=1] \ge \Pr[\mathsf{PrivK}^{\mathsf{cca}}_{\mathcal{A},\Pi'}(n)=1 \land \overline{\mathsf{VQ}}]$。
 
 13. 认证加密理论与实践
 
@@ -133,7 +133,7 @@
 16. 在变长加密中的一个常见错误
 
     - 常见错误：在 CBC/CTR 模式中采用固定的$IV$。这虽然是确定性的，但是不安全。
-    - 敌手能够查询 $(m_{q1}, m_{q2})$ 并且得到 $(c_{q1}, c_{q2})$；然后输出明文：$ IV\oplus c_{q1} \oplus m_{q2}$ 并且期待密文： $c_{q2}$。注：第一个PRF的输入就是$ IV\oplus IV\oplus c_{q1} \oplus m_{q2} = c_{q1} \oplus m_{q2}$ 
+    - 敌手能够查询 $(m_{q1}, m_{q2})$ 并且得到 $(c_{q1}, c_{q2})$；然后输出明文：$IV\oplus c_{q1} \oplus m_{q2}$ 并且期待密文： $c_{q2}$。注：第一个PRF的输入就是$IV\oplus IV\oplus c_{q1} \oplus m_{q2} = c_{q1} \oplus m_{q2}$ 
     - 下面介绍三种变长明文的CPA安全的确定性加密方案。
 
 17. 合成初始向量法（**Synthetic** IV **(SIV)**）
